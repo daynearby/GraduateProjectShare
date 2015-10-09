@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="D:\AS workSpace\share\app\libs\volley.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="7eb90d3407943ccbac85ddb1406522baa36ef0ba">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\volley-f228ee43af5fdd4e74117554a7a62f8897501c83.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\share\Crop\unspecified\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="903aed02a1a9673cb13d7cd80052c5df47e2150c">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-c36728af5df7db5e1b9eacbb5d1de298ca96afeb.jar" />
+    </item>
+    <item
+        jar="E:\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.0\support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\support-annotations-22.2.0-e2315d1b4130b9994f0a06fbbdeb35471a3d426b.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\libs\internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-69b21b0d4ae4c23f496f30a6d95dc832b80f66d2.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\com.bigkoo\svprogresshud\1.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="3c4c2e7553b3a7305cb64a906129a698f4a68d27">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-0c23bf64234db852498049526fad8ec92e59d7ef.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-81b105cae093d9edf4b623dc5d4c12015d235c28.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\libs\universal-image-loader-1.9.4.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="dd9eeb557650c4ad7394df23f0f5cf27a7cfc697">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\universal-image-loader-1.9.4-36d8de94c0bb2d58f7aa9bbf850692a438ebec5b.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-5be6c28577765b3dc575127515a2440fd022cdae.jar" />
+    </item>
+
+</items>
