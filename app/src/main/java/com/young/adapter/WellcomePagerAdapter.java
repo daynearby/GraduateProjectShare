@@ -7,12 +7,12 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-public class welcomePagerAdapter extends PagerAdapter {
+public class WellcomePagerAdapter extends PagerAdapter {
 
 	private Context ctx;
 	private List<View> views;
 	
-	public welcomePagerAdapter(Context ctx, List<View> views){
+	public WellcomePagerAdapter(Context ctx, List<View> views){
 		
 		this.ctx=ctx;
 		this.views=views;

@@ -12,7 +12,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.young.adapter.welcomePagerAdapter;
+import com.young.adapter.WellcomePagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class GuideActivity extends Activity {
             im[i] = (ImageView) findViewById(_id[i]);
         }
 
-        welcomePagerAdapter myPagerAdapter = new welcomePagerAdapter(this, list);
+        WellcomePagerAdapter myPagerAdapter = new WellcomePagerAdapter(this, list);
 
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);

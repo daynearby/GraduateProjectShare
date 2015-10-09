@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.young.share.R;
 import com.young.utils.LogUtils;
@@ -30,6 +32,7 @@ public abstract class BaseActivity extends Activity {
 
     private List<String> tagList;//标签数据源
     private List<String> cityList;//城市数据源
+    private TextView title_tv;
 
     private Spinner spinnerCity;
     private Spinner spinnerTag;
@@ -50,13 +53,43 @@ public abstract class BaseActivity extends Activity {
     private void initActionBar() {
         LayoutInflater mlayoutInflater = LayoutInflater.from(this);
         View view = mlayoutInflater.inflate(R.layout.actionbar_main, null);
+
         spinnerCity = (Spinner) view.findViewById(R.id.sp_actionbar_city);
         spinnerTag = (Spinner) view.findViewById(R.id.sp_actionbar_tag);
+        title_tv = (TextView) view.findViewById(R.id.tv_actionbar_titile);
 
         mActionbar = getActionBar();
         mActionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         mActionbar.setCustomView(view);
+        refreshActionBar();
 
+
+        mActionbar.getCustomView().setOnClickListener(new mOnclickListener());
+
+    }
+
+
+    /**
+     * 设置标题显示状态
+     *
+     * @param showCity
+     * @param showTag
+     */
+    public void setTitle(boolean showCity, boolean showTag) {
+
+        this.showCity = showCity;
+        this.showTag = showTag;
+
+    }
+
+    /**
+     * 更新显示状态
+     */
+    private void refreshActionBar() {
+
+        if (title != null) {
+            title_tv.setText(title);
+        }
 
         if (showCity) {
             spinnerCity.setVisibility(View.VISIBLE);
@@ -69,24 +102,16 @@ public abstract class BaseActivity extends Activity {
         } else {
             spinnerTag.setVisibility(View.GONE);
         }
-
-        mActionbar.getCustomView().setOnClickListener(new mOnclickListener());
-
     }
 
-
     /**
-     * 设置标题显示状态
+     * 标题
      *
      * @param title
-     * @param showCity
-     * @param showTag
      */
-    public void setTitle(String title, boolean showCity, boolean showTag) {
+    public void setTitle(String title) {
         this.title = title;
-        this.showCity = showCity;
-        this.showTag = showTag;
-
+        refreshActionBar();
     }
 
     /**
@@ -96,7 +121,14 @@ public abstract class BaseActivity extends Activity {
      */
     public void setTag(List<String> tagList) {
         this.tagList = tagList;
+        //适配器
+        ArrayAdapter arr_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, tagList);
+        //设置样式
+        arr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //加载适配器
+        spinnerTag.setAdapter(arr_adapter);
 
+        refreshActionBar();
     }
 
     /**
@@ -106,6 +138,14 @@ public abstract class BaseActivity extends Activity {
      */
     public void setCity(List<String> cityList) {
         this.cityList = cityList;
+        //适配器
+        ArrayAdapter arr_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, tagList);
+        //设置样式
+        arr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //加载适配器
+        spinnerCity.setAdapter(arr_adapter);
+
+        refreshActionBar();
     }
 
     /**
