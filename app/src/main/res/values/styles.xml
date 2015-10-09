@@ -5,38 +5,37 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="bar_text" parent="Theme.AppCompat.Light">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">fill_parent</item>
+<style name="bar_text" parent="Theme.AppCompat.Light">
+<item name="android:layout_height">wrap_content</item>
+<item name="android:layout_width">fill_parent</item>
 
-    </style>
+</style>
 
-    <style name="text_style">
+<style name="text_style">
 
-        <item name="android:textColor">@color/theme_puple</item>
-        <item name="android:textSize">@dimen/textSize20</item>
-        <item name="android:drawablePadding">@dimen/padding5</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">@dimen/size40</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:gravity">center</item>
-        <item name="android:padding">@dimen/padding5</item>
-    </style>
+<item name="android:textColor">@color/theme_puple</item>
+<item name="android:textSize">@dimen/textSizeMediu</item>
+<item name="android:drawablePadding">@dimen/paddingHit</item>
+<item name="android:layout_width">0dp</item>
+<item name="android:layout_height">@dimen/size40</item>
+<item name="android:layout_weight">1</item>
+<item name="android:gravity">center</item>
+<item name="android:padding">@dimen/paddingHit</item>
+</style>
 
-    <style name="text_tab">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
+<style name="text_tab">
+<item name="android:layout_height">wrap_content</item>
+<item name="android:layout_width">wrap_content</item>
 
-    </style>
+</style>
 
 
-    <style name="gridViwe">
+<style name="gridViwe">
 
-        <item name="android:numColumns">3</item>
-        <item name="android:horizontalSpacing">4dp</item>
-        <item name="android:verticalSpacing">4dp</item>
-        <item name="android:cacheColorHint">@color/transparent</item>
-        <item name="android:listSelector">@color/transparent</item>
-        <item name="android:scrollbars">none</item>
-    </style>
-</resources>
+<item name="android:numColumns">3</item>
+<item name="android:horizontalSpacing">4dp</item>
+<item name="android:verticalSpacing">4dp</item>
+<item name="android:cacheColorHint">@color/transparent</item>
+<item name="android:listSelector">@color/transparent</item>
+<item name="android:scrollbars">none</item>
+</style></resources>

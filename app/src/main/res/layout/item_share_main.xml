@@ -11,7 +11,7 @@
         android:id="@+id/tx_share_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/padding10"
+        android:padding="@dimen/paddingMic"
         android:text="@string/defaul_share_text"
         android:textSize="@dimen/abc_text_size_medium_material" />
 
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        android:padding="@dimen/padding10"
+        android:padding="@dimen/paddingMic"
         />
 
     <include layout="@layout/include_bottom_bar" />

@@ -1,6 +1,5 @@
 package com.young.config;
 
-import android.app.Application;
 import android.content.Context;
 
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
@@ -12,19 +11,36 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import org.litepal.LitePalApplication;
+
 import java.io.File;
 
 /**
  * Created by Nearby Yang on 2015-07-02.
  */
-public class UILApplicationConfig extends Application {
+public class ApplicationConfig extends LitePalApplication {
+
+    //是否使用调试
+    public final static boolean isDebug = true;
+
+    //单例模式
+    private volatile static ApplicationConfig instance;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
+        initConfig();
 //初始化imageloader
         initImageLoader(getApplicationContext());
+
+    }
+
+    /**
+     * 应用的基本配置
+     */
+    private void initConfig() {
+        LitePalApplication.initialize(this);
     }
 
     private void initImageLoader(Context ctx) {
@@ -51,12 +67,20 @@ public class UILApplicationConfig extends Application {
         ImageLoader.getInstance().init(imConfig);
     }
 
+
     /**
-     * 获取iamgeloader对象
+     * 单例的Application
      *
-     * @return
+     * @return ApplicationConfig.this
      */
-    public ImageLoader getImageloader(){
-        return ImageLoader.getInstance();
+    public static ApplicationConfig getInstance() {
+        if (instance == null) {
+            synchronized (ApplicationConfig.class) {
+                if (instance == null) {
+                    instance = (ApplicationConfig) getContext();
+                }
+            }
+        }
+        return instance;
     }
 }
