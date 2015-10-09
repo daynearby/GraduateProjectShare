@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_rectangle"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_head" />
+
+    <TextView
+        android:id="@+id/tx_share_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding10"
+        android:text="@string/defaul_share_text"
+        android:textSize="@dimen/abc_text_size_medium_material" />
+
+    <GridView
+        android:id="@+id/gv_shareimg"
+        style="@style/gridViwe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:padding="@dimen/padding10"
+        />
+
+    <include layout="@layout/include_bottom_bar" />
+
+</LinearLayout>

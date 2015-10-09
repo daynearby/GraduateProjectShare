@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">share</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="id_enterMain">进入</string>
+    <string name="tx_wantogo">想去</string>
+    <string name="hadgo">去过</string>
+    <string name="tx_comment">评论</string>
+    <string name="userNameDefual">瞄瞄</string>
+    <string name="tab_appoinment"><a href="">约会圣地</a></string>
+    <string name="defaul_share_text">南坛公园，松锅的约会圣地，推荐你们去哟！</string>
+</resources>
