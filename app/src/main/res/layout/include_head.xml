@@ -11,14 +11,14 @@
 
 
         <com.young.views.CircleImageView
-            android:id="@+id/im_userH"
+            android:id="@+id/id_im_userH"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:scaleType="centerCrop"
             android:src="@drawable/users" />
 
         <TextView
-            android:id="@+id/userName"
+            android:id="@+id/id_userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -37,7 +37,7 @@
         android:padding="@dimen/paddingMic">
 
         <TextView
-            android:id="@+id/tx_tab"
+            android:id="@+id/id_tx_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tab_appoinment"
@@ -48,8 +48,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/paddingMic"
-            android:layout_toEndOf="@+id/tx_tab"
-            android:layout_toRightOf="@+id/tx_tab"
+            android:layout_toEndOf="@+id/id_tx_tab"
+            android:layout_toRightOf="@+id/id_tx_tab"
             android:src="@drawable/tab_20" />
     </RelativeLayout>
 

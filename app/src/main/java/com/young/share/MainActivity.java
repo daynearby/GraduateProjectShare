@@ -24,11 +24,10 @@ public class MainActivity extends BaseActivity {
     private ViewPager viewPager;
     private List<View> list;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_main;
     }
 
     @Override
@@ -47,6 +46,7 @@ public class MainActivity extends BaseActivity {
 
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new pageChangeListener());
+        viewPager.setCurrentItem(1);
 
     }
 
@@ -57,6 +57,9 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void bindData() {
+        settitle(R.string.discover);
+        setBarVisibility(true, false);
+        setCity(cityList());
 
 
     }
@@ -79,15 +82,15 @@ public class MainActivity extends BaseActivity {
             switch (arg0) {
 
                 case 0:
-
+                    settitle(R.string.discount);
                     break;
 
                 case 1:
-
+                    settitle(R.string.discover);
                     break;
 
                 case 2:
-
+                    settitle(R.string.rank);
                     break;
 
             }
@@ -116,26 +119,7 @@ public class MainActivity extends BaseActivity {
 //    }
 //
 //
-//    private void beginCrop(Uri source) {
-//
-//        File filepath;
-//
-//        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-//            //外置内存卡存在
-//            File share = new File(Environment.getExternalStorageDirectory(), "share/user/icon");
-//            share.mkdirs();
-//
-//            filepath = new File(Environment.getExternalStorageDirectory(), "share/user/icon/user");
-//
-//        } else {
-//            //外置内存卡不存在
-//
-//            File share = new File(this.getCacheDir(), "/user/icon");
-//            share.mkdirs();
-//
-//            filepath = new File(this.getCacheDir(), "user/icon/user");
-//
-//        }
+
 //
 //
 ////        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
@@ -144,6 +128,25 @@ public class MainActivity extends BaseActivity {
 //        Crop.of(source, destination).asSquare().start(this);
 //
 //    }
+// TODO: 15/10/10 将这些文字资源存放到xml的资源中 
+    private List<String> tagList() {
+        List<String> list = new ArrayList<>();
+        list.add("旅游圣地");
+        list.add("约会圣地");
+        list.add("儿童乐园");
+        list.add("摄影");
+
+        return list;
+    }
+
+    private List<String> cityList(){
+        List<String> list = new ArrayList<>();
+        list.add("惠州");
+        list.add("深圳");
+        list.add("广州");
+        list.add("东莞");
+        return list;
+    }
 
 
     // 退出程序

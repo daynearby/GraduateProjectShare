@@ -2,6 +2,7 @@
 <resources>
     
    <color name="theme_puple">#9D55B8</color>
+   <color name="witch">#ffffff</color>
    <color name="transparent">#00000000</color>
    <color name="translucent">#50000000</color>
 </resources>
