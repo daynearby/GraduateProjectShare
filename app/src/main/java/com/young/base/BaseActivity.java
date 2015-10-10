@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.young.annotation.Injector;
 import com.young.share.R;
 import com.young.utils.LogUtils;
 
@@ -41,8 +42,8 @@ public abstract class BaseActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
+        Injector.inject(BaseActivity.this);
         initActionBar();
-
         initData();
         findviewbyid();
         bindData();

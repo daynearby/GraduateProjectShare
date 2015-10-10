@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.young.adapter.MainPagerAdapter;
+import com.young.annotation.InjectView;
 import com.young.base.BaseActivity;
 
 import java.util.ArrayList;
@@ -20,7 +21,8 @@ public class MainActivity extends BaseActivity {
 
     //    private GridView myGridview;
 //    private ImageView im_user;
-    private TextView tx;
+//    @InjectView(R.id.id_tv)
+//    private TextView tx;
     private ViewPager viewPager;
     private List<View> list;
 
@@ -45,7 +47,7 @@ public class MainActivity extends BaseActivity {
         MainPagerAdapter pagerAdapter = new MainPagerAdapter(this, list);
 
         viewPager.setAdapter(pagerAdapter);
-        viewPager.addOnPageChangeListener(new pageChangeListener());
+        viewPager.setOnPageChangeListener(new pageChangeListener());
         viewPager.setCurrentItem(1);
 
     }
@@ -60,7 +62,6 @@ public class MainActivity extends BaseActivity {
         settitle(R.string.discover);
         setBarVisibility(true, false);
         setCity(cityList());
-
 
     }
 
