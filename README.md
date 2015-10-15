@@ -7,4 +7,6 @@
 
 3.使用具有动画的listview,其中图片点击放大,并且可以缩放,添加瀑布流view
 
+4.使用Bmob移动后端服务器，作为数据存储的服务器；以及Bmob的推送消息
+
 gson，volley，litepal（sqlite），UIL（通用图片加载）
