@@ -77,7 +77,7 @@ public class MainActivity extends BaseActivity {
         public void onPageSelected(int arg0) {
 
             switch (arg0) {
-
+// TODO: 2015-10-09 页面切换更换title 
                 case 0:
 
                     break;

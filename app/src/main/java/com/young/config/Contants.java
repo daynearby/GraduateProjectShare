@@ -12,4 +12,7 @@ public class Contants {
 
     public final static String sharePreferenceStr="WELCOME";
 
+    //*************************** Bmob key *****************
+
+    public final static String BMOB_APP_KEY = "52f47fe363ec6e189700adf5b51e58ed";
 }
