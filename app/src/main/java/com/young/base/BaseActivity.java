@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.young.annotation.Injector;
 import com.young.share.R;
 import com.young.utils.LogUtils;
 
@@ -26,7 +27,7 @@ public abstract class BaseActivity extends Activity {
     private ActionBar mActionbar;
     private mActionBarOnClickListener mActionBarOnClickListener;
 
-    private String title = "标题";
+    private int title = R.string.title;
     private boolean showCity = false;
     private boolean showTag = false;
 
@@ -40,8 +41,9 @@ public abstract class BaseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(getLayoutId());
+        Injector.inject(BaseActivity.this);
         initActionBar();
-
         initData();
         findviewbyid();
         bindData();
@@ -51,20 +53,15 @@ public abstract class BaseActivity extends Activity {
      * 初始化主界面actionbar
      */
     private void initActionBar() {
-        LayoutInflater mlayoutInflater = LayoutInflater.from(this);
-        View view = mlayoutInflater.inflate(R.layout.actionbar_main, null);
-
-        spinnerCity = (Spinner) view.findViewById(R.id.sp_actionbar_city);
-        spinnerTag = (Spinner) view.findViewById(R.id.sp_actionbar_tag);
-        title_tv = (TextView) view.findViewById(R.id.tv_actionbar_titile);
 
         mActionbar = getActionBar();
         mActionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        mActionbar.setCustomView(view);
-        refreshActionBar();
+        mActionbar.setCustomView(R.layout.actionbar_main);
 
+        spinnerCity = (Spinner) mActionbar.getCustomView().findViewById(R.id.sp_actionbar_city);
+        spinnerTag = (Spinner) mActionbar.getCustomView().findViewById(R.id.sp_actionbar_tag);
+        title_tv = (TextView) mActionbar.getCustomView().findViewById(R.id.tv_actionbar_titile);
 
-        mActionbar.getCustomView().setOnClickListener(new mOnclickListener());
 
     }
 
@@ -75,7 +72,7 @@ public abstract class BaseActivity extends Activity {
      * @param showCity
      * @param showTag
      */
-    public void setTitle(boolean showCity, boolean showTag) {
+    public void setBarVisibility(boolean showCity, boolean showTag) {
 
         this.showCity = showCity;
         this.showTag = showTag;
@@ -87,7 +84,7 @@ public abstract class BaseActivity extends Activity {
      */
     private void refreshActionBar() {
 
-        if (title != null) {
+        if (title != 0) {
             title_tv.setText(title);
         }
 
@@ -109,7 +106,7 @@ public abstract class BaseActivity extends Activity {
      *
      * @param title
      */
-    public void setTitle(String title) {
+    public void settitle(int title) {
         this.title = title;
         refreshActionBar();
     }
@@ -120,7 +117,7 @@ public abstract class BaseActivity extends Activity {
      * @param tagList
      */
     public void setTag(List<String> tagList) {
-        this.tagList = tagList;
+
         //适配器
         ArrayAdapter arr_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, tagList);
         //设置样式
@@ -137,13 +134,13 @@ public abstract class BaseActivity extends Activity {
      * @param cityList
      */
     public void setCity(List<String> cityList) {
-        this.cityList = cityList;
+
         //适配器
-        ArrayAdapter arr_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, tagList);
+        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, cityList);
         //设置样式
-        arr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //加载适配器
-        spinnerCity.setAdapter(arr_adapter);
+        spinnerCity.setAdapter(adapter);
 
         refreshActionBar();
     }
@@ -178,6 +175,9 @@ public abstract class BaseActivity extends Activity {
     public interface mActionBarOnClickListener {
         void onClick(View v);
     }
+
+    //主界面layout的id
+    public abstract int getLayoutId();
 
     //获取控件实例
     public abstract void findviewbyid();

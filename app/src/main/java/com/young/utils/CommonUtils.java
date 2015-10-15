@@ -51,4 +51,25 @@ public class CommonUtils {
 			return false;
 	}
 
+	//    private void beginCrop(Uri source) {
+//
+//        File filepath;
+//
+//        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+//            //外置内存卡存在
+//            File share = new File(Environment.getExternalStorageDirectory(), "share/user/icon");
+//            share.mkdirs();
+//
+//            filepath = new File(Environment.getExternalStorageDirectory(), "share/user/icon/user");
+//
+//        } else {
+//            //外置内存卡不存在
+//
+//            File share = new File(this.getCacheDir(), "/user/icon");
+//            share.mkdirs();
+//
+//            filepath = new File(this.getCacheDir(), "user/icon/user");
+//
+//        }
+
 }

@@ -5,4 +5,6 @@
 
 2.主界面使用viewpager，可以进行左右滑动
 
+3.使用具有动画的listview,其中图片点击放大,并且可以缩放,添加瀑布流view
+
 gson，volley，litepal（sqlite），UIL（通用图片加载）

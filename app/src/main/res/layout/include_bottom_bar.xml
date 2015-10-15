@@ -19,17 +19,17 @@
         android:showDividers="middle">
 
         <TextView
-            android:id="@+id/tx_wantogo"
+            android:id="@+id/id_tx_wantogo"
             android:drawableLeft="@drawable/wantogo_30"
             android:text="@string/tx_wantogo"
             style="@style/text_style" />
         <TextView
-           android:id="@+id/hadgo"
+           android:id="@+id/id_hadgo"
             style="@style/text_style"
             android:drawableLeft="@drawable/hadgo_30"
             android:text="@string/hadgo"/>
         <TextView
-            android:id="@+id/tx_comment"
+            android:id="@+id/id_tx_comment"
             android:text="@string/tx_comment"
             android:drawableLeft="@drawable/comment_30"
             style="@style/text_style"/>
