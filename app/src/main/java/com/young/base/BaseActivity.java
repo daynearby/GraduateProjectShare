@@ -2,8 +2,8 @@ package com.young.base;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -37,6 +37,8 @@ public abstract class BaseActivity extends Activity {
 
     private Spinner spinnerCity;
     private Spinner spinnerTag;
+
+    public final static String BUNDLE_TAG = "Serializable_Data";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +169,33 @@ public abstract class BaseActivity extends Activity {
 
 
         }
+    }
+
+    /**
+     * 跳转界面，不带参数的
+     *
+     * @param clazz 要跳转的类，也就是要传递参数的类
+     */
+    public void mStartActivity(Class clazz) {
+
+
+        mStartActivity(clazz, null);
+    }
+
+    /**
+     * 跳转界面，带参数的
+     * @param clazz 要跳转的类，也就是要传递参数的类
+     * @param bundle serializable
+     */
+    public void mStartActivity(Class clazz, Bundle bundle) {
+
+        Intent intent = new Intent();
+        intent.setClass(this, clazz);
+        if (bundle != null) {
+            intent.putExtra(BUNDLE_TAG, bundle);
+        }
+
+        startActivity(intent);
     }
 
     /**
