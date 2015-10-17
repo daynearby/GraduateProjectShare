@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="select_cities_items">
+        <item>广州</item>
+        <item>深圳</item>
+        <item>佛山</item>
+        <item>东莞</item>
+        <item>中山</item>
+        <item>珠海</item>
+        <item>江门</item>
+        <item>肇庆</item>
+        <item>惠州</item>
+        <item>汕头</item>
+        <item>潮州</item>
+        <item>揭阳</item>
+        <item>汕尾</item>
+        <item>湛江</item>
+        <item>茂名</item>
+        <item>阳江</item>
+        <item>韶关</item>
+        <item>清远</item>
+        <item>云浮</item>
+        <item>梅州</item>
+        <item>河源</item>
+    </string-array>
+
+    <string-array name="select_tag_item">
+        <item>最多人想去</item>
+        <item>我爱摄影</item>
+        <item>约会圣地</item>
+        <item>我是吃货</item>
+        <item>户外运动</item>
+    </string-array>
+</resources>

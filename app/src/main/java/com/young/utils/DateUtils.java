@@ -9,14 +9,14 @@ import java.util.TimeZone;
 /**
  * 时间 格式化、截取、转换 工具类
  */
-public class DateUtil {
+public class DateUtils {
 
     public static SimpleDateFormat dateFormat;
     public static SimpleDateFormat timeFormat;
     public static SimpleDateFormat longFormat;
     public static Calendar calendar;
 
-    private static final String TAG = "DateUtil";
+    private static final String TAG = "DateUtils";
     private static final int HOUR_SDUR = 1;//两个时间段相隔的时间
 
     static {
@@ -111,7 +111,7 @@ public class DateUtil {
      */
     public static boolean compearString(String tempTime, String currentTime) {
 
-        int hours = DateUtil.hourBetween(tempTime, currentTime);
+        int hours = DateUtils.hourBetween(tempTime, currentTime);
 
         return HOUR_SDUR <= hours;
     }
@@ -141,7 +141,7 @@ public class DateUtil {
 
     public static String convertTimeStamp2Time(long timestamp) {
         Date date = new Date(timestamp);
-        return DateUtil.convertDate2Str(date);
+        return DateUtils.convertDate2Str(date);
     }
 
     public static void main(String[] args) {
