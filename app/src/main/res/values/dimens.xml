@@ -12,5 +12,9 @@
     <dimen name="textSizeSmall">14sp</dimen>
     <dimen name="textSizeMediu">18sp</dimen>
     <dimen name="textSizeLarge">22sp</dimen>
+    <dimen name="textSizeXLarge">28sp</dimen>
+
+    <dimen name="micro">2dp</dimen>
+    <dimen name="radius">10dp</dimen>
 
 </resources>

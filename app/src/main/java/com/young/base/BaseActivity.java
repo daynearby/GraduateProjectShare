@@ -3,12 +3,16 @@ package com.young.base;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.young.annotation.Injector;
 import com.young.share.R;
 import com.young.utils.LogUtils;
@@ -19,7 +23,7 @@ import java.util.List;
  * 基类
  * 有actionBar，并且有点击事件
  * 使用注释
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-10-08.
  */
 public abstract class BaseActivity extends Activity {
@@ -60,6 +64,8 @@ public abstract class BaseActivity extends Activity {
         mActionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         mActionbar.setCustomView(R.layout.actionbar_main);
 
+        setTranslucentStatus();
+
         spinnerCity = (Spinner) mActionbar.getCustomView().findViewById(R.id.sp_actionbar_city);
         spinnerTag = (Spinner) mActionbar.getCustomView().findViewById(R.id.sp_actionbar_tag);
         title_tv = (TextView) mActionbar.getCustomView().findViewById(R.id.tv_actionbar_titile);
@@ -67,6 +73,33 @@ public abstract class BaseActivity extends Activity {
 
     }
 
+    private void setTranslucentStatus() {
+        boolean on = false;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            on = true;
+        }
+
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+
+        win.setAttributes(winParams);
+
+
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        tintManager.setStatusBarTintEnabled(true);
+//设置沉浸的颜色
+        tintManager.setStatusBarTintResource(R.color.theme_puple);
+
+
+}
 
     /**
      * 设置标题显示状态
@@ -121,9 +154,9 @@ public abstract class BaseActivity extends Activity {
     public void setTag(List<String> tagList) {
 
         //适配器
-        ArrayAdapter arr_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, tagList);
+        ArrayAdapter arr_adapter = new ArrayAdapter<>(this, R.layout.custom_spinner_item, tagList);
         //设置样式
-        arr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        arr_adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
         //加载适配器
         spinnerTag.setAdapter(arr_adapter);
 
@@ -138,9 +171,9 @@ public abstract class BaseActivity extends Activity {
     public void setCity(List<String> cityList) {
 
         //适配器
-        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, cityList);
+        ArrayAdapter adapter = new ArrayAdapter<>(this, R.layout.custom_spinner_item, cityList);
         //设置样式
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
         //加载适配器
         spinnerCity.setAdapter(adapter);
 
@@ -156,20 +189,20 @@ public abstract class BaseActivity extends Activity {
         this.mActionBarOnClickListener = mActionBarOnClickListener;
     }
 
-    private class mOnclickListener implements View.OnClickListener {
+private class mOnclickListener implements View.OnClickListener {
 
-        @Override
-        public void onClick(View v) {
+    @Override
+    public void onClick(View v) {
 
-            if (mActionBarOnClickListener != null) {
-                mActionBarOnClickListener.onClick(v);
-            } else {
-                LogUtils.logE(getPackageName(), "没有设置点击回调");
-            }
-
-
+        if (mActionBarOnClickListener != null) {
+            mActionBarOnClickListener.onClick(v);
+        } else {
+            LogUtils.logE(getPackageName(), "没有设置点击回调");
         }
+
+
     }
+}
 
     /**
      * 跳转界面，不带参数的
@@ -184,7 +217,8 @@ public abstract class BaseActivity extends Activity {
 
     /**
      * 跳转界面，带参数的
-     * @param clazz 要跳转的类，也就是要传递参数的类
+     *
+     * @param clazz  要跳转的类，也就是要传递参数的类
      * @param bundle serializable
      */
     public void mStartActivity(Class clazz, Bundle bundle) {
@@ -198,12 +232,13 @@ public abstract class BaseActivity extends Activity {
         startActivity(intent);
     }
 
-    /**
-     * 点击事件的回调
-     */
-    public interface mActionBarOnClickListener {
-        void onClick(View v);
-    }
+/**
+ * 点击事件的回调
+ */
+public interface mActionBarOnClickListener {
+    void onClick(View v);
+
+}
 
     //主界面layout的id
     public abstract int getLayoutId();

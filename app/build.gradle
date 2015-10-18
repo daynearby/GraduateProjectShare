@@ -3,7 +3,6 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 22
     buildToolsVersion '22.0.1'
-
     defaultConfig {
         applicationId "com.young.share"
         minSdkVersion 15
@@ -17,12 +16,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+    }
 }
 
 dependencies {
+    compile "com.readystatesoftware.systembartint:systembartint:1.0.3"
     compile 'com.android.support:appcompat-v7:22.2.0'
-    compile project(':Crop')
-    compile project(':svprogresshud')
     compile files('libs/universal-image-loader-1.9.4.jar')
     compile files('libs/volley.jar')
     compile files('libs/litepal-1.2.1-src.jar')

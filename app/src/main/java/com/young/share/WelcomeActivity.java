@@ -10,6 +10,8 @@ import android.view.Window;
 import com.young.config.Contants;
 import com.young.utils.SharePreferenceUtils;
 
+import cn.bmob.v3.BmobUser;
+
 /**
  * Created by Nearby Yang on 2015-08-17.
  */
@@ -82,15 +84,23 @@ public class WelcomeActivity extends Activity{
     };
 
 
-
+    /**
+     * 进入主界面
+     *
+     */
     private void goHome(){
 
         intents=new Intent(WelcomeActivity.this,MainActivity.class);
+
+        loginFunction();
 
         startActivity(intents);
         this.finish();
 
     }
+
+
+
 
     private void goGuide(){
 
@@ -101,4 +111,20 @@ public class WelcomeActivity extends Activity{
         this.finish();
 
     }
+
+    /**
+     * 登录过，才能进行登录
+     * 没有登录过，则不进行其他操作
+     */
+    private void loginFunction() {
+
+        BmobUser bmobUser = BmobUser.getCurrentUser(this);
+        if(bmobUser != null){
+            // 允许用户使用应用
+
+        }else{
+            //缓存用户对象为空时， 可打开用户注册界面…
+        }
+    }
+
 }

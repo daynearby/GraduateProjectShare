@@ -15,4 +15,10 @@
     <string name="discover">发 现</string>
     <string name="rank">排行榜</string>
     <string name="discount">优 惠</string>
+    <string name="account">账号</string>
+    <string name="email">邮箱</string>
+    <string name="pwd">密码</string>
+    <string name="login_text">登录</string>
+    <string name="forget_pwd">忘记密码？</string>
+    <string name="regist">注册</string>
 </resources>
