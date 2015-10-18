@@ -13,6 +13,7 @@ import com.young.adapter.MainPagerAdapter;
 import com.young.annotation.InjectView;
 import com.young.base.BaseActivity;
 import com.young.config.Contants;
+import com.young.views.ArcMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class MainActivity extends BaseActivity {
 //    private TextView tx;
     private ViewPager viewPager;
     private List<View> list;
+    private ArcMenu mArcMenu;
 
 
     @Override
@@ -42,6 +44,7 @@ public class MainActivity extends BaseActivity {
 
         list = new ArrayList<>();
         viewPager = $(R.id.vp_main);
+        mArcMenu = (ArcMenu) findViewById(R.id.id_menu);
 
         LayoutInflater inflater = LayoutInflater.from(this);
 
