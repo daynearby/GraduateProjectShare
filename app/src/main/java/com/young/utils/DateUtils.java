@@ -19,6 +19,10 @@ public class DateUtils {
     private static final String TAG = "DateUtils";
     private static final int HOUR_SDUR = 1;//两个时间段相隔的时间
 
+    private static final int MINUT = 1;
+    private static final int HOUR = 2;
+
+
     static {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         timeFormat = new SimpleDateFormat("hh:mm:ss");
@@ -67,21 +71,55 @@ public class DateUtils {
         return convertStr2Date(goalDate).after(calendar.getTime());
     }
 
-    public static int daysBetween(String smdate, String bdate) {
+    /**
+     *
+     * @param smdate 最新一个时间
+     * @param bdate 一个时间
+     * @param i  0-->天，  1 --> 分钟，  2-->小时
+     * @return 两个时间差
+     */
+    public static int Between(String smdate, String bdate, int i) {
+
+        long between_days = 0;
+
         try {
             calendar.setTime(dateFormat.parse(smdate));
             long time1 = calendar.getTimeInMillis();
             calendar.setTime(dateFormat.parse(bdate));
             long time2 = calendar.getTimeInMillis();
-            long between_days = (time2 - time1) / (1000 * 3600 * 24);
-            return Integer.parseInt(String.valueOf(between_days));
+            between_days = (time2 - time1) / (1000);
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return 0;
+
+        switch (i) {
+            case MINUT:
+                return Integer.parseInt(String.valueOf(between_days / 60 ));
+            case HOUR:
+                return Integer.parseInt(String.valueOf(between_days / 3600));
+            default:
+                return Integer.parseInt(String.valueOf(between_days /3600 /24));
+
+        }
+
+
     }
 
     /**
+     * 小时
+     * 比较两个时间之间相差多少小时
+     *
+     * @param bdate 前一个时间
+     * @param adate 当前时间
+     * @return
+     */
+    public static int dayBetween(String bdate, String adate) {
+
+        return Between(bdate, adate, 0);
+    }
+    /**
+     * 小时
      * 比较两个时间之间相差多少小时
      *
      * @param bdate 前一个时间
@@ -89,18 +127,23 @@ public class DateUtils {
      * @return
      */
     public static int hourBetween(String bdate, String adate) {
-        try {
-            calendar.setTime(longFormat.parse(bdate));
-            long time1 = calendar.getTimeInMillis();
-            calendar.setTime(longFormat.parse(adate));
-            long time2 = calendar.getTimeInMillis();
-            long between_hours = (time2 - time1) / (1000 * 3600);
-            return Integer.parseInt(String.valueOf(between_hours));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0;
+
+        return Between(bdate, adate, 2);
     }
+
+    /**
+     * 分钟
+     * 比较两个时间之间相差多少小时
+     *
+     * @param bdate 前一个时间
+     * @param adate 当前时间
+     * @return
+     */
+    public static int minuBetween(String bdate, String adate) {
+
+        return Between(bdate, adate, 1);
+    }
+
 
     /**
      * 比较两个时间 超过一个小时的记录则显示时间

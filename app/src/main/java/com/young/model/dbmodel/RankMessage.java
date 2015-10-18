@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by Nearby Yang on 2015-10-17.
  */
-public class RankMessa extends DBModel {
+public class RankMessage extends DBModel {
 
     private String shContent;
     private List<String> shImgs;

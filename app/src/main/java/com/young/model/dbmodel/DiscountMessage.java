@@ -10,7 +10,6 @@ import java.util.List;
 public class DiscountMessage extends DBModel {
 
 
-
     private String shContent;
     private List<String> shImgs;
     private String shLocation;

@@ -18,15 +18,42 @@ import cn.bmob.v3.BmobObject;
  */
 public  class DBModel extends DataSupport implements Serializable {
 
+    private int id;
+    private String objectId;
     private String userId;
     private String address;
     private String avatar;
     private String qq;
     private int age;
     private boolean gender;
-    private String accessToken;
 
+    private String accessToken;
     private String createdAt;
+    private String updatedAt;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
 
     public String getUserId() {
         return userId;
