@@ -2,6 +2,7 @@ package com.young.share;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
@@ -13,7 +14,9 @@ import com.young.adapter.MainPagerAdapter;
 import com.young.annotation.InjectView;
 import com.young.base.BaseActivity;
 import com.young.config.Contants;
+import com.young.model.User;
 import com.young.views.ArcMenu;
+import com.young.views.Dialog4Tips;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +24,11 @@ import java.util.List;
 import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobInstallation;
+import cn.bmob.v3.BmobUser;
 
 
 public class MainActivity extends BaseActivity {
 
-    //    private GridView myGridview;
-//    private ImageView im_user;
-//    @InjectView(R.id.id_tv)
-//    private TextView tx;
     private ViewPager viewPager;
     private List<View> list;
     private ArcMenu mArcMenu;
@@ -82,6 +82,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void bindData() {
+        loginFunction();
         settitle(R.string.discover);
         setBarVisibility(true, false);
         setCity(cityList());
@@ -212,6 +213,50 @@ public class MainActivity extends BaseActivity {
         } else {
 
             return super.dispatchKeyEvent(event);
+
+        }
+    }
+
+    /**
+     * 登录过，才能进行登录
+     * 没有登录过，则不进行其他操作
+     */
+    private void loginFunction() {
+        final Dialog4Tips dialog4Tips = new Dialog4Tips(MainActivity.this);
+
+        User bmobUser = BmobUser.getCurrentUser(this, User.class);
+
+        if (bmobUser != null) {
+            // 允许用户使用应用
+//用户登录过，没有注销
+
+        } else { //缓存用户对象为空时， 可打开用户注册界面…或者选择进入主界面
+
+
+            dialog4Tips.setBtnCancelText(getString(R.string.skin));
+            dialog4Tips.setBtnOkText(getString(R.string.login_text));
+            dialog4Tips.setBtnCancelVisi(View.VISIBLE);
+
+            dialog4Tips.setDialogListener(new Dialog4Tips.Listener() {
+                @Override
+                public void btnOkListenter() {//登陆  按钮 ，进入登陆界面
+
+                    intents .setClass(MainActivity.this, LoginActivity.class);
+                    dialog4Tips.dismiss();
+
+                    startActivity(intents);
+                }
+
+                @Override
+                public void btnCancelListener() {//跳过  按钮 进入主界面
+
+
+                    dialog4Tips.dismiss();
+
+                }
+            });
+
+            dialog4Tips.show();
 
         }
     }

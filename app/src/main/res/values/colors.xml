@@ -4,5 +4,7 @@
    <color name="theme_puple">#9D55B8</color>
    <color name="white">#ffffff</color>
    <color name="transparent">#00000000</color>
-   <color name="translucent">#50000000</color>
+   <color name="translucent">#80ffffff</color>
+   <color name="light_gray">#c2c2c2</color>
+
 </resources>

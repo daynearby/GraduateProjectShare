@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.young.annotation.Injector;
@@ -41,6 +42,7 @@ public abstract class BaseActivity extends Activity {
 
     private Spinner spinnerCity;
     private Spinner spinnerTag;
+    public Intent intents = new Intent();
 
     public final static String BUNDLE_TAG = "Serializable_Data";
 
@@ -48,7 +50,7 @@ public abstract class BaseActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
-        Injector.inject(BaseActivity.this);
+        Injector.inject(this);
         initActionBar();
         initData();
         findviewbyid();
@@ -230,6 +232,14 @@ private class mOnclickListener implements View.OnClickListener {
         }
 
         startActivity(intent);
+    }
+
+    /**
+     *  toast
+     * @param strId 文字id
+     */
+    public void mToast(int strId){
+        Toast.makeText(this, strId, Toast.LENGTH_SHORT).show();
     }
 
 /**

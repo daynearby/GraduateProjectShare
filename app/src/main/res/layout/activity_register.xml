@@ -17,7 +17,7 @@
             style="@style/bar_text"
             android:gravity="center"
             android:padding="@dimen/paddingMediu"
-            android:text="@string/login_text"
+            android:text="@string/regist"
             android:textColor="@color/white"
             android:textSize="@dimen/textSizeXLarge" />
 
@@ -34,7 +34,7 @@
                 android:textSize="@dimen/textSizeLarge" />
 
             <EditText
-                android:id="@+id/et_login_email"
+                android:id="@+id/et_registrt_email"
                 style="@style/bar_text"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
@@ -59,44 +59,64 @@
                 android:textSize="@dimen/textSizeLarge" />
 
             <EditText
-                android:id="@+id/et_login_pwd"
+                android:id="@+id/et_register_pwd"
                 style="@style/bar_text"
                 android:inputType="textPassword"
                 android:paddingLeft="@dimen/paddingMediu"
                 android:singleLine="true"
                 android:textColor="@color/white"
+                android:textSize="@dimen/textSizeLarge"
+                android:textColorHint="@color/light_gray"
+                android:hint="最少六位字符"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/paddingMediu">
+
+            <TextView
+                style="@style/text_tab"
+                android:text="@string/pwd"
+                android:textColor="@color/white"
                 android:textSize="@dimen/textSizeLarge" />
+
+            <EditText
+                android:id="@+id/et_register_config_pwd"
+                style="@style/bar_text"
+                android:inputType="textPassword"
+                android:paddingLeft="@dimen/paddingMediu"
+                android:singleLine="true"
+                android:textColorHint="@color/light_gray"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeLarge"
+                android:hint="@string/config_pwd"/>
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_login_forgetPwd"
+            android:id="@+id/tv_go_login"
             style="@style/bar_text"
             android:gravity="right"
             android:padding="@dimen/paddingMic"
-            android:text="@string/forget_pwd"
-            android:textColor="@drawable/sele_text_color_def_white"
-            android:textSize="@dimen/textSizeMediu" />
-
-        <TextView
-            android:id="@+id/tv_login_register"
-            style="@style/bar_text"
-            android:gravity="right"
-            android:padding="@dimen/paddingMic"
-            android:text="@string/regist"
+            android:text="@string/had_register"
             android:textColor="@drawable/sele_text_color_def_white"
             android:textSize="@dimen/textSizeMediu" />
 
 
+
+
         <TextView
-            android:id="@+id/tv_login_btn"
+            android:id="@+id/tv_register_btn"
             style="@style/bar_text"
             android:layout_marginLeft="@dimen/paddingLarg"
             android:layout_marginRight="@dimen/paddingLarg"
             android:background="@drawable/sele_login_btn"
             android:gravity="center"
             android:padding="@dimen/paddingMediu"
-            android:text="@string/login_text"
+            android:text="@string/regist"
             android:textColor="@color/white"
             android:textSize="@dimen/textSizeLarge" />
     </LinearLayout>

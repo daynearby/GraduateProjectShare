@@ -5,22 +5,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
 import android.view.Window;
 
 import com.young.config.Contants;
+import com.young.model.User;
 import com.young.utils.SharePreferenceUtils;
+import com.young.views.Dialog4Tips;
 
 import cn.bmob.v3.BmobUser;
 
 /**
  * Created by Nearby Yang on 2015-08-17.
  */
-public class WelcomeActivity extends Activity{
+public class WelcomeActivity extends Activity {
 
-    private Intent intents;
-    private boolean isFirstIn=true;
+    private Intent  intents = new Intent();
+    private boolean isFirstIn = true;
 
-    private final static String isFirstInTAG="isFirstIn";
+    private final static String isFirstInTAG = "isFirstIn";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,25 +38,23 @@ public class WelcomeActivity extends Activity{
      * 是否第一次启动
      */
 
-    private void isFirstIn(){
+    private void isFirstIn() {
 
-        SharePreferenceUtils preferences=new SharePreferenceUtils(this);
+        SharePreferenceUtils preferences = new SharePreferenceUtils(this);
 
-        isFirstIn=preferences.getBoolean(Contants.sharePreferenceStr.hashCode()+"",isFirstInTAG);
+        isFirstIn = preferences.getBoolean(Contants.sharePreferenceStr.hashCode() + "", isFirstInTAG);
 
-        if(isFirstIn){
+        if (isFirstIn) {
 
-            preferences.setBoolean(Contants.sharePreferenceStr.hashCode()+"",isFirstInTAG,false);
+            preferences.setBoolean(Contants.sharePreferenceStr.hashCode() + "", isFirstInTAG, false);
             handler.sendEmptyMessageDelayed(Contants.GO_GUIDE, Contants.TIME);
 
 
-
-        }else{
+        } else {
 //"welcome", MODE_PRIVATE);
-            handler.sendEmptyMessageDelayed(Contants.GO_HOME,Contants.TIME);
+            handler.sendEmptyMessageDelayed(Contants.GO_HOME, Contants.TIME);
 
         }
-
 
 
     }
@@ -86,25 +87,20 @@ public class WelcomeActivity extends Activity{
 
     /**
      * 进入主界面
-     *
      */
-    private void goHome(){
+    private void goHome() {
 
-        intents=new Intent(WelcomeActivity.this,MainActivity.class);
-
-        loginFunction();
-
+        intents.setClass(WelcomeActivity.this, MainActivity.class);
         startActivity(intents);
+
         this.finish();
 
     }
 
 
+    private void goGuide() {
 
-
-    private void goGuide(){
-
-        intents=new Intent(WelcomeActivity.this,GuideActivity.class);
+        intents.setClass(WelcomeActivity.this, GuideActivity.class);
 
         startActivity(intents);
 
@@ -112,19 +108,6 @@ public class WelcomeActivity extends Activity{
 
     }
 
-    /**
-     * 登录过，才能进行登录
-     * 没有登录过，则不进行其他操作
-     */
-    private void loginFunction() {
 
-        BmobUser bmobUser = BmobUser.getCurrentUser(this);
-        if(bmobUser != null){
-            // 允许用户使用应用
-
-        }else{
-            //缓存用户对象为空时， 可打开用户注册界面…
-        }
-    }
 
 }

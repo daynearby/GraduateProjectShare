@@ -17,7 +17,7 @@
         android:clickable="true"
         android:padding="@dimen/paddingMic"
         android:text="@string/id_enterMain"
-        android:textColor="@drawable/text_selector"
+        android:textColor="@drawable/sele_text_color"
         android:textSize="20sp" />
 
 </RelativeLayout>

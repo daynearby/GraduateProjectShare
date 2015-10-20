@@ -11,7 +11,7 @@ public class User extends BmobUser {
 
 
     private String address;
-    private BmobFile avatar;
+    private String avatar;
     private String qq;
     private int age;
     private boolean gender;
@@ -43,11 +43,11 @@ public class User extends BmobUser {
         this.address = address;
     }
 
-    public BmobFile getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(BmobFile avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 

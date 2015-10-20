@@ -9,6 +9,7 @@ public class Contants {
     public final static int GO_HOME = 100;
     public final static int GO_GUIDE = 101;
     public final static int TIME = 2000;
+    public final static int ONE_SECOND = 1000;
 
     public final static String sharePreferenceStr="WELCOME";
 
