@@ -125,7 +125,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                                         public void onFailure(int i, String s) {
 
                                             if (i == 202) {
-                                                SVProgressHUD.showInfoWithStatus(RegisterActivity.this, getString(R.string.userHadRegister), SVProgressHUD.SVProgressHUDMaskType.Gradient);
+                                                SVProgressHUD.showInfoWithStatus(RegisterActivity.this, getString(R.string.user_had_register), SVProgressHUD.SVProgressHUDMaskType.Gradient);
                                             }
                                             LogUtils.logE(getClass().getName(), "注册失败  code = " + i + " message = " + s);
                                         }
@@ -136,22 +136,22 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                                     registPwd.setText("");
                                     registConfigPwd.setText("");
 
-                                    SVProgressHUD.showInfoWithStatus(this, getString(R.string.pwdNotEquals), SVProgressHUD.SVProgressHUDMaskType.Gradient);
+                                    SVProgressHUD.showInfoWithStatus(this, getString(R.string.pwd_not_equals), SVProgressHUD.SVProgressHUDMaskType.Gradient);
 
                                 }
                             } else {
-                                SVProgressHUD.showInfoWithStatus(this, getString(R.string.pwdLenghtNotEnough), SVProgressHUD.SVProgressHUDMaskType.Gradient);
+                                SVProgressHUD.showInfoWithStatus(this, getString(R.string.pwd_lenght_not_enough), SVProgressHUD.SVProgressHUDMaskType.Gradient);
 
                             }
                         } else {
-                            SVProgressHUD.showInfoWithStatus(this, getString(R.string.pwdNotEmpty), SVProgressHUD.SVProgressHUDMaskType.Gradient);
+                            SVProgressHUD.showInfoWithStatus(this, getString(R.string.pwd_not_empty), SVProgressHUD.SVProgressHUDMaskType.Gradient);
 
                         }
                     } else {
-                        SVProgressHUD.showInfoWithStatus(this, getString(R.string.emailError), SVProgressHUD.SVProgressHUDMaskType.Gradient);
+                        SVProgressHUD.showInfoWithStatus(this, getString(R.string.email_eror), SVProgressHUD.SVProgressHUDMaskType.Gradient);
                     }
                 } else {
-                    SVProgressHUD.showInfoWithStatus(this, getString(R.string.emailNotEmpty), SVProgressHUD.SVProgressHUDMaskType.Gradient);
+                    SVProgressHUD.showInfoWithStatus(this, getString(R.string.email_not_empty), SVProgressHUD.SVProgressHUDMaskType.Gradient);
 
                 }
 

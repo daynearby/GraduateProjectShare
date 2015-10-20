@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:padding="@dimen/paddingMic"
-            android:text="@string/userNameDefual"
+            android:text="@string/user_name_defual"
             android:textSize="@dimen/textSizeLarge" />
 
 

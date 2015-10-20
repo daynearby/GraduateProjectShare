@@ -7,7 +7,7 @@
     <string name="tx_wantogo">想去</string>
     <string name="hadgo">去过</string>
     <string name="tx_comment">评论</string>
-    <string name="userNameDefual">瞄瞄</string>
+    <string name="user_name_defual">瞄瞄</string>
     <string name="tab_appoinment"><a href="">约会圣地</a></string>
     <string name="defaul_share_text">南坛公园，松锅的约会圣地，推荐你们去哟！</string>
     <string name="huizhou">惠州</string>
@@ -27,11 +27,12 @@
     <string name="personal_center">个人中心</string>
     <string name="config_pwd">确认密码</string>
     <string name="had_register">已有账号？</string>
-    <string name="emailNotEmpty">邮箱不能为空</string>
-    <string name="pwdNotEmpty">密码不能为空</string>
-    <string name="pwdNotEquals">两次输入密码不相同</string>
-    <string name="userHadRegister">该邮箱已经被使用</string>
-    <string name="pwdLenghtNotEnough">密码长度不能小于6位</string>
-    <string name="emailError">邮箱格式错误</string>
+    <string name="email_not_empty">邮箱不能为空</string>
+    <string name="pwd_not_empty">密码不能为空</string>
+    <string name="pwd_not_equals">两次输入密码不相同</string>
+    <string name="user_had_register">该邮箱已经被使用</string>
+    <string name="pwd_lenght_not_enough">密码长度不能小于6位</string>
+    <string name="email_eror">邮箱格式错误</string>
     <string name="register_success">恭喜，注册成功！</string>
+    <string name="user_name">用户名</string>
 </resources>

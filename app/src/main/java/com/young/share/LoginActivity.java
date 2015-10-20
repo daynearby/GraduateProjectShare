@@ -5,6 +5,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.young.base.BaseActivity;
+import com.young.model.User;
 
 /**
  * Created by Nearby Yang on 2015-10-18.
@@ -40,7 +41,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void initData() {
 
-        setBarVisibility(false,false);
+        setBarVisibility(false, false);
         settitle(R.string.personal_center);
     }
 
@@ -64,9 +65,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
 
             case R.id.tv_login_btn:
+
+                login();
+
 // TODO: 2015-10-20 登陆功能实现
                 break;
 
         }
+    }
+    /**
+     *登陆账号
+     */
+    private void login() {
+
+        User userLogin = new User();
+//        userLogin.setPassword();
+//        et_loginEmail.getText().toString().trim()
+
     }
 }

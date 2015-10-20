@@ -6,14 +6,17 @@ package com.young.config;
  */
 public class Contants {
 //欢迎界面
-    public final static int GO_HOME = 100;
-    public final static int GO_GUIDE = 101;
-    public final static int TIME = 2000;
-    public final static int ONE_SECOND = 1000;
+    public  static final int GO_HOME = 100;
+    public  static final int GO_GUIDE = 101;
+    public  static final int TIME = 2000;
+    public  static final int ONE_SECOND = 1000;
 
-    public final static String sharePreferenceStr="WELCOME";
+    public  static final String sharePreferenceStr="WELCOME";
+
+    public  static final String SH_ACCOUNT = "account";
+    public  static final String SH_PWD = "pwd";
 
     //*************************** Bmob key *****************
 
-    public final static String BMOB_APP_KEY = "52f47fe363ec6e189700adf5b51e58ed";
+    public  static final String BMOB_APP_KEY = "52f47fe363ec6e189700adf5b51e58ed";
 }
