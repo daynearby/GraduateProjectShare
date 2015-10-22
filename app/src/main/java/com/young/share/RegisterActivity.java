@@ -78,6 +78,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
+    public void handerMessage(Message msg) {
+        // 停止定位服务并且回到登陆界面
+        gotoLoginAndStopLocationServices();
+    }
+
+    @Override
     public void onClick(View v) {
 
         String email;
@@ -96,7 +102,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                 if (email != null) {
 
-                    if (CommonUtils.isEmail(email)) {
+                    if (email.length() >3) {
 
 
                         if (pwd != null || config_pwd != null) {
@@ -117,7 +123,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                                         public void onSuccess() {
 
                                             SVProgressHUD.showSuccessWithStatus(RegisterActivity.this, getString(R.string.register_success));
-                                            mhandler.sendEmptyMessageDelayed(101,Contants.ONE_SECOND);
+                                            mHandler.sendEmptyMessageDelayed(101,Contants.ONE_SECOND);
 
                                         }
 
@@ -165,15 +171,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-     private Handler mhandler = new Handler(){
-         @Override
-         public void handleMessage(Message msg) {
-             // 停止定位服务并且回到登陆界面
-             gotoLoginAndStopLocationServices();
-         }
 
-
-     };
 
     private void uploadAvatarAndRegisrter(final User user) {
 

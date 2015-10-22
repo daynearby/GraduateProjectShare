@@ -21,6 +21,11 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+
     <!-- end -->
 
     <!-- BmobPush SDK权限 -->
@@ -69,6 +74,15 @@
         <!-- 注册 -->
         <activity android:name=".RegisterActivity"/>
 
+        <!-- 找回密码 -->
+        <activity android:name=".FindPwdActivity"/>
+
+        <!-- 短信验证 -->
+        <activity
+            android:name="com.mob.tools.MobUIShell"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <!-- 裁剪头像 -->
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 

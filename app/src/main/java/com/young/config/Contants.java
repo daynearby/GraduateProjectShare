@@ -19,4 +19,11 @@ public class Contants {
     //*************************** Bmob key *****************
 
     public  static final String BMOB_APP_KEY = "52f47fe363ec6e189700adf5b51e58ed";
+
+    //******************************Mob key*******************************
+    public  static final String SMS_APP_KEY = "b63b43f91a14";
+    public  static final String SMS_APP_SECRET= "78a2317bbf261f05ebb6c62be8262bb7";
+
+
+
 }

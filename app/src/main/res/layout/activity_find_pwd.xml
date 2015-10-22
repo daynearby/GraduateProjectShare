@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_login_m"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:padding="@dimen/paddingMediu"
+        >
+
+        <TextView
+            style="@style/bar_text"
+            android:gravity="center"
+            android:padding="@dimen/paddingMediu"
+            android:text="@string/find_pwd_text"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textSizeXLarge" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/paddingMediu">
+
+            <TextView
+                style="@style/text_tab"
+                android:text="@string/account"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeLarge" />
+
+            <EditText
+                android:id="@+id/et_find_pwd_user_name"
+                style="@style/bar_text"
+                android:hint="@string/user_name"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="@dimen/paddingMediu"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/light_gray"
+                android:textSize="@dimen/textSizeLarge" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lly_find_pwd_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="invisible"
+            android:padding="@dimen/paddingMediu">
+
+            <TextView
+                style="@style/text_tab"
+                android:text="@string/pwd"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeLarge" />
+
+            <EditText
+                android:id="@+id/et_find_pwd_pwd"
+                style="@style/bar_text"
+                android:inputType="textPassword"
+                android:paddingLeft="@dimen/paddingMediu"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeLarge" />
+
+        </LinearLayout>
+
+
+
+        <TextView
+            android:id="@+id/tv_find_pwd_btn"
+            style="@style/bar_text"
+            android:layout_marginLeft="@dimen/paddingLarg"
+            android:layout_marginRight="@dimen/paddingLarg"
+            android:background="@drawable/sele_login_btn"
+            android:gravity="center"
+            android:padding="@dimen/paddingMediu"
+            android:text="@string/find_pwd_text"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textSizeLarge" />
+    </LinearLayout>
+</RelativeLayout>

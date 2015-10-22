@@ -19,7 +19,7 @@ import android.widget.FrameLayout;
 public class SVProgressHUD {
     private Context context;
     private static SVProgressHUD mSVProgressHUD;
-    private static final long DISMISSDELAYED = 1000;
+    private static final long DISMISSDELAYED = 1500;
     private SVProgressHUDMaskType mSVProgressHUDMaskType;
 
     public enum SVProgressHUDMaskType {

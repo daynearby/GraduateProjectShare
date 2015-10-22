@@ -36,7 +36,7 @@
             <EditText
                 android:id="@+id/et_login_email"
                 style="@style/bar_text"
-                android:hint="@string/email"
+                android:hint="@string/user_name"
                 android:inputType="textEmailAddress"
                 android:paddingLeft="@dimen/paddingMediu"
                 android:singleLine="true"

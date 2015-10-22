@@ -2,19 +2,19 @@ package com.young.share;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 
 import com.young.adapter.MainPagerAdapter;
-import com.young.annotation.InjectView;
 import com.young.base.BaseActivity;
 import com.young.config.Contants;
 import com.young.model.User;
+import com.young.utils.BDLBSUtils;
+import com.young.utils.SharePreferenceUtils;
+import com.young.utils.XmlUtils;
 import com.young.views.ArcMenu;
 import com.young.views.Dialog4Tips;
 
@@ -32,7 +32,17 @@ public class MainActivity extends BaseActivity {
     private ViewPager viewPager;
     private List<View> list;
     private ArcMenu mArcMenu;
+    private SharePreferenceUtils sharePreferenceUtils;
+    private BDLBSUtils bdlbsUtils;
 
+    private String province = "广东省";
+    private String city = "惠州市";
+    private String district;
+    private String street;
+    private String streetNumber;
+
+    private int times = 0;
+    private static final int callbackTimes = 10;//回调10次
 
     @Override
     public int getLayoutId() {
@@ -65,11 +75,14 @@ public class MainActivity extends BaseActivity {
 
         //初始化Bmob的消息推送
         configBmob();
+        bdlbsUtils = new BDLBSUtils(this, new locationListener());
+        bdlbsUtils.startLocation();
+
+        sharePreferenceUtils = new SharePreferenceUtils(this);
     }
 
     /**
      * 初始化Bmob的消息推送
-     *
      */
     private void configBmob() {
         // 初始化BmobSDK
@@ -82,10 +95,16 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void bindData() {
-        loginFunction();
+
         settitle(R.string.discover);
         setBarVisibility(true, false);
-        setCity(cityList());
+        setCity(XmlUtils.getSelectCities(this));
+        loginFunction();
+
+    }
+
+    @Override
+    public void handerMessage(Message msg) {
 
     }
 
@@ -145,7 +164,7 @@ public class MainActivity extends BaseActivity {
 //
 //
 
-//
+    //
 //
 ////        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
 //        Uri destination = Uri.fromFile(filepath);
@@ -153,24 +172,69 @@ public class MainActivity extends BaseActivity {
 //        Crop.of(source, destination).asSquare().start(this);
 //
 //    }
-// TODO: 15/10/10 将这些文字资源存放到xml的资源中 
-    private List<String> tagList() {
-        List<String> list = new ArrayList<>();
-        list.add("旅游圣地");
-        list.add("约会圣地");
-        list.add("儿童乐园");
-        list.add("摄影");
 
-        return list;
-    }
 
-    private List<String> cityList(){
-        List<String> list = new ArrayList<>();
-        list.add("惠州");
-        list.add("深圳");
-        list.add("广州");
-        list.add("东莞");
-        return list;
+    /**
+     * 登录过，才能进行登录
+     * 没有登录过，则不进行其他操作
+     */
+    private void loginFunction() {
+
+        final Dialog4Tips dialog4Tips = new Dialog4Tips(MainActivity.this);
+        User currnetUser = BmobUser.getCurrentUser(this, User.class);
+
+//        User userLogin = new User();
+//
+//        String userName = sharePreferenceUtils.getString(Contants.SH_ACCOUNT.hashCode() + "", LoginActivity.ACCOUNT);
+//        String pwd = sharePreferenceUtils.getString(Contants.SH_PWD.hashCode() + "", LoginActivity.PWD);
+//
+//        if (userName != null) {
+//
+//            userLogin.setUsername(userName);
+//            userLogin.setPassword(pwd);
+//
+//            userLogin.login(this, new SaveListener() {
+//                @Override
+//                public void onSuccess() {
+//
+//                }
+//
+//                @Override
+//                public void onFailure(int i, String s) {
+//
+//                }
+//            });
+
+        if (currnetUser == null) {//用户未登录
+
+            dialog4Tips.setBtnCancelText(getString(R.string.skin));
+            dialog4Tips.setBtnOkText(getString(R.string.login_text));
+            dialog4Tips.setBtnCancelVisi(View.VISIBLE);
+
+            dialog4Tips.setDialogListener(new Dialog4Tips.Listener() {
+                @Override
+                public void btnOkListenter() {//登陆  按钮 ，进入登陆界面
+
+                    intents.setClass(MainActivity.this, LoginActivity.class);
+                    dialog4Tips.dismiss();
+
+                    startActivity(intents);
+                }
+
+                @Override
+                public void btnCancelListener() {//跳过  按钮 进入主界面
+
+
+                    dialog4Tips.dismiss();
+
+                }
+            });
+
+            dialog4Tips.show();
+
+        } else {//用户已经登陆过
+
+        }
     }
 
 
@@ -190,7 +254,7 @@ public class MainActivity extends BaseActivity {
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,
                                                     int which) {
-
+                                    bdlbsUtils.stopLocation();
                                     int nPid = android.os.Process.myPid();
                                     android.os.Process.killProcess(nPid);
 
@@ -218,47 +282,49 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
-     * 登录过，才能进行登录
-     * 没有登录过，则不进行其他操作
+     * 定位回调
+     * 回调 10次 还是没有得到位置，那么就停止
      */
-    private void loginFunction() {
-        final Dialog4Tips dialog4Tips = new Dialog4Tips(MainActivity.this);
+    private class locationListener implements BDLBSUtils.LocationInfoListener {
+        private List<String> cityList = new ArrayList<>();
 
-        User bmobUser = BmobUser.getCurrentUser(this, User.class);
+        @Override
+        public void LocationInfo(String Province, String City, String District, String Street, String StreetNumber) {
 
-        if (bmobUser != null) {
-            // 允许用户使用应用
-//用户登录过，没有注销
+            province = Province;
+            city = City;
+            district = District;
+            street = Street;
+            streetNumber = StreetNumber;
 
-        } else { //缓存用户对象为空时， 可打开用户注册界面…或者选择进入主界面
+            times++;
 
+            if (Province != null) {
+                cityList = XmlUtils.getSelectCities(MainActivity.this);
 
-            dialog4Tips.setBtnCancelText(getString(R.string.skin));
-            dialog4Tips.setBtnOkText(getString(R.string.login_text));
-            dialog4Tips.setBtnCancelVisi(View.VISIBLE);
-
-            dialog4Tips.setDialogListener(new Dialog4Tips.Listener() {
-                @Override
-                public void btnOkListenter() {//登陆  按钮 ，进入登陆界面
-
-                    intents .setClass(MainActivity.this, LoginActivity.class);
-                    dialog4Tips.dismiss();
-
-                    startActivity(intents);
+                for (int i = 0; i < cityList.size(); i++) {
+                    city.equals(cityList.get(i));
+                    setDefaultCity(i);
                 }
 
-                @Override
-                public void btnCancelListener() {//跳过  按钮 进入主界面
+                bdlbsUtils.stopLocation();
+            }
 
-
-                    dialog4Tips.dismiss();
-
-                }
-            });
-
-            dialog4Tips.show();
-
+            if (times == callbackTimes) {
+                bdlbsUtils.stopLocation();
+            }
         }
     }
 
+
+//    private Handler mhandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//
+//
+//
+//        }
+//
+//
+//    };
 }

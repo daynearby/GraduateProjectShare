@@ -20,6 +20,7 @@
     <string name="pwd">密码</string>
     <string name="login_text">登录</string>
     <string name="forget_pwd">忘记密码？</string>
+    <string name="find_pwd_text">找回密码</string>
     <string name="regist">注册</string>
     <string name="config">确定</string>
     <string name="cancel">取消</string>
@@ -27,12 +28,18 @@
     <string name="personal_center">个人中心</string>
     <string name="config_pwd">确认密码</string>
     <string name="had_register">已有账号？</string>
-    <string name="email_not_empty">邮箱不能为空</string>
+    <string name="email_not_empty">用户名不能为空</string>
     <string name="pwd_not_empty">密码不能为空</string>
     <string name="pwd_not_equals">两次输入密码不相同</string>
-    <string name="user_had_register">该邮箱已经被使用</string>
+    <string name="user_had_register">该用户名已经被使用</string>
     <string name="pwd_lenght_not_enough">密码长度不能小于6位</string>
-    <string name="email_eror">邮箱格式错误</string>
+    <string name="email_eror">用户名长度不少于4位</string>
     <string name="register_success">恭喜，注册成功！</string>
     <string name="user_name">用户名</string>
+    <string name="account_pwd_incorrect">账号或密码不正确</string>
+    <string name="login_success">登陆成功</string>
+    <string name="find_pwd_success">重置密码成功</string>
+    <string name="user_non_existent">用户名不存在</string>
+    <string name="mobilePhone_not_equals">用户注册时预留手机号与当 \n 前验证手机号不相符</string>
+    <string name="user_non_verif_monilePhome">当前用户尚未验证手机号</string>
 </resources>

@@ -1,10 +1,13 @@
 package com.young.base;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,7 +27,7 @@ import java.util.List;
  * 基类
  * 有actionBar，并且有点击事件
  * 使用注释
- * <p/>
+ * <p>
  * Created by Nearby Yang on 2015-10-08.
  */
 public abstract class BaseActivity extends Activity {
@@ -101,7 +104,7 @@ public abstract class BaseActivity extends Activity {
         tintManager.setStatusBarTintResource(R.color.theme_puple);
 
 
-}
+    }
 
     /**
      * 设置标题显示状态
@@ -170,16 +173,40 @@ public abstract class BaseActivity extends Activity {
      *
      * @param cityList
      */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void setCity(List<String> cityList) {
 
         //适配器
         ArrayAdapter adapter = new ArrayAdapter<>(this, R.layout.custom_spinner_item, cityList);
         //设置样式
         adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
+        //android.R.layout.simple_spinner_dropdown_item
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// TODO: 2015-10-21 设置下拉菜单的长度 
+//        spinnerCity.getL
         //加载适配器
         spinnerCity.setAdapter(adapter);
 
+
         refreshActionBar();
+    }
+
+    /**
+     * 设置城市当前默认值
+     *
+     * @param position
+     */
+    public void setDefaultCity(int position) {
+        spinnerCity.setSelection(position, true);
+    }
+
+    /**
+     * 设置标签 当前的默认值
+     *
+     * @param position 值
+     */
+    public void setDefaultTag(int position) {
+        spinnerTag.setSelection(position, true);
     }
 
     /**
@@ -191,20 +218,20 @@ public abstract class BaseActivity extends Activity {
         this.mActionBarOnClickListener = mActionBarOnClickListener;
     }
 
-private class mOnclickListener implements View.OnClickListener {
+    private class mOnclickListener implements View.OnClickListener {
 
-    @Override
-    public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
 
-        if (mActionBarOnClickListener != null) {
-            mActionBarOnClickListener.onClick(v);
-        } else {
-            LogUtils.logE(getPackageName(), "没有设置点击回调");
+            if (mActionBarOnClickListener != null) {
+                mActionBarOnClickListener.onClick(v);
+            } else {
+                LogUtils.logE(getPackageName(), "没有设置点击回调");
+            }
+
+
         }
-
-
     }
-}
 
     /**
      * 跳转界面，不带参数的
@@ -235,20 +262,29 @@ private class mOnclickListener implements View.OnClickListener {
     }
 
     /**
-     *  toast
+     * toast
+     *
      * @param strId 文字id
      */
-    public void mToast(int strId){
+    public void mToast(int strId) {
         Toast.makeText(this, strId, Toast.LENGTH_SHORT).show();
     }
 
-/**
- * 点击事件的回调
- */
-public interface mActionBarOnClickListener {
-    void onClick(View v);
+    /**
+     * 点击事件的回调
+     */
+    public interface mActionBarOnClickListener {
+        void onClick(View v);
 
-}
+    }
+
+    public Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            handerMessage(msg);
+        }
+    };
 
     //主界面layout的id
     public abstract int getLayoutId();
@@ -261,6 +297,8 @@ public interface mActionBarOnClickListener {
 
     //绑定数据到空间中
     public abstract void bindData();
+
+    public abstract void handerMessage(Message msg);
 
     /**
      * 简化findviewbyid

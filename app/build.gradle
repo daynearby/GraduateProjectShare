@@ -38,4 +38,5 @@ dependencies {
     compile project(':PhotoView')
     compile project(':PinterestView')
     compile project(':svprogresshud')
+    compile project(':sMSSDK')
 }
