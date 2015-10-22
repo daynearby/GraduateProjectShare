@@ -1,13 +1,14 @@
 package com.young.base;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -18,10 +19,13 @@ import android.widget.Toast;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.young.annotation.Injector;
+import com.young.model.User;
 import com.young.share.R;
 import com.young.utils.LogUtils;
 
 import java.util.List;
+
+import cn.bmob.v3.BmobUser;
 
 /**
  * 基类
@@ -30,7 +34,7 @@ import java.util.List;
  * <p>
  * Created by Nearby Yang on 2015-10-08.
  */
-public abstract class BaseActivity extends Activity {
+public abstract class BaseCustomActBarActivity extends AppCompatActivity {
 
     private ActionBar mActionbar;
     private mActionBarOnClickListener mActionBarOnClickListener;
@@ -46,6 +50,7 @@ public abstract class BaseActivity extends Activity {
     private Spinner spinnerCity;
     private Spinner spinnerTag;
     public Intent intents = new Intent();
+    public User mUser ;
 
     public final static String BUNDLE_TAG = "Serializable_Data";
 
@@ -54,6 +59,7 @@ public abstract class BaseActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         Injector.inject(this);
+        mUser= BmobUser.getCurrentUser(this, User.class);
         initActionBar();
         initData();
         findviewbyid();
@@ -65,7 +71,7 @@ public abstract class BaseActivity extends Activity {
      */
     private void initActionBar() {
 
-        mActionbar = getActionBar();
+        mActionbar = getSupportActionBar();
         mActionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         mActionbar.setCustomView(R.layout.actionbar_main);
 

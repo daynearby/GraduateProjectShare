@@ -9,4 +9,8 @@
 
 4.使用Bmob移动后端服务器，作为数据存储的服务器；以及Bmob的推送消息
 
-gson，volley，litepal（sqlite），UIL（通用图片加载）
+5.使用百度地图定位
+
+6.自定义viewground
+
+gson，volley，litepal（sqlite），UIL（通用图片加载），百度定位

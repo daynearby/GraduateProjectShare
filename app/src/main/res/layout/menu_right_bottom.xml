@@ -4,44 +4,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     hyman:position="right_bottom"
-    hyman:radius="140dp" >
+    hyman:radius="140dp">
 
-    <RelativeLayout
+
+    <ImageView
+        android:id="@+id/id_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/composer_button" >
-
-        <ImageView
-            android:id="@+id/id_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:src="@drawable/composer_icn_plus" />
-    </RelativeLayout>
-
+        android:layout_centerInParent="true"
+        android:src="@drawable/icon_more"
+        android:padding="@dimen/paddingMic"/>
 
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/composer_place"
         android:padding="@dimen/paddingMic"
+        android:src="@drawable/icon_share_messages"
         android:tag="Place" />
 
 
-
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/composer_thought"
         android:padding="@dimen/paddingMic"
+        android:src="@drawable/icon_comment"
         android:tag="Sun" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/composer_with"
         android:padding="@dimen/paddingMic"
+        android:src="@drawable/icon_personal_centre"
         android:tag="People" />
 
 </com.young.views.ArcMenu>

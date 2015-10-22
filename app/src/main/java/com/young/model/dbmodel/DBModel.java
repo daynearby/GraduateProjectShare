@@ -1,14 +1,8 @@
 package com.young.model.dbmodel;
 
-import android.view.View;
-
-import com.young.base.BaseActivity;
-
 import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
-
-import cn.bmob.v3.BmobObject;
 
 /**
  * model的基类，有用户的基本信息 继承他

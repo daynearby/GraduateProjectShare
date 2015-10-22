@@ -83,8 +83,15 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
+
+        <!-- 个人中心-->
+        <activity android:name=".PersonalCenterActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <!-- 裁剪头像 -->
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+
+
 
         <!-- 百度定位 services -->
         <service

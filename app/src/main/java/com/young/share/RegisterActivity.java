@@ -3,7 +3,6 @@ package com.young.share;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.EditText;
@@ -14,11 +13,10 @@ import com.bmob.BTPFileResponse;
 import com.bmob.BmobProFile;
 import com.bmob.btp.callback.UploadListener;
 import com.young.annotation.InjectView;
-import com.young.base.BaseActivity;
+import com.young.base.BaseCustomActBarActivity;
 import com.young.config.Contants;
 import com.young.model.User;
 import com.young.utils.BDLBSUtils;
-import com.young.utils.CommonUtils;
 import com.young.utils.LogUtils;
 
 import java.io.FileNotFoundException;
@@ -31,7 +29,7 @@ import cn.bmob.v3.listener.SaveListener;
 /**
  * Created by Nearby Yang on 2015-10-20.
  */
-public class RegisterActivity extends BaseActivity implements View.OnClickListener {
+public class RegisterActivity extends BaseCustomActBarActivity implements View.OnClickListener {
 
     @InjectView(R.id.et_registrt_email)
     private EditText registEmail;

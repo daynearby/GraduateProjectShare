@@ -1,18 +1,25 @@
 package com.young.share;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.young.adapter.MainPagerAdapter;
-import com.young.base.BaseActivity;
+import com.young.base.BaseCustomActBarActivity;
+import com.young.bmobPush.MyPushMessageReceiver;
 import com.young.config.Contants;
-import com.young.model.User;
+import com.young.model.MyBmobInstallation;
 import com.young.utils.BDLBSUtils;
+import com.young.utils.LogUtils;
 import com.young.utils.SharePreferenceUtils;
 import com.young.utils.XmlUtils;
 import com.young.views.ArcMenu;
@@ -22,12 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.push.BmobPush;
+import cn.bmob.push.PushConstants;
 import cn.bmob.v3.Bmob;
-import cn.bmob.v3.BmobInstallation;
-import cn.bmob.v3.BmobUser;
 
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseCustomActBarActivity {
 
     private ViewPager viewPager;
     private List<View> list;
@@ -54,13 +60,15 @@ public class MainActivity extends BaseActivity {
 
         list = new ArrayList<>();
         viewPager = $(R.id.vp_main);
-        mArcMenu = (ArcMenu) findViewById(R.id.id_menu);
+        mArcMenu = $(R.id.id_menu);
 
         LayoutInflater inflater = LayoutInflater.from(this);
 
         list.add(inflater.inflate(R.layout.pager_discount, null));
         list.add(inflater.inflate(R.layout.pager_discover, null));
         list.add(inflater.inflate(R.layout.pager_rank, null));
+
+        mArcMenu.setOnMenuItemClickListener(new onitmeListener());
 
         MainPagerAdapter pagerAdapter = new MainPagerAdapter(this, list);
 
@@ -75,6 +83,7 @@ public class MainActivity extends BaseActivity {
 
         //初始化Bmob的消息推送
         configBmob();
+
         bdlbsUtils = new BDLBSUtils(this, new locationListener());
         bdlbsUtils.startLocation();
 
@@ -88,9 +97,11 @@ public class MainActivity extends BaseActivity {
         // 初始化BmobSDK
         Bmob.initialize(this, Contants.BMOB_APP_KEY);
         // 使用推送服务时的初始化操作
-        BmobInstallation.getCurrentInstallation(this).save();
+        MyBmobInstallation.getCurrentInstallation(this).save();
         // 启动推送服务
         BmobPush.startWork(this, Contants.BMOB_APP_KEY);
+        //注册信息接收者
+        registerBoradcastReceiver();
     }
 
     @Override
@@ -99,7 +110,10 @@ public class MainActivity extends BaseActivity {
         settitle(R.string.discover);
         setBarVisibility(true, false);
         setCity(XmlUtils.getSelectCities(this));
-        loginFunction();
+        if (mUser == null) {
+            loginFunction();
+        }
+
 
     }
 
@@ -143,6 +157,14 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    //注册广播接收者
+    public void registerBoradcastReceiver() {
+        IntentFilter myIntentFilter = new IntentFilter();
+        myIntentFilter.addAction(MyPushMessageReceiver.BMOB_PUSH_MESSAGES);
+        //注册广播
+        registerReceiver(mBroadcastReceiver, myIntentFilter);
+    }
+
 
 //    private void initWidget() {
 //
@@ -181,60 +203,33 @@ public class MainActivity extends BaseActivity {
     private void loginFunction() {
 
         final Dialog4Tips dialog4Tips = new Dialog4Tips(MainActivity.this);
-        User currnetUser = BmobUser.getCurrentUser(this, User.class);
 
-//        User userLogin = new User();
-//
-//        String userName = sharePreferenceUtils.getString(Contants.SH_ACCOUNT.hashCode() + "", LoginActivity.ACCOUNT);
-//        String pwd = sharePreferenceUtils.getString(Contants.SH_PWD.hashCode() + "", LoginActivity.PWD);
-//
-//        if (userName != null) {
-//
-//            userLogin.setUsername(userName);
-//            userLogin.setPassword(pwd);
-//
-//            userLogin.login(this, new SaveListener() {
-//                @Override
-//                public void onSuccess() {
-//
-//                }
-//
-//                @Override
-//                public void onFailure(int i, String s) {
-//
-//                }
-//            });
+        dialog4Tips.setBtnCancelText(getString(R.string.skin));
+        dialog4Tips.setBtnOkText(getString(R.string.login_text));
+        dialog4Tips.setBtnCancelVisi(View.VISIBLE);
 
-        if (currnetUser == null) {//用户未登录
+        dialog4Tips.setDialogListener(new Dialog4Tips.Listener() {
+            @Override
+            public void btnOkListenter() {//登陆  按钮 ，进入登陆界面
 
-            dialog4Tips.setBtnCancelText(getString(R.string.skin));
-            dialog4Tips.setBtnOkText(getString(R.string.login_text));
-            dialog4Tips.setBtnCancelVisi(View.VISIBLE);
+                intents.setClass(MainActivity.this, LoginActivity.class);
+                dialog4Tips.dismiss();
 
-            dialog4Tips.setDialogListener(new Dialog4Tips.Listener() {
-                @Override
-                public void btnOkListenter() {//登陆  按钮 ，进入登陆界面
+                startActivity(intents);
+            }
 
-                    intents.setClass(MainActivity.this, LoginActivity.class);
-                    dialog4Tips.dismiss();
-
-                    startActivity(intents);
-                }
-
-                @Override
-                public void btnCancelListener() {//跳过  按钮 进入主界面
+            @Override
+            public void btnCancelListener() {//跳过  按钮 进入主界面
 
 
-                    dialog4Tips.dismiss();
+                dialog4Tips.dismiss();
 
-                }
-            });
+            }
+        });
 
-            dialog4Tips.show();
+        dialog4Tips.show();
 
-        } else {//用户已经登陆过
 
-        }
     }
 
 
@@ -316,15 +311,73 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 消息的广播接收者
+     */
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 
-//    private Handler mhandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//
-//
-//
-//        }
-//
-//
-//    };
+        private ImageView imageView;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent.getAction().equals(MyPushMessageReceiver.BMOB_PUSH_MESSAGES)) {
+
+                LogUtils.logE("收到信息" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
+
+                imageView = (ImageView) mArcMenu.getChildAt(0);
+                imageView.setImageResource(R.drawable.icon_more_light);
+
+                imageView = (ImageView) mArcMenu.getChildAt(2);
+                imageView.setImageResource(R.drawable.icon_comment_light);
+
+            }
+        }
+
+    };
+
+
+    /**
+     * 自定义按钮的点击事件
+     */
+    private class onitmeListener implements ArcMenu.OnMenuItemClickListener {
+        private ImageView itemIm;
+
+        @Override
+        public void onClick(View view, int pos) {
+//            LogUtils.logI("view = "+view+" position = "+pos);
+            itemIm = (ImageView) view;
+            switch (pos) {
+                case 1://分享信息
+// TODO: 2015-10-22 弹窗，填写，并且可以保存草稿 使用popwindow
+                    break;
+                case 2://评论
+// TODO: 2015-10-22 查看评论列表
+                    itemIm.setImageResource(R.drawable.icon_comment);
+
+                    //跳转到评论页面
+                    break;
+                case 3://个人中心
+
+// TODO: 2015-10-22 判断是否已经登录，已经等了进入个人中心，未登录进入登录界面
+                    if (mUser != null) {
+
+                        intents.setClass(MainActivity.this, PersonalCenterActivity.class);
+                        startActivity(intents);
+
+                    } else {
+                        loginFunction();
+                    }
+                    break;
+            }
+        }
+
+        @Override
+        public void onViewGroundClickListener(View view) {
+            itemIm = (ImageView) view;
+            itemIm.setImageResource(R.drawable.icon_more);
+        }
+    }
+
+
 }

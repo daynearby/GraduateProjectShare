@@ -1,16 +1,27 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="mAppTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+    <style name="mAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <!-- API 14 theme customizations can go here. -->
-        <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+
+
     </style>
 
-    <style name="ActionBarStyle" parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/theme_puple</item>
+    <!-- 使用toolbar的activity需要使用这个主题-->
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="bar_text" parent="Theme.AppCompat.Light">
         <item name="android:layout_height">wrap_content</item>

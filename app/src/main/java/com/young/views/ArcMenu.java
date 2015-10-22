@@ -58,6 +58,7 @@ public class ArcMenu extends ViewGroup implements OnClickListener
 	public interface OnMenuItemClickListener
 	{
 		void onClick(View view, int pos);
+		void onViewGroundClickListener(View view);
 	}
 
 	public void setOnMenuItemClickListener(
@@ -216,7 +217,7 @@ public class ArcMenu extends ViewGroup implements OnClickListener
 		rotateCButton(v, 0f, 360f, 300);
 
 		toggleMenu(300);
-
+		mMenuItemClickListener.onViewGroundClickListener(v);
 	}
 
 	/**

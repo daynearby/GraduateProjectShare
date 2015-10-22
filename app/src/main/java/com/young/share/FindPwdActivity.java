@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.annotation.InjectView;
-import com.young.base.BaseActivity;
+import com.young.base.BaseCustomActBarActivity;
 import com.young.config.Contants;
 import com.young.model.User;
 import com.young.myCallback.GotoAsyncFunction;
@@ -33,7 +33,7 @@ import cn.smssdk.gui.RegisterPage;
  * <p/>
  * Created by Nearby Yang on 2015-10-21.
  */
-public class FindPwdActivity extends BaseActivity implements View.OnClickListener {
+public class FindPwdActivity extends BaseCustomActBarActivity implements View.OnClickListener {
 
     private boolean hadVerfi = false;//是否验证
     private String phone;
