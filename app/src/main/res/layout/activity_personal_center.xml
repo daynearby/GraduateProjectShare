@@ -26,13 +26,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/personal_center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/textSizeLarge" />
+            </android.support.v7.widget.Toolbar>
+
+            <com.young.views.CircleImageView
+                android:id="@+id/id_im_personal_avatar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+
+                android:src="@drawable/users" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
+
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/include_content_scrolling" />
-
 
 
 </android.support.design.widget.CoordinatorLayout>

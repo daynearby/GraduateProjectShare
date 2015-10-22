@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -25,8 +24,7 @@ import cn.bmob.v3.BmobUser;
  */
 public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
-    private ActionBar mActionbar;
-    private mActionBarOnClickListener mActionBarOnClickListener;
+
 
     private int title = R.string.title;
     private boolean showCity = false;
@@ -46,7 +44,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         setContentView(getLayoutId());
         Injector.inject(this);
         mUser= BmobUser.getCurrentUser(this, User.class);
-
+//        initActionBar();
         initData();
         findviewbyid();
         bindData();
@@ -122,6 +120,9 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
     //绑定数据到空间中
     public abstract void bindData();
+
+    //初始化actionBar
+//    public abstract void initActionBar();
 
     public abstract void handerMessage(Message msg);
 

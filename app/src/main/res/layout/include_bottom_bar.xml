@@ -20,7 +20,7 @@
 
         <TextView
             android:id="@+id/id_tx_wantogo"
-            android:drawableLeft="@drawable/wantogo_30"
+            android:drawableLeft="@drawable/icon_wantogo_30"
             android:text="@string/tx_wantogo"
             style="@style/text_style" />
         <TextView

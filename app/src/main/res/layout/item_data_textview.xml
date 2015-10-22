@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center">
+
+    <TextView
+
+        android:id="@+id/tv_item_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:padding="@dimen/paddingMic"
+        android:text="选择"
+        android:textSize="@dimen/textSizeMediu" />
+
+    <ImageView
+        android:id="@+id/im_icon_item_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/tv_item_data"
+        android:src="@drawable/tab30"
+        android:visibility="invisible"/>
+
+</RelativeLayout>

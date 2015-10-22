@@ -1,20 +1,23 @@
 package com.young.share;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.young.adapter.MainPagerAdapter;
-import com.young.base.BaseCustomActBarActivity;
+import com.young.base.CustomActBarActivity;
 import com.young.bmobPush.MyPushMessageReceiver;
 import com.young.config.Contants;
 import com.young.model.MyBmobInstallation;
@@ -24,6 +27,7 @@ import com.young.utils.SharePreferenceUtils;
 import com.young.utils.XmlUtils;
 import com.young.views.ArcMenu;
 import com.young.views.Dialog4Tips;
+import com.young.views.PopupWindowView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +37,7 @@ import cn.bmob.push.PushConstants;
 import cn.bmob.v3.Bmob;
 
 
-public class MainActivity extends BaseCustomActBarActivity {
+public class MainActivity extends CustomActBarActivity {
 
     private ViewPager viewPager;
     private List<View> list;
@@ -49,6 +53,7 @@ public class MainActivity extends BaseCustomActBarActivity {
 
     private int times = 0;
     private static final int callbackTimes = 10;//回调10次
+    private boolean isToggle = false;
 
     @Override
     public int getLayoutId() {
@@ -76,11 +81,40 @@ public class MainActivity extends BaseCustomActBarActivity {
         viewPager.setOnPageChangeListener(new pageChangeListener());
         viewPager.setCurrentItem(1);
 
+        final PopupWindowView popupWindows = new PopupWindowView(this,XmlUtils.getSelectCities(this));
+
+        popupWindows.setItemClick(new PopupWindowView.onItemClick() {
+            @Override
+            public void onClick(View view, int position, long id) {
+                LogUtils.logI("set  onclick  position = " + position + " id = " + id);
+                if (popupWindows != null) {
+                    popupWindows.dismiss();
+                }
+            }
+        });
+
+
+        getTitle_tv().setOnClickListener(new View.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onClick(View v) {
+//                if (isToggle) {
+//                    popupWindows.dismiss();
+//                    isToggle = false;
+//                } else {
+//                    isToggle = true;
+//                    popupWindows.showAsDropDown(v);
+                    popupWindows.showAsDropDown(v, 0, 0, Gravity.CENTER_HORIZONTAL);
+//                }
+                LogUtils.logI(" text onclick "+isToggle);
+
+            }
+        });
     }
 
     @Override
     public void initData() {
-
+        super.initData();
         //初始化Bmob的消息推送
         configBmob();
 

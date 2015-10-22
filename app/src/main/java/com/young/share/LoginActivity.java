@@ -6,7 +6,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.young.base.BaseCustomActBarActivity;
+import com.young.base.CustomActBarActivity;
 import com.young.config.Contants;
 import com.young.model.User;
 import com.young.utils.LogUtils;
@@ -17,7 +17,7 @@ import cn.bmob.v3.listener.SaveListener;
 /**
  * Created by Nearby Yang on 2015-10-18.
  */
-public class LoginActivity extends BaseCustomActBarActivity implements View.OnClickListener {
+public class LoginActivity extends CustomActBarActivity implements View.OnClickListener {
 
     private EditText et_loginEmail;
     private EditText et_loginPwd;

@@ -13,7 +13,7 @@ import com.bmob.BTPFileResponse;
 import com.bmob.BmobProFile;
 import com.bmob.btp.callback.UploadListener;
 import com.young.annotation.InjectView;
-import com.young.base.BaseCustomActBarActivity;
+import com.young.base.CustomActBarActivity;
 import com.young.config.Contants;
 import com.young.model.User;
 import com.young.utils.BDLBSUtils;
@@ -29,7 +29,7 @@ import cn.bmob.v3.listener.SaveListener;
 /**
  * Created by Nearby Yang on 2015-10-20.
  */
-public class RegisterActivity extends BaseCustomActBarActivity implements View.OnClickListener {
+public class RegisterActivity extends CustomActBarActivity implements View.OnClickListener {
 
     @InjectView(R.id.et_registrt_email)
     private EditText registEmail;
