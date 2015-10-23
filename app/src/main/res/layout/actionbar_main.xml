@@ -5,34 +5,31 @@
     android:padding="@dimen/paddingMic">
 
 
-
     <TextView
         android:id="@+id/tv_actionbar_titile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/paddingMediu"
-        android:paddingRight="@dimen/paddingMediu"
-        android:text="标题"
-        android:textSize="@dimen/textSizeLarge"
+        style="@style/actionbar_text"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/white"
-        />
+        android:text="标题"
+        android:textSize="@dimen/textSizeLarge" />
 
-    <Spinner
-        android:id="@+id/sp_actionbar_tag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <TextView
+        android:id="@+id/tv_actionbar_tag"
+        style="@style/actionbar_text"
+        android:layout_alignBottom="@id/tv_actionbar_titile"
         android:layout_toLeftOf="@id/tv_actionbar_titile"
+        android:paddingLeft="0dp"
+        android:text="@string/tag_manywanttogo"
+        android:textColor="@drawable/sele_text_color_def_white_light_gray"
+        android:textSize="@dimen/textSizeMediu" />
 
-        ></Spinner>
-
-    <Spinner
-        android:id="@+id/sp_actionbar_city"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <TextView
+        android:id="@+id/tv_actionbar_city"
+        style="@style/actionbar_text"
+        android:layout_alignBottom="@id/tv_actionbar_titile"
         android:layout_toRightOf="@id/tv_actionbar_titile"
-
-        ></Spinner>
+        android:text="@string/惠州"
+        android:textColor="@drawable/sele_text_color_def_white_light_gray"
+        android:textSize="@dimen/textSizeMediu" />
 
 
 </RelativeLayout>

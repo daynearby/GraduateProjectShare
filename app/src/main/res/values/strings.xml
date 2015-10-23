@@ -8,7 +8,7 @@
     <string name="hadgo">去过</string>
     <string name="tx_comment">评论</string>
     <string name="user_name_defual">瞄瞄</string>
-    <string name="tab_appoinment"><a href="">约会圣地</a></string>
+    <string name="tab_appoinment"><a href="">最多人想去</a></string>
     <string name="defaul_share_text">南坛公园，松锅的约会圣地，推荐你们去哟！</string>
     <string name="huizhou">惠州</string>
     <string name="title">标题</string>
@@ -42,6 +42,8 @@
     <string name="user_non_existent">用户名不存在</string>
     <string name="mobilePhone_not_equals">用户注册时预留手机号与当 \n 前验证手机号不相符</string>
     <string name="user_non_verif_monilePhome">当前用户尚未验证手机号</string>
+    <string name="tag">标签</string>
+    <string name="tag_manywanttogo">最多人想去</string>
 
 
      <string name="large_text">
@@ -133,4 +135,5 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="惠州">惠州市</string>
 </resources>

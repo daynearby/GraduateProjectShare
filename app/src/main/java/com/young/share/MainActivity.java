@@ -10,7 +10,6 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,35 +80,6 @@ public class MainActivity extends CustomActBarActivity {
         viewPager.setOnPageChangeListener(new pageChangeListener());
         viewPager.setCurrentItem(1);
 
-        final PopupWindowView popupWindows = new PopupWindowView(this,XmlUtils.getSelectCities(this));
-
-        popupWindows.setItemClick(new PopupWindowView.onItemClick() {
-            @Override
-            public void onClick(View view, int position, long id) {
-                LogUtils.logI("set  onclick  position = " + position + " id = " + id);
-                if (popupWindows != null) {
-                    popupWindows.dismiss();
-                }
-            }
-        });
-
-
-        getTitle_tv().setOnClickListener(new View.OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.KITKAT)
-            @Override
-            public void onClick(View v) {
-//                if (isToggle) {
-//                    popupWindows.dismiss();
-//                    isToggle = false;
-//                } else {
-//                    isToggle = true;
-//                    popupWindows.showAsDropDown(v);
-                    popupWindows.showAsDropDown(v, 0, 0, Gravity.CENTER_HORIZONTAL);
-//                }
-                LogUtils.logI(" text onclick "+isToggle);
-
-            }
-        });
     }
 
     @Override
@@ -143,7 +113,7 @@ public class MainActivity extends CustomActBarActivity {
 
         settitle(R.string.discover);
         setBarVisibility(true, false);
-        setCity(XmlUtils.getSelectCities(this));
+        setCity(XmlUtils.getSelectCities(this).get(8));
         if (mUser == null) {
             loginFunction();
         }
@@ -331,10 +301,10 @@ public class MainActivity extends CustomActBarActivity {
             if (Province != null) {
                 cityList = XmlUtils.getSelectCities(MainActivity.this);
 
-                for (int i = 0; i < cityList.size(); i++) {
-                    city.equals(cityList.get(i));
-                    setDefaultCity(i);
-                }
+//                for (int i = 0; i < cityList.size(); i++) {
+
+                getCity_tv().setText(city);
+//                }
 
                 bdlbsUtils.stopLocation();
             }

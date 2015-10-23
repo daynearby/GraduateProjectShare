@@ -2,6 +2,111 @@
 <items version="2" >
 
     <item
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\share\sMSSDK\unspecified\jars\libs\MobTools.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="23e791d96579e8c56fd11f1912130ff93c2d6289">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\MobTools-5caa7cbff13227fb4365d7ac635c43f63d8ccdb7.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="f8efd0096475e0daf054267b61544e10dc776503">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-062069afe9bc5e8a7d18b267cf6e191d53608727.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\share\CustomShapeImageView\unspecified\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="2073835f7cb1c336bcf7c4c2401484924b3e6165">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-065e101b81eabfc847656c112521f004df357142.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\share\JazzyListView\unspecified\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="8922c2d6344877f8ce6b84838d665e8301b925c3">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-084e3004eeae1ec67f16526bce7b8c9aa0e98ceb.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\libs\Bmob_Push_V0.6beta_20150408.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="db21ec99c2c7bf91c67bf80f5c5c49a92dd0562e">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\Bmob_Push_V0.6beta_20150408-7ce9c6db64fafc7659db20f176c0d41ce5da7076.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\share\Crop\unspecified\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="22c611e3ca0c86bb7f3fe3640b133fc0b7f76de9">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-c36728af5df7db5e1b9eacbb5d1de298ca96afeb.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\share\sMSSDK\unspecified\jars\libs\MobLogCollector.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="0488dc80a5addc72b2fcb515f792a130c164ab5f">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\MobLogCollector-59b56f3cd9cb2992b8d6ed98a386bbc0da5aeb83.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-385dc9237e2c593f62dec4b5415099c4a6c9b161.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\libs\okhttp-2.4.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="40340c0748190fe897baf7bffbc1b282734294e5">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\okhttp-2.4.0-ccdab1539c7fe50e6861f45ecd808ba29f8b7579.jar" />
+    </item>
+    <item
+        jar="C:\Users\Nearby\.gradle\caches\modules-2\files-2.1\com.readystatesoftware.systembartint\systembartint\1.0.3\de4f7404e2f58d8f6e83cb1e85d0c2d6c2987287\systembartint-1.0.3.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="de4f7404e2f58d8f6e83cb1e85d0c2d6c2987287">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\systembartint-1.0.3-16b9cc79635203ff701cfaec6ede1d94747f630a.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\libs\gson-2.2.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="2f5481ff752b0e69ecba7070f8b0a645e570cc22">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\gson-2.2-0fd77d6ac409ddfa0f3c4ffd8cf055d4ee3a6cef.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\libs\okio-1.4.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="5b72bf48563ea8410e650de14aa33ff69a3e8c35">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\okio-1.4.0-c3e64077c05ee7c2f8e93886c87d178ff5c5569c.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\share\PinterestView\unspecified\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="b887861d79afd739b2e3012720596502233edaed">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-524c679d5743b3b6da51624d03ec5a63e4880ca7.jar" />
+    </item>
+    <item
+        jar="E:\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.1\support-annotations-22.2.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\support-annotations-22.2.1-abdea0359f0e05be7d478ed15f4e04968fbe785d.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\libs\BaiduLBS_Android.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="a57f7efe16a98b26ca59abcd26e1ab884f9385a1">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\BaiduLBS_Android-bf28355db86b8e665a46be8c5e18949132bcade2.jar" />
+    </item>
+    <item
         jar="D:\AS workSpace\share\app\libs\volley.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -9,39 +114,46 @@
         <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\volley-f228ee43af5fdd4e74117554a7a62f8897501c83.jar" />
     </item>
     <item
-        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\share\Crop\unspecified\jars\classes.jar"
+        jar="D:\AS workSpace\share\app\libs\litepal-1.2.1-src.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="903aed02a1a9673cb13d7cd80052c5df47e2150c">
-        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-c36728af5df7db5e1b9eacbb5d1de298ca96afeb.jar" />
+        sha1="2fe0b14b0fbb722c72470337a2f09ac27a9ad9b8">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\litepal-1.2.1-src-7d32f752293e401ee562cb78cf7672fbdb9e1395.jar" />
     </item>
     <item
-        jar="E:\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.0\support-annotations-22.2.0.jar"
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\share\PhotoView\2.0.7\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
-        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\support-annotations-22.2.0-e2315d1b4130b9994f0a06fbbdeb35471a3d426b.jar" />
+        sha1="c9a9093c31307dd45986be37463b1699feed756d">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-c84095a42622ef0a98134378c85ab32088bae898.jar" />
     </item>
     <item
-        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\libs\internal_impl-22.2.0.jar"
+        jar="D:\AS workSpace\share\app\libs\BmobSDK_V3.4.4_0930.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
-        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-69b21b0d4ae4c23f496f30a6d95dc832b80f66d2.jar" />
+        sha1="504064278d5cd28bb2c47245dd3af8176d4ce7eb">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\BmobSDK_V3.4.4_0930-fe7caceec572d4335093e01d5cad6985a5bf552e.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\libs\internal_impl-22.2.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.1-33bd4b034298d4d25d92b39f96b155d576474cb0.jar" />
     </item>
     <item
         jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\com.bigkoo\svprogresshud\1.0.0\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="3c4c2e7553b3a7305cb64a906129a698f4a68d27">
+        sha1="1b88f6188b48eaea140f95d97f11c1e71f4a8a02">
         <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-0c23bf64234db852498049526fad8ec92e59d7ef.jar" />
     </item>
     <item
-        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.0\jars\classes.jar"
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\com.android.support\design\22.2.1\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
-        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-81b105cae093d9edf4b623dc5d4c12015d235c28.jar" />
+        sha1="1821601ddbec5ff125653097812823388700af74">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-a90d690e59c741cb35f4de683c3e87659a9787dc.jar" />
     </item>
     <item
         jar="D:\AS workSpace\share\app\libs\universal-image-loader-1.9.4.jar"
@@ -51,11 +163,18 @@
         <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\universal-image-loader-1.9.4-36d8de94c0bb2d58f7aa9bbf850692a438ebec5b.jar" />
     </item>
     <item
-        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\classes.jar"
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\share\sMSSDK\unspecified\jars\libs\SMSSDK-1.3.1.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
-        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-5be6c28577765b3dc575127515a2440fd022cdae.jar" />
+        sha1="0951da1e350144289581921fcc3570cc3aeac48a">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\SMSSDK-1.3.1-174e7ea0bbe3b86f2435bccbc39725daf47f3289.jar" />
+    </item>
+    <item
+        jar="D:\AS workSpace\share\app\build\intermediates\exploded-aar\share\sMSSDK\unspecified\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="a7b370826dbd43a86277ae97840d542ed5aa77d6">
+        <dex dex="D:\AS workSpace\share\app\build\intermediates\pre-dexed\debug\classes-84a7fc4e0b4e4a87844fa4e126ace0363327d8ca.jar" />
     </item>
 
 </items>

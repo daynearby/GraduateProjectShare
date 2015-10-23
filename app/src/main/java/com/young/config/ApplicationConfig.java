@@ -43,7 +43,7 @@ public class ApplicationConfig extends LitePalApplication {
      */
     private void initConfig() {
         LitePalApplication.initialize(this);
-        SMSSDK.initSDK(this, Contants.SMS_APP_KEY, Contants.SMS_APP_SECRET);
+//        SMSSDK.initSDK(this, Contants.SMS_APP_KEY, Contants.SMS_APP_SECRET);
     }
 
     private void initImageLoader(Context ctx) {

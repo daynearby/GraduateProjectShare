@@ -22,6 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/tv_item_data"
         android:src="@drawable/tab30"
-        android:visibility="invisible"/>
+        android:visibility="gone"/>
 
 </RelativeLayout>

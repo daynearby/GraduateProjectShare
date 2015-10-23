@@ -63,6 +63,7 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
     public void initData() {
         setBarVisibility(false, false);
         settitle(R.string.find_pwd_text);
+        //        SMSSDK.initSDK(this, Contants.SMS_APP_KEY, Contants.SMS_APP_SECRET);
     }
 
     @Override

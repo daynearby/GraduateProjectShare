@@ -1,7 +1,11 @@
 package com.young.views;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +22,7 @@ import com.young.utils.LogUtils;
 
 import java.util.List;
 
+
 /**
  * 弹窗，实现输入、保存草稿
  * Created by Nearby Yang on 2015-10-22.
@@ -31,8 +36,11 @@ public class PopupWindowView extends PopupWindow {
     private mAdapter adapter;
     private onItemClick listener;
 
+    public enum location{
+        LEFT,RIGHT,CENTER
+    }
 
-    // TODO: 2015-10-22  弹窗，实现输入、保存草稿
+
     public PopupWindowView(Context ctx, List<String> datas) {
         this.ctx = ctx;
         this.datas = datas;
@@ -49,9 +57,11 @@ public class PopupWindowView extends PopupWindow {
         setWidth(CommonUtils.getWidth((Activity) ctx) / 2);
         setHeight(CommonUtils.getHeight((Activity) ctx) / 2);
         setFocusable(true);
-//        setOutsideTouchable(true);
-//        setBackgroundDrawable();
-        // TODO: 2015-10-22 抢占焦点，点击事件，定义位置，显示效果 
+        setOutsideTouchable(true);
+
+        setBackgroundDrawable(new BitmapDrawable());
+
+
     }
 
 
@@ -69,10 +79,15 @@ public class PopupWindowView extends PopupWindow {
     }
 
     private class itemOnClickListener implements AdapterView.OnItemClickListener {
+        String str = null;
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            listener.onClick(view, position, id);
+            dismiss();
+            if (datas.size() > 0) {
+                str = datas.get(position);
+            }
+            listener.onClick(view, str, position, id);
             LogUtils.logI("position = " + position + " id = " + id);
         }
     }
@@ -87,11 +102,19 @@ public class PopupWindowView extends PopupWindow {
 
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public void onShow(View v) {
+//        showAsDropDown(v, (CommonUtils.getWidth((Activity) ctx) - this.getWidth()) / 2, 0, Gravity.CENTER);
+        showAsDropDown(v, (int) v.getX() - getWidth()/2, 0, Gravity.CENTER);
+
+
+    }
+
     /**
      * item点击事件 回调
      */
     public interface onItemClick {
-        void onClick(View view, int position, long id);
+        void onClick(View view, String str, int position, long id);
     }
 
     private class mAdapter extends BaseAdapter {

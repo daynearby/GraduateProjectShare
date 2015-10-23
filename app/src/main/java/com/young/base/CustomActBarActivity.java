@@ -1,22 +1,18 @@
 package com.young.base;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.young.share.R;
 import com.young.utils.LogUtils;
-
-import java.util.List;
+import com.young.utils.XmlUtils;
+import com.young.views.PopupWindowView;
 
 /**
  * 基类
@@ -28,28 +24,17 @@ import java.util.List;
 public abstract class CustomActBarActivity extends BaseAppCompatActivity {
 
     private ActionBar mActionbar;
-    private mActionBarOnClickListener mActionBarOnClickListener;
 
     private int title = R.string.title;
     private boolean showCity = false;
     private boolean showTag = false;
 
-    private List<String> tagList;//标签数据源
-    private List<String> cityList;//城市数据源
-
     private TextView title_tv;
-
-    private Spinner spinnerCity;
-    private Spinner spinnerTag;
+    private TextView tag_tv;
+    private TextView city_tv;
     public Intent intents = new Intent();
 
     public final static String BUNDLE_TAG = "Serializable_Data";
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        initActionBar();
-//        super.onCreate(savedInstanceState);
-//    }
 
 
     @Override
@@ -59,6 +44,10 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
 
     public TextView getTitle_tv() {
         return title_tv;
+    }
+
+    public View getCustomView() {
+        return mActionbar.getCustomView();
     }
 
     /**
@@ -72,13 +61,16 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
 
         setTranslucentStatus();
 
-        spinnerCity = (Spinner) mActionbar.getCustomView().findViewById(R.id.sp_actionbar_city);
-        spinnerTag = (Spinner) mActionbar.getCustomView().findViewById(R.id.sp_actionbar_tag);
         title_tv = (TextView) mActionbar.getCustomView().findViewById(R.id.tv_actionbar_titile);
-
-
+        tag_tv = (TextView) mActionbar.getCustomView().findViewById(R.id.tv_actionbar_tag);
+        city_tv = (TextView) mActionbar.getCustomView().findViewById(R.id.tv_actionbar_city);
+        tag_tv.setOnClickListener(new tvOnclick());
+        city_tv.setOnClickListener(new tvOnclick());
     }
 
+    /**
+     * 沉浸式
+     */
     private void setTranslucentStatus() {
         boolean on = false;
 
@@ -108,7 +100,7 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
     }
 
     /**
-     * 设置标题显示状态
+     * 设置标题显示状态：显示与隐藏
      *
      * @param showCity
      * @param showTag
@@ -130,15 +122,15 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
         }
 
         if (showCity) {
-            spinnerCity.setVisibility(View.VISIBLE);
+            city_tv.setVisibility(View.VISIBLE);
         } else {
-            spinnerCity.setVisibility(View.GONE);
+            city_tv.setVisibility(View.GONE);
         }
 
         if (showTag) {
-            spinnerTag.setVisibility(View.VISIBLE);
+            tag_tv.setVisibility(View.VISIBLE);
         } else {
-            spinnerTag.setVisibility(View.GONE);
+            tag_tv.setVisibility(View.GONE);
         }
     }
 
@@ -155,16 +147,11 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
     /**
      * 设置标签的数据
      *
-     * @param tagList
+     * @param tagStr 标签
      */
-    public void setTag(List<String> tagList) {
+    public void setTag(String tagStr) {
 
-        //适配器
-        ArrayAdapter arr_adapter = new ArrayAdapter<>(this, R.layout.custom_spinner_item, tagList);
-        //设置样式
-        arr_adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
-        //加载适配器
-        spinnerTag.setAdapter(arr_adapter);
+        tag_tv.setText(tagStr);
 
         refreshActionBar();
     }
@@ -172,74 +159,78 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
     /**
      * 设置城市数据源
      *
-     * @param cityList
+     * @param cityStr 城市
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public void setCity(List<String> cityList) {
+    public void setCity(String cityStr) {
 
-        //适配器
-        ArrayAdapter adapter = new ArrayAdapter<>(this, R.layout.custom_spinner_item, cityList);
-        //设置样式
-        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
-        //android.R.layout.simple_spinner_dropdown_item
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// TODO: 2015-10-21 设置下拉菜单的长度 
-//        spinnerCity.getL
-        //加载适配器
-        spinnerCity.setAdapter(adapter);
-
-
+        city_tv.setText(cityStr);
         refreshActionBar();
     }
 
-    /**
-     * 设置城市当前默认值
-     *
-     * @param position
-     */
-    public void setDefaultCity(int position) {
-        spinnerCity.setSelection(position, true);
+
+    public TextView getTag_tv() {
+        return tag_tv;
     }
 
-    /**
-     * 设置标签 当前的默认值
-     *
-     * @param position 值
-     */
-    public void setDefaultTag(int position) {
-        spinnerTag.setSelection(position, true);
+    public TextView getCity_tv() {
+        return city_tv;
     }
 
-    /**
-     * 点击事件回调对象
-     *
-     * @param mActionBarOnClickListener
-     */
-    public void setOnClickListener(mActionBarOnClickListener mActionBarOnClickListener) {
-        this.mActionBarOnClickListener = mActionBarOnClickListener;
-    }
 
-    private class mOnclickListener implements View.OnClickListener {
+    private class tvOnclick implements View.OnClickListener {
+
+        private PopupWindowView popupWindows;
+        private int isTag = 0;
+
 
         @Override
         public void onClick(View v) {
 
-            if (mActionBarOnClickListener != null) {
-                mActionBarOnClickListener.onClick(v);
-            } else {
-                LogUtils.logE(getPackageName(), "没有设置点击回调");
+
+            switch (v.getId()) {
+                case R.id.tv_actionbar_tag://标签
+                    popupWindows = new PopupWindowView(CustomActBarActivity.this, XmlUtils.getSelectTag(CustomActBarActivity.this));
+
+                    isTag = 1;
+
+                    break;
+
+                case R.id.tv_actionbar_city://城市
+
+                    popupWindows = new PopupWindowView(CustomActBarActivity.this, XmlUtils.getSelectCities(CustomActBarActivity.this));
+                    isTag = 2;
+
+                    break;
+
             }
+
+            //初始化对应的点击事件的监听
+            popupWindows.setItemClick(new PopupWindowView.onItemClick() {
+                @Override
+                public void onClick(View view, String s, int position, long id) {
+
+                    switch (isTag) {
+                        case 1:
+                            getTag_tv().setText(s);
+                            break;
+                        case 2:
+                            getCity_tv().setText(s);
+                            break;
+                        default:
+                            LogUtils.logI(getClass().getName(), "actionbar 点击未设置");
+                            break;
+                    }
+
+                    isTag = 0;
+
+                }
+            });
+
+            popupWindows.onShow(v);
 
 
         }
-    }
 
-
-    /**
-     * 点击事件的回调
-     */
-    public interface mActionBarOnClickListener {
-        void onClick(View v);
 
     }
 
