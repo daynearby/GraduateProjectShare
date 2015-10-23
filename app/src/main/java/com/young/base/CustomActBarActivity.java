@@ -12,7 +12,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.young.share.R;
 import com.young.utils.LogUtils;
 import com.young.utils.XmlUtils;
-import com.young.views.PopupWindowView;
+import com.young.views.PopupWinListView;
 
 /**
  * 基类
@@ -33,6 +33,7 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
     private TextView tag_tv;
     private TextView city_tv;
     public Intent intents = new Intent();
+    private itemClickResult itemResult;
 
     public final static String BUNDLE_TAG = "Serializable_Data";
 
@@ -109,7 +110,7 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
 
         this.showCity = showCity;
         this.showTag = showTag;
-
+        refreshActionBar();
     }
 
     /**
@@ -153,7 +154,6 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
 
         tag_tv.setText(tagStr);
 
-        refreshActionBar();
     }
 
     /**
@@ -164,7 +164,6 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
     public void setCity(String cityStr) {
 
         city_tv.setText(cityStr);
-        refreshActionBar();
     }
 
 
@@ -177,9 +176,13 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
     }
 
 
+    public void setItemResult(itemClickResult itemResult) {
+        this.itemResult = itemResult;
+    }
+
     private class tvOnclick implements View.OnClickListener {
 
-        private PopupWindowView popupWindows;
+        private PopupWinListView popupWindows;
         private int isTag = 0;
 
 
@@ -189,7 +192,7 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
 
             switch (v.getId()) {
                 case R.id.tv_actionbar_tag://标签
-                    popupWindows = new PopupWindowView(CustomActBarActivity.this, XmlUtils.getSelectTag(CustomActBarActivity.this));
+                    popupWindows = new PopupWinListView(CustomActBarActivity.this, XmlUtils.getSelectTag(CustomActBarActivity.this));
 
                     isTag = 1;
 
@@ -197,15 +200,16 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
 
                 case R.id.tv_actionbar_city://城市
 
-                    popupWindows = new PopupWindowView(CustomActBarActivity.this, XmlUtils.getSelectCities(CustomActBarActivity.this));
+                    popupWindows = new PopupWinListView(CustomActBarActivity.this, XmlUtils.getSelectCities(CustomActBarActivity.this));
                     isTag = 2;
 
                     break;
 
             }
 
+
             //初始化对应的点击事件的监听
-            popupWindows.setItemClick(new PopupWindowView.onItemClick() {
+            popupWindows.setItemClick(new PopupWinListView.onItemClick() {
                 @Override
                 public void onClick(View view, String s, int position, long id) {
 
@@ -220,11 +224,13 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
                             LogUtils.logI(getClass().getName(), "actionbar 点击未设置");
                             break;
                     }
+                    itemResult.result(view, s,position);
 
                     isTag = 0;
 
                 }
             });
+
 
             popupWindows.onShow(v);
 
@@ -234,5 +240,11 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
 
     }
 
+    /**
+     * 点击之后item之后的回调
+     */
+    public interface itemClickResult{
+        void result(View view, String s,int position);
+    }
 
 }

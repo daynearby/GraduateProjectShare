@@ -1,13 +1,11 @@
 package com.young.share;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
@@ -26,7 +24,7 @@ import com.young.utils.SharePreferenceUtils;
 import com.young.utils.XmlUtils;
 import com.young.views.ArcMenu;
 import com.young.views.Dialog4Tips;
-import com.young.views.PopupWindowView;
+import com.young.views.PopupWinShareView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -346,6 +344,7 @@ public class MainActivity extends CustomActBarActivity {
      */
     private class onitmeListener implements ArcMenu.OnMenuItemClickListener {
         private ImageView itemIm;
+        private PopupWinShareView shareView =new PopupWinShareView(MainActivity.this);
 
         @Override
         public void onClick(View view, int pos) {
@@ -354,6 +353,8 @@ public class MainActivity extends CustomActBarActivity {
             switch (pos) {
                 case 1://分享信息
 // TODO: 2015-10-22 弹窗，填写，并且可以保存草稿 使用popwindow
+                    shareView.onShow(view);
+
                     break;
                 case 2://评论
 // TODO: 2015-10-22 查看评论列表

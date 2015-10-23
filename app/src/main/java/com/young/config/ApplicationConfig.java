@@ -15,7 +15,6 @@ import org.litepal.LitePalApplication;
 
 import java.io.File;
 
-import cn.smssdk.SMSSDK;
 
 /**
  * Created by Nearby Yang on 2015-07-02.

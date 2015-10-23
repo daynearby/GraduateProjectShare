@@ -136,4 +136,8 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="惠州">惠州市</string>
+    <string name="let_me_share">我来分享</string>
+    <string name="share_what_hint">分享点什么呢？</string>
+    <string name="share_location_info">分享位置</string>
+    <string name="share">分享</string>
 </resources>

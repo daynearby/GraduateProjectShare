@@ -27,7 +27,7 @@ import java.util.List;
  * 弹窗，实现输入、保存草稿
  * Created by Nearby Yang on 2015-10-22.
  */
-public class PopupWindowView extends PopupWindow {
+public class PopupWinListView extends PopupWindow {
 
     private Context ctx;
     private View view;
@@ -36,12 +36,9 @@ public class PopupWindowView extends PopupWindow {
     private mAdapter adapter;
     private onItemClick listener;
 
-    public enum location{
-        LEFT,RIGHT,CENTER
-    }
 
 
-    public PopupWindowView(Context ctx, List<String> datas) {
+    public PopupWinListView(Context ctx, List<String> datas) {
         this.ctx = ctx;
         this.datas = datas;
 
@@ -78,19 +75,7 @@ public class PopupWindowView extends PopupWindow {
 
     }
 
-    private class itemOnClickListener implements AdapterView.OnItemClickListener {
-        String str = null;
 
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            dismiss();
-            if (datas.size() > 0) {
-                str = datas.get(position);
-            }
-            listener.onClick(view, str, position, id);
-            LogUtils.logI("position = " + position + " id = " + id);
-        }
-    }
 
     /**
      * 设置点击事件
@@ -110,6 +95,20 @@ public class PopupWindowView extends PopupWindow {
 
     }
 
+    private class itemOnClickListener implements AdapterView.OnItemClickListener {
+        String str = null;
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            dismiss();
+            if (datas.size() > 0) {
+                str = datas.get(position);
+            }
+            listener.onClick(view, str, position, id);
+            LogUtils.logI("position = " + position + " id = " + id);
+        }
+    }
+
     /**
      * item点击事件 回调
      */
@@ -117,6 +116,9 @@ public class PopupWindowView extends PopupWindow {
         void onClick(View view, String str, int position, long id);
     }
 
+    /**
+     * 显示数据的baseAdapter
+     */
     private class mAdapter extends BaseAdapter {
 
         @Override

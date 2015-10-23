@@ -34,11 +34,11 @@ dependencies {
     compile files('libs/okhttp-2.4.0.jar')
     compile files('libs/okio-1.4.0.jar')
     compile files('libs/BaiduLBS_Android.jar')
+    compile files('libs/svprogresshud.jar')
     compile project(':Crop')
     compile project(':CustomShapeImageView')
     compile project(':JazzyListView')
     compile project(':PhotoView')
     compile project(':PinterestView')
-    compile project(':svprogresshud')
     compile project(':sMSSDK')
 }
