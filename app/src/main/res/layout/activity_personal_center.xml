@@ -43,7 +43,7 @@
                 android:layout_height="100dp"
                 android:scaleType="centerCrop"
 
-                android:src="@drawable/users" />
+                android:src="@drawable/icon_avatar" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 

@@ -211,7 +211,7 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
         String path = "/data/data/com.hzu.zao/files/avatar.png";
 
         bitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.default_avatar);
+                R.drawable.icon_default_avatar);
 
 
         try {

@@ -100,7 +100,7 @@ public class GuideActivity extends Activity {
                     im[i].setImageResource(R.drawable.login_point_selected);
 
                 } else {
-                    im[i].setImageResource(R.drawable.login_point);
+                    im[i].setImageResource(R.drawable.bg_login_point);
                 }
 
             }

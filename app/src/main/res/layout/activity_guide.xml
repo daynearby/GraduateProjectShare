@@ -27,12 +27,12 @@
             android:id="@+id/pots1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/login_point" />
+            android:src="@drawable/bg_login_point" />
         <ImageView
             android:id="@+id/pots2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/login_point" />
+            android:src="@drawable/bg_login_point" />
 
     </LinearLayout>
 

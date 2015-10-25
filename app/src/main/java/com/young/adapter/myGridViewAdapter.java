@@ -2,13 +2,10 @@ package com.young.adapter;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -18,15 +15,11 @@ import com.bm.library.Info;
 import com.bm.library.PhotoView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.young.config.Contants;
-import com.young.myCallback.GoToSelectImages;
-import com.young.share.MainActivity;
 import com.young.share.R;
 import com.young.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * 需要传入图片的url
@@ -41,8 +34,6 @@ public class myGridViewAdapter extends BaseAdapter {
     private int num = 0;
     private String imageUrl;
     private boolean isUpload = false;
-
-
 
 
     /**
@@ -68,18 +59,19 @@ public class myGridViewAdapter extends BaseAdapter {
      */
     public void setDatas(List<String> datas) {
 
-//        if (data.size() > 0) {
-//            data.clear();
+
+        this.data = datas;
 //        }
-        if (datas != null) {
-            this.data = datas;
-        }
 
         if (isUpload) {
 
-            if (data.size()>=1 && data.size() <= 6) {
-                data.add(data.size() - 1, Contants.LAST_ADD_IMG);
-            }else {
+            if (data == null) {
+                data = new ArrayList<>();
+            }
+
+            if (data.size() >= 1 && data.size() < Contants.IMAGENUMBER) {
+                data.add(data.size(), Contants.LAST_ADD_IMG);
+            } else {
                 data.add(Contants.LAST_ADD_IMG);
             }
 
@@ -120,7 +112,7 @@ public class myGridViewAdapter extends BaseAdapter {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
+//        LogUtils.logE("position = " + position);
 
         ViewHolder holder = null;
         imageUrl = data.get(position);
@@ -152,6 +144,10 @@ public class myGridViewAdapter extends BaseAdapter {
 
             } else {
                 holder.isUpload.setVisibility(View.INVISIBLE);
+            }
+
+            if (data.size() > Contants.IMAGENUMBER) {
+                data.remove(data.size() - 1);
             }
 
 // 禁用图片缩放功能 (默认为禁用，会跟普通的ImageView一样，缩放功能需手动调用enable()启用)
@@ -197,7 +193,6 @@ public class myGridViewAdapter extends BaseAdapter {
     }
 
 
-
     private class ViewHolder {
         public PhotoView imageView;
         public ImageView isUpload;
@@ -220,32 +215,10 @@ public class myGridViewAdapter extends BaseAdapter {
                     notifyDataSetChanged();
                     break;
 
-//                case R.id.im_gridview_item://当时最后一张的时候，也就是添加照片的按钮，那么就
-//                    LogUtils.logE("ietm onclick");
-//                    MainActivity activity = (MainActivity) myGridViewAdapter.this.mactivity;
-//                    activity.setGoToSelectImages(new selectImagesCallback());
-//
-//                    starSelectImages();
-
-//                    break;
 
             }
         }
     }
-
-
-
-
-//    /**
-//     * 选择完图片的回调函数
-//     */
-//    private class selectImagesCallback implements GoToSelectImages {
-//
-//        @Override
-//        public void selectResult(List<String> dataList, int REQUEST_IMAGE) {
-//            setDatas(dataList);
-//        }
-//    }
 
 
 }

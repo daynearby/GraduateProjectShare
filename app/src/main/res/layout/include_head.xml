@@ -15,7 +15,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/users" />
+            android:src="@drawable/icon_avatar" />
 
         <TextView
             android:id="@+id/id_userName"
@@ -50,7 +50,7 @@
             android:layout_marginTop="@dimen/paddingMic"
             android:layout_toEndOf="@+id/id_tx_tab"
             android:layout_toRightOf="@+id/id_tx_tab"
-            android:src="@drawable/tab_20" />
+            android:src="@drawable/icon_tag_mini" />
     </RelativeLayout>
 
 </RelativeLayout>

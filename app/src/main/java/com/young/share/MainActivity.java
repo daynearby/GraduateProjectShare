@@ -53,6 +53,8 @@ public class MainActivity extends CustomActBarActivity {
     private int times = 0;
     private static final int callbackTimes = 10;//回调10次
     private boolean isToggle = false;
+    private boolean isRegistBordcast = false;//是否注册了广播接收者
+    private  ArrayList<String>  mSelectPath = new ArrayList<>();;//图片路径
 
 
     @Override
@@ -171,13 +173,14 @@ public class MainActivity extends CustomActBarActivity {
         myIntentFilter.addAction(MyPushMessageReceiver.BMOB_PUSH_MESSAGES);
         //注册广播
         registerReceiver(mBroadcastReceiver, myIntentFilter);
+        isRegistBordcast = true;
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        ArrayList<String> mSelectPath = new ArrayList<>();
+
 
         if (requestCode == Contants.REQUEST_IMAGE) {
             if (resultCode == RESULT_OK) {
@@ -193,7 +196,7 @@ public class MainActivity extends CustomActBarActivity {
                         mSelectPath.add(path);
 
                     }
-
+                    intents.setAction(Contants.BORDCAST_SELECTIMAGES);
                     intents.putStringArrayListExtra(Contants.BORDCAST_IMAGEPATH_LIST, mSelectPath);
                     sendBroadcast(intents);
                 }
@@ -354,6 +357,7 @@ public class MainActivity extends CustomActBarActivity {
                 bundle.putString(Contants.STREET, street);
                 bundle.putString(Contants.STREETNUMBER, streetNumber);
 
+                intents.setAction(Contants.BORDCAST_LOCATIONINFO);
                 intents.putExtra(BUNDLE_BROADCAST, bundle);
                 sendBroadcast(intents);
 
@@ -405,7 +409,7 @@ public class MainActivity extends CustomActBarActivity {
             itemIm = (ImageView) view;
             switch (pos) {
                 case 1://分享信息
-// TODO: 2015-10-22 弹窗，填写，并且可以保存草稿 使用popwindow
+// TODO: 2015-10-22 弹窗，填写，并且可以保存草稿 使用dialog
                     shareView.show();
 
                     break;
@@ -438,9 +442,12 @@ public class MainActivity extends CustomActBarActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         bdlbsUtils.stopLocation();
-        unregisterReceiver(mBroadcastReceiver);
+        if (isRegistBordcast) {
+            unregisterReceiver(mBroadcastReceiver);
+            isRegistBordcast = false;
+        }
     }
 }

@@ -27,14 +27,14 @@ public class ImageHandlerUtils {
      *
      * @return
      */
-    public static void starSelectImages(Activity aty) {
+    public static void starSelectImages(Activity aty,int imageNumber) {
         Intent intent = new Intent(aty, MultiImageSelectorActivity.class);
 
 // 是否显示调用相机拍照
         intent.putExtra(MultiImageSelectorActivity.EXTRA_SHOW_CAMERA, true);
 
 // 最大图片选择数量
-        intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, Contants.IMAGENUMBER);
+        intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, imageNumber);
 
 // 设置模式 (支持 单选/MultiImageSelectorActivity.MODE_SINGLE 或者 多选/MultiImageSelectorActivity.MODE_MULTI)
         intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE, MultiImageSelectorActivity.MODE_MULTI);

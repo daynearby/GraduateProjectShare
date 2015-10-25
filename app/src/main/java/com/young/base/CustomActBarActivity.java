@@ -32,7 +32,6 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
     private TextView title_tv;
     private TextView tag_tv;
     private TextView city_tv;
-    public Intent intents = new Intent();
     private itemClickResult itemResult;
 
 

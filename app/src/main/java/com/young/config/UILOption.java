@@ -19,9 +19,9 @@ public class UILOption {
         DisplayImageOptions options=null;
 
         options=new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.loadingimg)
-                .showImageOnFail(R.drawable.loadingimgfaile)
-                .showImageForEmptyUri(R.drawable.loadingimaisempty)
+                .showImageOnLoading(R.drawable.icon_loading_img)
+                .showImageOnFail(R.drawable.icon_loading_img_faile)
+                .showImageForEmptyUri(R.drawable.icon_loadingi_maisempty)
                 .considerExifParams(true)//考虑是否旋转
                 .cacheOnDisk(true)
                 .cacheInMemory(true)

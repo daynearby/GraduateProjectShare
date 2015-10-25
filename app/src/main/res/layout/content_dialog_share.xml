@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:src="@drawable/tab30" />
+                    android:src="@drawable/icon_bottombar_tag" />
 
                 <Spinner
                     android:id="@+id/sp_content_popupwin_share_seletag"

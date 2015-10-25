@@ -46,7 +46,7 @@ public class Contants {
 
     //****************************广播接收者 标识**************************************
 
-    public static final String BORDCAST_SELECTIMAGES = "bordcase_select_images";
+    public static final String BORDCAST_SELECTIMAGES = "bordcast_select_images";
     public static final String BORDCAST_LOCATIONINFO = "bordcast_location_info";
 
     //广播数据的标志
