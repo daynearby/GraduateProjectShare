@@ -1,10 +1,12 @@
 package com.young.base;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,35 +27,38 @@ import cn.bmob.v3.BmobUser;
 public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
 
-
     private int title = R.string.title;
     private boolean showCity = false;
     private boolean showTag = false;
-
+    public Activity mActivity;
 
     private TextView title_tv;
 
     public Intent intents = new Intent();
-    public User mUser ;
+    public User mUser;
 
     public final static String BUNDLE_TAG = "Serializable_Data";
+    public final static String BUNDLE_BROADCAST = "sendBroadcast";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         Injector.inject(this);
-        mUser= BmobUser.getCurrentUser(this, User.class);
+        mUser = BmobUser.getCurrentUser(this, User.class);
+        mActivity = BaseAppCompatActivity.this;
 //        initActionBar();
         initData();
         findviewbyid();
         bindData();
     }
 
-
-
-
-
+    /**
+     * 获取根目录的布局
+     */
+    public View getRootView() {
+        return LayoutInflater.from(this).inflate(getLayoutId(), null);
+    }
 
 
     /**

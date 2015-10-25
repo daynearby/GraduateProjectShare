@@ -41,4 +41,5 @@ dependencies {
     compile project(':PhotoView')
     compile project(':PinterestView')
     compile project(':sMSSDK')
+    compile project(':multiImageSelector')
 }

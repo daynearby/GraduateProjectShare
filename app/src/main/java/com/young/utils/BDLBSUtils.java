@@ -9,7 +9,7 @@ import com.baidu.location.LocationClientOption;
 
 /**
  * 百度定位
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-10-20.
  */
 public class BDLBSUtils {
@@ -19,6 +19,20 @@ public class BDLBSUtils {
     //百度定位
     private LocationClient mLocationClient = null;
     private BDLocationListener myListener = new MyLocationListener();
+    private static BDLBSUtils bdlbsUtils;
+
+    public static BDLBSUtils builder(Context ctx, LocationInfoListener locationInfoListener) {
+        if (bdlbsUtils == null) {
+            synchronized (BDLBSUtils.class) {
+                if (bdlbsUtils == null) {
+                    bdlbsUtils = new BDLBSUtils(ctx, locationInfoListener);
+                    return bdlbsUtils;
+                }
+            }
+
+        }
+        return bdlbsUtils;
+    }
 
     public BDLBSUtils(Context ctx, LocationInfoListener locationInfoListener) {
         this.ctx = ctx;
@@ -55,8 +69,8 @@ public class BDLBSUtils {
             locationInfoListener.LocationInfo(data.getProvince(), data.getCity(),
                     data.getDistrict(), data.getStreet(), data.getStreetNumber());
 
-            LogUtils.logI("百度定位"," 省 = "+data.getProvince()+" 城市 = "+data.getCity()+" 地区 = "+
-                    data.getDistrict()+ " 街道 = "+data.getStreet()+" 门牌号 = "+data.getStreetNumber());
+            LogUtils.logI("百度定位", " 省 = " + data.getProvince() + " 城市 = " + data.getCity() + " 地区 = " +
+                    data.getDistrict() + " 街道 = " + data.getStreet() + " 门牌号 = " + data.getStreetNumber());
 
         }
 
@@ -66,7 +80,7 @@ public class BDLBSUtils {
      * 启动 定位
      */
     public void startLocation() {
-        if (!lbsState()){
+        if (!lbsState()) {
             mLocationClient.start();
         }
 
@@ -76,7 +90,7 @@ public class BDLBSUtils {
      * 停止定位
      */
     public void stopLocation() {
-        if (lbsState()){
+        if (lbsState()) {
             mLocationClient.stop();
         }
 
@@ -84,11 +98,13 @@ public class BDLBSUtils {
 
     /**
      * 定位是否启动
+     *
      * @return
      */
-    public boolean lbsState(){
-       return mLocationClient.isStarted();
+    public boolean lbsState() {
+        return mLocationClient.isStarted();
     }
+
     /**
      * 监听定位 的回调
      */

@@ -42,6 +42,7 @@ public class ApplicationConfig extends LitePalApplication {
      */
     private void initConfig() {
         LitePalApplication.initialize(this);
+        // TODO: 2015-10-25 信息sdk的初始化
 //        SMSSDK.initSDK(this, Contants.SMS_APP_KEY, Contants.SMS_APP_SECRET);
     }
 

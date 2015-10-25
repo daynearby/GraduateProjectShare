@@ -35,8 +35,6 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
     public Intent intents = new Intent();
     private itemClickResult itemResult;
 
-    public final static String BUNDLE_TAG = "Serializable_Data";
-
 
     @Override
     public void initData() {

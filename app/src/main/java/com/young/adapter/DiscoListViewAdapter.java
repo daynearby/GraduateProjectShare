@@ -1,5 +1,6 @@
 package com.young.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ public class DiscoListViewAdapter extends CommAdapter<BaseModel> {
 
     @Override
     public void convert(ViewHolder holder, BaseModel bean) {
-        myGridViewAdapter gridViewAdapter = new myGridViewAdapter(ctx);
+        myGridViewAdapter gridViewAdapter = new myGridViewAdapter((Activity) ctx,false);
 
         holder.getView(R.id.id_im_userH);//用户头像
         holder.getView(R.id.id_userName);//昵称

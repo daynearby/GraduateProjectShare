@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
@@ -24,7 +25,7 @@ import com.young.utils.SharePreferenceUtils;
 import com.young.utils.XmlUtils;
 import com.young.views.ArcMenu;
 import com.young.views.Dialog4Tips;
-import com.young.views.PopupWinShareView;
+import com.young.views.DialogShareView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ import java.util.List;
 import cn.bmob.push.BmobPush;
 import cn.bmob.push.PushConstants;
 import cn.bmob.v3.Bmob;
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 
 public class MainActivity extends CustomActBarActivity {
@@ -51,6 +53,7 @@ public class MainActivity extends CustomActBarActivity {
     private int times = 0;
     private static final int callbackTimes = 10;//回调10次
     private boolean isToggle = false;
+
 
     @Override
     public int getLayoutId() {
@@ -86,7 +89,7 @@ public class MainActivity extends CustomActBarActivity {
         //初始化Bmob的消息推送
         configBmob();
 
-        bdlbsUtils = new BDLBSUtils(this, new locationListener());
+        bdlbsUtils = BDLBSUtils.builder(this, new locationListener());
         bdlbsUtils.startLocation();
 
         sharePreferenceUtils = new SharePreferenceUtils(this);
@@ -143,14 +146,17 @@ public class MainActivity extends CustomActBarActivity {
 // TODO: 2015-10-09 页面切换更换title 
                 case 0:
                     settitle(R.string.discount);
+
                     break;
 
                 case 1:
                     settitle(R.string.discover);
+
                     break;
 
                 case 2:
                     settitle(R.string.rank);
+
                     break;
 
             }
@@ -159,16 +165,46 @@ public class MainActivity extends CustomActBarActivity {
 
     }
 
-    //注册广播接收者
+    //注册广播接收者。Bmob推送消息 更新UI
     public void registerBoradcastReceiver() {
         IntentFilter myIntentFilter = new IntentFilter();
         myIntentFilter.addAction(MyPushMessageReceiver.BMOB_PUSH_MESSAGES);
         //注册广播
         registerReceiver(mBroadcastReceiver, myIntentFilter);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ArrayList<String> mSelectPath = new ArrayList<>();
+
+        if (requestCode == Contants.REQUEST_IMAGE) {
+            if (resultCode == RESULT_OK) {
+                if (data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT).size() > 0) {
+
+                    List<String> pathList = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+
+
+                    for (String path : pathList) {
+
+                        path = Contants.FILE_HEAD + path;
+                        LogUtils.logI("image path = " + path);
+                        mSelectPath.add(path);
+
+                    }
+
+                    intents.putStringArrayListExtra(Contants.BORDCAST_IMAGEPATH_LIST, mSelectPath);
+                    sendBroadcast(intents);
+                }
+
+
+            }
+        }
     }
 
 
-//    private void initWidget() {
+    //    private void initWidget() {
 //
 //        myGridViewAdapter gridViewAdapter = new myGridViewAdapter(this);
 //
@@ -204,7 +240,7 @@ public class MainActivity extends CustomActBarActivity {
      */
     private void loginFunction() {
 
-        final Dialog4Tips dialog4Tips = new Dialog4Tips(MainActivity.this);
+        final Dialog4Tips dialog4Tips = new Dialog4Tips(mActivity);
 
         dialog4Tips.setBtnCancelText(getString(R.string.skin));
         dialog4Tips.setBtnOkText(getString(R.string.login_text));
@@ -214,7 +250,7 @@ public class MainActivity extends CustomActBarActivity {
             @Override
             public void btnOkListenter() {//登陆  按钮 ，进入登陆界面
 
-                intents.setClass(MainActivity.this, LoginActivity.class);
+                intents.setClass(mActivity, LoginActivity.class);
                 dialog4Tips.dismiss();
 
                 startActivity(intents);
@@ -279,11 +315,18 @@ public class MainActivity extends CustomActBarActivity {
     }
 
     /**
+     * 开始定位
+     */
+    public void startLocation() {
+        bdlbsUtils.startLocation();
+    }
+
+    /**
      * 定位回调
      * 回调 10次 还是没有得到位置，那么就停止
      */
     private class locationListener implements BDLBSUtils.LocationInfoListener {
-        private List<String> cityList = new ArrayList<>();
+//        private List<String> cityList = new ArrayList<>();
 
         @Override
         public void LocationInfo(String Province, String City, String District, String Street, String StreetNumber) {
@@ -297,12 +340,22 @@ public class MainActivity extends CustomActBarActivity {
             times++;
 
             if (Province != null) {
-                cityList = XmlUtils.getSelectCities(MainActivity.this);
+//                cityList = XmlUtils.getSelectCities(mActivity);
 
 //                for (int i = 0; i < cityList.size(); i++) {
 
                 getCity_tv().setText(city);
+
 //                }
+                Bundle bundle = new Bundle();
+                bundle.putString(Contants.PROVINCE, province);
+                bundle.putString(Contants.CITY, city);
+                bundle.putString(Contants.DISTRICT, district);
+                bundle.putString(Contants.STREET, street);
+                bundle.putString(Contants.STREETNUMBER, streetNumber);
+
+                intents.putExtra(BUNDLE_BROADCAST, bundle);
+                sendBroadcast(intents);
 
                 bdlbsUtils.stopLocation();
             }
@@ -344,7 +397,7 @@ public class MainActivity extends CustomActBarActivity {
      */
     private class onitmeListener implements ArcMenu.OnMenuItemClickListener {
         private ImageView itemIm;
-        private PopupWinShareView shareView =new PopupWinShareView(MainActivity.this);
+        private DialogShareView shareView = new DialogShareView(mActivity);
 
         @Override
         public void onClick(View view, int pos) {
@@ -353,7 +406,7 @@ public class MainActivity extends CustomActBarActivity {
             switch (pos) {
                 case 1://分享信息
 // TODO: 2015-10-22 弹窗，填写，并且可以保存草稿 使用popwindow
-                    shareView.onShow(view);
+                    shareView.show();
 
                     break;
                 case 2://评论
@@ -367,7 +420,7 @@ public class MainActivity extends CustomActBarActivity {
 // TODO: 2015-10-22 判断是否已经登录，已经等了进入个人中心，未登录进入登录界面
                     if (mUser != null) {
 
-                        intents.setClass(MainActivity.this, PersonalCenterActivity.class);
+                        intents.setClass(mActivity, PersonalCenterActivity.class);
                         startActivity(intents);
 
                     } else {
@@ -384,5 +437,10 @@ public class MainActivity extends CustomActBarActivity {
         }
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        bdlbsUtils.stopLocation();
+        unregisterReceiver(mBroadcastReceiver);
+    }
 }

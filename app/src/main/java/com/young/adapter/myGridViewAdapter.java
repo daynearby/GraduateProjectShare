@@ -1,11 +1,14 @@
 package com.young.adapter;
 
 import android.annotation.TargetApi;
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -14,9 +17,16 @@ import android.widget.RelativeLayout.LayoutParams;
 import com.bm.library.Info;
 import com.bm.library.PhotoView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.young.config.Contants;
+import com.young.myCallback.GoToSelectImages;
+import com.young.share.MainActivity;
 import com.young.share.R;
+import com.young.utils.LogUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * 需要传入图片的url
@@ -26,25 +36,14 @@ import java.util.List;
 public class myGridViewAdapter extends BaseAdapter {
 
     private List<String> data;
-    private Context ctx;
+    private Activity mactivity;
     private LayoutInflater myinflater;
+    private int num = 0;
+    private String imageUrl;
     private boolean isUpload = false;
 
-    public myGridViewAdapter(Context ctx) {
-        this.ctx = ctx;
-        myinflater = LayoutInflater.from(ctx);
 
-    }
 
-    /**
-     * 设置图片的url
-     *
-     * @param data
-     */
-    public void setDatas(List<String> data) {
-        this.data = data;
-        notifyDataSetChanged();
-    }
 
     /**
      * 设置是否是上传图片,
@@ -53,23 +52,57 @@ public class myGridViewAdapter extends BaseAdapter {
      *
      * @param isUpload
      */
-    public void setIsUpload(boolean isUpload) {
+    public myGridViewAdapter(Activity mactivity, boolean isUpload) {
+        this.mactivity = mactivity;
         this.isUpload = isUpload;
+        data = new ArrayList<>();
+
+        myinflater = LayoutInflater.from(mactivity);
+
     }
+
+    /**
+     * 设置图片的url
+     *
+     * @param datas
+     */
+    public void setDatas(List<String> datas) {
+
+//        if (data.size() > 0) {
+//            data.clear();
+//        }
+        if (datas != null) {
+            this.data = datas;
+        }
+
+        if (isUpload) {
+
+            if (data.size()>=1 && data.size() <= 6) {
+                data.add(data.size() - 1, Contants.LAST_ADD_IMG);
+            }else {
+                data.add(Contants.LAST_ADD_IMG);
+            }
+
+        }
+
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public int getCount() {
 
-        int num = 0;
+
         if (null != data) {
             num = data.size();
         }
+
 
         return num;
     }
 
     @Override
-    public Object getItem(int position) {
+    public String getItem(int position) {
         if (data != null) {
             return data.get(position);
 
@@ -88,7 +121,7 @@ public class myGridViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        String imageUrl;
+
         ViewHolder holder = null;
         imageUrl = data.get(position);
 
@@ -109,19 +142,29 @@ public class myGridViewAdapter extends BaseAdapter {
 
         }
 
-        //是否是上传状态
+        //是否是上传状态,删除按钮的状态
         if (isUpload) {
-            holder.isUpload.setVisibility(View.VISIBLE);
+
+            if (!imageUrl.equals(Contants.LAST_ADD_IMG)) {
+                holder.isUpload.setVisibility(View.VISIBLE);
+//                holder.isUpload.setOnClickListener(new itemOnclick(position));
+                holder.imageView.setOnClickListener(new deleteListener(position));
+
+            } else {
+                holder.isUpload.setVisibility(View.INVISIBLE);
+            }
+
+// 禁用图片缩放功能 (默认为禁用，会跟普通的ImageView一样，缩放功能需手动调用enable()启用)
+            holder.imageView.disenable();
 
         } else {
             holder.isUpload.setVisibility(View.GONE);
-
-        }
-// TODO: 15/10/10 图片查看,以及连续查看多张图片,左右拖动 
 // 启用图片缩放功能
-        holder.imageView.enable();
-// 禁用图片缩放功能 (默认为禁用，会跟普通的ImageView一样，缩放功能需手动调用enable()启用)
-        holder.imageView.disenable();
+            holder.imageView.enable();
+        }
+// TODO: 15/10/10 图片查看,以及连续查看多张图片,左右拖动
+
+
 // 获取图片信息
         Info info = holder.imageView.getInfo();
 // 从一张图片信息变化到现在的图片，用于图片点击后放大浏览，具体使用可以参照demo的使用
@@ -148,9 +191,11 @@ public class myGridViewAdapter extends BaseAdapter {
 
         ImageLoader.getInstance().displayImage(imageUrl, holder.imageView);
 
+
         return convertView;
 
     }
+
 
 
     private class ViewHolder {
@@ -158,4 +203,49 @@ public class myGridViewAdapter extends BaseAdapter {
         public ImageView isUpload;
 
     }
+
+    public class deleteListener implements View.OnClickListener {
+        private int _postion;
+
+        public deleteListener(int pos) {
+            _postion = pos;
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+
+                case R.id.im_gridview_item_dele://删除按钮
+                    data.remove(_postion);
+                    notifyDataSetChanged();
+                    break;
+
+//                case R.id.im_gridview_item://当时最后一张的时候，也就是添加照片的按钮，那么就
+//                    LogUtils.logE("ietm onclick");
+//                    MainActivity activity = (MainActivity) myGridViewAdapter.this.mactivity;
+//                    activity.setGoToSelectImages(new selectImagesCallback());
+//
+//                    starSelectImages();
+
+//                    break;
+
+            }
+        }
+    }
+
+
+
+
+//    /**
+//     * 选择完图片的回调函数
+//     */
+//    private class selectImagesCallback implements GoToSelectImages {
+//
+//        @Override
+//        public void selectResult(List<String> dataList, int REQUEST_IMAGE) {
+//            setDatas(dataList);
+//        }
+//    }
+
+
 }

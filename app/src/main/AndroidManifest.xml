@@ -88,6 +88,11 @@
         <activity android:name=".PersonalCenterActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+        <!-- 选择照片-->
+        <activity
+            android:configChanges="orientation|screenSize"
+            android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity" />
+
         <!-- 裁剪头像 -->
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
