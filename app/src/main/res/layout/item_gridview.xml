@@ -16,6 +16,6 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/im_gridview_item"
         android:src="@drawable/icon_delete_image"
-        android:visibility="gone" />
+        android:visibility="invisible" />
 
 </RelativeLayout>

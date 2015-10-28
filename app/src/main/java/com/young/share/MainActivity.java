@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
@@ -54,8 +53,7 @@ public class MainActivity extends CustomActBarActivity {
     private static final int callbackTimes = 10;//回调10次
     private boolean isToggle = false;
     private boolean isRegistBordcast = false;//是否注册了广播接收者
-    private  ArrayList<String>  mSelectPath = new ArrayList<>();;//图片路径
-
+    private DialogShareView shareView;
 
     @Override
     public int getLayoutId() {
@@ -121,6 +119,14 @@ public class MainActivity extends CustomActBarActivity {
             loginFunction();
         }
 
+        //选择城市的回调
+        setItemResult(new itemClickResult() {
+            @Override
+            public void result(View view, String s, int position) {
+
+                LogUtils.logI("选择城市 = " + s + " position = " + position);
+            }
+        });
 
     }
 
@@ -169,10 +175,21 @@ public class MainActivity extends CustomActBarActivity {
 
     //注册广播接收者。Bmob推送消息 更新UI
     public void registerBoradcastReceiver() {
-        IntentFilter myIntentFilter = new IntentFilter();
+//        myIntentFilter= new IntentFilter();
         myIntentFilter.addAction(MyPushMessageReceiver.BMOB_PUSH_MESSAGES);
         //注册广播
         registerReceiver(mBroadcastReceiver, myIntentFilter);
+        isRegistBordcast = true;
+
+    }
+
+    //注册广播接收者。Bmob推送消息 更新UI
+    public void registerBoradcastReceiverRequestLocation() {
+//        myIntentFilter= new IntentFilter();
+        myIntentFilter.addAction(Contants.BORDCAST_REQUEST_LOCATIONINFO);
+        //注册广播
+        registerReceiver(mBroadcastReceiver, myIntentFilter);
+
         isRegistBordcast = true;
 
     }
@@ -188,11 +205,14 @@ public class MainActivity extends CustomActBarActivity {
 
                     List<String> pathList = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
 
+                    ArrayList<String> mSelectPath = new ArrayList<>();
 
                     for (String path : pathList) {
 
                         path = Contants.FILE_HEAD + path;
-                        LogUtils.logI("image path = " + path);
+
+//                        LogUtils.logI("image path = " + path);
+
                         mSelectPath.add(path);
 
                     }
@@ -205,36 +225,6 @@ public class MainActivity extends CustomActBarActivity {
             }
         }
     }
-
-
-    //    private void initWidget() {
-//
-//        myGridViewAdapter gridViewAdapter = new myGridViewAdapter(this);
-//
-//        myGridview = (GridView) findViewById(R.id.gv_shareimg);
-//        im_user = (ImageView) findViewById(R.id.im_userH);
-//
-////        im_user.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View v) {
-////                Crop.pickImage(MainActivity.this);
-////            }
-////        });
-//
-//        myGridview.setAdapter(gridViewAdapter);
-//
-//    }
-//
-//
-
-    //
-//
-////        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
-//        Uri destination = Uri.fromFile(filepath);
-//
-//        Crop.of(source, destination).asSquare().start(this);
-//
-//    }
 
 
     /**
@@ -321,6 +311,7 @@ public class MainActivity extends CustomActBarActivity {
      * 开始定位
      */
     public void startLocation() {
+
         bdlbsUtils.startLocation();
     }
 
@@ -329,7 +320,6 @@ public class MainActivity extends CustomActBarActivity {
      * 回调 10次 还是没有得到位置，那么就停止
      */
     private class locationListener implements BDLBSUtils.LocationInfoListener {
-//        private List<String> cityList = new ArrayList<>();
 
         @Override
         public void LocationInfo(String Province, String City, String District, String Street, String StreetNumber) {
@@ -360,7 +350,7 @@ public class MainActivity extends CustomActBarActivity {
                 intents.setAction(Contants.BORDCAST_LOCATIONINFO);
                 intents.putExtra(BUNDLE_BROADCAST, bundle);
                 sendBroadcast(intents);
-
+                LogUtils.logI("定位成功 定位信息 发送广播 ");
                 bdlbsUtils.stopLocation();
             }
 
@@ -382,7 +372,7 @@ public class MainActivity extends CustomActBarActivity {
 
             if (intent.getAction().equals(MyPushMessageReceiver.BMOB_PUSH_MESSAGES)) {
 
-                LogUtils.logE("收到信息" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
+                LogUtils.logE("Bmob 收到信息" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
 
                 imageView = (ImageView) mArcMenu.getChildAt(0);
                 imageView.setImageResource(R.drawable.icon_more_light);
@@ -390,6 +380,9 @@ public class MainActivity extends CustomActBarActivity {
                 imageView = (ImageView) mArcMenu.getChildAt(2);
                 imageView.setImageResource(R.drawable.icon_comment_light);
 
+            } else if (intent.getAction().equals(Contants.BORDCAST_REQUEST_LOCATIONINFO)) {
+                LogUtils.logI("main 收到广播 开始 定位");
+                startLocation();
             }
         }
 
@@ -401,7 +394,7 @@ public class MainActivity extends CustomActBarActivity {
      */
     private class onitmeListener implements ArcMenu.OnMenuItemClickListener {
         private ImageView itemIm;
-        private DialogShareView shareView = new DialogShareView(mActivity);
+
 
         @Override
         public void onClick(View view, int pos) {
@@ -410,6 +403,10 @@ public class MainActivity extends CustomActBarActivity {
             switch (pos) {
                 case 1://分享信息
 // TODO: 2015-10-22 弹窗，填写，并且可以保存草稿 使用dialog
+                    shareView = new DialogShareView(mActivity);
+                    //定位信息请求，注册广播接收者
+                    registerBoradcastReceiverRequestLocation();
+
                     shareView.show();
 
                     break;

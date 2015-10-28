@@ -1,2 +1,2 @@
-include ':app', ':Crop', ':CustomShapeImageView', ':JazzyListView', ':PhotoView', ':PinterestView', ':sMSSDK', ':multiImageSelector'
+include ':app', ':Crop', ':CustomShapeImageView', ':JazzyListView', ':PhotoView', ':PinterestView', ':sMSSDK', ':multiImageSelector', ':svprogresshud'
 

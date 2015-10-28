@@ -63,6 +63,7 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
 
     @Override
     public void initData() {
+        super.initData();
         bdlbsUtils = new BDLBSUtils(this, new locationListener());
         bdlbsUtils.startLocation();
         setBarVisibility(false, false);

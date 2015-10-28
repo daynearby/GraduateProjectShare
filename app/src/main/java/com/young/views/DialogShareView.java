@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -30,6 +31,7 @@ import com.young.utils.ImageHandlerUtils;
 import com.young.utils.LogUtils;
 import com.young.utils.XmlUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,16 +53,17 @@ public class DialogShareView extends Dialog implements View.OnKeyListener, View.
     private GridView gv_img;
     private myGridViewAdapter gridViewAdapter;
 
-    private List<String> path;//图片路径
-    private int imagesNumber;//图片的可选择数量，最多为6张
+
     private List<String> tagList;
     private boolean isRegister = false;//广播接收者是否被注册
     private IntentFilter myIntentFilter = new IntentFilter();
+    private Intent intents;
+    private boolean isRegisterSelectimg = false;
 
     private String locationInfo;//定位信息
     private String tagInfo;//标签信息
 
-    // TODO: 2015-10-23 文本输入框，清空的选项，图片选择，位置，标签。取消的时候询问是否保存草稿
+    // TODO: 2015-10-23 文本输入框，清空的选项，位置，标签。取消的时候询问是否保存草稿
 
     public DialogShareView(Activity mainActivity) {
         super(mainActivity);
@@ -69,7 +72,6 @@ public class DialogShareView extends Dialog implements View.OnKeyListener, View.
 
         view = LayoutInflater.from(mainActivity).inflate(R.layout.content_dialog_share, null);
         setContentView(view);
-
 
         findView();
 
@@ -82,9 +84,8 @@ public class DialogShareView extends Dialog implements View.OnKeyListener, View.
 
         tagList = XmlUtils.getSelectTag(mainActivity);
         tagList.remove(0);
-//        title_tv.setFocusable(true);
 
-        gridViewAdapter = new myGridViewAdapter(mainActivity, true);
+        gridViewAdapter = new myGridViewAdapter(mainActivity, gv_img, true);
         gridViewAdapter.setDatas(null);
         gv_img.setAdapter(gridViewAdapter);
         gv_img.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -94,18 +95,13 @@ public class DialogShareView extends Dialog implements View.OnKeyListener, View.
                 String item = gridViewAdapter.getItem(position);
                 if (item != null) {
                     if (item.equals(Contants.LAST_ADD_IMG)) {
-// TODO: 2015-10-25 6张照片后隐藏添加照片的图标
+
+                        //注册广播接收者
                         registerBoradcastReceiverSelectorImages();
 
-                        if (path != null) {
-                            imagesNumber = Contants.IMAGENUMBER - path.size() + 1;
-                        } else {
-                            imagesNumber = Contants.IMAGENUMBER;
-                        }
 
-                        LogUtils.logE("number = " + imagesNumber);
+                        ImageHandlerUtils.starSelectImages(mainActivity, gridViewAdapter.getData());
 
-                        ImageHandlerUtils.starSelectImages(mainActivity, imagesNumber);
                     }
                 }
             }
@@ -114,8 +110,10 @@ public class DialogShareView extends Dialog implements View.OnKeyListener, View.
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(mainActivity, R.layout.custom_spinner_item);
         arrayAdapter.addAll(tagList);
         arrayAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
+
         tagSpinner.setPrompt(" 请选择标签 ： ");
         tagSpinner.setAdapter(arrayAdapter);
+
         tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -127,7 +125,6 @@ public class DialogShareView extends Dialog implements View.OnKeyListener, View.
                 tagSpinner.setPrompt(" 请选择标签 ： ");
             }
         });
-
     }
 
     private void findView() {
@@ -155,6 +152,9 @@ public class DialogShareView extends Dialog implements View.OnKeyListener, View.
         linearLayout.setLayoutParams(params);
     }
 
+    public ArrayList<String> getData(){
+        return gridViewAdapter.getData();
+    }
 
     /**
      * 设置标题
@@ -165,10 +165,10 @@ public class DialogShareView extends Dialog implements View.OnKeyListener, View.
         title_tv.setText(strId);
     }
 
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        return true;
-//    }
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return true;
+    }
 
     //注册广播接收者。地理信息
     public void registerBoradcastReceiver() {
@@ -182,9 +182,12 @@ public class DialogShareView extends Dialog implements View.OnKeyListener, View.
     //注册广播接收者。图片
     public void registerBoradcastReceiverSelectorImages() {
 
+
         myIntentFilter.addAction(Contants.BORDCAST_SELECTIMAGES);
         //注册广播
         mainActivity.registerReceiver(broadcastReceiver, myIntentFilter);
+
+//        isRegisterSelectimg = true;
 
     }
 
@@ -203,13 +206,18 @@ public class DialogShareView extends Dialog implements View.OnKeyListener, View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_content_popupwin_share_lacation_i:
+
+                intents = new Intent();
+                intents.setAction(Contants.BORDCAST_REQUEST_LOCATIONINFO);
+                mainActivity.sendBroadcast(intents);
+
                 //注册广播接收者
                 registerBoradcastReceiver();
 
                 ((MainActivity) mainActivity).startLocation();
 
                 isRegister = true;
-
+                LogUtils.logI("dialog 定位");
                 break;
             case R.id.tv_contnent_popupwin_send:
                 LogUtils.ta("发送");
@@ -230,7 +238,7 @@ public class DialogShareView extends Dialog implements View.OnKeyListener, View.
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            LogUtils.logE("收到广播 Action = " + intent.getAction());
+
             if (intent.getAction().equals(Contants.BORDCAST_LOCATIONINFO)) {
 
                 Bundle bundle = intent.getBundleExtra(BaseAppCompatActivity.BUNDLE_BROADCAST);
@@ -247,11 +255,10 @@ public class DialogShareView extends Dialog implements View.OnKeyListener, View.
                 shareLocation_tv.setTextColor(mainActivity.getResources().getColor(R.color.theme_puple));
 
             } else if (intent.getAction().equals(Contants.BORDCAST_SELECTIMAGES)) {
-
-                path = intent.getStringArrayListExtra(Contants.BORDCAST_IMAGEPATH_LIST);
+                //图片路径
+                List<String> path = intent.getStringArrayListExtra(Contants.BORDCAST_IMAGEPATH_LIST);
                 gridViewAdapter.setDatas(path);
 
-                LogUtils.logI("size = " + path.size() + " toString = " + path.toString());
             }
         }
 

@@ -48,6 +48,7 @@ public class Contants {
 
     public static final String BORDCAST_SELECTIMAGES = "bordcast_select_images";
     public static final String BORDCAST_LOCATIONINFO = "bordcast_location_info";
+    public static final String BORDCAST_REQUEST_LOCATIONINFO = "bordcast_request_location_info";
 
     //广播数据的标志
 

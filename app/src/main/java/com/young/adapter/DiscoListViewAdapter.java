@@ -2,8 +2,6 @@ package com.young.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.GridView;
 
 import com.young.adapter.CommentAdapter.ViewHolder;
@@ -35,7 +33,6 @@ public class DiscoListViewAdapter extends CommAdapter<BaseModel> {
 
     @Override
     public void convert(ViewHolder holder, BaseModel bean) {
-        myGridViewAdapter gridViewAdapter = new myGridViewAdapter((Activity) ctx,false);
 
         holder.getView(R.id.id_im_userH);//用户头像
         holder.getView(R.id.id_userName);//昵称
@@ -46,6 +43,7 @@ public class DiscoListViewAdapter extends CommAdapter<BaseModel> {
         holder.getView(R.id.id_hadgo);//去过数量
         holder.getView(R.id.id_tx_comment);//评论数量
 
+        myGridViewAdapter gridViewAdapter = new myGridViewAdapter((Activity) ctx, myGridview, false);
         myGridview.setAdapter(gridViewAdapter);
 
     }

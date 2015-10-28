@@ -51,9 +51,10 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
 
     @Override
     public void initData() {
-
-        setBarVisibility(false, false);
+        super.initData();
         settitle(R.string.personal_center);
+        setBarVisibility(false, false);
+
 
         sharePreferenceUtils = new SharePreferenceUtils(this);
     }

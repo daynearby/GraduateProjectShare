@@ -1,7 +1,6 @@
 package com.young.utils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,13 +9,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import com.young.config.Contants;
-import com.young.share.MainActivity;
+
+import java.util.ArrayList;
 
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * 图片处理工具类
- *
+ * <p>
  * Created by Nearby Yang on 2015-10-25.
  */
 public class ImageHandlerUtils {
@@ -27,17 +27,29 @@ public class ImageHandlerUtils {
      *
      * @return
      */
-    public static void starSelectImages(Activity aty,int imageNumber) {
+    public static void starSelectImages(Activity aty, ArrayList<String> data) {
+        ArrayList<String> list = new ArrayList<>();
         Intent intent = new Intent(aty, MultiImageSelectorActivity.class);
 
 // 是否显示调用相机拍照
         intent.putExtra(MultiImageSelectorActivity.EXTRA_SHOW_CAMERA, true);
 
 // 最大图片选择数量
-        intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, imageNumber);
+        intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, Contants.IMAGENUMBER);
 
 // 设置模式 (支持 单选/MultiImageSelectorActivity.MODE_SINGLE 或者 多选/MultiImageSelectorActivity.MODE_MULTI)
         intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE, MultiImageSelectorActivity.MODE_MULTI);
+
+        for (String s : data) {
+            s = s.substring(Contants.FILE_HEAD.length(), s.length());
+//            LogUtils.logI("转化 path = "+s);
+            list.add(s);
+        }
+
+        // 默认选择
+        if (list != null && list.size() > 0) {
+            intent.putExtra(MultiImageSelectorActivity.EXTRA_DEFAULT_SELECTED_LIST, list);
+        }
 
         aty.startActivityForResult(intent, Contants.REQUEST_IMAGE);
 

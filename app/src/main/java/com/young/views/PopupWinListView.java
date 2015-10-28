@@ -105,7 +105,7 @@ public class PopupWinListView extends PopupWindow {
                 str = datas.get(position);
             }
             listener.onClick(view, str, position, id);
-            LogUtils.logI("position = " + position + " id = " + id);
+//            LogUtils.logI("position = " + position + " id = " + id);
         }
     }
 

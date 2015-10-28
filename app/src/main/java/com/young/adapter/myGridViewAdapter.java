@@ -23,7 +23,7 @@ import java.util.List;
 
 /**
  * 需要传入图片的url
- * <p/>
+ * <p>
  * Created by Nearby Yang on 2015-06-28.
  */
 public class myGridViewAdapter extends BaseAdapter {
@@ -34,18 +34,21 @@ public class myGridViewAdapter extends BaseAdapter {
     private int num = 0;
     private String imageUrl;
     private boolean isUpload = false;
-
+    private GridView gv;
+//    private boolean isFirstSet = true;
 
     /**
      * 设置是否是上传图片,
      * true -> 显示红色的叉叉
      * false -> 不显示红色叉叉
      *
+     * @param gv_img
      * @param isUpload
      */
-    public myGridViewAdapter(Activity mactivity, boolean isUpload) {
+    public myGridViewAdapter(Activity mactivity, GridView gv_img, boolean isUpload) {
         this.mactivity = mactivity;
         this.isUpload = isUpload;
+        gv = gv_img;
         data = new ArrayList<>();
 
         myinflater = LayoutInflater.from(mactivity);
@@ -59,8 +62,12 @@ public class myGridViewAdapter extends BaseAdapter {
      */
     public void setDatas(List<String> datas) {
 
-
         this.data = datas;
+
+//        if (data != null) {
+//            for (String s : data) {
+//                LogUtils.logE("set data = " + s);
+//            }
 //        }
 
         if (isUpload) {
@@ -69,10 +76,11 @@ public class myGridViewAdapter extends BaseAdapter {
                 data = new ArrayList<>();
             }
 
-            if (data.size() >= 1 && data.size() < Contants.IMAGENUMBER) {
+//1~5需要加
+            if (data.size() >= 0 && data.size() < Contants.IMAGENUMBER) {
+
+
                 data.add(data.size(), Contants.LAST_ADD_IMG);
-            } else {
-                data.add(Contants.LAST_ADD_IMG);
             }
 
         }
@@ -80,6 +88,31 @@ public class myGridViewAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public ArrayList<String> getData() {
+        ArrayList<String> dataL = (ArrayList<String>) data;
+
+        if (dataL != null) {
+            //1 ·· 5
+            if (dataL.size() > 0 && dataL.size() < Contants.IMAGENUMBER) {
+                dataL.remove(data.size() - 1);
+
+                // 6
+            } else if (dataL.size() == Contants.IMAGENUMBER) {
+
+                if (dataL.get(Contants.IMAGENUMBER - 1).equals(Contants.LAST_ADD_IMG)) {
+                    dataL.remove(Contants.IMAGENUMBER - 1);
+                }
+            }
+
+        }
+
+//        //log
+//        for (String s : dataL) {
+//            LogUtils.logE("get data = " + s);
+//        }
+
+        return dataL;
+    }
 
     @Override
     public int getCount() {
@@ -88,7 +121,6 @@ public class myGridViewAdapter extends BaseAdapter {
         if (null != data) {
             num = data.size();
         }
-
 
         return num;
     }
@@ -118,7 +150,7 @@ public class myGridViewAdapter extends BaseAdapter {
         imageUrl = data.get(position);
 
 
-        if (null == holder) {
+        if (convertView == null) {
 
             holder = new ViewHolder();
             convertView = myinflater.inflate(R.layout.item_gridview, parent, false);
@@ -139,8 +171,9 @@ public class myGridViewAdapter extends BaseAdapter {
 
             if (!imageUrl.equals(Contants.LAST_ADD_IMG)) {
                 holder.isUpload.setVisibility(View.VISIBLE);
-//                holder.isUpload.setOnClickListener(new itemOnclick(position));
-                holder.imageView.setOnClickListener(new deleteListener(position));
+                holder.isUpload.setOnClickListener(new deleteListener(position));
+//                holder.imageView.setClickable(true);
+//                holder.imageView.setOnClickListener(new deleteListener(position));
 
             } else {
                 holder.isUpload.setVisibility(View.INVISIBLE);
@@ -152,7 +185,7 @@ public class myGridViewAdapter extends BaseAdapter {
 
 // 禁用图片缩放功能 (默认为禁用，会跟普通的ImageView一样，缩放功能需手动调用enable()启用)
             holder.imageView.disenable();
-
+//            holder.imageView.enable();
         } else {
             holder.isUpload.setVisibility(View.GONE);
 // 启用图片缩放功能
@@ -200,6 +233,7 @@ public class myGridViewAdapter extends BaseAdapter {
     }
 
     public class deleteListener implements View.OnClickListener {
+
         private int _postion;
 
         public deleteListener(int pos) {
@@ -211,8 +245,17 @@ public class myGridViewAdapter extends BaseAdapter {
             switch (v.getId()) {
 
                 case R.id.im_gridview_item_dele://删除按钮
+
+//                    LogUtils.logE("点击删除图片按钮 position = " + _postion);
                     data.remove(_postion);
+
+                    if (data.size() == Contants.IMAGENUMBER-1) {
+                        if (!data.get(Contants.IMAGENUMBER - 2).equals(Contants.LAST_ADD_IMG)) {
+                            data.add(Contants.LAST_ADD_IMG);
+                        }
+                    }
                     notifyDataSetChanged();
+
                     break;
 
 

@@ -36,6 +36,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     private TextView title_tv;
 
     public Intent intents = new Intent();
+    public IntentFilter myIntentFilter = new IntentFilter();;
     public User mUser;
 
     public final static String BUNDLE_TAG = "Serializable_Data";
