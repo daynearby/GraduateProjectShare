@@ -9,7 +9,7 @@
         android:id="@+id/tv_actionbar_titile"
         style="@style/actionbar_text"
         android:layout_centerHorizontal="true"
-        android:text="标题"
+        android:text="@string/title"
         android:textSize="@dimen/textSizeLarge" />
 
     <TextView
@@ -27,7 +27,7 @@
         style="@style/actionbar_text"
         android:layout_alignBottom="@id/tv_actionbar_titile"
         android:layout_toRightOf="@id/tv_actionbar_titile"
-        android:text="@string/惠州"
+        android:text="@string/hz"
         android:textColor="@drawable/sele_text_color_def_white_light_gray"
         android:textSize="@dimen/textSizeMediu" />
 

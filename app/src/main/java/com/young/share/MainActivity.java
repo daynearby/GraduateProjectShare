@@ -24,7 +24,6 @@ import com.young.utils.SharePreferenceUtils;
 import com.young.utils.XmlUtils;
 import com.young.views.ArcMenu;
 import com.young.views.Dialog4Tips;
-import com.young.views.DialogShareView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,6 @@ import java.util.List;
 import cn.bmob.push.BmobPush;
 import cn.bmob.push.PushConstants;
 import cn.bmob.v3.Bmob;
-import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 
 public class MainActivity extends CustomActBarActivity {
@@ -53,7 +51,6 @@ public class MainActivity extends CustomActBarActivity {
     private static final int callbackTimes = 10;//回调10次
     private boolean isToggle = false;
     private boolean isRegistBordcast = false;//是否注册了广播接收者
-    private DialogShareView shareView;
 
     @Override
     public int getLayoutId() {
@@ -194,37 +191,7 @@ public class MainActivity extends CustomActBarActivity {
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-
-        if (requestCode == Contants.REQUEST_IMAGE) {
-            if (resultCode == RESULT_OK) {
-                if (data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT).size() > 0) {
-
-                    List<String> pathList = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-
-                    ArrayList<String> mSelectPath = new ArrayList<>();
-
-                    for (String path : pathList) {
-
-                        path = Contants.FILE_HEAD + path;
-
-//                        LogUtils.logI("image path = " + path);
-
-                        mSelectPath.add(path);
-
-                    }
-                    intents.setAction(Contants.BORDCAST_SELECTIMAGES);
-                    intents.putStringArrayListExtra(Contants.BORDCAST_IMAGEPATH_LIST, mSelectPath);
-                    sendBroadcast(intents);
-                }
-
-
-            }
-        }
-    }
 
 
     /**
@@ -350,7 +317,9 @@ public class MainActivity extends CustomActBarActivity {
                 intents.setAction(Contants.BORDCAST_LOCATIONINFO);
                 intents.putExtra(BUNDLE_BROADCAST, bundle);
                 sendBroadcast(intents);
+
                 LogUtils.logI("定位成功 定位信息 发送广播 ");
+
                 bdlbsUtils.stopLocation();
             }
 
@@ -369,7 +338,7 @@ public class MainActivity extends CustomActBarActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
+//"Bmob  信息
             if (intent.getAction().equals(MyPushMessageReceiver.BMOB_PUSH_MESSAGES)) {
 
                 LogUtils.logE("Bmob 收到信息" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
@@ -381,8 +350,11 @@ public class MainActivity extends CustomActBarActivity {
                 imageView.setImageResource(R.drawable.icon_comment_light);
 
             } else if (intent.getAction().equals(Contants.BORDCAST_REQUEST_LOCATIONINFO)) {
+                //开始 百度定位
                 LogUtils.logI("main 收到广播 开始 定位");
+
                 startLocation();
+
             }
         }
 
@@ -402,12 +374,11 @@ public class MainActivity extends CustomActBarActivity {
             itemIm = (ImageView) view;
             switch (pos) {
                 case 1://分享信息
-// TODO: 2015-10-22 弹窗，填写，并且可以保存草稿 使用dialog
-                    shareView = new DialogShareView(mActivity);
+
                     //定位信息请求，注册广播接收者
                     registerBoradcastReceiverRequestLocation();
 
-                    shareView.show();
+                    mStartActivity(ShareMessageActivity.class);
 
                     break;
                 case 2://评论

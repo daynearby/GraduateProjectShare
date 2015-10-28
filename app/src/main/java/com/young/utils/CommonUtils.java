@@ -2,11 +2,6 @@ package com.young.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
@@ -18,8 +13,9 @@ import java.util.regex.Pattern;
 public class CommonUtils {
 
 
-    public static final String WIDTH = "width";
-    public static final String HEIGHT = "height";
+    private static final String WIDTH = "width";
+    private static final String HEIGHT = "height";
+    private static final String DENSITY = "density";
 
     private int width;
     private int height;
@@ -103,42 +99,80 @@ public class CommonUtils {
      *
      * @return
      */
-    public static HashMap<String, String> getDisplaySize(Activity activity) {
+    private static HashMap<String, Integer> getDisplaySize(Activity activity) {
 
         DisplayMetrics metric = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(metric);
         int width = metric.widthPixels;     // 屏幕宽度（像素）
         int height = metric.heightPixels;   // 屏幕高度（像素）
-        HashMap<String, String> size = new HashMap<>();
-        size.put(WIDTH, String.valueOf(width));
-        size.put(HEIGHT, String.valueOf(height));
-
+        float density = metric.density;//屏幕密度
+        HashMap<String, Integer> size = new HashMap<>();
+        size.put(WIDTH, width);
+        size.put(HEIGHT, height);
+        size.put(DENSITY, (int) density);
         return size;
 
     }
 
     /**
      * 获取高度
+     * 像素
+     *
      * @param activity
      * @return
      */
     public static int getHeight(Activity activity) {
-        return Integer.valueOf(getDisplaySize(activity).get(HEIGHT));
+        return getDisplaySize(activity).get(HEIGHT);
 
     }
 
 
     /**
-     * 获取宽度
+     * 获取宽度 像素
+     *
      * @param activity
      * @return
      */
     public static int getWidth(Activity activity) {
-        return Integer.valueOf(getDisplaySize(activity).get(WIDTH));
+        return getDisplaySize(activity).get(WIDTH);
+    }
+
+    /**
+     * 获取屏幕密度
+     *
+     * @param activity
+     * @return
+     */
+    public static int getDensity(Activity activity) {
+        return getDisplaySize(activity).get(DENSITY);
+    }
+
+    /**
+     * 屏幕尺寸 dp转px
+     *
+     * @param activity
+     * @param _dp
+     * @return
+     */
+    public static int dp2px(Activity activity, int _dp) {
+
+        return _dp * getDensity(activity);
+    }
+
+    /**
+     * 屏幕尺寸 px转dp
+     *
+     * @param activity
+     * @param _px
+     * @return
+     */
+    public static int px2dp(Activity activity, int _px) {
+        return _px / getDensity(activity);
     }
 
     /**
      * 判断email格式是否正确
+     *
      * @param email 要验证的字符串
      */
     public static boolean isEmail(String email) {
@@ -148,7 +182,6 @@ public class CommonUtils {
 
         return m.matches();
     }
-
 
 
 }

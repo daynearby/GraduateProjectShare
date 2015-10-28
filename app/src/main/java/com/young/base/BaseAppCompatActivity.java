@@ -28,13 +28,7 @@ import cn.bmob.v3.BmobUser;
 public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
 
-    private int title = R.string.title;
-    private boolean showCity = false;
-    private boolean showTag = false;
     public Activity mActivity;
-
-    private TextView title_tv;
-
     public Intent intents = new Intent();
     public IntentFilter myIntentFilter = new IntentFilter();;
     public User mUser;

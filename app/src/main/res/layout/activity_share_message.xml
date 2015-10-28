@@ -1,19 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_content_popupwin_share"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/tv_contnent_popupwin_title"
-        style="@style/text_style_match"
-        android:background="@color/theme_puple"
-        android:gravity="center"
-        android:padding="@dimen/paddingMic"
-        android:text="@string/let_me_share"
-        android:textColor="@color/white"
-        android:textSize="@dimen/textSizeLarge" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,6 +32,14 @@
                 android:minLines="3"
                 android:padding="@dimen/paddingHit" />
 
+            <ImageView
+                android:id="@+id/im_content_dialog_share_emotion"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="right"
+                android:padding="@dimen/paddingMic"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_emotion_def" />
 
             <GridView
                 android:id="@+id/gv_content_popupwin_share_addimg"
@@ -49,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/paddingMic"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
         </LinearLayout>
 
@@ -57,62 +55,40 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/paddingMic"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_marginTop="@dimen/paddingMediu"
+            android:layout_marginLeft="@dimen/paddingMic"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
+                    android:paddingRight="@dimen/radius"
                     android:src="@drawable/icon_bottombar_tag" />
 
                 <Spinner
                     android:id="@+id/sp_content_popupwin_share_seletag"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_content_popupwin_share_lacation_i"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginTop="@dimen/paddingMediu"
                 android:drawableLeft="@drawable/icon_location_info"
-                android:gravity="center"
-                android:paddingLeft="@dimen/paddingMediu"
+                android:drawablePadding="@dimen/paddingMediu"
                 android:text="@string/share_location_info"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/textSizeMediu"
-                android:ellipsize="end"/>
+                android:textColor="@drawable/sele_text_color"
+                android:textSize="@dimen/textSizeMediu" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@drawable/divier_vertical"
-            android:orientation="horizontal"
-            android:showDividers="middle">
 
-            <TextView
-                android:id="@+id/tv_contnent_popupwin_cancel"
-                style="@style/text_style.weight"
-                android:text="@string/cancel" />
-
-            <TextView
-                android:id="@+id/tv_contnent_popupwin_send"
-                style="@style/text_style.weight"
-                android:text="@string/share"
-                android:textSize="@dimen/textSizeLarge" />
-
-        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
