@@ -15,7 +15,6 @@ import android.widget.ImageView;
 
 import com.young.adapter.MainPagerAdapter;
 import com.young.base.CustomActBarActivity;
-import com.young.bmobPush.MyPushMessageReceiver;
 import com.young.config.Contants;
 import com.young.model.MyBmobInstallation;
 import com.young.utils.BDLBSUtils;
@@ -173,7 +172,7 @@ public class MainActivity extends CustomActBarActivity {
     //注册广播接收者。Bmob推送消息 更新UI
     public void registerBoradcastReceiver() {
 //        myIntentFilter= new IntentFilter();
-        myIntentFilter.addAction(MyPushMessageReceiver.BMOB_PUSH_MESSAGES);
+        myIntentFilter.addAction(Contants.BMOB_PUSH_MESSAGES);
         //注册广播
         registerReceiver(mBroadcastReceiver, myIntentFilter);
         isRegistBordcast = true;
@@ -190,8 +189,6 @@ public class MainActivity extends CustomActBarActivity {
         isRegistBordcast = true;
 
     }
-
-
 
 
     /**
@@ -247,10 +244,9 @@ public class MainActivity extends CustomActBarActivity {
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,
                                                     int which) {
-                                    bdlbsUtils.stopLocation();
                                     int nPid = android.os.Process.myPid();
                                     android.os.Process.killProcess(nPid);
-
+                                    System.exit(0);
                                 }
                             })
                     .setNegativeButton("取消",
@@ -339,7 +335,7 @@ public class MainActivity extends CustomActBarActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 //"Bmob  信息
-            if (intent.getAction().equals(MyPushMessageReceiver.BMOB_PUSH_MESSAGES)) {
+            if (intent.getAction().equals(Contants.BMOB_PUSH_MESSAGES)) {
 
                 LogUtils.logE("Bmob 收到信息" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
 
@@ -391,9 +387,7 @@ public class MainActivity extends CustomActBarActivity {
 
 // TODO: 2015-10-22 判断是否已经登录，已经等了进入个人中心，未登录进入登录界面
                     if (mUser != null) {
-
-                        intents.setClass(mActivity, PersonalCenterActivity.class);
-                        startActivity(intents);
+                        mStartActivity(PersonalCenterActivity.class);
 
                     } else {
                         loginFunction();

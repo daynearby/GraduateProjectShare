@@ -17,7 +17,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.young.share.R;
-import com.young.utils.CommonUtils;
+import com.young.utils.DisplayUtils;
 import com.young.utils.LogUtils;
 
 import java.util.List;
@@ -37,7 +37,6 @@ public class PopupWinListView extends PopupWindow {
     private onItemClick listener;
 
 
-
     public PopupWinListView(Context ctx, List<String> datas) {
         this.ctx = ctx;
         this.datas = datas;
@@ -51,8 +50,12 @@ public class PopupWinListView extends PopupWindow {
     private void init() {
         view = LayoutInflater.from(ctx).inflate(R.layout.content_popup_window_list, null);
         setContentView(view);
-        setWidth(CommonUtils.getWidth((Activity) ctx) / 2);
-        setHeight(CommonUtils.getHeight((Activity) ctx) / 2);
+        setWidth(DisplayUtils.getScreenWidthPixels((Activity) ctx) / 2);
+        if (datas.size() > 4) {
+            setHeight(DisplayUtils.getScreenHeightPixels((Activity) ctx) / 2);
+        } else {
+            setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
         setFocusable(true);
         setOutsideTouchable(true);
 
@@ -76,7 +79,6 @@ public class PopupWinListView extends PopupWindow {
     }
 
 
-
     /**
      * 设置点击事件
      *
@@ -89,8 +91,10 @@ public class PopupWinListView extends PopupWindow {
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public void onShow(View v) {
-//        showAsDropDown(v, (CommonUtils.getWidth((Activity) ctx) - this.getWidth()) / 2, 0, Gravity.CENTER);
-        showAsDropDown(v, (int) v.getX() - getWidth()/2, 0, Gravity.CENTER);
+//        LogUtils.logE("v.getX = " + v.getX() + " getWidth() = " + getWidth() + " v.getWidth = " + v.getWidth());
+        showAsDropDown(v, 0, 0, Gravity.BOTTOM);
+//        showAsDropDown(v, v.getWidth()/2, 0);
+
 
 
     }

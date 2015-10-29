@@ -94,81 +94,8 @@ public class CommonUtils {
 //
 //        }
 
-    /**
-     * 获取屏幕宽\高
-     *
-     * @return
-     */
-    private static HashMap<String, Integer> getDisplaySize(Activity activity) {
-
-        DisplayMetrics metric = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(metric);
-        int width = metric.widthPixels;     // 屏幕宽度（像素）
-        int height = metric.heightPixels;   // 屏幕高度（像素）
-        float density = metric.density;//屏幕密度
-        HashMap<String, Integer> size = new HashMap<>();
-        size.put(WIDTH, width);
-        size.put(HEIGHT, height);
-        size.put(DENSITY, (int) density);
-        return size;
-
-    }
-
-    /**
-     * 获取高度
-     * 像素
-     *
-     * @param activity
-     * @return
-     */
-    public static int getHeight(Activity activity) {
-        return getDisplaySize(activity).get(HEIGHT);
-
-    }
 
 
-    /**
-     * 获取宽度 像素
-     *
-     * @param activity
-     * @return
-     */
-    public static int getWidth(Activity activity) {
-        return getDisplaySize(activity).get(WIDTH);
-    }
-
-    /**
-     * 获取屏幕密度
-     *
-     * @param activity
-     * @return
-     */
-    public static int getDensity(Activity activity) {
-        return getDisplaySize(activity).get(DENSITY);
-    }
-
-    /**
-     * 屏幕尺寸 dp转px
-     *
-     * @param activity
-     * @param _dp
-     * @return
-     */
-    public static int dp2px(Activity activity, int _dp) {
-
-        return _dp * getDensity(activity);
-    }
-
-    /**
-     * 屏幕尺寸 px转dp
-     *
-     * @param activity
-     * @param _px
-     * @return
-     */
-    public static int px2dp(Activity activity, int _px) {
-        return _px / getDensity(activity);
-    }
 
     /**
      * 判断email格式是否正确

@@ -1,94 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:padding="@dimen/paddingMic">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="@dimen/paddingMic">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/et_contnent_popupwin_content"
             style="@style/text_style_match"
-            android:layout_marginTop="@dimen/paddingMic"
+            android:layout_marginLeft="@dimen/paddingHit"
+            android:layout_marginRight="@dimen/paddingHit"
+            android:layout_marginTop="@dimen/paddingHit"
             android:background="@drawable/bg_rectangle"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/et_contnent_popupwin_content"
-                style="@style/text_style_match"
-                android:layout_marginLeft="@dimen/paddingHit"
-                android:layout_marginRight="@dimen/paddingHit"
-                android:layout_marginTop="@dimen/paddingHit"
-                android:background="@color/white"
-                android:gravity="start"
-                android:hint="@string/share_what_hint"
-                android:inputType="textMultiLine"
-                android:maxLines="3"
-                android:minLines="3"
-                android:padding="@dimen/paddingHit" />
-
-            <ImageView
-                android:id="@+id/im_content_dialog_share_emotion"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="right"
-                android:padding="@dimen/paddingMic"
-                android:scaleType="centerInside"
-                android:src="@drawable/icon_emotion_def" />
-
-            <GridView
-                android:id="@+id/gv_content_popupwin_share_addimg"
-                style="@style/gridViwe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/paddingMic"
-                android:visibility="gone" />
-
-        </LinearLayout>
-
+            android:gravity="start"
+            android:hint="@string/share_what_hint"
+            android:inputType="textMultiLine"
+            android:maxLines="5"
+            android:minLines="5"
+            android:padding="@dimen/paddingHit" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/paddingMediu"
-            android:layout_marginLeft="@dimen/paddingMic"
-            android:orientation="vertical">
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:padding="@dimen/paddingMic">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/im_content_popupwin_share_seletag"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_tag" />
+            <TextView
+                android:id="@+id/tv_content_popupwin_share_seletag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/lake_blue"
+                android:layout_gravity="bottom"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingRight="@dimen/radius"
-                    android:src="@drawable/icon_bottombar_tag" />
-
-                <Spinner
-                    android:id="@+id/sp_content_popupwin_share_seletag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+            <ImageView
+                android:id="@+id/im_content_popupwin_share_lacation_i"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/paddingMic"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_location_info" />
 
             <TextView
                 android:id="@+id/tv_content_popupwin_share_lacation_i"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/paddingMediu"
-                android:drawableLeft="@drawable/icon_location_info"
-                android:drawablePadding="@dimen/paddingMediu"
-                android:text="@string/share_location_info"
-                android:textColor="@drawable/sele_text_color"
-                android:textSize="@dimen/textSizeMediu" />
+                android:textColor="@color/lake_blue"
+                android:layout_gravity="bottom"/>
+
+            <ImageView
+                android:id="@+id/im_activity_share_message_addimg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/paddingMic"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_addimg" />
+
+            <ImageView
+                android:id="@+id/im_content_dialog_share_emotion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/paddingMic"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_emotion_def" />
+
+
         </LinearLayout>
 
 
+        <GridView
+            android:id="@+id/gv_content_popupwin_share_addimg"
+            style="@style/gridViwe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/paddingMic"
+            android:paddingRight="@dimen/paddingMic"
+            android:visibility="visible" />
+
     </LinearLayout>
-</LinearLayout>
+
+    <include layout="@layout/content_popup_window_emotion_panel" />
+</RelativeLayout>

@@ -83,6 +83,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         }
 
         startActivity(intent);
+        overridePendingTransition(R.animator.activity_slid_right_in, R.animator.activity_slid_left_out);
     }
 
     /**

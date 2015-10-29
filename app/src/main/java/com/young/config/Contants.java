@@ -45,7 +45,7 @@ public class Contants {
     public static final int IMAGENUMBER = 6;//选择照片的数量
 
     //****************************广播接收者 标识**************************************
-
+    public static final String BMOB_PUSH_MESSAGES = "Bmob_Push_Messages";
     public static final String BORDCAST_SELECTIMAGES = "bordcast_select_images";
     public static final String BORDCAST_LOCATIONINFO = "bordcast_location_info";
     public static final String BORDCAST_REQUEST_LOCATIONINFO = "bordcast_request_location_info";

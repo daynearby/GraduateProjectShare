@@ -70,42 +70,42 @@ public class myGridViewAdapter extends BaseAdapter {
 //            }
 //        }
 
-        if (isUpload) {
-
-            if (data == null) {
-                data = new ArrayList<>();
-            }
-
-//1~5需要加
-            if (data.size() >= 0 && data.size() < Contants.IMAGENUMBER) {
-
-
-                data.add(data.size(), Contants.LAST_ADD_IMG);
-            }
-
-        }
+//        if (isUpload) {
+//
+//            if (data == null) {
+//                data = new ArrayList<>();
+//            }
+//
+////1~5需要加
+//            if (data.size() >= 0 && data.size() < Contants.IMAGENUMBER) {
+//
+//
+//                data.add(data.size(), Contants.LAST_ADD_IMG);
+//            }
+//
+//        }
 
         notifyDataSetChanged();
     }
 
     public ArrayList<String> getData() {
         ArrayList<String> dataL = (ArrayList<String>) data;
-
-        if (dataL != null) {
-            //1 ·· 5
-            if (dataL.size() > 0 && dataL.size() < Contants.IMAGENUMBER) {
-                dataL.remove(data.size() - 1);
-
-                // 6
-            } else if (dataL.size() == Contants.IMAGENUMBER) {
-
-                if (dataL.get(Contants.IMAGENUMBER - 1).equals(Contants.LAST_ADD_IMG)) {
-                    dataL.remove(Contants.IMAGENUMBER - 1);
-                }
-            }
-
-        }
-
+//
+//        if (dataL != null) {
+//            //1 ·· 5
+//            if (dataL.size() > 0 && dataL.size() < Contants.IMAGENUMBER) {
+//                dataL.remove(data.size() - 1);
+//
+//                // 6
+//            } else if (dataL.size() == Contants.IMAGENUMBER) {
+//
+//                if (dataL.get(Contants.IMAGENUMBER - 1).equals(Contants.LAST_ADD_IMG)) {
+//                    dataL.remove(Contants.IMAGENUMBER - 1);
+//                }
+//            }
+//
+//        }
+//
 //        //log
 //        for (String s : dataL) {
 //            LogUtils.logE("get data = " + s);
@@ -116,7 +116,6 @@ public class myGridViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-
 
         if (null != data) {
             num = data.size();
@@ -249,11 +248,11 @@ public class myGridViewAdapter extends BaseAdapter {
 //                    LogUtils.logE("点击删除图片按钮 position = " + _postion);
                     data.remove(_postion);
 
-                    if (data.size() == Contants.IMAGENUMBER-1) {
-                        if (!data.get(Contants.IMAGENUMBER - 2).equals(Contants.LAST_ADD_IMG)) {
-                            data.add(Contants.LAST_ADD_IMG);
-                        }
-                    }
+//                    if (data.size() == Contants.IMAGENUMBER-1) {
+//                        if (!data.get(Contants.IMAGENUMBER - 2).equals(Contants.LAST_ADD_IMG)) {
+//                            data.add(Contants.LAST_ADD_IMG);
+//                        }
+//                    }
                     notifyDataSetChanged();
 
                     break;

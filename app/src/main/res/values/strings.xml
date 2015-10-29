@@ -141,4 +141,6 @@
     <string name="share_location_info">分享位置</string>
     <string name="share">分享</string>
     <string name="send">发送</string>
+    <string name="theImgNumberLimit">最多选%s张照片哟</string>
+    <string name="locationing">正在定位...</string>
 </resources>

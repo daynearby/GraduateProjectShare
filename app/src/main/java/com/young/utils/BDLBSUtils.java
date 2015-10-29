@@ -18,7 +18,6 @@ public class BDLBSUtils {
 
     //百度定位
     private LocationClient mLocationClient = null;
-    private BDLocationListener myListener = new MyLocationListener();
     private static BDLBSUtils bdlbsUtils;
 
     public static BDLBSUtils builder(Context ctx, LocationInfoListener locationInfoListener) {
@@ -57,7 +56,7 @@ public class BDLBSUtils {
     private void initBDlbs() {
         mLocationClient = new LocationClient(ctx);
 
-        mLocationClient.registerLocationListener(myListener);
+        mLocationClient.registerLocationListener(new MyLocationListener());
 
 
     }
@@ -66,12 +65,12 @@ public class BDLBSUtils {
 
         @Override
         public void onReceiveLocation(BDLocation data) {
-            locationInfoListener.LocationInfo(data.getProvince(), data.getCity(),
-                    data.getDistrict(), data.getStreet(), data.getStreetNumber());
 
-            LogUtils.logI("百度定位", " 省 = " + data.getProvince() + " 城市 = " + data.getCity() + " 地区 = " +
+            LogUtils.logD("百度定位", " 省 = " + data.getProvince() + " 城市 = " + data.getCity() + " 地区 = " +
                     data.getDistrict() + " 街道 = " + data.getStreet() + " 门牌号 = " + data.getStreetNumber());
 
+            locationInfoListener.LocationInfo(data.getProvince(), data.getCity(),
+                    data.getDistrict(), data.getStreet(), data.getStreetNumber());
         }
 
     }
@@ -109,6 +108,6 @@ public class BDLBSUtils {
      * 监听定位 的回调
      */
     public interface LocationInfoListener {
-        public void LocationInfo(String province, String city, String district, String street, String streetNumber);
+         void LocationInfo(String province, String city, String district, String street, String streetNumber);
     }
 }

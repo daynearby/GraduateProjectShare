@@ -8,10 +8,13 @@ import android.widget.TextView;
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.base.CustomActBarActivity;
 import com.young.config.Contants;
+import com.young.model.MyBmobInstallation;
 import com.young.model.User;
 import com.young.utils.LogUtils;
 import com.young.utils.SharePreferenceUtils;
 
+import cn.bmob.v3.BmobInstallation;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.SaveListener;
 
 /**
@@ -67,14 +70,23 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
 
     @Override
     public void handerMessage(Message msg) {
+
+
         intents.setClass(LoginActivity.this, MainActivity.class);
         startActivity(intents);
         LoginActivity.this.finish();
     }
 
+    private void saveCurrentUser2InstalltionTable(){
+        User user = BmobUser.getCurrentUser(this,User.class);
+        MyBmobInstallation installation = new MyBmobInstallation(this);
+        installation.setUser(user);
+        installation.setInstallationId(BmobInstallation.getInstallationId(this));
+        installation.save();
+    }
+
     @Override
     public void onClick(View v) {
-
 
         switch (v.getId()) {
             case R.id.tv_login_forgetPwd:
@@ -121,6 +133,7 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
                         SVProgressHUD.showSuccessWithStatus(LoginActivity.this, getString(R.string.login_success));
 
                         mHandler.sendEmptyMessageDelayed(102, Contants.ONE_SECOND);
+                        saveCurrentUser2InstalltionTable();
                     }
 
                     @Override

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.young.share.R;
 import com.young.utils.CommonUtils;
+import com.young.utils.DisplayUtils;
 
 
 /**
@@ -46,7 +47,7 @@ public class Dialog4Tips extends Dialog implements View.OnClickListener {
      */
     private void initDialogSize() {
         ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
-        params.width = Integer.valueOf(CommonUtils.getWidth(activity)) * 4 / 5;
+        params.width = Integer.valueOf(DisplayUtils.getScreenWidthPixels(activity)) * 4 / 5;
         linearLayout.setLayoutParams(params);
     }
 
