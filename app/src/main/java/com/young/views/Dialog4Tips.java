@@ -2,6 +2,7 @@ package com.young.views;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.young.share.R;
-import com.young.utils.CommonUtils;
 import com.young.utils.DisplayUtils;
 
 
@@ -57,13 +57,13 @@ public class Dialog4Tips extends Dialog implements View.OnClickListener {
      *
      * @param title
      */
-    public void setTitle(String title,int colorId) {
+    public void setTitle(String title, int colorId) {
         if (null != title) {
             titleTv.setText(title);
 
         }
 
-        if (colorId != 0){
+        if (colorId != 0) {
             titleTv.setTextColor(colorId);
         }
     }
@@ -73,12 +73,22 @@ public class Dialog4Tips extends Dialog implements View.OnClickListener {
      *
      * @param content
      */
-    public void setContent(String content,int colorId) {
-        if (null != content) {
+    public void setContent(String content) {
+
+        setContent(content, android.R.color.black);
+    }
+
+    /**
+     * 设置显示的内容
+     *
+     * @param content
+     */
+    public void setContent(String content, int colorId) {
+        if (!TextUtils.isEmpty(content)) {
             contentTv.setText(content);
         }
 
-        if (colorId != 0){
+        if (colorId != 0) {
             contentTv.setTextColor(colorId);
         }
     }
@@ -101,9 +111,9 @@ public class Dialog4Tips extends Dialog implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        if (v == btnOk){
+        if (v == btnOk) {
             listener.btnOkListenter();
-        }else{
+        } else {
             listener.btnCancelListener();
         }
 
@@ -113,27 +123,27 @@ public class Dialog4Tips extends Dialog implements View.OnClickListener {
     /**
      * 监听事件的回调函数
      */
-    public interface Listener{
+    public interface Listener {
 
         /**
          * 确定按钮的回调
          */
-        public void btnOkListenter();
+         void btnOkListenter();
 
         /**
          * 取消按钮的回调
          */
-        public void btnCancelListener();
+         void btnCancelListener();
     }
 
     /**
      * 设置两个按钮的监听
+     *
      * @param listener
      */
-    public void setDialogListener(Listener listener){
+    public void setDialogListener(Listener listener) {
         this.listener = listener;
     }
-
 
 
     /**
@@ -158,7 +168,7 @@ public class Dialog4Tips extends Dialog implements View.OnClickListener {
     /**
      * 设置按钮的显示文字
      *
-     * @param btnCancelStr  显示文字
+     * @param btnCancelStr 显示文字
      */
     public void setBtnCancelText(String btnCancelStr) {
         btnCancel.setText(btnCancelStr);
@@ -167,7 +177,7 @@ public class Dialog4Tips extends Dialog implements View.OnClickListener {
     /**
      * 设置按钮的显示文字
      *
-     * @param textColorr  显示文字
+     * @param textColorr 显示文字
      */
     public void setBtnCancelTextColor(int textColorr) {
         btnCancel.setTextColor(textColorr);
@@ -175,6 +185,7 @@ public class Dialog4Tips extends Dialog implements View.OnClickListener {
 
     /**
      * 设置左边按钮是否可见
+     *
      * @param visibilityOrNot
      */
     public void setBtnCancelVisi(int visibilityOrNot) {

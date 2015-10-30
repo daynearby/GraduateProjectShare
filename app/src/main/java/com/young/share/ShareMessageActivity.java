@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.adapter.EmotionGvAdapter;
 import com.young.adapter.EmotionPagerAdapter;
 import com.young.adapter.myGridViewAdapter;
@@ -25,17 +27,27 @@ import com.young.annotation.InjectView;
 import com.young.base.BaseAppCompatActivity;
 import com.young.base.ItemActBarActivity;
 import com.young.config.Contants;
+import com.young.model.ShareMessage_HZ;
+import com.young.myCallback.GoToUploadImages;
+import com.young.network.ResetApi;
 import com.young.utils.DisplayUtils;
 import com.young.utils.EmotionUtils;
 import com.young.utils.ImageHandlerUtils;
 import com.young.utils.LogUtils;
 import com.young.utils.StringUtils;
 import com.young.utils.XmlUtils;
+import com.young.utils.cache.ACache;
+import com.young.utils.cache.DarftUtils;
+import com.young.views.Dialog4Tips;
 import com.young.views.PopupWinListView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.listener.SaveListener;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
@@ -72,9 +84,13 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
     private List<String> tagList;//标签
     private PopupWinListView popupWinListView;
-
+    private boolean isResgiter = false;
     private String locationInfo;//定位信息
     private String tagInfo = "未分类";//标签信息
+    private ACache acache;//缓存
+    private Dialog4Tips dialog;//保存草稿的提示框
+    private DarftUtils darftUtils;//草稿
+
 
     // TODO: 2015-10-23 表情，位置，标签。取消的时候询问是否保存草稿
 
@@ -121,6 +137,62 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         //表情
         initEmotion();
 
+        acache = ACache.get(mActivity);
+        darftUtils = DarftUtils.builder(mActivity);
+        dialog = new Dialog4Tips(mActivity);
+//恢复草稿
+        resetDraft();
+
+    }
+
+    /**
+     * 恢复草稿
+     */
+    private void resetDraft() {
+        final List<String> list = new ArrayList<>();
+        final String darft_content = acache.getAsString(Contants.DRAFT_CONTENT);
+
+        if (darft_content != null) {
+            dialog.setContent(getString(R.string.had_draft_would_reset_tips));
+            dialog.setBtnOkText(getString(R.string.reset));
+            dialog.setBtnCancelText(getString(R.string.do_not_reset));
+            dialog.setDialogListener(new Dialog4Tips.Listener() {
+                @Override
+                public void btnOkListenter() {
+                    content_et.setText(darft_content);
+                    tag_tv.setText(acache.getAsString(Contants.DRAFT_TAG));
+                    shareLocation_tv.setText(acache.getAsString(Contants.DRAFT_LOCATION_INFO));
+                    JSONArray imgJsArray = acache.getAsJSONArray(Contants.DRAFT_IMAGES_LIST);
+
+                    if (imgJsArray != null) {
+                        for (int i = 0; i < imgJsArray.length(); i++) {
+                            try {
+                                list.add(imgJsArray.getString(i));
+                            } catch (JSONException e) {
+                                LogUtils.logE("读取jsonArray数据出错" + e.toString());
+                            }
+                        }
+
+                        gridViewAdapter.setDatas(list);
+                    }
+
+                    //删除草稿
+                    darftUtils.deleteDraft();
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void btnCancelListener() {
+
+                    //删除草稿
+                    darftUtils.deleteDraft();
+
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+            LogUtils.logI("有草稿 存在");
+        }
 
     }
 
@@ -150,6 +222,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         myIntentFilter.addAction(Contants.BORDCAST_LOCATIONINFO);
         //注册广播
         registerReceiver(broadcastReceiver, myIntentFilter);
+        isResgiter = true;
 
     }
 
@@ -159,7 +232,6 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         switch (v.getId()) {
 
             case R.id.im_content_dialog_share_emotion://添加表情
-// TODO: 2015-10-29 键盘与表情选择 显示
                 imm.hideSoftInputFromWindow(content_et.getWindowToken(), 0);
                 emotionPanel_bg.setVisibility(emotionPanel_bg.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 break;
@@ -252,7 +324,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (broadcastReceiver.isOrderedBroadcast()) {
+        if (isResgiter) {
             unregisterReceiver(broadcastReceiver);
         }
 
@@ -271,17 +343,148 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
         @Override
         public void leftClick(View v) {
-            LogUtils.logE("左边点击");
-            // TODO: 2015-10-25 保存草稿
-            mActivity.finish();
 
+            if (!TextUtils.isEmpty(content_et.getText().toString().trim())) {
+
+
+                dialog.setContent(getString(R.string.need_to_save_draft));
+                dialog.setBtnOkText(getString(R.string.save));
+                dialog.setBtnCancelText(getString(R.string.do_not_save));
+                dialog.setDialogListener(new Dialog4Tips.Listener() {
+                    @Override
+                    public void btnOkListenter() {
+
+                        darftUtils.saveDraft(content_et.getText().toString(),
+                                shareLocation_tv.getText().toString(),
+                                tag_tv.getText().toString(),
+                                gridViewAdapter.getData()
+                        );
+                        back2MainActivity();
+
+                    }
+
+                    @Override
+                    public void btnCancelListener() {
+                        back2MainActivity();
+
+                    }
+                });
+                dialog.show();
+
+            }
+
+
+        }
+
+        /**
+         * 回到MainActivity
+         */
+        private void back2MainActivity() {
+            dialog.dismiss();
+            mStartActivity(MainActivity.class);
+            mActivity.finish();
         }
 
         @Override
-        public void rightClivk(View v) {
+        public void rightClivk(View v) {//发送按钮
 
-            LogUtils.logE("右边点击");
+            String content = content_et.getText().toString();
+            List<String> lists = gridViewAdapter.getData();
+
+            if (!TextUtils.isEmpty(content) || !lists.isEmpty()) {
+
+                mToast(R.string.sending);
+
+                String[] files = new String[lists.size()];
+
+                final ShareMessage_HZ shareMessage_hz = new ShareMessage_HZ();
+
+                shareMessage_hz.setShContent(content);
+                shareMessage_hz.setShTag(tagInfo);
+                shareMessage_hz.setShLocation(locationInfo);
+                shareMessage_hz.setUserId(mUser);
+                shareMessage_hz.setShCommNum(0);
+                shareMessage_hz.setShVisitedNum(0);
+                shareMessage_hz.setShWantedNum(0);
+
+                if (!lists.isEmpty()) {//有上传图片的
+
+                    for (int i = 0; i < lists.size(); i++) {
+                        files[i] = lists.get(i);
+                    }
+                    ResetApi.UploadFiles(mActivity, files, new GoToUploadImages() {
+                        @Override
+                        public void Result(boolean isFinish, String[] urls) {
+                            if (isFinish) {
+                                List<String> list = new ArrayList<>();
+
+                                for (int i = 0; i < urls.length; i++) {
+                                    list.add(urls[i]);
+                                }
+
+                                shareMessage_hz.setShImgs(list);
+                                //保存分享信息到云端
+                                shareMessage(shareMessage_hz);
+                            } else {
+
+                                LogUtils.logE("回调第一次，isfinish = " + isFinish);
+//                                SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.some_images_maybe_miss));
+                            }
+                        }
+
+                        @Override
+                        public void onError(int statuscode, String errormsg) {
+                            SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.upload_images_fail));
+                        }
+                    });
+
+                } else {//没有上传图片的
+                    shareMessage(shareMessage_hz);
+
+                }
+
+//shareMessage_hz.setShImgs();
+//                LogUtils.logE("右边点击");
+
+
+            } else {
+
+                SVProgressHUD.showErrorWithStatus(mActivity, getString(R.string.share_messages_empty));
+
+            }
         }
+
+
+    }
+
+    /**
+     * 分享信息
+     *
+     * @param shareMessage_hz
+     */
+    private void shareMessage(ShareMessage_HZ shareMessage_hz) {
+
+        shareMessage_hz.save(mActivity, new SaveListener() {
+            @Override
+            public void onSuccess() {
+                SVProgressHUD.showSuccessWithStatus(mActivity, getString(R.string.share_messages_success));
+
+                mActivity.finish();
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.share_message_fail));
+
+                darftUtils.saveDraft(
+                        content_et.getText().toString(),
+                        shareLocation_tv.getText().toString(),
+                        tag_tv.getText().toString(),
+                        gridViewAdapter.getData()
+                );
+                mActivity.finish();
+            }
+        });
     }
 
 
@@ -377,4 +580,6 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
         }
     }
+
+
 }

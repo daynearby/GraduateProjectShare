@@ -54,4 +54,15 @@ public class Contants {
 
     public static final String BORDCAST_IMAGEPATH_LIST = "bordcast_imagrpath_list";
 
+    //                                  Acache keys
+    //******************************** 保存草稿 keys**********************************************
+
+    public static final String DRAFT_CONTENT = "draft_content";
+    public static final String DRAFT_TAG = "draft_tag";
+    public static final String DRAFT_LOCATION_INFO = "draft_location_info";
+    public static final String DRAFT_IMAGES_LIST = "draft_images_list";
+
+    public static final int DARFT_LIVE_TIME = 60 * 60;//一个小时
+
+
 }

@@ -9,7 +9,8 @@ import java.util.List;
  *
  * Created by Nearby Yang on 2015-10-24.
  */
-public interface GoToSelectImages {
+public interface GoToUploadImages {
 
-    void selectResult(List<String> dataList,int REQUEST_IMAGE);
+    void Result(boolean isFinish, String[] urls);
+    void onError(int statuscode, String errormsg) ;
 }

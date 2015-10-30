@@ -143,4 +143,17 @@
     <string name="send">发送</string>
     <string name="theImgNumberLimit">最多选%s张照片哟</string>
     <string name="locationing">正在定位...</string>
+    <string name="sending">正在发送</string>
+    <string name="upload_images_fail">上传照片失败\n请稍候再试</string>
+    <string name="some_images_maybe_miss">部分图片可能丢失</string>
+    <string name="share_message_fail">分享失败\n请稍后再试</string>
+    <string name="share_messages_success">分享成功</string>
+    <string name="share_messages_empty">分享的内容不能为空</string>
+    <string name="reset">恢复</string>
+    <string name="do_not_reset">不恢复</string>
+    <string name="save_draft_success">保存草稿成功</string>
+    <string name="need_to_save_draft">需要保存草稿吗？</string>
+    <string name="save">保存</string>
+    <string name="do_not_save">不保存</string>
+    <string name="had_draft_would_reset_tips">有上一次未分享成功的信息\n要恢复吗？</string>
 </resources>

@@ -12,14 +12,6 @@ import java.util.regex.Pattern;
 
 public class CommonUtils {
 
-
-    private static final String WIDTH = "width";
-    private static final String HEIGHT = "height";
-    private static final String DENSITY = "density";
-
-    private int width;
-    private int height;
-
     /**
      * 检查是否有网络
      */

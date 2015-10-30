@@ -66,7 +66,7 @@ public class BDLBSUtils {
         @Override
         public void onReceiveLocation(BDLocation data) {
 
-            LogUtils.logD("百度定位", " 省 = " + data.getProvince() + " 城市 = " + data.getCity() + " 地区 = " +
+            LogUtils.logD("bdlbs", " 省 = " + data.getProvince() + " 城市 = " + data.getCity() + " 地区 = " +
                     data.getDistrict() + " 街道 = " + data.getStreet() + " 门牌号 = " + data.getStreetNumber());
 
             locationInfoListener.LocationInfo(data.getProvince(), data.getCity(),

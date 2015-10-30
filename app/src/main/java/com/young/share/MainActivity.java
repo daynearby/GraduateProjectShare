@@ -10,6 +10,7 @@ import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -404,12 +405,17 @@ public class MainActivity extends CustomActBarActivity {
     }
 
     @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        LogUtils.logI("touch");
+        return super.onTouchEvent(event);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         bdlbsUtils.stopLocation();
         if (isRegistBordcast) {
             unregisterReceiver(mBroadcastReceiver);
-            isRegistBordcast = false;
         }
     }
 }
