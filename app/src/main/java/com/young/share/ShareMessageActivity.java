@@ -52,7 +52,7 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * 发送分享信息
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-10-23.
  */
 public class ShareMessageActivity extends ItemActBarActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
@@ -253,7 +253,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                 registerBoradcastReceiver();
                 mToast(R.string.locationing);
 
-                LogUtils.logI("dialog 定位");
+//                LogUtils.logI("dialog 定位");
 
                 break;
 
@@ -383,7 +383,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
          */
         private void back2MainActivity() {
             dialog.dismiss();
-            mStartActivity(MainActivity.class);
+            mBackStartActivity(MainActivity.class);
             mActivity.finish();
         }
 
@@ -396,7 +396,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
             if (!TextUtils.isEmpty(content) || lists != null) {
 
                 mToast(R.string.sending);
-                mStartActivity(MainActivity.class);
+                mBackStartActivity(MainActivity.class);
 
 
                 final ShareMessage_HZ shareMessage_hz = new ShareMessage_HZ();
@@ -415,7 +415,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                     for (int i = 0; i < lists.size(); i++) {
                         files[i] = lists.get(i);
                     }
-                    ResetApi.UploadFiles(mActivity, files, Contants.IMAGE_TYPE_SHARE,new GoToUploadImages() {
+                    ResetApi.UploadFiles(mActivity, files, Contants.IMAGE_TYPE_SHARE, new GoToUploadImages() {
                         @Override
                         public void Result(boolean isFinish, String[] urls) {
 
@@ -429,9 +429,11 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                                 shareMessage_hz.setShImgs(list);
                                 //保存分享信息到云端
                                 shareMessage(shareMessage_hz);
+
+
                             } else {
 
-                                LogUtils.logE("回调第一次，isfinish = " + isFinish);
+//                                LogUtils.logE("回调第一次，isfinish = " + isFinish);
 //                                SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.some_images_maybe_miss));
                             }
                         }
@@ -443,10 +445,11 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                     });
 
                 } else {//没有上传图片的
-                    mStartActivity(MainActivity.class);
+                    mBackStartActivity(MainActivity.class);
                     shareMessage(shareMessage_hz);
 
                 }
+                //在没有销毁该Activity的时候，需要清空该Activity中的数据
 
 //shareMessage_hz.setShImgs();
 //                LogUtils.logE("右边点击");
@@ -469,6 +472,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
      */
     private void shareMessage(ShareMessage_HZ shareMessage_hz) {
 
+        clean();
         shareMessage_hz.save(mActivity, new SaveListener() {
             @Override
             public void onSuccess() {
@@ -496,6 +500,13 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         });
     }
 
+    private void clean() {
+        content_et.setText("");
+        shareLocation_tv.setText("");
+        tag_tv.setText("");
+        gridViewAdapter.setDatas(null);
+
+    }
 
     /**
      * 初始化表情面板内容

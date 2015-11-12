@@ -9,7 +9,6 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.young.annotation.Injector;
@@ -22,7 +21,7 @@ import cn.bmob.v3.BmobUser;
  * 基类 v7 兼容activity
  * 有actionBar，并且有点击事件
  * 使用注释
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-10-08.
  */
 public abstract class BaseAppCompatActivity extends AppCompatActivity {
@@ -30,11 +29,16 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
     public Activity mActivity;
     public Intent intents = new Intent();
-    public IntentFilter myIntentFilter = new IntentFilter();;
+    public IntentFilter myIntentFilter = new IntentFilter();
+    ;
     public User mUser;
 
     public final static String BUNDLE_TAG = "Serializable_Data";
     public final static String BUNDLE_BROADCAST = "sendBroadcast";
+
+    private final static int TYPE_BACK = 0x1;
+    private final static int TYPE_DEFUAL = 0x0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         setContentView(getLayoutId());
         Injector.inject(this);
         mUser = BmobUser.getCurrentUser(this, User.class);
-        mActivity = BaseAppCompatActivity.this;
+        mActivity = this;
 //        initActionBar();
         initData();
         findviewbyid();
@@ -65,7 +69,11 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public void mStartActivity(Class clazz) {
 
 
-        mStartActivity(clazz, null);
+        mStartActivity(clazz, null, TYPE_DEFUAL);
+    }
+
+    public void mBackStartActivity(Class clazz) {
+        mStartActivity(clazz, null, TYPE_BACK);
     }
 
     /**
@@ -74,7 +82,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * @param clazz  要跳转的类，也就是要传递参数的类
      * @param bundle serializable
      */
-    public void mStartActivity(Class clazz, Bundle bundle) {
+    public void mStartActivity(Class clazz, Bundle bundle, int type) {
 
         Intent intent = new Intent();
         intent.setClass(this, clazz);
@@ -83,7 +91,12 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         }
 
         startActivity(intent);
-        overridePendingTransition(R.animator.activity_slid_right_in, R.animator.activity_slid_left_out);
+        if (type == TYPE_BACK) {
+            overridePendingTransition(R.animator.activity_slid_left_in, R.animator.activity_slid_right_out);
+        } else {
+
+            overridePendingTransition(R.animator.activity_slid_right_in, R.animator.activity_slid_left_out);
+        }
     }
 
     /**

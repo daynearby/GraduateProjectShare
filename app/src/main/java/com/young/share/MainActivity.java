@@ -204,16 +204,16 @@ public class MainActivity extends CustomActBarActivity {
 
         dialog4Tips.setBtnCancelText(getString(R.string.skin));
         dialog4Tips.setBtnOkText(getString(R.string.login_text));
+        dialog4Tips.setContent(getString(R.string.login_tips_text));
         dialog4Tips.setBtnCancelVisi(View.VISIBLE);
 
         dialog4Tips.setDialogListener(new Dialog4Tips.Listener() {
             @Override
             public void btnOkListenter() {//登陆  按钮 ，进入登陆界面
 
-                intents.setClass(mActivity, LoginActivity.class);
                 dialog4Tips.dismiss();
 
-                startActivity(intents);
+                mStartActivity(LoginActivity.class);
             }
 
             @Override
@@ -422,11 +422,7 @@ public class MainActivity extends CustomActBarActivity {
         }
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        LogUtils.logI("touch");
-        return super.onTouchEvent(event);
-    }
+
 
     @Override
     protected void onDestroy() {

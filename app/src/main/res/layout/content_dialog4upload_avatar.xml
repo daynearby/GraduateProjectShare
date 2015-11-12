@@ -1,28 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bg_dialog4upload_linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:divider="@drawable/divier_vertical"
-    android:orientation="horizontal"
-    android:showDividers="middle">
+    android:paddingTop="@dimen/paddingMediu"
+    android:paddingBottom="@dimen/paddingMediu"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/dialog_frag_real_name_btn_local_photo"
-        android:layout_width="0dp"
+        android:id="@+id/tv_content_dialog4upload_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:gravity="center_horizontal"
-        android:padding="@dimen/paddingMediu"
-        android:text="选择图库" />
+        android:padding="@dimen/paddingMic"
+        android:text="title"
+        android:textColor="@color/theme_puple"
+        android:textSize="@dimen/textSizeMediu" />
 
-    <TextView
-        android:id="@+id/dialog_frag_real_name_btn_camera"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:padding="@dimen/paddingMediu"
-        android:text="拍照" />
+        android:layout_marginTop="@dimen/paddingMic"
+        android:divider="@drawable/divier_vertical"
+        android:orientation="horizontal"
+        android:showDividers="middle">
+
+        <TextView
+            android:id="@+id/dialog_frag_real_name_btn_local_photo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/textSizeMediu"
+            android:paddingLeft="@dimen/paddingMediu"
+            android:paddingRight="@dimen/paddingMediu"
+            android:text="选择图库" />
+
+        <TextView
+            android:id="@+id/dialog_frag_real_name_btn_camera"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/textSizeMediu"
+            android:gravity="center_horizontal"
+            android:paddingLeft="@dimen/paddingMediu"
+            android:paddingRight="@dimen/paddingMediu"
+            android:text="拍照" />
+    </LinearLayout>
+
 
 </LinearLayout>

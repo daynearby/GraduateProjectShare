@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 
 import com.young.share.R;
+import com.young.utils.LogUtils;
 
 
 public class ArcMenu extends ViewGroup implements OnClickListener
@@ -427,4 +429,11 @@ public class ArcMenu extends ViewGroup implements OnClickListener
 		v.startAnimation(anim);
 	}
 
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		if(mCurrentStatus == Status.OPEN ){
+			toggleMenu(300);
+		}
+		return super.onTouchEvent(event);
+	}
 }

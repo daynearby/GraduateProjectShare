@@ -162,4 +162,5 @@
     <string name="star_upload_avatar">开始上传头像</string>
     <string name="reset_avatar_success">修改头像成功</string>
     <string name="reset_avatar_failure">修改头像失败\\n请稍候再试</string>
+    <string name="login_tips_text">当前还没有登录哟！\n需要登录吗？</string>
 </resources>

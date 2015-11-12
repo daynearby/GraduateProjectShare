@@ -40,18 +40,18 @@ public class DisplayUtils {
 	/**
 	 * 获取屏幕宽度
 	 */
-	public static int getScreenWidthPixels(Activity context) {
+	public static int getScreenWidthPixels(Activity activity) {
 		DisplayMetrics metric = new DisplayMetrics();
-		context.getWindowManager().getDefaultDisplay().getMetrics(metric);
+		activity.getWindowManager().getDefaultDisplay().getMetrics(metric);
 		return metric.widthPixels;
 	}
 
 	/**
 	 * 获取屏幕高度
 	 */
-	public static int getScreenHeightPixels(Activity context) {
+	public static int getScreenHeightPixels(Activity activity) {
 		DisplayMetrics metric = new DisplayMetrics();
-		context.getWindowManager().getDefaultDisplay().getMetrics(metric);
+		activity.getWindowManager().getDefaultDisplay().getMetrics(metric);
 		return metric.heightPixels;
 	}
 }

@@ -47,7 +47,7 @@ public class Dialog4Tips extends Dialog implements View.OnClickListener {
      */
     private void initDialogSize() {
         ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
-        params.width = Integer.valueOf(DisplayUtils.getScreenWidthPixels(activity)) * 4 / 5;
+        params.width = DisplayUtils.getScreenWidthPixels(activity) * 4 / 5;
         linearLayout.setLayoutParams(params);
     }
 
@@ -75,7 +75,7 @@ public class Dialog4Tips extends Dialog implements View.OnClickListener {
      */
     public void setContent(String content) {
 
-        setContent(content, android.R.color.black);
+        setContent(content, 0);
     }
 
     /**
@@ -84,6 +84,7 @@ public class Dialog4Tips extends Dialog implements View.OnClickListener {
      * @param content
      */
     public void setContent(String content, int colorId) {
+
         if (!TextUtils.isEmpty(content)) {
             contentTv.setText(content);
         }

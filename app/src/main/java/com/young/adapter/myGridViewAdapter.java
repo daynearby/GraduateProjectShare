@@ -147,7 +147,7 @@ public class myGridViewAdapter extends BaseAdapter {
 
         ViewHolder holder = null;
         imageUrl = data.get(position);
-
+// TODO: 2015-11-12 get数据的时候偶尔会空指针
 
         if (convertView == null) {
 
