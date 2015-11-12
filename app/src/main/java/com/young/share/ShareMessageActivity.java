@@ -52,7 +52,7 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * 发送分享信息
- * <p/>
+ * <p>
  * Created by Nearby Yang on 2015-10-23.
  */
 public class ShareMessageActivity extends ItemActBarActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
@@ -90,9 +90,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     private ACache acache;//缓存
     private Dialog4Tips dialog;//保存草稿的提示框
     private DarftUtils darftUtils;//草稿
-
-
-    // TODO: 2015-10-23 表情，位置，标签。取消的时候询问是否保存草稿
+    private static final int FINISH_ACTIVITY = 0;
 
     @Override
     public int getLayoutId() {
@@ -232,7 +230,9 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         switch (v.getId()) {
 
             case R.id.im_content_dialog_share_emotion://添加表情
+
                 imm.hideSoftInputFromWindow(content_et.getWindowToken(), 0);
+
                 emotionPanel_bg.setVisibility(emotionPanel_bg.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 break;
 
@@ -253,7 +253,6 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                 registerBoradcastReceiver();
                 mToast(R.string.locationing);
 
-                // TODO: 2015-10-28 广播定位
                 LogUtils.logI("dialog 定位");
 
                 break;
@@ -333,7 +332,8 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
     @Override
     public void handerMessage(Message msg) {
-
+//        LogUtils.logI("handler = "+msg);
+        mActivity.finish();
     }
 
     /**
@@ -344,7 +344,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         @Override
         public void leftClick(View v) {
 
-            if (!TextUtils.isEmpty(content_et.getText().toString().trim())) {
+            if (!TextUtils.isEmpty(content_et.getText().toString())) {
 
 
                 dialog.setContent(getString(R.string.need_to_save_draft));
@@ -371,6 +371,8 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                 });
                 dialog.show();
 
+            } else {
+                back2MainActivity();
             }
 
 
@@ -391,11 +393,11 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
             String content = content_et.getText().toString();
             List<String> lists = gridViewAdapter.getData();
 
-            if (!TextUtils.isEmpty(content) || !lists.isEmpty()) {
+            if (!TextUtils.isEmpty(content) || lists != null) {
 
                 mToast(R.string.sending);
+                mStartActivity(MainActivity.class);
 
-                String[] files = new String[lists.size()];
 
                 final ShareMessage_HZ shareMessage_hz = new ShareMessage_HZ();
 
@@ -407,14 +409,16 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                 shareMessage_hz.setShVisitedNum(0);
                 shareMessage_hz.setShWantedNum(0);
 
-                if (!lists.isEmpty()) {//有上传图片的
+                if (lists != null && !lists.isEmpty()) {//有上传图片的
 
+                    String[] files = new String[lists.size()];
                     for (int i = 0; i < lists.size(); i++) {
                         files[i] = lists.get(i);
                     }
-                    ResetApi.UploadFiles(mActivity, files, new GoToUploadImages() {
+                    ResetApi.UploadFiles(mActivity, files, Contants.IMAGE_TYPE_SHARE,new GoToUploadImages() {
                         @Override
                         public void Result(boolean isFinish, String[] urls) {
+
                             if (isFinish) {
                                 List<String> list = new ArrayList<>();
 
@@ -439,6 +443,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                     });
 
                 } else {//没有上传图片的
+                    mStartActivity(MainActivity.class);
                     shareMessage(shareMessage_hz);
 
                 }
@@ -467,22 +472,26 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         shareMessage_hz.save(mActivity, new SaveListener() {
             @Override
             public void onSuccess() {
-                SVProgressHUD.showSuccessWithStatus(mActivity, getString(R.string.share_messages_success));
+//                SVProgressHUD.showSuccessWithStatus(mActivity, getString(R.string.share_messages_success));
+                mToast(R.string.share_messages_success);
+//                LogUtils.logI("share messages success ");
+                mHandler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Contants.ONE_SECOND);
 
-                mActivity.finish();
             }
 
             @Override
             public void onFailure(int i, String s) {
-                SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.share_message_fail));
-
+                mToast(R.string.share_message_fail);
+//                SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.share_message_fail));
+//                LogUtils.logI("share messages faile ");
                 darftUtils.saveDraft(
                         content_et.getText().toString(),
                         shareLocation_tv.getText().toString(),
                         tag_tv.getText().toString(),
                         gridViewAdapter.getData()
                 );
-                mActivity.finish();
+
+                mHandler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Contants.ONE_SECOND);
             }
         });
     }

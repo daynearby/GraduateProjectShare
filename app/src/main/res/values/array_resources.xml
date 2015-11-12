@@ -31,4 +31,13 @@
         <item>我是吃货</item>
         <item>户外运动</item>
     </string-array>
+
+    <string-array name="select_option_item">
+        <item>我想去</item>
+        <item>分享记录</item>
+        <item>修改资料</item>
+        <item>修改密码</item>
+        <item>关于</item>
+
+    </string-array>
 </resources>

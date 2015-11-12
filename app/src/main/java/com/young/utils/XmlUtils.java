@@ -46,5 +46,21 @@ public class XmlUtils {
         return itemsList;
     }
 
+    /**
+     * 获取标签数据
+     *
+     * @param ctx
+     * @return String[]
+     */
+    public static List<String> getSelectOption(Context ctx) {
+        List<String> itemsList = new ArrayList<>();
+        String[] items = ctx.getResources().getStringArray(R.array.select_option_item);
+
+        for (int i = 0; i < items.length; i++) {
+            itemsList.add(items[i]);
+        }
+        return itemsList;
+    }
+
 
 }

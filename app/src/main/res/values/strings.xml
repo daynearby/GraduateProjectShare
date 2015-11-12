@@ -156,4 +156,10 @@
     <string name="save">保存</string>
     <string name="do_not_save">不保存</string>
     <string name="had_draft_would_reset_tips">有上一次未分享成功的信息\n要恢复吗？</string>
+    <string name="user_logout">注销登陆</string>
+    <string name="upload_avater">上传头像</string>
+    <string name="upload_success">上传成功</string>
+    <string name="star_upload_avatar">开始上传头像</string>
+    <string name="reset_avatar_success">修改头像成功</string>
+    <string name="reset_avatar_failure">修改头像失败\\n请稍候再试</string>
 </resources>

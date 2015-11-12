@@ -89,10 +89,13 @@ public class PopupWinListView extends PopupWindow {
 
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     public void onShow(View v) {
 //        LogUtils.logE("v.getX = " + v.getX() + " getWidth() = " + getWidth() + " v.getWidth = " + v.getWidth());
-        showAsDropDown(v, 0, 0, Gravity.BOTTOM);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            showAsDropDown(v, 0, 0, Gravity.BOTTOM);
+        }else {
+            showAsDropDown(v);
+        }
 //        showAsDropDown(v, v.getWidth()/2, 0);
 
 

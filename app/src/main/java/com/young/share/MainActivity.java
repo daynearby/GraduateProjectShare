@@ -18,6 +18,7 @@ import com.young.adapter.MainPagerAdapter;
 import com.young.base.CustomActBarActivity;
 import com.young.config.Contants;
 import com.young.model.MyBmobInstallation;
+import com.young.model.User;
 import com.young.utils.BDLBSUtils;
 import com.young.utils.LogUtils;
 import com.young.utils.SharePreferenceUtils;
@@ -31,6 +32,7 @@ import java.util.List;
 import cn.bmob.push.BmobPush;
 import cn.bmob.push.PushConstants;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobUser;
 
 
 public class MainActivity extends CustomActBarActivity {
@@ -320,7 +322,7 @@ public class MainActivity extends CustomActBarActivity {
                 bdlbsUtils.stopLocation();
             }
 
-            if (times == callbackTimes) {
+            if (times >= callbackTimes) {
                 bdlbsUtils.stopLocation();
             }
         }
@@ -369,20 +371,36 @@ public class MainActivity extends CustomActBarActivity {
         public void onClick(View view, int pos) {
 //            LogUtils.logI("view = "+view+" position = "+pos);
             itemIm = (ImageView) view;
+            mUser = BmobUser.getCurrentUser(mActivity,User.class);
+
             switch (pos) {
                 case 1://分享信息
+                    if (mUser != null) {
 
-                    //定位信息请求，注册广播接收者
-                    registerBoradcastReceiverRequestLocation();
+                        //定位信息请求，注册广播接收者
+                        registerBoradcastReceiverRequestLocation();
+                        mStartActivity(ShareMessageActivity.class);
 
-                    mStartActivity(ShareMessageActivity.class);
+                    } else {
+
+                        loginFunction();
+                    }
 
                     break;
                 case 2://评论
 // TODO: 2015-10-22 查看评论列表
                     itemIm.setImageResource(R.drawable.icon_comment);
 
-                    //跳转到评论页面
+                    if (mUser != null) {
+
+                        //跳转到评论页面
+//                        mStartActivity(ShareMessageActivity.class);
+
+                    } else {
+
+                        loginFunction();
+
+                    }
                     break;
                 case 3://个人中心
 

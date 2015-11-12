@@ -1,0 +1,24 @@
+<resources>
+
+    <dimen name="paddingLarg">48dp</dimen>
+    <dimen name="paddingMediu">16dp</dimen>
+    <dimen name="paddingMic">8dp</dimen>
+    <dimen name="paddingHit">4dp</dimen>
+
+    <dimen name="size40">40dp</dimen>
+    <dimen name="dp20">20dp</dimen>
+
+    <dimen name="textSizeMicro">12sp</dimen>
+    <dimen name="textSizeSmall">14sp</dimen>
+    <dimen name="textSizeMediu">18sp</dimen>
+    <dimen name="textSizeLarge">22sp</dimen>
+    <dimen name="textSizeXLarge">28sp</dimen>
+
+    <dimen name="micro">2dp</dimen>
+    <dimen name="radius">10dp</dimen>
+
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+
+</resources>

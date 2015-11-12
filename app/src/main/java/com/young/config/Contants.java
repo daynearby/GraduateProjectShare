@@ -64,5 +64,9 @@ public class Contants {
 
     public static final int DARFT_LIVE_TIME = 60 * 60;//一个小时
 
+    //*************************************上传照片类型***********************************************
+    public static final int IMAGE_TYPE_SHARE = 100;
+    public static final int IMAGE_TYPE_AVATAR = 101;
+
 
 }

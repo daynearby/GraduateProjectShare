@@ -13,5 +13,7 @@
    <color name="colorPrimary">#9D55B8</color>
    <color name="colorPrimaryDark">#9055B8</color>
    <color name="colorAccent">#FF4081</color>
+   <color name="cherry_red">#fd495a</color>
+   <color name="cherry_red_light">#befd495a</color>
 
 </resources>

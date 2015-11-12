@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -85,7 +86,38 @@ public class CommonUtils {
 //            filepath = new File(this.getCacheDir(), "user/icon/user");
 //
 //        }
+    /**
+     * 存放图片对应的文件夹
+     *
+     * @param context 上下文对象
+     *
+     * @return file对象
+     */
+    public static File CreateImageFile(Context context){
+        String path ;
+        File imageFilePath;
 
+        if (checkSdCard()){//存在
+
+            path = context.getExternalCacheDir().getAbsolutePath()+"/image";
+            imageFilePath =new File(path);
+
+            if (!imageFilePath.exists()){
+                imageFilePath.mkdir();
+            }
+
+        }else{
+
+            path = context.getCacheDir().getAbsolutePath()+"/image";
+
+            imageFilePath =new File(path);
+            if (!imageFilePath.exists()){
+                imageFilePath.mkdir();
+            }
+        }
+
+        return imageFilePath;
+    }
 
 
 

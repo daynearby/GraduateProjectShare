@@ -23,14 +23,13 @@ public class ActivityResult {
     private static final int RESULT_OK = -1;
     //裁剪好的照片名字
     public static final String storyFileName = "cropped.jpeg";
-    public static final String STORY_DIC = "/image";
     private static File imageFilePath;
     //    private Context context;
     //定义输出的宽高
     private static final int size_nromal = 250;
     //输出照片的宽\高.默认是250*250,不会进行放大图片,如果图片最小边没有1500像素,那么就娶最小边的宽高
     private static final int size_large = 1500;
-
+    private static Uri imguri;//裁剪好的照片uri
     /**
      * 在覆写protected void onActivityResult(int requestCode, int resultCode, Intent result)
      * 传入对应的变量
@@ -40,14 +39,13 @@ public class ActivityResult {
      * @param resultCode  onActivityResult的回调参数
      * @param result      onActivityResult的回调参数
      * @param resultView  目标的imageView的实例化对象     @return 图片保存的uri
-     * @param isBig       是否裁剪为使用比较大分辨率图片
      */
-    public static boolean corpResult(Activity activity, int requestCode, int resultCode, Intent result, ImageView resultView, boolean isBig) {
+    public static boolean corpResult(Activity activity, int requestCode, int resultCode, Intent result, ImageView resultView) {
 
-        return config(activity, requestCode, resultCode, result, resultView, isBig);
+        return config(activity, requestCode, resultCode, result, resultView);
     }
 
-    private static boolean config(Activity activity, int requestCode, int resultCode, Intent result, ImageView resultView, boolean isBig) {
+    private static boolean config(Activity activity, int requestCode, int resultCode, Intent result, ImageView resultView) {
 
         boolean finish = false;
 
@@ -57,10 +55,10 @@ public class ActivityResult {
 //        设置了返回值，如果返回值是1993 相机拍照 ，并且使用裁剪
         if (requestCode == Crop.PIC_FROM_CAMERA && resultCode == RESULT_OK) {
 
-            beginCrop(activity, Uri.fromFile(new File(imageFilePath, Crop.imgFileName)), isBig);
+            beginCrop(activity, Uri.fromFile(new File(imageFilePath, Crop.imgFileName)));
 
         } else if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {//选择了照片，开始裁剪
-            beginCrop(activity, result.getData(), isBig);
+            beginCrop(activity, result.getData());
 
         } else if (requestCode == Crop.REQUEST_CROP) {//裁剪完成
 
@@ -76,14 +74,14 @@ public class ActivityResult {
      * @param activity 当前Activity的Activity
      * @param source   读取照片之后返回的照片uri
      */
-    private static void beginCrop(Activity activity, Uri source, boolean isLarge) {
+    private static void beginCrop(Activity activity, Uri source) {
 
         Uri destination = Uri.fromFile(new File(imageFilePath, storyFileName));
-        if (isLarge) {
-            Crop.of(source, destination).asSquare().withMaxSize(size_large, size_large).start(activity);
-        } else {
+//        if (isLarge) {
+//            Crop.of(source, destination).asSquare().withMaxSize(size_large, size_large).start(activity);
+//        } else {
             Crop.of(source, destination).asSquare().withMaxSize(size_nromal, size_nromal).start(activity);
-        }
+//        }
     }
 
     /**
@@ -96,7 +94,7 @@ public class ActivityResult {
      */
     private static boolean handleCrop(Activity activity, int resultCode, Intent result, ImageView resultView) {
         boolean isfinish = false;
-        Uri imguri;//裁剪好的照片uri
+
 
         if (resultCode == RESULT_OK) {
 
@@ -118,5 +116,11 @@ public class ActivityResult {
         return isfinish;
     }
 
-
+    /**
+     * 图片上传完成后的uri
+     * @return
+     */
+    public static Uri getImguri() {
+        return imguri;
+    }
 }

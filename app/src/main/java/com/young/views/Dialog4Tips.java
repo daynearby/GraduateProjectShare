@@ -33,7 +33,7 @@ public class Dialog4Tips extends Dialog implements View.OnClickListener {
     public Dialog4Tips(Activity activity) {
         super(activity);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        view = LayoutInflater.from(activity).inflate(R.layout.dialog4tips, null);
+        view = LayoutInflater.from(activity).inflate(R.layout.content_dialog4tips, null);
 
         setContentView(view);
         this.activity = activity;

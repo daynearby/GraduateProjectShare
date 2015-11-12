@@ -1,7 +1,6 @@
 package com.young.network;
 
 import android.content.Context;
-import android.os.Message;
 
 import com.bmob.BmobProFile;
 import com.bmob.btp.callback.UploadBatchListener;
@@ -71,24 +70,33 @@ public class ResetApi {
 
     /**
      * Bmob批量上传文件
-     *先修正文件地址，再进行操作
-     * @param file 文件地址，带file：//的
+     * 先修正文件地址，再进行操作
+     *
+     * @param file    文件地址，带file：//的
      * @param context
      */
-    public static void UploadFiles( Context context,String[] file, final GoToUploadImages listener) {
+    public static void UploadFiles(Context context, String[] file, int type, final GoToUploadImages listener) {
 
         String[] files = new String[file.length];
 
-        for (int i = 0; i < file.length; i++) {
-            files[i] = file[i].substring(Contants.FILE_HEAD.length(), file[i].length());
+        switch (type) {
+            case Contants.IMAGE_TYPE_AVATAR://头像
+                files[0] = file[0];
+                break;
+            case Contants.IMAGE_TYPE_SHARE://分享信息的照片
+                for (int i = 0; i < file.length; i++) {
+                    files[i] = file[i].substring(Contants.FILE_HEAD.length(), file[i].length());
+                }
+                break;
         }
+
 
         BmobProFile.getInstance(context).uploadBatch(files, new UploadBatchListener() {
 
             @Override
             public void onSuccess(boolean isFinish, String[] fileNames, String[] urls, BmobFile[] files) {
                 if (listener != null) {
-                    listener.Result(isFinish,urls);
+                    listener.Result(isFinish, urls);
                 }
 
                 // isFinish ：批量上传是否完成
@@ -96,7 +104,7 @@ public class ResetApi {
                 // urls        : url：文件地址数组
                 // files     : BmobFile文件数组，`V3.4.1版本`开始提供，用于兼容新旧文件服务。
 //                注：若上传的是图片，url(s)并不能直接在浏览器查看（会出现404错误），需要经过`URL签名`得到真正的可访问的URL地址,当然，`V3.4.1`版本可直接从BmobFile中获得可访问的文件地址。
-                LogUtils.logI("uploadBatch isFinish = "+isFinish+" imgUrl = " + urls.toString());
+                LogUtils.logI("uploadBatch isFinish = " + isFinish + " imgUrl = " + urls.toString());
 
             }
 
@@ -118,8 +126,6 @@ public class ResetApi {
             }
         });
     }
-
-
 
 
 }
