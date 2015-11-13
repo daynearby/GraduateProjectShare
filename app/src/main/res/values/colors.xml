@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-   <color name="theme_puple">#9D55B8</color>
-   <color name="trans_theme_puple">#a09D55B8</color>
-   <color name="white">#ffffff</color>
-   <color name="transparent">#00000000</color>
-   <color name="translucent">#80ffffff</color>
-   <color name="translucent_l">#96ffffff</color>
-   <color name="light_gray">#c2c2c2</color>
-   <color name="lake_blue">#1E90FF</color>
 
-   <color name="colorPrimary">#9D55B8</color>
-   <color name="colorPrimaryDark">#9055B8</color>
-   <color name="colorAccent">#FF4081</color>
-   <color name="cherry_red">#fd495a</color>
-   <color name="cherry_red_light">#befd495a</color>
+    <color name="theme_puple">#9D55B8</color>
+    <color name="trans_theme_puple">#a09D55B8</color>
+    <color name="white">#ffffff</color>
+    <color name="transparent">#00000000</color>
+    <color name="translucent">#80ffffff</color>
+    <color name="translucent_l">#96ffffff</color>
+    <color name="light_gray">#c2c2c2</color>
+    <color name="gray">#dddddd</color>
+    <color name="lake_blue">#1E90FF</color>
+
+    <color name="colorPrimary">#9D55B8</color>
+    <color name="colorPrimaryDark">#9055B8</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="cherry_red">#fd495a</color>
+    <color name="cherry_red_light">#befd495a</color>
 
 </resources>

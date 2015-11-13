@@ -79,9 +79,9 @@
         <activity android:name=".FindPwdActivity" />
 
         <!-- 分享信息 -->
-        <activity android:name=".ShareMessageActivity"
-            android:windowSoftInputMode="adjustPan"
-            />
+        <activity
+            android:name=".ShareMessageActivity"
+            android:windowSoftInputMode="adjustPan" />
         <!-- 短信验证 -->
         <activity
             android:name="com.mob.tools.MobUIShell"
@@ -102,6 +102,14 @@
         <!-- 裁剪头像 -->
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
+        <!-- 关于 -->
+        <activity android:name=".AboutActivity" />
+
+        <!-- 重置密码 -->
+        <activity android:name=".ResetPwdActivity" />
+
+        <!-- 修改个人信息-->
+        <activity android:name=".EditPersonalInfoActivity" />
 
         <!-- 百度定位 services -->
         <service

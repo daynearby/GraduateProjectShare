@@ -28,7 +28,7 @@
             android:padding="@dimen/paddingMediu">
 
             <TextView
-                style="@style/text_tab"
+                style="@style/text_style_wrap"
                 android:text="@string/account"
                 android:textColor="@color/white"
                 android:textSize="@dimen/textSizeLarge" />
@@ -55,7 +55,7 @@
             android:padding="@dimen/paddingMediu">
 
             <TextView
-                style="@style/text_tab"
+                style="@style/text_style_wrap"
                 android:text="@string/pwd"
                 android:textColor="@color/white"
                 android:textSize="@dimen/textSizeLarge" />

@@ -85,6 +85,27 @@ public abstract class ItemActBarActivity extends BaseAppCompatActivity {
     }
 
     /**
+     * 设置上面两个按钮是否显示
+     * true-->显示 false -->不显示
+     *
+     * @param left  左边
+     * @param right 右边
+     */
+    public void setBarItemVisible(boolean left, boolean right) {
+        if (left) {
+            backto_im.setVisibility(View.VISIBLE);
+        } else {
+            backto_im.setVisibility(View.GONE);
+        }
+        if (right) {
+            barRightItem_tv.setVisibility(View.VISIBLE);
+        } else {
+            barRightItem_tv.setVisibility(View.GONE);
+        }
+
+    }
+
+    /**
      * 设置标题
      *
      * @param resId

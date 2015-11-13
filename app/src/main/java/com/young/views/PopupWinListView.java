@@ -1,6 +1,5 @@
 package com.young.views;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
@@ -90,14 +89,31 @@ public class PopupWinListView extends PopupWindow {
     }
 
     public void onShow(View v) {
-//        LogUtils.logE("v.getX = " + v.getX() + " getWidth() = " + getWidth() + " v.getWidth = " + v.getWidth());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            showAsDropDown(v, 0, 0, Gravity.BOTTOM);
-        }else {
-            showAsDropDown(v);
-        }
-//        showAsDropDown(v, v.getWidth()/2, 0);
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            int offsetPx = (DisplayUtils.getScreenWidthPixels((Activity) ctx) - v.getWidth()) / 2;
+            int offsetPx2dp = DisplayUtils.px2dp(ctx, offsetPx);
+            showAsDropDown(v, -offsetPx2dp, 0, Gravity.CENTER);
+        } else {
+
+
+//            int x = DisplayUtils.px2dp(ctx, v.getLeft());
+//            int y = DisplayUtils.px2dp(ctx, v.getBottom());
+
+//            int[] location = new int[2];
+//            v.getLocationInWindow(location);
+//            int x = location[0];
+//            int y = location[1];
+//            LogUtils.logE(" v x = " + x + " y = " + y);
+            int widthDp = DisplayUtils.px2dp(ctx, v.getWidth()) / 2;
+
+
+//            showAtLocation(v, Gravity.NO_GRAVITY, x-v.getWidth(),y+v.getHeight());
+//            LogUtils.logE(" v Width() = " + v.getWidth()+" v Height() = "+v.getHeight()  + " left = " + v.getLeft());
+            showAsDropDown(v, -widthDp, 0);
+        }
+//        update();
 
 
     }

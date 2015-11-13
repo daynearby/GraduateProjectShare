@@ -10,7 +10,6 @@ import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -77,7 +76,7 @@ public class MainActivity extends CustomActBarActivity {
         MainPagerAdapter pagerAdapter = new MainPagerAdapter(this, list);
 
         viewPager.setAdapter(pagerAdapter);
-        viewPager.setOnPageChangeListener(new pageChangeListener());
+        viewPager.addOnPageChangeListener(new pageChangeListener());
         viewPager.setCurrentItem(1);
 
     }
@@ -371,7 +370,7 @@ public class MainActivity extends CustomActBarActivity {
         public void onClick(View view, int pos) {
 //            LogUtils.logI("view = "+view+" position = "+pos);
             itemIm = (ImageView) view;
-            mUser = BmobUser.getCurrentUser(mActivity,User.class);
+            mUser = BmobUser.getCurrentUser(mActivity, User.class);
 
             switch (pos) {
                 case 1://分享信息
@@ -421,7 +420,6 @@ public class MainActivity extends CustomActBarActivity {
             itemIm.setImageResource(R.drawable.icon_more);
         }
     }
-
 
 
     @Override

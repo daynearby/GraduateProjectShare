@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:paddingLeft="@dimen/paddingMediu"
+    android:paddingRight="@dimen/paddingMediu">
+
+
+    <LinearLayout
+        android:id="@+id/old_pwd_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/paddingMic"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:padding="5dp"
+            android:text="@string/old_pwd" />
+
+        <EditText
+            android:id="@+id/old_pwd"
+           style="@style/bar_text"
+            android:layout_weight="1"
+            android:inputType="textPassword"
+            android:padding="5dp"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/new_pwd_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/old_pwd_layout"
+        android:layout_marginTop="@dimen/paddingMic"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:padding="5dp"
+            android:text="@string/new_pwd" />
+
+        <EditText
+            android:id="@+id/new_pwd"
+            style="@style/bar_text"
+            android:layout_weight="1"
+            android:inputType="textPassword"
+            android:padding="5dp"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/new_pwd_layout"
+        android:layout_marginTop="@dimen/paddingMic"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3.5"
+            android:text="@string/confirm_pwd" />
+
+        <EditText
+            android:id="@+id/confirm_pwd_et"
+            style="@style/bar_text"
+            android:layout_weight="1"
+            android:inputType="textPassword"
+            android:padding="5dp"
+            android:singleLine="true" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:divider="@drawable/divier_vertical"
+        android:orientation="horizontal"
+        android:showDividers="middle">
+
+        <TextView
+            android:id="@+id/cancel_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/cancel"
+            android:textColor="@drawable/sele_text_color_def_back" />
+
+        <TextView
+            android:id="@+id/confirm_pwd_bt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/save_pwd"
+            android:textColor="@drawable/sele_text_color_def_back" />
+    </LinearLayout>
+
+</RelativeLayout>

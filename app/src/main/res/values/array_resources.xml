@@ -37,6 +37,7 @@
         <item>分享记录</item>
         <item>修改资料</item>
         <item>修改密码</item>
+        <item>清除缓存</item>
         <item>关于</item>
 
     </string-array>

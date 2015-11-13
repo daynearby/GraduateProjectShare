@@ -258,8 +258,8 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                 break;
 
             case R.id.im_content_popupwin_share_seletag://标签选择
-
-                popupWinListView.onShow(v);
+// TODO: 2015-11-13 选择标签的popupwindow的位置问题 主要是4.1的适配
+                popupWinListView.onShow(tag_im);
                 break;
         }
     }
@@ -471,7 +471,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
      * @param shareMessage_hz
      */
     private void shareMessage(ShareMessage_HZ shareMessage_hz) {
-
+// TODO: 2015-11-13  分享信息后台一直gcc
         clean();
         shareMessage_hz.save(mActivity, new SaveListener() {
             @Override

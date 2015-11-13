@@ -10,6 +10,8 @@ public class Contants {
     //欢迎界面
     public static final int GO_HOME = 100;
     public static final int GO_GUIDE = 101;
+
+    //**********************时间单位******************
     public static final int TIME = 2000;
     public static final int ONE_SECOND = 1000;
 
@@ -17,10 +19,13 @@ public class Contants {
 
     public static final String SH_ACCOUNT = "account";
     public static final String SH_PWD = "pwd";
+    //*******************字符串长度**************************
+    public static final int PWD_LENGHT = 6;
 
     //*************************** Bmob key *****************
 
     public static final String BMOB_APP_KEY = "52f47fe363ec6e189700adf5b51e58ed";
+    public static final String BMOB_APP_ACCESS_KEY = "cf5d7486b89a2ad072047b2cb8d4396c";
 
     //******************************Mob key*******************************
     public static final String SMS_APP_KEY = "b63b43f91a14";
@@ -31,6 +36,9 @@ public class Contants {
     public static final String FILE_HEAD = "file://";
 
     public static final String LAST_ADD_IMG = "drawable://" + R.drawable.icon_addimg;
+
+    public static final String IMAGE_PATH_AND_NAME = "/image/cropped.jpeg";
+    public static final String DOWNLOAD_PATH = "share/images/";
 
     //******************************定位 Keys***********************
     public static final String PROVINCE = "province";
@@ -67,6 +75,7 @@ public class Contants {
     //*************************************上传照片类型***********************************************
     public static final int IMAGE_TYPE_SHARE = 100;
     public static final int IMAGE_TYPE_AVATAR = 101;
+    public static final int IAMGE_MAX_WIDTH = 1000;
 
 
 }

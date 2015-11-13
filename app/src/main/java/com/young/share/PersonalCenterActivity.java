@@ -7,6 +7,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,6 +18,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bigkoo.svprogresshud.SVProgressHUD;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.soundcloud.android.crop.ActivityResult;
 import com.young.annotation.InjectView;
 import com.young.base.BaseAppCompatActivity;
@@ -25,11 +28,11 @@ import com.young.model.User;
 import com.young.myCallback.GoToUploadImages;
 import com.young.network.ResetApi;
 import com.young.utils.DisplayUtils;
+import com.young.utils.ImageHandlerUtils;
 import com.young.utils.LogUtils;
 import com.young.utils.XmlUtils;
 import com.young.views.Dialog4UploadAvatar;
 
-import java.io.File;
 import java.util.List;
 
 import cn.bmob.v3.BmobUser;
@@ -37,7 +40,7 @@ import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * 个人中心
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-10-22.
  */
 public class PersonalCenterActivity extends BaseAppCompatActivity implements View.OnClickListener {
@@ -59,6 +62,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
     private int displayHeightDp = 0;
     private Dialog4UploadAvatar dialog4UploadAvater;
 
+
     // TODO: 2015-10-31  界面效果
     @Override
     public int getLayoutId() {
@@ -68,12 +72,6 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
     @Override
     public void findviewbyid() {
         initToolbar();
-//        relativeLayout.getLayoutParams();
-//               ViewGroup.LayoutParams params =  new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DisplayUtils.getScreenHeightPixels(mActivity));
-//        h = (int) relativeLayout.getY;
-
-        LogUtils.logI("height dp = " + displayHeightDp);
-
         ViewGroup.LayoutParams params = relativeLayout.getLayoutParams();
         params.height = displayHeightDp / 2 + 44;
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -104,6 +102,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
         select_ls.setAdapter(arrayAdapter);
         select_ls.setOnItemClickListener(new onitemClick());
 
+        loadingAvatar();
     }
 
     @Override
@@ -137,20 +136,34 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
                 break;
             case R.id.btn_include_content_scrolling_logout://注销登录
 //                退出当前账号，清除保存的个人信息
-
+                BmobUser.logOut(this);   //清除缓存用户对象
+                mStartActivity(WelcomeActivity.class);
+                finish();
                 break;
+
         }
 
     }
 
+
     /**
      * 上传头像对话框
-     * <p>
+     * <p/>
      * 初始化对话框
      */
     private void initDialog() {
-        dialog4UploadAvater = new Dialog4UploadAvatar(mActivity, R.string.upload_avater, false);
+        dialog4UploadAvater = new Dialog4UploadAvatar(this, R.string.upload_avater, false);
         dialog4UploadAvater.setClickListener();
+
+    }
+
+    /**
+     * 加载头像
+     */
+    private void loadingAvatar() {
+        ImageHandlerUtils.loadIamge(this, mUser.getAvatar(), avatar_im);
+        ImageHandlerUtils.loadIamge(this, mUser.getAvatar(), avatar_bg_im);
+
 
     }
 
@@ -172,24 +185,39 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
                     break;
                 case 2:// <item>修改资料</item>
 
-
+                    mStartActivity(EditPersonalInfoActivity.class);
                     break;
                 case 3:// <item>修改密码</item>
-
+                    mStartActivity(ResetPwdActivity.class);
 
                     break;
-                case 4://<item>关于</item>
+                case 4://<item>清除缓存</item>
 
+                    clearCache();
+                    break;
+                case 5://<item>关于</item>
+                    mStartActivity(AboutActivity.class);
                     break;
             }
         }
     }
 
+
+    /**
+     * 清除缓存
+     */
+    private void clearCache() {
+        SVProgressHUD.showWithStatus(this, getString(R.string.cleaning_cache));
+
+        ImageLoader.getInstance().clearDiskCache();
+        SVProgressHUD.dismiss(this);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        boolean finish = ActivityResult.corpResult(mActivity, requestCode, resultCode, data, avatar_im);
+        String croppath = "";
+        boolean finish = ActivityResult.corpResult(this, requestCode, resultCode, data, avatar_im);
 
         if (finish) {
             //开始上传照片
@@ -197,12 +225,14 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
 
             avatar_bg_im.setImageURI(ActivityResult.getImguri());
 
-            String croppath=   mActivity.getExternalCacheDir().getAbsolutePath()+"/image/cropped.jpeg";
-
+            if (mActivity.getExternalCacheDir() != null) {
+                croppath = mActivity.getExternalCacheDir().getAbsolutePath() + Contants.IMAGE_PATH_AND_NAME;
+            }
             LogUtils.logI(croppath);
+
             String[] files = {croppath};
 
-            ResetApi.UploadFiles(mActivity, files, Contants.IMAGE_TYPE_AVATAR,new GoToUploadImages() {
+            ResetApi.UploadFiles(mActivity, files, Contants.IMAGE_TYPE_AVATAR, new GoToUploadImages() {
                 @Override
                 public void Result(boolean isFinish, String[] urls) {
                     //上传文件成功
@@ -236,5 +266,16 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
             });
         }
 
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
+            mBackStartActivity(MainActivity.class);
+        }
+
+
+        return super.dispatchKeyEvent(event);
     }
 }

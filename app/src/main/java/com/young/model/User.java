@@ -1,7 +1,6 @@
 package com.young.model;
 
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobFile;
 
 /**
  * user 类
@@ -16,6 +15,17 @@ public class User extends BmobUser {
     private int age;
     private boolean gender;
     private String accessToken;
+
+    private String nickName;
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
 
     public String getAccessToken() {
         return accessToken;
@@ -32,7 +42,6 @@ public class User extends BmobUser {
     public void setGender(boolean gender) {
         this.gender = gender;
     }
-
 
 
     public String getAddress() {
