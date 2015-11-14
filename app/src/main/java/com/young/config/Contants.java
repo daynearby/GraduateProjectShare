@@ -21,6 +21,9 @@ public class Contants {
     public static final String SH_PWD = "pwd";
     //*******************字符串长度**************************
     public static final int PWD_LENGHT = 6;
+    public static final int NICKNAME_MIN_LENGHT=2;
+    public static final int NICKNAME_MAX_LENGHT=12;
+
 
     //*************************** Bmob key *****************
 
@@ -77,5 +80,8 @@ public class Contants {
     public static final int IMAGE_TYPE_AVATAR = 101;
     public static final int IAMGE_MAX_WIDTH = 1000;
 
+    //**************************性别************************************
+    public static final String GENDER_MALE = "男";
+    public static final String GENDER_FEMALE = "女";
 
 }

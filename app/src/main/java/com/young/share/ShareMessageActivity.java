@@ -112,7 +112,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         tagList = XmlUtils.getSelectTag(this);
         tagList.remove(0);
 
-        popupWinListView = new PopupWinListView(this, tagList);
+        popupWinListView = new PopupWinListView(this, tagList,false);
         gridViewAdapter = new myGridViewAdapter(this, gv_img, true);
         gridViewAdapter.setDatas(null);
 

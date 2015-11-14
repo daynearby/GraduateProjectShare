@@ -1,6 +1,7 @@
 package com.young.share;
 
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -87,7 +88,7 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
 
         if (!hadVerfi) {
 
-            LogUtils.logE(userName + " lenght = " + userName.length());
+//            LogUtils.logE(userName + " lenght = " + userName.length());
 
             if (userName.length() < 1) {
 
@@ -102,7 +103,7 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
                     public void onSuccess(List<User> object) {
                         if (object.size() > 0) {
 
-                            if (object.get(0).getMobilePhoneNumber() != null) {
+                            if (!TextUtils.isEmpty(object.get(0).getMobilePhoneNumber())) {
 
                                 smsVerfied(object.get(0).getMobilePhoneNumber() );
 

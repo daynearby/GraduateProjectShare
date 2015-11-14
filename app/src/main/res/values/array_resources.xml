@@ -41,4 +41,235 @@
         <item>关于</item>
 
     </string-array>
+
+    <string-array name="select_gender_item">
+        <item>男</item>
+        <item>女</item>
+    </string-array>
+
+    <string-array name="select_age_item">
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>49</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>53</item>
+        <item>54</item>
+        <item>55</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
+        <item>60</item>
+    </string-array>
+
+    <string-array name="select_gz_item">
+        <item>越秀区</item>
+        <item>海珠区</item>
+        <item>荔湾区</item>
+        <item>天河区</item>
+        <item>白云区</item>
+        <item>黄埔区</item>
+        <item>花都区</item>
+        <item>番禺区</item>
+        <item>萝岗区</item>
+        <item>南沙区</item>
+        <item>从化市</item>
+        <item>增城市</item>
+
+    </string-array>
+    <string-array name="select_sz_item">
+        <item>福田区</item>
+        <item>罗湖区</item>
+        <item>南山区</item>
+        <item>盐田区</item>
+        <item>宝安区</item>
+        <item>龙岗区</item>
+        <item>光明区</item>
+        <item>龙华区</item>
+        <item>坪山区</item>
+        <item>大鹏区</item>
+    </string-array>
+
+    <string-array name="select_fs_item">
+        <item>南海区</item>
+        <item>高明区</item>
+        <item>三水区</item>
+        <item>禅城区</item>
+        <item>顺德区</item>
+
+    </string-array>
+    <string-array name="select_dg_item">
+        <item>莞城区</item>
+        <item>东城区</item>
+        <item>南城区</item>
+        <item>万江区</item>
+
+    </string-array>
+
+    <string-array name="select_zhs_item">
+        <item>城区</item>
+        <item>东区</item>
+        <item>南区</item>
+        <item>西区</item>
+        <item>北区</item>
+    </string-array>
+    <string-array name="select_zhh_item">
+        <item>香州区</item>
+        <item>金湾区</item>
+        <item>斗门区</item>
+    </string-array>
+    <string-array name="select_jm_item">
+        <item>逢江区</item>
+        <item>江海区</item>
+        <item>新会区</item>
+    </string-array>
+    <string-array name="select_zq_item">
+        <item>端州区</item>
+        <item>鼎湖区</item>
+    </string-array>
+
+    <string-array name="select_hz_item">
+        <item>惠城区</item>
+        <item>惠阳区(包含大亚湾)</item>
+        <item>惠东县</item>
+        <item>龙门县</item>
+        <item>博罗县</item>
+    </string-array>
+    <string-array name="select_st_item">
+        <item>金平区</item>
+        <item>龙湖区</item>
+        <item>濠江区</item>
+        <item>潮阳区</item>
+        <item>潮南区</item>
+        <item>澄海区</item>
+        <item>南澳县</item>
+    </string-array>
+
+    <string-array name="select_chz_item">
+        <item>湘桥区</item>
+        <item>枫溪区</item>
+        <item>潮安县</item>
+        <item>饶平县</item>
+    </string-array>
+
+    <string-array name="select_jy_item">
+        <item>榕城区</item>
+        <item>揭东县</item>
+        <item>普宁县</item>
+        <item>揭西县</item>
+        <item>惠来县</item>
+    </string-array>
+    <string-array name="select_shw_item">
+        <item>市城区</item>
+        <item>陆丰市</item>
+        <item>海丰县</item>
+        <item>陆河县</item>
+    </string-array>
+    <string-array name="select_zhj_item">
+        <item>赤坎区</item>
+        <item>霞山区</item>
+        <item>坡头区</item>
+        <item>麻章区</item>
+        <item>遂溪县</item>
+        <item>徐闻县</item>
+        <item>吴川市</item>
+        <item>廉江市</item>
+        <item>雷州市</item>
+    </string-array>
+    <string-array name="select_mm_item">
+        <item>茂南区</item>
+        <item>茂港区</item>
+        <item>电白县</item>
+        <item>化州市</item>
+        <item>信宜市</item>
+        <item>信宜市</item>
+    </string-array>
+    <string-array name="select_yj_item">
+        <item>阳春市</item>
+        <item>阳西县</item>
+        <item>阳东县</item>
+        <item>江城区</item>
+        <item>海陵岛</item>
+        <item>岗侨区</item>
+    </string-array>
+    <string-array name="select_shg_item">
+        <item>浈江区</item>
+        <item>武江区</item>
+        <item>曲江区</item>
+        <item>仁化县</item>
+        <item>始兴县</item>
+        <item>翁源县</item>
+        <item>新丰县</item>
+        <item>乳源瑶族自治县</item>
+        <item>乐昌市</item>
+        <item>南雄市</item>
+    </string-array>
+    <string-array name="select_qy_item">
+        <item>清新县</item>
+        <item>佛冈县</item>
+        <item>阳山县</item>
+        <item>连山壮族瑶族自治县</item>
+        <item>连南瑶族自治县</item>
+        <item>清城区</item>
+        <item>英德市</item>
+        <item>连州市</item>
+    </string-array>
+    <string-array name="select_yf_item">
+        <item>云城区</item>
+        <item>罗定市</item>
+        <item>新兴县</item>
+        <item>郁南县</item>
+        <item>云安县</item>
+    </string-array>
+    <string-array name="select_mzh_item">
+        <item>梅江区</item>
+        <item>兴宁市</item>
+        <item>梅县</item>
+        <item>大埔县</item>
+        <item>丰顺县</item>
+        <item>五华县</item>
+        <item>平远县</item>
+        <item>蕉岭县</item>
+    </string-array>
+    <string-array name="select_hy_item">
+        <item>紫金县</item>
+        <item>龙川县</item>
+        <item>连平县</item>
+        <item>和平县</item>
+        <item>东源县</item>
+    </string-array>
 </resources>

@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.young.share.R;
 import com.young.utils.DisplayUtils;
-import com.young.utils.LogUtils;
 
 import java.util.List;
 
@@ -34,11 +33,12 @@ public class PopupWinListView extends PopupWindow {
     private ListView listview;
     private mAdapter adapter;
     private onItemClick listener;
+    private boolean selectHometown = false;
 
-
-    public PopupWinListView(Context ctx, List<String> datas) {
+    public PopupWinListView(Context ctx, List<String> datas, boolean selectHometown) {
         this.ctx = ctx;
         this.datas = datas;
+        this.selectHometown = selectHometown;
 
         init();
         //初始化控件
@@ -47,7 +47,15 @@ public class PopupWinListView extends PopupWindow {
     }
 
     private void init() {
-        view = LayoutInflater.from(ctx).inflate(R.layout.content_popup_window_list, null);
+        int layoutId;
+
+        if (selectHometown){
+            layoutId=R.layout.content_popup_window_list_bottom;
+        }else {
+            layoutId=R.layout.content_popup_window_list_top;
+        }
+
+        view = LayoutInflater.from(ctx).inflate(layoutId, null);
         setContentView(view);
         setWidth(DisplayUtils.getScreenWidthPixels((Activity) ctx) / 2);
         if (datas.size() > 4) {
@@ -60,6 +68,18 @@ public class PopupWinListView extends PopupWindow {
 
         setBackgroundDrawable(new BitmapDrawable());
 
+
+    }
+
+
+    /**
+     * 刷新列表中的数据
+     *
+     * @param datas
+     */
+    public void setDatas(List<String> datas) {
+        this.datas = datas;
+        adapter.notifyDataSetChanged();
 
     }
 
@@ -115,7 +135,6 @@ public class PopupWinListView extends PopupWindow {
         }
 //        update();
 
-
     }
 
     private class itemOnClickListener implements AdapterView.OnItemClickListener {
@@ -123,7 +142,11 @@ public class PopupWinListView extends PopupWindow {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            dismiss();
+
+            if (!selectHometown) {
+                dismiss();
+            }
+
             if (datas.size() > 0) {
                 str = datas.get(position);
             }

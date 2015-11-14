@@ -25,7 +25,7 @@
 
         <EditText
             android:id="@+id/old_pwd"
-           style="@style/bar_text"
+            style="@style/bar_text"
             android:layout_weight="1"
             android:inputType="textPassword"
             android:padding="5dp"
@@ -83,35 +83,6 @@
     </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:divider="@drawable/divier_vertical"
-        android:orientation="horizontal"
-        android:showDividers="middle">
-
-        <TextView
-            android:id="@+id/cancel_pwd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/cancel"
-            android:textColor="@drawable/sele_text_color_def_back" />
-
-        <TextView
-            android:id="@+id/confirm_pwd_bt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/save_pwd"
-            android:textColor="@drawable/sele_text_color_def_back" />
-    </LinearLayout>
+    <include layout="@layout/include_option_bottom_bar" />
 
 </RelativeLayout>

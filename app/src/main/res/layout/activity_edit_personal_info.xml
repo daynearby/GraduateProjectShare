@@ -1,143 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    android:paddingLeft="@dimen/paddingMic"
-    android:paddingRight="@dimen/paddingMic">
+    android:fitsSystemWindows="true">
 
     <LinearLayout
-        style="@style/linearLayout_h"
-        android:layout_marginTop="@dimen/paddingMediu">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/paddingMic"
+        android:paddingRight="@dimen/paddingMic"
+        android:paddingTop="@dimen/paddingMic">
+
+        <LinearLayout
+            style="@style/linearLayout_h"
+            android:layout_marginTop="@dimen/paddingMediu">
+
+            <TextView
+                style="@style/text_style_match"
+                android:layout_weight="3.5"
+                android:gravity="center_horizontal"
+                android:text="@string/nickname"
+                android:textSize="@dimen/textSizeMediu" />
+
+            <EditText
+                android:id="@+id/et_edit_personal_nickname"
+                style="@style/bar_text"
+                android:layout_weight="1"
+                android:inputType="text"
+                android:padding="@dimen/paddingMic"
+                android:singleLine="true"
+                android:textSize="@dimen/textSizeMediu" />
+        </LinearLayout>
 
         <TextView
             style="@style/text_style_match"
-            android:layout_weight="3.5"
             android:gravity="center_horizontal"
-            android:text="@string/nickname"
-            android:textSize="@dimen/textSizeMediu" />
+            android:text="@string/input_hint_nickname" />
 
-        <EditText
-            style="@style/bar_text"
-            android:layout_weight="1"
-            android:hint="@string/input_hint_nickname"
-            android:inputType="text"
-            android:singleLine="true" />
+        <LinearLayout
+            style="@style/linearLayout_h"
+            android:layout_marginTop="@dimen/paddingMediu">
+
+            <TextView
+                style="@style/text_style_match"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="@string/age"
+                android:textSize="@dimen/textSizeMediu" />
+
+            <TextView
+
+                android:id="@+id/popupwin_edit_personnal_info_age"
+                style="@style/text_style_match"
+                android:layout_weight="1"
+                android:drawableEnd="@drawable/icon_drop_down_def"
+                android:gravity="center_horizontal"
+                android:text="@string/age_22"
+                android:textSize="@dimen/textSizeMediu" />
+
+
+            <TextView
+                style="@style/text_style_match"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="@string/gender"
+                android:textSize="@dimen/textSizeMediu" />
+
+            <TextView
+                android:id="@+id/popupwin_edit_personnal_info_gender"
+                style="@style/text_style_match"
+                android:layout_weight="1"
+                android:drawableEnd="@drawable/icon_drop_down_def"
+                android:gravity="center_horizontal"
+                android:text="@string/male"
+                android:textSize="@dimen/textSizeMediu" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/linearLayout_h"
+            android:layout_marginTop="@dimen/paddingMediu">
+
+            <TextView
+                style="@style/text_style_match"
+                android:layout_weight="3.5"
+                android:gravity="center_horizontal"
+                android:text="@string/qq"
+                android:textSize="@dimen/textSizeMediu" />
+
+            <EditText
+                android:id="@+id/et_edit_personal_qq"
+                style="@style/bar_text"
+                android:layout_weight="1"
+                android:inputType="number"
+                android:padding="@dimen/paddingMic"
+                android:singleLine="true"
+                android:textSize="@dimen/textSizeMediu" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/linearLayout_h"
+            android:layout_marginTop="@dimen/paddingMediu">
+
+            <TextView
+                style="@style/text_style_match"
+                android:layout_weight="3.5"
+                android:gravity="center_horizontal"
+                android:text="@string/email"
+                android:textSize="@dimen/textSizeMediu" />
+
+            <EditText
+                android:id="@+id/et_edit_personal_email"
+                style="@style/bar_text"
+                android:layout_weight="1"
+                android:inputType="textEmailAddress"
+                android:padding="@dimen/paddingMic"
+                android:singleLine="true"
+                android:textSize="@dimen/textSizeMediu" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/linearLayout_h"
+            android:layout_marginTop="@dimen/paddingMediu">
+
+            <TextView
+                style="@style/text_style_match"
+                android:layout_weight="3.5"
+                android:gravity="center_horizontal"
+                android:text="@string/mobile_phone_number"
+                android:textSize="@dimen/textSizeMediu" />
+
+            <EditText
+                android:id="@+id/et_edit_personal_mobile_phone_number"
+                style="@style/bar_text"
+                android:layout_weight="1"
+                android:hint="@string/input_mobile_phone_number"
+                android:inputType="phone"
+                android:singleLine="true"
+                android:textSize="@dimen/textSizeMediu" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/text_style_match"
+            android:gravity="center_horizontal"
+            android:text="@string/mobile_phone_tips" />
+
+        <LinearLayout
+            style="@style/linearLayout_h"
+            android:layout_marginTop="@dimen/paddingMediu">
+
+            <TextView
+                style="@style/text_style_match"
+                android:layout_weight="3.5"
+                android:gravity="center_horizontal"
+                android:text="@string/hometown"
+                android:textSize="@dimen/textSizeMediu" />
+
+            <TextView
+                android:id="@+id/popupwin_edit_personnal_info_hometown"
+                style="@style/text_style_match"
+                android:layout_weight="1"
+                android:drawableEnd="@drawable/icon_drop_down_def"
+                android:gravity="center_horizontal"
+                android:text="@string/hz"
+                android:textSize="@dimen/textSizeMediu" />
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        style="@style/linearLayout_h"
-        android:layout_marginTop="@dimen/paddingMediu">
-
-        <TextView
-            style="@style/text_style_match"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text="@string/age"
-            android:textSize="@dimen/textSizeMediu" />
-
-        <TextView
-            style="@style/text_style_match"
-            android:layout_weight="1"
-            android:drawableEnd="@drawable/icon_drop_down_def"
-            android:gravity="center_horizontal"
-            android:text="@string/age_22"
-            android:textSize="@dimen/textSizeMediu" />
-
-
-        <TextView
-            style="@style/text_style_match"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text="@string/gender"
-            android:textSize="@dimen/textSizeMediu" />
-
-        <TextView
-            style="@style/text_style_match"
-            android:layout_weight="1"
-            android:drawableEnd="@drawable/icon_drop_down_def"
-            android:gravity="center_horizontal"
-            android:text="@string/male"
-            android:textSize="@dimen/textSizeMediu" />
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/linearLayout_h"
-        android:layout_marginTop="@dimen/paddingMediu">
-
-        <TextView
-            style="@style/text_style_match"
-            android:layout_weight="3.5"
-            android:gravity="center_horizontal"
-            android:text="@string/qq"
-            android:textSize="@dimen/textSizeMediu" />
-
-        <EditText
-            style="@style/bar_text"
-            android:layout_weight="1"
-            android:inputType="number"
-            android:singleLine="true" />
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/linearLayout_h"
-        android:layout_marginTop="@dimen/paddingMediu">
-
-        <TextView
-            style="@style/text_style_match"
-            android:layout_weight="3.5"
-            android:gravity="center_horizontal"
-            android:text="@string/email"
-            android:textSize="@dimen/textSizeMediu" />
-
-        <EditText
-            style="@style/bar_text"
-            android:layout_weight="1"
-            android:inputType="textEmailAddress"
-            android:singleLine="true" />
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/linearLayout_h"
-        android:layout_marginTop="@dimen/paddingMediu">
-
-        <TextView
-            style="@style/text_style_match"
-            android:layout_weight="3.5"
-            android:gravity="center_horizontal"
-            android:text="@string/mobile_phone_number"
-            android:textSize="@dimen/textSizeMediu" />
-
-        <EditText
-            style="@style/bar_text"
-            android:layout_weight="1"
-            android:hint="@string/input_mobile_phone_number"
-            android:inputType="number"
-            android:singleLine="true" />
-    </LinearLayout>
 
     <TextView
-        style="@style/text_style_match"
-        android:text="@string/mobile_phone_tips" />
-
-    <LinearLayout
-        style="@style/linearLayout_h"
-        android:layout_marginTop="@dimen/paddingMediu">
-
-        <TextView
-            style="@style/text_style_match"
-            android:layout_weight="3.5"
-            android:gravity="center_horizontal"
-            android:text="@string/hometown"
-            android:textSize="@dimen/textSizeMediu" />
-
-        <TextView
-            style="@style/text_style_match"
-            android:layout_weight="1"
-            android:drawableEnd="@drawable/icon_drop_down_def"
-            android:gravity="center_horizontal"
-            android:text="@string/hz"
-            android:textSize="@dimen/textSizeMediu" />
-    </LinearLayout>
-</LinearLayout>
+        android:id="@+id/confirm_pwd_bt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/save_pwd"
+        android:textColor="@drawable/sele_text_color_def_back"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

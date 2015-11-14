@@ -86,7 +86,7 @@ public class ResetPwdActivity extends ItemActBarActivity implements View.OnClick
 
             @Override
             public void onSuccess() {
-                LogUtils.logD("smile", "密码修改成功，可以用新密码进行登录啦");
+//                LogUtils.logD("smile", "密码修改成功，可以用新密码进行登录啦");
                 SVProgressHUD.showSuccessWithStatus(mActivity, getString(R.string.revise_success));
                 mHandler.sendEmptyMessageDelayed(101, Contants.ONE_SECOND);
 

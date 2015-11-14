@@ -189,7 +189,7 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
 
             switch (v.getId()) {
                 case R.id.tv_actionbar_tag://标签
-                    popupWindows = new PopupWinListView(CustomActBarActivity.this, XmlUtils.getSelectTag(CustomActBarActivity.this));
+                    popupWindows = new PopupWinListView(CustomActBarActivity.this, XmlUtils.getSelectTag(CustomActBarActivity.this),false);
 
                     isTag = 1;
 
@@ -197,7 +197,7 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
 
                 case R.id.tv_actionbar_city://城市
 
-                    popupWindows = new PopupWinListView(CustomActBarActivity.this, XmlUtils.getSelectCities(CustomActBarActivity.this));
+                    popupWindows = new PopupWinListView(CustomActBarActivity.this, XmlUtils.getSelectCities(CustomActBarActivity.this),false);
                     isTag = 2;
 
                     break;
