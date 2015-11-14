@@ -13,4 +13,6 @@
 
 6.自定义viewground
 
+7.使用Mob的短信验证
+
 gson，volley，litepal（sqlite），UIL（通用图片加载），百度定位
