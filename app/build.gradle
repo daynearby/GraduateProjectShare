@@ -40,4 +40,5 @@ dependencies {
     compile project(':sMSSDK')
     compile project(':multiImageSelector')
     compile project(':svprogresshud')
+    compile 'com.android.support:support-v4:23.0.0'
 }

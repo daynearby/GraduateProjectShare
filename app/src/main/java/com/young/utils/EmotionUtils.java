@@ -1,13 +1,26 @@
 package com.young.utils;
 
+import android.graphics.Color;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
+import android.widget.LinearLayout;
+
+import com.young.adapter.EmotionGvAdapter;
+import com.young.adapter.EmotionPagerAdapter;
 import com.young.share.R;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EmotionUtils implements Serializable {
-	
+
+	private EmotionPagerAdapter emotionPagerGvAdapter;
 	/**
 	 * key-表情文字;value-表情图片资源
 	 */

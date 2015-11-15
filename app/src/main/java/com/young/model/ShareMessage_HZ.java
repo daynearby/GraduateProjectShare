@@ -18,9 +18,18 @@ public class ShareMessage_HZ extends BmobObject {
     private List<String> shImgs;
     private String shLocation;
     private String shTag;
-    private int shWantedNum;
-    private int shVisitedNum;
+    private List<String> shWantedNum;
+    private List<String> shVisitedNum;
     private int shCommNum;
+    private String nickName;
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
 
     public User getUserId() {
         return userId;
@@ -62,19 +71,19 @@ public class ShareMessage_HZ extends BmobObject {
         this.shTag = shTag;
     }
 
-    public int getShWantedNum() {
+    public List<String> getShWantedNum() {
         return shWantedNum;
     }
 
-    public void setShWantedNum(int shWantedNum) {
+    public void setShWantedNum(List<String> shWantedNum) {
         this.shWantedNum = shWantedNum;
     }
 
-    public int getShVisitedNum() {
+    public List<String> getShVisitedNum() {
         return shVisitedNum;
     }
 
-    public void setShVisitedNum(int shVisitedNum) {
+    public void setShVisitedNum(List<String> shVisitedNum) {
         this.shVisitedNum = shVisitedNum;
     }
 

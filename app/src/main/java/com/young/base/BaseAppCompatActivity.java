@@ -118,7 +118,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
     }
 
-    public Handler mHandler = new Handler() {
+    public  Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);

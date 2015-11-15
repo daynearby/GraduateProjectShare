@@ -14,8 +14,8 @@ private User userId;
     private List<String> dtImgs;
     private String dtLocation;
     private String dtTag;
-    private int dtWantedNum;
-    private int dtVisitedNum;
+    private List<String> dtWantedNum;
+    private List<String> dtVisitedNum;
 
     public User getUserId() {
         return userId;
@@ -57,19 +57,19 @@ private User userId;
         this.dtTag = dtTag;
     }
 
-    public int getDtWantedNum() {
+    public List<String> getDtWantedNum() {
         return dtWantedNum;
     }
 
-    public void setDtWantedNum(int dtWantedNum) {
+    public void setDtWantedNum(List<String> dtWantedNum) {
         this.dtWantedNum = dtWantedNum;
     }
 
-    public int getDtVisitedNum() {
+    public List<String> getDtVisitedNum() {
         return dtVisitedNum;
     }
 
-    public void setDtVisitedNum(int dtVisitedNum) {
+    public void setDtVisitedNum(List<String> dtVisitedNum) {
         this.dtVisitedNum = dtVisitedNum;
     }
 }

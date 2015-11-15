@@ -15,10 +15,18 @@ public abstract class BasePager {
     public void init(Context ctx, View view) {
         this.ctx = ctx;
         this.view = view;
+
+        initView();
+        bindData();
     }
 
     public abstract void initView();
 
     public abstract void bindData();
+
+    public <T extends View> T $(int resId){
+
+        return (T) view.findViewById(resId);
+    }
 
 }

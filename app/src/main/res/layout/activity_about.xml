@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/paddingMediu"
         android:textSize="@dimen/textSizeMediu"
-        android:text="@string/large_text"
+        android:text="@string/huizhou"
         android:scrollbars="vertical"
         android:singleLine="false"
         android:overScrollMode="never"/>
