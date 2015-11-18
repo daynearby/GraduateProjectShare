@@ -15,7 +15,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.young.config.Contants;
 import com.young.share.R;
 
@@ -107,10 +106,10 @@ public class ImageHandlerUtils {
         return new BitmapDrawable(bm);
     }
 
-    private static DisplayImageOptions imageloaderOption() {
+    public static DisplayImageOptions imageloaderOption() {
         DisplayImageOptions options
                 = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.icon_avatar) //设置图片在下载期间显示的图片
+                .showImageOnLoading(R.drawable.icon_default_avatar) //设置图片在下载期间显示的图片
                 .showImageForEmptyUri(R.drawable.icon_loading_image_fail)//设置图片Uri为空或是错误的时候显示的图片
                 .showImageOnFail(R.drawable.icon_loading_image_fail)  //设置图片加载/解码过程中错误时候显示的图片
                 .cacheInMemory(true)//设置下载的图片是否缓存在内存中
@@ -130,7 +129,14 @@ public class ImageHandlerUtils {
         return options;
     }
 
-    public static void loadIamge(Context ctx,String imageUrl,ImageView im){
-        ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(ctx,imageUrl),im,imageloaderOption());
+    /**
+     *
+     * @param ctx
+     * @param imageUrl
+     * @param im
+     * @param isLocation 是否是本地资源，true --> 本地资源
+     */
+    public static void loadIamge(Context ctx,String imageUrl,ImageView im,boolean isLocation){
+        ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(ctx,imageUrl, isLocation),im,imageloaderOption());
     }
 }

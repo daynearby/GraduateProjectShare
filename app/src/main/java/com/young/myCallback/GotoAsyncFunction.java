@@ -8,8 +8,8 @@ package com.young.myCallback;
  * Created by yangfujing on 15/10/10.
  */
 public interface GotoAsyncFunction {
-    public void onSuccess(Object object);
-    public void onFailure(int code, String msg);
+     void onSuccess(Object object);
+     void onFailure(int code, String msg);
 
 
 }

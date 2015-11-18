@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@drawable/bg_rectangle"
     android:orientation="vertical">
 
@@ -11,17 +11,20 @@
         android:id="@+id/id_tx_share_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxLines="3"
+        android:ellipsize="end"
         android:padding="@dimen/paddingMic"
         android:text="@string/defaul_share_text"
         android:textSize="@dimen/abc_text_size_medium_material" />
 
-    <GridView
+    <com.young.views.WrapHightGridview
         android:id="@+id/id_gv_shareimg"
         style="@style/gridViwe"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        android:padding="@dimen/paddingMic"
+        android:paddingLeft="@dimen/paddingMic"
+        android:paddingRight="@dimen/paddingMic"
         />
 
     <include layout="@layout/include_bottom_bar" />

@@ -26,7 +26,7 @@ import com.young.base.BaseAppCompatActivity;
 import com.young.config.Contants;
 import com.young.model.User;
 import com.young.myCallback.GoToUploadImages;
-import com.young.network.ResetApi;
+import com.young.network.BmobApi;
 import com.young.utils.DisplayUtils;
 import com.young.utils.ImageHandlerUtils;
 import com.young.utils.LogUtils;
@@ -161,8 +161,8 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
      * 加载头像
      */
     private void loadingAvatar() {
-        ImageHandlerUtils.loadIamge(this, mUser.getAvatar(), avatar_im);
-        ImageHandlerUtils.loadIamge(this, mUser.getAvatar(), avatar_bg_im);
+        ImageHandlerUtils.loadIamge(this, mUser.getAvatar(), avatar_im,false);
+        ImageHandlerUtils.loadIamge(this, mUser.getAvatar(), avatar_bg_im,false);
 
 
     }
@@ -232,7 +232,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
 
             String[] files = {croppath};
 
-            ResetApi.UploadFiles(mActivity, files, Contants.IMAGE_TYPE_AVATAR, new GoToUploadImages() {
+            BmobApi.UploadFiles(mActivity, files, Contants.IMAGE_TYPE_AVATAR, new GoToUploadImages() {
                 @Override
                 public void Result(boolean isFinish, String[] urls) {
                     //上传文件成功

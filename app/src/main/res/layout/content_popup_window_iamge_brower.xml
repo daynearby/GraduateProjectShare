@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_popupwindow_image_brower"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:id="@+id/image_brower_indicator0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/login_point_selected"
+            android:visibility="gone"/>
+        <ImageView
+            android:id="@+id/image_brower_indicator1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/bg_login_point"
+            android:visibility="gone"/>
+        <ImageView
+            android:id="@+id/image_brower_indicator2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/bg_login_point"
+            android:visibility="gone"/>
+        <ImageView
+            android:id="@+id/image_brower_indicator3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/login_point_selected"
+            android:visibility="gone"/>
+        <ImageView
+            android:id="@+id/image_brower_indicator4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/bg_login_point"
+            android:visibility="gone"/>
+        <ImageView
+            android:id="@+id/image_brower_indicator5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/bg_login_point"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+</RelativeLayout>

@@ -13,7 +13,7 @@ import com.young.base.CustomActBarActivity;
 import com.young.config.Contants;
 import com.young.model.User;
 import com.young.myCallback.GotoAsyncFunction;
-import com.young.network.ResetApi;
+import com.young.network.BmobApi;
 import com.young.utils.LogUtils;
 
 import org.json.JSONException;
@@ -209,7 +209,7 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
         }
 
 //云端代码 更新密码
-        ResetApi.AsyncFunction(this, params, ResetApi.aceName.FIND_PWD, new GotoAsyncFunction() {
+        BmobApi.AsyncFunction(this, params, BmobApi.FINDPWD, new GotoAsyncFunction() {
             @Override
             public void onSuccess(Object object) {
 

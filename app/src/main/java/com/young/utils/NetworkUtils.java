@@ -14,13 +14,20 @@ public class NetworkUtils {
 
     /**
      * 获取签名url
+     *
      * @param context
      * @param url
+     * @param isLocation
      * @return
      */
-    public static String getRealUrl(Context context,String url) {
-        String filename = url.substring(url.lastIndexOf('/') + 1);
-        String mURL = BmobProFile.getInstance(context).signURL(filename, url, Contants.BMOB_APP_ACCESS_KEY, 0, null);
-        return mURL;
+    public static String getRealUrl(Context context, String url, boolean isLocation) {
+
+        if (isLocation) {
+            return url;
+        } else {
+            String filename = url.substring(url.lastIndexOf('/') + 1);
+            return BmobProFile.getInstance(context).signURL(filename, url, Contants.BMOB_APP_ACCESS_KEY, 0, null);
+
+        }
     }
 }

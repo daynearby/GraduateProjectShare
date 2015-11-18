@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.young.utils.LogUtils;
+
 import java.util.List;
 
 /**

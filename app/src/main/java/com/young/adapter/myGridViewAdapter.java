@@ -16,7 +16,9 @@ import com.bm.library.PhotoView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.young.config.Contants;
 import com.young.share.R;
+import com.young.utils.ImageHandlerUtils;
 import com.young.utils.LogUtils;
+import com.young.utils.NetworkUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,7 @@ public class myGridViewAdapter extends BaseAdapter {
     private String imageUrl;
     private boolean isUpload = false;
     private GridView gv;
-//    private boolean isFirstSet = true;
+    private boolean isLocation = true;
 
     /**
      * 设置是否是上传图片,
@@ -60,9 +62,10 @@ public class myGridViewAdapter extends BaseAdapter {
      *
      * @param datas
      */
-    public void setDatas(List<String> datas) {
+    public void setDatas(List<String> datas,boolean isLocation) {
 
         this.data = datas;
+        this.isLocation = isLocation;
 
 //        if (data != null) {
 //            for (String s : data) {
@@ -154,7 +157,7 @@ public class myGridViewAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = myinflater.inflate(R.layout.item_gridview, parent, false);
 
-            holder.imageView = (PhotoView) convertView.findViewById(R.id.im_gridview_item);
+            holder.imageView = (ImageView) convertView.findViewById(R.id.im_gridview_item);
             holder.isUpload = (ImageView) convertView.findViewById(R.id.im_gridview_item_dele);
 
             convertView.setTag(holder);
@@ -178,32 +181,17 @@ public class myGridViewAdapter extends BaseAdapter {
                 holder.isUpload.setVisibility(View.INVISIBLE);
             }
 
-            if (data.size() > Contants.IMAGENUMBER) {
-                data.remove(data.size() - 1);
-            }
+//            if (data.size() > Contants.IMAGENUMBER) {
+//                data.remove(data.size() - 1);
+//            }
 
-// 禁用图片缩放功能 (默认为禁用，会跟普通的ImageView一样，缩放功能需手动调用enable()启用)
-            holder.imageView.disenable();
+
 //            holder.imageView.enable();
         } else {
             holder.isUpload.setVisibility(View.GONE);
-// 启用图片缩放功能
-            holder.imageView.enable();
+
         }
-// TODO: 15/10/10 图片查看,以及连续查看多张图片,左右拖动
 
-
-// 获取图片信息
-        Info info = holder.imageView.getInfo();
-// 从一张图片信息变化到现在的图片，用于图片点击后放大浏览，具体使用可以参照demo的使用
-        holder.imageView.animaFrom(info);
-// 从现在的图片变化到所给定的图片信息，用于图片放大后点击缩小到原来的位置，具体使用可以参照demo的使用
-        holder.imageView.animaTo(info, new Runnable() {
-            @Override
-            public void run() {
-                //动画完成监听
-            }
-        });
 
 
         GridView gv = (GridView) parent;
@@ -217,7 +205,7 @@ public class myGridViewAdapter extends BaseAdapter {
 
         holder.imageView.setLayoutParams(params);
 
-        ImageLoader.getInstance().displayImage(imageUrl, holder.imageView);
+        ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(mactivity, imageUrl,isLocation), holder.imageView, ImageHandlerUtils.imageloaderOption());
 
 
         return convertView;
@@ -226,7 +214,7 @@ public class myGridViewAdapter extends BaseAdapter {
 
 
     private class ViewHolder {
-        public PhotoView imageView;
+        public ImageView imageView;
         public ImageView isUpload;
 
     }

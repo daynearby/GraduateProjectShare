@@ -29,7 +29,7 @@ import com.young.base.ItemActBarActivity;
 import com.young.config.Contants;
 import com.young.model.ShareMessage_HZ;
 import com.young.myCallback.GoToUploadImages;
-import com.young.network.ResetApi;
+import com.young.network.BmobApi;
 import com.young.utils.DisplayUtils;
 import com.young.utils.EmotionUtils;
 import com.young.utils.ImageHandlerUtils;
@@ -114,7 +114,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
         popupWinListView = new PopupWinListView(this, tagList,false);
         gridViewAdapter = new myGridViewAdapter(this, gv_img, true);
-        gridViewAdapter.setDatas(null);
+        gridViewAdapter.setDatas(null,true);
 
         gv_img.setAdapter(gridViewAdapter);
 
@@ -171,7 +171,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                             }
                         }
 
-                        gridViewAdapter.setDatas(list);
+                        gridViewAdapter.setDatas(list,true);
                     }
 
                     //删除草稿
@@ -312,7 +312,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                     }
 
                     //图片路径
-                    gridViewAdapter.setDatas(mSelectPath);
+                    gridViewAdapter.setDatas(mSelectPath,true);
                 }
 
 
@@ -406,8 +406,8 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                 shareMessage_hz.setShLocation(locationInfo);
                 shareMessage_hz.setUserId(mUser);
                 shareMessage_hz.setShCommNum(0);
-                shareMessage_hz.setShVisitedNum(0);
-                shareMessage_hz.setShWantedNum(0);
+                shareMessage_hz.setShVisitedNum(new ArrayList<String>());
+                shareMessage_hz.setShWantedNum(new ArrayList<String>());
 
                 if (lists != null && !lists.isEmpty()) {//有上传图片的
 
@@ -415,7 +415,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                     for (int i = 0; i < lists.size(); i++) {
                         files[i] = lists.get(i);
                     }
-                    ResetApi.UploadFiles(mActivity, files, Contants.IMAGE_TYPE_SHARE, new GoToUploadImages() {
+                    BmobApi.UploadFiles(mActivity, files, Contants.IMAGE_TYPE_SHARE, new GoToUploadImages() {
                         @Override
                         public void Result(boolean isFinish, String[] urls) {
 
@@ -504,7 +504,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         content_et.setText("");
         shareLocation_tv.setText("");
         tag_tv.setText("");
-        gridViewAdapter.setDatas(null);
+        gridViewAdapter.setDatas(null,true);
 
     }
 

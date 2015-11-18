@@ -1,5 +1,7 @@
 package com.young.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import cn.bmob.v3.BmobObject;
 
 /**

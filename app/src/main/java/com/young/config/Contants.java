@@ -21,14 +21,19 @@ public class Contants {
     public static final String SH_PWD = "pwd";
     //*******************字符串长度**************************
     public static final int PWD_LENGHT = 6;
-    public static final int NICKNAME_MIN_LENGHT=2;
-    public static final int NICKNAME_MAX_LENGHT=12;
+    public static final int NICKNAME_MIN_LENGHT = 2;
+    public static final int NICKNAME_MAX_LENGHT = 12;
 
 
     //*************************** Bmob key *****************
 
     public static final String BMOB_APP_KEY = "52f47fe363ec6e189700adf5b51e58ed";
     public static final String BMOB_APP_ACCESS_KEY = "cf5d7486b89a2ad072047b2cb8d4396c";
+    public static final String BMOB_APP_REST_KEY = "15ef57525ecb26c77323665e3a2ca59f";
+    public static final String REST_APP_KEY = "X-Bmob-Application-Id";
+    public static final String REST_APP_REST_KEY = "X-Bmob-REST-API-Key";
+    public static final String BMOB_MAIN_URL = "https://api.bmob.cn/1/classes/";
+
 
     //******************************Mob key*******************************
     public static final String SMS_APP_KEY = "b63b43f91a14";
@@ -39,6 +44,7 @@ public class Contants {
     public static final String FILE_HEAD = "file://";
 
     public static final String LAST_ADD_IMG = "drawable://" + R.drawable.icon_addimg;
+    public static final String DEFAULT_AVATAR = "drawable://" + R.drawable.icon_avatar;
 
     public static final String IMAGE_PATH_AND_NAME = "/image/cropped.jpeg";
     public static final String DOWNLOAD_PATH = "share/images/";
@@ -79,9 +85,14 @@ public class Contants {
     public static final int IMAGE_TYPE_SHARE = 100;
     public static final int IMAGE_TYPE_AVATAR = 101;
     public static final int IAMGE_MAX_WIDTH = 1000;
+    public static final int IMAGE_MIN_SIZE = 200;
 
     //**************************性别************************************
     public static final String GENDER_MALE = "男";
     public static final String GENDER_FEMALE = "女";
+
+    //**********************网络请求 常量***************************
+    public static final int PAGER_NUMBER = 50;//一次请求的数据条数，与云端代码相符
+    public static final String SKIP = "skip";//请求参数
 
 }
