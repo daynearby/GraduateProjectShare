@@ -4,13 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 
 import com.young.adapter.WellcomePagerAdapter;
+import com.young.annotation.InjectView;
+import com.young.base.BasePopupWin;
 import com.young.share.R;
 import com.young.utils.DisplayUtils;
 
@@ -19,15 +18,13 @@ import java.util.List;
 
 /**
  * 图片查看
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-11-18.
  */
-public class PopupWinImageBrowser extends PopupWindow {
-    private Context context;
-    private View view;
+public class PopupWinImageBrowser extends BasePopupWin {
+
     private ViewPager viewPager;
-    private List<View> list;
-    private LayoutInflater inflater;
+    private List<View>  view_list = new ArrayList<>();
     private List<String> im_url;
 
     private int[] pager = new int[]{R.layout.image_pager_one, R.layout.image_pager_two,
@@ -43,31 +40,38 @@ public class PopupWinImageBrowser extends PopupWindow {
 
     public PopupWinImageBrowser(Context context) {
         super(context);
-        this.context = context;
 
+
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.content_popup_window_iamge_brower;
+    }
+
+    @Override
+    protected void init() {
         initSize();
     }
 
     private void initSize() {
-        inflater = LayoutInflater.from(context);
-        view = inflater.inflate(R.layout.content_popup_window_iamge_brower, null);
         setContentView(view);
-        setWidth(DisplayUtils.getScreenWidthPixels((Activity) context)+10);
-        setHeight(DisplayUtils.getScreenHeightPixels((Activity) context)+10);
+        setWidth(DisplayUtils.getScreenWidthPixels((Activity) context) + 10);
+        setHeight(DisplayUtils.getScreenHeightPixels((Activity) context) + 10);
 //        setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
 //        setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-        setFocusable(true);
 
     }
 
-    private void findView() {
+    protected void findView(){}
+    private void findViews() {
 //        im_browser = new PhotoView[im_url.size()];
         im_indictor = new ImageView[im_url.size() + 1];
 
-        list = new ArrayList<>();
+
 
         for (int i = 0; i < im_url.size(); i++) {
-            list.add(inflater.inflate(pager[i], null));
+            view_list.add(inflater.inflate(pager[i], null));
             im_indictor[i] = (ImageView) view.findViewById(indictor[i]);
             im_indictor[i].setVisibility(View.VISIBLE);
             // 启用图片缩放功能
@@ -91,7 +95,7 @@ public class PopupWinImageBrowser extends PopupWindow {
  */
 
 
-        WellcomePagerAdapter myPagerAdapter = new WellcomePagerAdapter(context, list);
+        WellcomePagerAdapter myPagerAdapter = new WellcomePagerAdapter(context, view_list);
         myPagerAdapter.setData(im_url);
         viewPager = (ViewPager) view.findViewById(R.id.vp_popupwindow_image_brower);
         viewPager.setAdapter(myPagerAdapter);
@@ -99,7 +103,8 @@ public class PopupWinImageBrowser extends PopupWindow {
 
     }
 
-    private void bindData() {
+    @Override
+    protected void bindData() {
 
 
 //        for (int i = 0; i < im_url.size(); i++) {
@@ -114,7 +119,7 @@ public class PopupWinImageBrowser extends PopupWindow {
      */
     public void setData(List<String> im_url) {
         this.im_url = im_url;
-        findView();
+        findViews();
         bindData();
     }
 
@@ -132,8 +137,9 @@ public class PopupWinImageBrowser extends PopupWindow {
      *
      * @param v
      */
+    @Override
     public void onShow(View v) {
-        showAtLocation(v, Gravity.CENTER, -20, -10);
+        showAtLocation(v, Gravity.CENTER, -10, -10);
     }
 
 

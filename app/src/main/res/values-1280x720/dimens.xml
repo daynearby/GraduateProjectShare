@@ -13,12 +13,15 @@
     <dimen name="textSizeMediu">18sp</dimen>
     <dimen name="textSizeLarge">22sp</dimen>
     <dimen name="textSizeXLarge">28sp</dimen>
+    <dimen name="textSizeXXLarge">42sp</dimen>
 
     <dimen name="micro">2dp</dimen>
     <dimen name="radius">10dp</dimen>
+    <dimen name="radius_mic">4dp</dimen>
 
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
+    <dimen name="maginMediu">35dp</dimen>
 </resources>

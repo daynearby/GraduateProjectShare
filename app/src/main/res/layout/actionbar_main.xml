@@ -17,7 +17,6 @@
         style="@style/actionbar_text"
         android:layout_alignBottom="@id/tv_actionbar_titile"
         android:layout_toLeftOf="@id/tv_actionbar_titile"
-        android:paddingLeft="0dp"
         android:text="@string/tag_manywanttogo"
         android:textColor="@drawable/sele_text_color_def_white_light_gray"
         android:textSize="@dimen/textSizeMediu" />

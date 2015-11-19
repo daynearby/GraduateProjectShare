@@ -26,7 +26,7 @@ public class ActivityResult {
     private static File imageFilePath;
     //    private Context context;
     //定义输出的宽高
-    private static final int size_nromal = 250;
+    private static final int size_nromal = 400;
     //输出照片的宽\高.默认是250*250,不会进行放大图片,如果图片最小边没有1500像素,那么就娶最小边的宽高
     private static final int size_large = 1500;
     private static Uri imguri;//裁剪好的照片uri

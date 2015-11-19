@@ -16,23 +16,26 @@ import com.young.model.ShareMessage_HZ;
 import com.young.model.User;
 import com.young.share.R;
 import com.young.utils.ImageHandlerUtils;
+import com.young.utils.LogUtils;
 import com.young.utils.StringUtils;
 import com.young.views.PopupWinImageBrowser;
+import com.young.views.PopupWinUserInfo;
 
 import java.util.List;
 
 /**
  * 实例化
- * <p>
+ * <p/>
  * 父类中setdata并且刷新
- * <p>
- * <p>
+ * <p/>
+ * <p/>
  * Created by yangfujing on 15/10/10.
  */
-public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> implements View.OnClickListener {
+public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
 
     private GridView myGridview;
-    private ShareMessage_HZ shareMessage;
+//    private ShareMessage_HZ shareMessage;
+    private PopupWinUserInfo userInfo;
 
     /**
      * 实例化对象
@@ -46,7 +49,7 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> implement
 
     @Override
     public void convert(ViewHolder holder, ShareMessage_HZ shareMessage) {
-        this.shareMessage = shareMessage;
+//        this.shareMessage = shareMessage;
         User user = shareMessage.getUserId();
 
         ImageView avatar = holder.getView(R.id.id_im_userH);//用户头像
@@ -57,6 +60,7 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> implement
         TextView wanto_tv = holder.getView(R.id.id_tx_wantogo);//想去数量
         TextView hadgo_tv = holder.getView(R.id.id_hadgo);//去过数量
         TextView comment_tv = holder.getView(R.id.id_tx_comment);//评论数量
+        ((TextView) holder.getView(R.id.tv_item_share_main_created_at)).setText(shareMessage.getCreatedAt());//创建时间
 
         myGridViewAdapter gridViewAdapter = new myGridViewAdapter((Activity) ctx, myGridview, false);
         myGridview.setAdapter(gridViewAdapter);
@@ -66,23 +70,24 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> implement
         content_tv.setText(StringUtils.getEmotionContent(
                 ctx, content_tv, TextUtils.isEmpty(shareMessage.getShContent()) ? "" : shareMessage.getShContent()));
 
-        nickname_tv.setText(TextUtils.isEmpty(shareMessage.getNickName()) ? "" : shareMessage.getNickName());
+        nickname_tv.setText(TextUtils.isEmpty(user.getNickName()) ? "" : user.getNickName());
 
         ImageHandlerUtils.loadIamge(ctx,
-                TextUtils.isEmpty(user.getAvatar()) ? Contants.DEFAULT_AVATAR : user.getAvatar(), avatar,false);
+                TextUtils.isEmpty(user.getAvatar()) ? Contants.DEFAULT_AVATAR : user.getAvatar(), avatar, false);
 
         tag_tv.setText(shareMessage.getShTag());
         wanto_tv.setText(shareMessage.getShWantedNum() == null ? "0" : String.valueOf(shareMessage.getShWantedNum().size()));
         hadgo_tv.setText(shareMessage.getShVisitedNum() == null ? "0" : String.valueOf(shareMessage.getShVisitedNum().size()));
         comment_tv.setText(String.valueOf(shareMessage.getShCommNum()));
-        gridViewAdapter.setDatas(shareMessage.getShImgs(),false);
+        gridViewAdapter.setDatas(shareMessage.getShImgs(), false);
         myGridview.setOnItemClickListener(new itemClick(shareMessage.getShImgs()));
 
-        nickname_tv.setOnClickListener(this);
-        avatar.setOnClickListener(this);
-        wanto_tv.setOnClickListener(this);
-        hadgo_tv.setOnClickListener(this);
-        comment_tv.setOnClickListener(this);
+        nickname_tv.setOnClickListener(new click(user));
+        avatar.setOnClickListener(new click(user));
+        wanto_tv.setOnClickListener(new click(shareMessage));
+        hadgo_tv.setOnClickListener(new click(shareMessage));
+        comment_tv.setOnClickListener(new click(shareMessage));
+        tag_tv.setOnClickListener(new click(shareMessage.getShTag()));
     }
 
     @Override
@@ -90,28 +95,42 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> implement
         return R.layout.item_share_main;
     }
 
+    private class click implements View.OnClickListener {
 
-    @Override
-    public void onClick(View v) {
+        private Object o;
 
-        switch (v.getId()) {
-            case R.id.id_im_userH | R.id.id_userName://用户资料
+        public click(Object o) {
+            this.o = o;
+        }
 
+        @Override
+        public void onClick(View v) {
+
+            switch (v.getId()) {
+                case R.id.id_im_userH ://用户资料
+                    User u = (User) o;
+                    userInfo = new PopupWinUserInfo(ctx, u);
+                    userInfo.onShow(v);
+                    LogUtils.logD("用户资料 = "+u.toString());
 //// TODO: 2015-11-15 查看用户资料
-                break;
+                    break;
 
-            case R.id.id_tx_wantogo://想去--数量
+                case R.id.id_tx_wantogo://想去--数量
 
-                break;
+                    break;
 
-            case R.id.id_hadgo://去过--数量
+                case R.id.id_hadgo://去过--数量
 
-                break;
+                    break;
 
-            case R.id.id_tx_comment://评论数量
+                case R.id.id_tx_comment://评论数量
 
-                break;
+                    break;
+                case R.id.id_tx_tab://标签
 
+                    break;
+
+            }
         }
     }
 

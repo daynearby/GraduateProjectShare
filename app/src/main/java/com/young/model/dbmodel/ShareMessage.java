@@ -10,7 +10,7 @@ import java.util.List;
 public class ShareMessage extends DBModel {
 
 
-
+    private User userId;
     private String shContent;
     private List<String> shImgs;
     private String shLocation;
@@ -18,6 +18,14 @@ public class ShareMessage extends DBModel {
     private int shWantedNum;
     private int shVisitedNum;
     private int shCommNum;
+
+    public User getUserId() {
+        return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
+    }
 
     public void setShContent(String shContent) {
         this.shContent = shContent;

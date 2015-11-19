@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_content_popupwin_user_info_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/trans_back_bg"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layout_content_popupwin_user_info_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2">
+
+            <ImageView
+                android:id="@+id/im_content_popupwin_user_info_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_avatar" />
+
+            <TextView
+                android:id="@+id/tv_content_popupwin_user_info_signture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="center_horizontal"
+                android:text="@string/user_info_hint_enjoy_life"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeMediu" />
+
+            <TextView
+                android:id="@+id/tv_content_popupwin_user_info_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/tv_content_popupwin_user_info_signture"
+                android:layout_centerHorizontal="true"
+                android:drawablePadding="@dimen/paddingMic"
+                android:drawableRight="@drawable/icon_female"
+                android:paddingLeft="@dimen/paddingMic"
+                android:text="@string/user_name_defual"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeXLarge" />
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="@dimen/paddingMic"
+            android:layout_marginRight="@dimen/paddingMic"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/layout_content_popupwin_user_info_qq"
+                style="@style/linearLayout_h"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/text_style_match"
+                    android:layout_weight="3.5"
+                    android:gravity="center_horizontal"
+                    android:text="@string/qq"
+                    android:textSize="@dimen/textSizeMediu" />
+
+                <TextView
+                    android:id="@+id/tv_content_popupwin_user_info_qq"
+                    style="@style/bar_text"
+                    android:layout_weight="1"
+                    android:padding="@dimen/paddingMic"
+                    android:singleLine="true"
+                    android:text="@string/qq_default"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textSizeMediu" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_content_popupwin_user_info_email"
+                style="@style/linearLayout_h"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/text_style_match"
+                    android:layout_weight="3.5"
+                    android:gravity="center_horizontal"
+                    android:text="@string/email"
+                    android:textSize="@dimen/textSizeMediu" />
+
+                <TextView
+                    android:id="@+id/tv_content_popupwin_user_info_email"
+                    style="@style/bar_text"
+                    android:layout_weight="1"
+                    android:padding="@dimen/paddingMic"
+                    android:singleLine="true"
+                    android:text="@string/email_default"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textSizeMediu" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_content_popupwin_user_info_hometwon"
+                style="@style/linearLayout_h"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/text_style_match"
+                    android:layout_weight="3.5"
+                    android:gravity="center_horizontal"
+                    android:text="@string/hometown"
+                    android:textSize="@dimen/textSizeMediu" />
+
+                <TextView
+                    android:id="@+id/tv_content_popupwin_user_info_hometown"
+                    style="@style/text_style_match"
+                    android:layout_weight="1"
+                    android:padding="@dimen/paddingMic"
+                    android:text="@string/hz"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textSizeMediu" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -9,8 +9,6 @@ import com.young.adapter.DiscoListViewAdapter;
 import com.young.base.BasePager;
 import com.young.config.Contants;
 import com.young.model.ShareMessageList;
-import com.young.model.ShareMessage_HZ;
-import com.young.model.dbmodel.ShareMessage;
 import com.young.myCallback.GotoAsyncFunction;
 import com.young.myCallback.ListViewRefreshListener;
 import com.young.network.BmobApi;
@@ -20,8 +18,6 @@ import com.young.utils.LogUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
 
 /**
  * 发现
@@ -106,7 +102,7 @@ public class DiscoverPager extends BasePager {
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }
-         );
+        );
 
 
     }

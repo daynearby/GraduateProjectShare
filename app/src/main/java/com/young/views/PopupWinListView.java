@@ -12,9 +12,9 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.young.base.BasePopupWin;
 import com.young.share.R;
 import com.young.utils.DisplayUtils;
 
@@ -25,49 +25,44 @@ import java.util.List;
  * 弹窗，实现输入、保存草稿
  * Created by Nearby Yang on 2015-10-22.
  */
-public class PopupWinListView extends PopupWindow {
+public class PopupWinListView extends BasePopupWin {
 
-    private Context ctx;
-    private View view;
-    private List<String> datas;
     private ListView listview;
     private mAdapter adapter;
     private onItemClick listener;
-    private boolean selectHometown = false;
+//    public boolean selectHometown = false;
+//    public List<String> datas;
 
     public PopupWinListView(Context ctx, List<String> datas, boolean selectHometown) {
-        this.ctx = ctx;
-        this.datas = datas;
-        this.selectHometown = selectHometown;
-
-        init();
-        //初始化控件
-        findViews();
+       super(ctx,datas,selectHometown);
 
     }
 
-    private void init() {
-        int layoutId;
+    @Override
+    protected int getLayoutId() {
+        return selectHometown? R.layout.content_popup_window_list_bottom:R.layout.content_popup_window_list_top;
+    }
 
-        if (selectHometown){
-            layoutId=R.layout.content_popup_window_list_bottom;
-        }else {
-            layoutId=R.layout.content_popup_window_list_top;
-        }
+    @Override
+    protected void init() {
 
-        view = LayoutInflater.from(ctx).inflate(layoutId, null);
-        setContentView(view);
-        setWidth(DisplayUtils.getScreenWidthPixels((Activity) ctx) / 2);
+        setWidth(DisplayUtils.getScreenWidthPixels((Activity) context) / 2);
         if (datas.size() > 4) {
-            setHeight(DisplayUtils.getScreenHeightPixels((Activity) ctx) / 2);
+            setHeight(DisplayUtils.getScreenHeightPixels((Activity) context) / 2);
         } else {
             setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         }
-        setFocusable(true);
+
         setOutsideTouchable(true);
 
         setBackgroundDrawable(new BitmapDrawable());
 
+
+    }
+
+
+    @Override
+    protected void bindData() {
 
     }
 
@@ -87,7 +82,8 @@ public class PopupWinListView extends PopupWindow {
     /**
      * 初始化控件
      */
-    private void findViews() {
+    @Override
+    protected void findView() {
         listview = (ListView) view.findViewById(R.id.lsv_contnet_popupwindow);
         adapter = new mAdapter();
 
@@ -108,12 +104,13 @@ public class PopupWinListView extends PopupWindow {
 
     }
 
+    @Override
     public void onShow(View v) {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            int offsetPx = (DisplayUtils.getScreenWidthPixels((Activity) ctx) - v.getWidth()) / 2;
-            int offsetPx2dp = DisplayUtils.px2dp(ctx, offsetPx);
+            int offsetPx = (DisplayUtils.getScreenWidthPixels((Activity) context) - v.getWidth()) / 2;
+            int offsetPx2dp = DisplayUtils.px2dp(context, offsetPx);
             showAsDropDown(v, -offsetPx2dp, 0, Gravity.CENTER);
         } else {
 
@@ -126,7 +123,7 @@ public class PopupWinListView extends PopupWindow {
 //            int x = location[0];
 //            int y = location[1];
 //            LogUtils.logE(" v x = " + x + " y = " + y);
-            int widthDp = DisplayUtils.px2dp(ctx, v.getWidth()) / 2;
+            int widthDp = DisplayUtils.px2dp(context, v.getWidth()) / 2;
 
 
 //            showAtLocation(v, Gravity.NO_GRAVITY, x-v.getWidth(),y+v.getHeight());
@@ -189,7 +186,7 @@ public class PopupWinListView extends PopupWindow {
 
             if (convertView == null) {
                 holder = new ViewHolder();
-                convertView = LayoutInflater.from(ctx).inflate(R.layout.item_data_textview, parent, false);
+                convertView = LayoutInflater.from(context).inflate(R.layout.item_data_textview, parent, false);
 
                 holder.contentTv = (TextView) convertView.findViewById(R.id.tv_item_data);
                 holder.iconIm = (ImageView) convertView.findViewById(R.id.im_icon_item_data);

@@ -11,21 +11,16 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout.LayoutParams;
 
-import com.bm.library.Info;
-import com.bm.library.PhotoView;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.young.config.Contants;
 import com.young.share.R;
 import com.young.utils.ImageHandlerUtils;
-import com.young.utils.LogUtils;
-import com.young.utils.NetworkUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 需要传入图片的url
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-06-28.
  */
 public class myGridViewAdapter extends BaseAdapter {
@@ -62,7 +57,7 @@ public class myGridViewAdapter extends BaseAdapter {
      *
      * @param datas
      */
-    public void setDatas(List<String> datas,boolean isLocation) {
+    public void setDatas(List<String> datas, boolean isLocation) {
 
         this.data = datas;
         this.isLocation = isLocation;
@@ -149,7 +144,9 @@ public class myGridViewAdapter extends BaseAdapter {
 //        LogUtils.logE("position = " + position);
 
         ViewHolder holder = null;
-        imageUrl = data.get(position);
+        if (data != null) {
+            imageUrl = data.get(position);
+        }
 // TODO: 2015-11-12 get数据的时候偶尔会空指针
 
         if (convertView == null) {
@@ -193,7 +190,6 @@ public class myGridViewAdapter extends BaseAdapter {
         }
 
 
-
         GridView gv = (GridView) parent;
 
         int width = gv.getHorizontalSpacing();
@@ -205,7 +201,12 @@ public class myGridViewAdapter extends BaseAdapter {
 
         holder.imageView.setLayoutParams(params);
 
-        ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(mactivity, imageUrl,isLocation), holder.imageView, ImageHandlerUtils.imageloaderOption());
+        if (isLocation) {
+            ImageHandlerUtils.loadIamge(mactivity, imageUrl, holder.imageView, true);
+        } else {
+            ImageHandlerUtils.loadIamgeThumbnail(mactivity, imageUrl, holder.imageView);
+        }
+//        ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(mactivity, imageUrl,isLocation), holder.imageView, ImageHandlerUtils.imageloaderOption());
 
 
         return convertView;

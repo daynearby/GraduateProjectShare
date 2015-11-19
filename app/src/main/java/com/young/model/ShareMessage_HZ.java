@@ -1,7 +1,5 @@
 package com.young.model;
 
-import org.litepal.crud.DataSupport;
-
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
@@ -21,15 +19,6 @@ public class ShareMessage_HZ extends BmobObject {
     private List<String> shWantedNum;
     private List<String> shVisitedNum;
     private int shCommNum;
-    private String nickName;
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
 
     public User getUserId() {
         return userId;

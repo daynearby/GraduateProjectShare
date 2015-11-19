@@ -1,32 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_rectangle"
-    android:orientation="vertical">
+    android:layout_marginBottom="@dimen/paddingHit"
+    android:layout_marginLeft="@dimen/paddingMic"
+    android:layout_marginRight="@dimen/paddingMic"
+    android:layout_marginTop="@dimen/paddingHit"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/radius_mic">
 
-    <include layout="@layout/include_head" />
-
-    <TextView
-        android:id="@+id/id_tx_share_content"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxLines="3"
-        android:ellipsize="end"
-        android:padding="@dimen/paddingMic"
-        android:text="@string/defaul_share_text"
-        android:textSize="@dimen/abc_text_size_medium_material" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <com.young.views.WrapHightGridview
-        android:id="@+id/id_gv_shareimg"
-        style="@style/gridViwe"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:paddingLeft="@dimen/paddingMic"
-        android:paddingRight="@dimen/paddingMic"
-        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/paddingMic">
 
-    <include layout="@layout/include_bottom_bar" />
+            <include layout="@layout/include_head" />
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/id_tx_share_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:padding="@dimen/paddingMic"
+                android:text="@string/defaul_share_text"
+                android:textSize="@dimen/abc_text_size_medium_material" />
+
+            <com.young.views.WrapHightGridview
+                android:id="@+id/id_gv_shareimg"
+                style="@style/gridViwe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/paddingMic"
+                android:layout_marginLeft="@dimen/size40"
+                android:layout_marginRight="@dimen/size40"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_item_share_main_created_at"
+                style="@style/text_style_match"
+                android:gravity="right"
+                android:padding="@dimen/paddingMic"
+                android:text="@string/created_at" />
+
+
+        </LinearLayout>
+
+        <include layout="@layout/include_bottom_bar" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

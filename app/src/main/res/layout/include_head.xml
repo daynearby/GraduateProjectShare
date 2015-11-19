@@ -22,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:textColor="@drawable/sele_text_color_def_back"
             android:padding="@dimen/paddingMic"
             android:text="@string/user_name_defual"
             android:textSize="@dimen/textSizeLarge" />
@@ -40,16 +41,18 @@
             android:id="@+id/id_tx_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@drawable/sele_text_color_def_back"
             android:text="@string/tab_appoinment"
-            android:textSize="@dimen/abc_text_size_medium_material"
-            />
+            android:textSize="@dimen/abc_text_size_medium_material" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/paddingHit"
             android:layout_marginTop="@dimen/paddingMic"
             android:layout_toEndOf="@+id/id_tx_tab"
             android:layout_toRightOf="@+id/id_tx_tab"
+            android:scaleType="centerInside"
             android:src="@drawable/icon_tag_mini" />
     </RelativeLayout>
 

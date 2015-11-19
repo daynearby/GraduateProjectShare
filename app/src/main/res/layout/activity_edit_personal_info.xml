@@ -165,7 +165,27 @@
                 android:text="@string/hz"
                 android:textSize="@dimen/textSizeMediu" />
         </LinearLayout>
+        <LinearLayout
+            style="@style/linearLayout_h"
+            android:layout_marginTop="@dimen/paddingMediu">
+
+            <TextView
+                style="@style/text_style_match"
+                android:layout_weight="3.5"
+                android:gravity="center_horizontal"
+                android:text="@string/personal_signature"
+                android:textSize="@dimen/textSizeMediu" />
+
+            <EditText
+                style="@style/bar_text"
+                android:layout_weight="1"
+                android:hint="@string/et_activity_edit_personal_info_signature"
+                android:inputType="phone"
+                android:singleLine="true"
+                android:textSize="@dimen/textSizeMediu" />
+        </LinearLayout>
     </LinearLayout>
+
 
 
     <TextView

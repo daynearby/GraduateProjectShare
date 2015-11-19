@@ -86,6 +86,7 @@ public class Contants {
     public static final int IMAGE_TYPE_AVATAR = 101;
     public static final int IAMGE_MAX_WIDTH = 1000;
     public static final int IMAGE_MIN_SIZE = 200;
+    public static final int MODEL_ID = 1;
 
     //**************************性别************************************
     public static final String GENDER_MALE = "男";

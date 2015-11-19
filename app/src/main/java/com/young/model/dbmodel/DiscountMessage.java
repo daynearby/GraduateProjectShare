@@ -9,28 +9,35 @@ import java.util.List;
  */
 public class DiscountMessage extends DBModel {
 
-
+    private User userId;
     private String shContent;
     private List<String> shImgs;
     private String shLocation;
     private String shTag;
-    private int shWantedNum;
-    private int shVisitedNum;
+    private List<String> shWantedNum;
+    private List<String> shVisitedNum;
 
+    public User getUserId() {
+        return userId;
+    }
 
-    public int getShVisitedNum() {
+    public void setUserId(User userId) {
+        this.userId = userId;
+    }
+
+    public List<String> getShVisitedNum() {
         return shVisitedNum;
     }
 
-    public void setShVisitedNum(int shVisitedNum) {
+    public void setShVisitedNum(List<String> shVisitedNum) {
         this.shVisitedNum = shVisitedNum;
     }
 
-    public int getShWantedNum() {
+    public List<String> getShWantedNum() {
         return shWantedNum;
     }
 
-    public void setShWantedNum(int shWantedNum) {
+    public void setShWantedNum(List<String> shWantedNum) {
         this.shWantedNum = shWantedNum;
     }
 

@@ -9,16 +9,19 @@
     <dimen name="dp20">20dp</dimen>
 
     <dimen name="textSizeMicro">12sp</dimen>
-    <dimen name="textSizeSmall">14sp</dimen>
-    <dimen name="textSizeMediu">18sp</dimen>
-    <dimen name="textSizeLarge">22sp</dimen>
+    <dimen name="textSizeSmall">16sp</dimen>
+    <dimen name="textSizeMediu">20sp</dimen>
+    <dimen name="textSizeLarge">24sp</dimen>
     <dimen name="textSizeXLarge">28sp</dimen>
+    <dimen name="textSizeXXLarge">48sp</dimen>
 
     <dimen name="micro">4dp</dimen>
     <dimen name="radius">10dp</dimen>
+    <dimen name="radius_mic">5dp</dimen>
 
     <dimen name="app_bar_height">200dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
+    <dimen name="maginMediu">40dp</dimen>
 </resources>

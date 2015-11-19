@@ -106,4 +106,13 @@
     <string name="verify_mobilePhone_faile">验证手机号码失败\\n请稍候再试！</string>
     <string name="updating">更新中...</string>
     <string name="without_network">网络不通畅\n稍后有网络才能获取最新数据</string>
+    <string name="created_at">2015-11-19 11:16</string>
+    <string name="personal_signature">个性签名</string>
+    <string name="et_activity_edit_personal_info_signature">（推荐）签名不多于20个字符</string>
+    <string name="user_info_hint_enjoy_life">爱生活，享受生活</string>
+    <string name="qq_default">000000000</string>
+    <string name="email_default">00000000@qq.com</string>
+    <string name="tips_loading"><![CDATA[加载中&#8230;]]></string>
+    <string name="tips_loading_faile">加载失败，请稍候再试</string>
+    <string name="tips_loading_cancel">下载已取消</string>
 </resources>

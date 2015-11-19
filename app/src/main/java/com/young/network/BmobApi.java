@@ -3,6 +3,7 @@ package com.young.network;
 import android.content.Context;
 
 import com.bmob.BmobProFile;
+import com.bmob.btp.callback.ThumbnailListener;
 import com.bmob.btp.callback.UploadBatchListener;
 import com.google.gson.Gson;
 import com.young.config.Contants;
@@ -93,7 +94,7 @@ public class BmobApi {
      * @param file    文件地址，带file：//的
      * @param context
      */
-    public static void UploadFiles(Context context, String[] file, int type, final GoToUploadImages listener) {
+    public static void UploadFiles(final Context context, String[] file, int type, final GoToUploadImages listener) {
 
         String[] files = new String[file.length];
 
@@ -115,6 +116,12 @@ public class BmobApi {
             public void onSuccess(boolean isFinish, String[] fileNames, String[] urls, BmobFile[] files) {
                 if (listener != null) {
                     listener.Result(isFinish, urls);
+                }
+                if (isFinish) {
+                    for (String filename : fileNames) {
+                        setThumbnail(context, filename);
+                    }
+
                 }
 
                 // isFinish ：批量上传是否完成
@@ -146,4 +153,21 @@ public class BmobApi {
     }
 
 
+    private static void setThumbnail(Context context, String fileName) {
+        BmobProFile.getInstance(context).submitThumnailTask(fileName, Contants.MODEL_ID, new ThumbnailListener() {
+
+            @Override
+            public void onSuccess(String thumbnailName, String thumbnailUrl) {
+                //此处得到的缩略图地址（thumbnailUrl）不一定能够请求的到，此方法为异步方法
+                LogUtils.logD("thumbnailName = " + thumbnailName + " thumbnailUrl = " + thumbnailUrl);
+            }
+
+            @Override
+            public void onError(int statuscode, String errormsg) {
+                LogUtils.logE("setThumbnail faile  code = " + statuscode + "  errormsg = " + errormsg);
+            }
+        });
+    }
 }
+
+

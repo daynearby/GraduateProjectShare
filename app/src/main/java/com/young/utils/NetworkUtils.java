@@ -30,4 +30,16 @@ public class NetworkUtils {
 
         }
     }
+
+    /**
+     * 载入缩略图
+     *
+     * @param context
+     * @param url
+     * @return
+     */
+    public static String getRealUrl(Context context, String url){
+
+        return getRealUrl(context,url + "_" + Contants.MODEL_ID,false);
+    }
 }

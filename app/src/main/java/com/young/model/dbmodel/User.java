@@ -1,31 +1,17 @@
-package com.young.model;
-
-import cn.bmob.v3.BmobUser;
+package com.young.model.dbmodel;
 
 /**
- * user 类
- * Created by Nearby Yang on 2015-10-16.
+ * Created by Nearby Yang on 2015-11-19.
  */
-public class User extends BmobUser {
+public class User extends DBModel {
 
-
+    private String userId;
     private String address;
     private String avatar;
     private String qq;
     private int age;
     private boolean gender;
-    private String accessToken;
     private String signture;
-
-    private String nickName;
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
 
     public String getSignture() {
         return signture;
@@ -35,22 +21,13 @@ public class User extends BmobUser {
         this.signture = signture;
     }
 
-    public String getAccessToken() {
-        return accessToken;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
-
-    public boolean isGender() {
-        return gender;
-    }
-
-    public void setGender(boolean gender) {
-        this.gender = gender;
-    }
-
 
     public String getAddress() {
         return address;
@@ -83,4 +60,13 @@ public class User extends BmobUser {
     public void setAge(int age) {
         this.age = age;
     }
+
+    public boolean isGender() {
+        return gender;
+    }
+
+    public void setGender(boolean gender) {
+        this.gender = gender;
+    }
+
 }
