@@ -14,7 +14,6 @@ public class User extends BmobUser {
     private String qq;
     private int age;
     private boolean gender;
-    private String accessToken;
     private String signture;
 
     private String nickName;
@@ -35,13 +34,6 @@ public class User extends BmobUser {
         this.signture = signture;
     }
 
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
 
     public boolean isGender() {
         return gender;

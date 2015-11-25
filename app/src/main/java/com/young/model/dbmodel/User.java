@@ -5,13 +5,66 @@ package com.young.model.dbmodel;
  */
 public class User extends DBModel {
 
-    private String userId;
     private String address;
     private String avatar;
     private String qq;
     private int age;
     private boolean gender;
     private String signture;
+    private String email;
+    private String mobilePhoneNumber;
+    private boolean mobilePhoneNumberVerified;
+    private String nickName;
+    private boolean emailVerified;
+    private String username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public boolean isMobilePhoneNumberVerified() {
+        return mobilePhoneNumberVerified;
+    }
+
+    public void setMobilePhoneNumberVerified(boolean mobilePhoneNumberVerified) {
+        this.mobilePhoneNumberVerified = mobilePhoneNumberVerified;
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getMobilePhoneNumber() {
+        return mobilePhoneNumber;
+    }
+
+    public void setMobilePhoneNumber(String mobilePhoneNumber) {
+        this.mobilePhoneNumber = mobilePhoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getSignture() {
         return signture;
@@ -21,13 +74,6 @@ public class User extends DBModel {
         this.signture = signture;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public String getAddress() {
         return address;

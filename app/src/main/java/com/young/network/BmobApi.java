@@ -8,8 +8,8 @@ import com.bmob.btp.callback.UploadBatchListener;
 import com.google.gson.Gson;
 import com.young.config.Contants;
 import com.young.model.BaseModel;
-import com.young.myCallback.GoToUploadImages;
-import com.young.myCallback.GotoAsyncFunction;
+import com.young.myInterface.GoToUploadImages;
+import com.young.myInterface.GotoAsyncFunction;
 import com.young.utils.LogUtils;
 
 import org.json.JSONObject;

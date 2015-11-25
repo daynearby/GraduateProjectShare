@@ -1,5 +1,6 @@
 package com.young.model;
 
+
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
@@ -9,7 +10,7 @@ import cn.bmob.v3.BmobObject;
  * <p>
  * Created by Nearby Yang on 2015-10-16.
  */
-public class ShareMessage_HZ extends BmobObject {
+public class ShareMessage_HZ extends BmobObject{
 
     private User userId;
     private String shContent;

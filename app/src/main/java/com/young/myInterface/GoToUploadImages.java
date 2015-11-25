@@ -1,8 +1,4 @@
-package com.young.myCallback;
-
-import android.content.Intent;
-
-import java.util.List;
+package com.young.myInterface;
 
 /**
  * 选择照片回调函数

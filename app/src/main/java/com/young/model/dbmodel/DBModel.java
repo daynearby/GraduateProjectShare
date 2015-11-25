@@ -14,7 +14,6 @@ public class DBModel extends DataSupport implements Serializable {
 
     private int id;
     private String objectId;
-
     private String accessToken;
     private String createdAt;
     private String updatedAt;

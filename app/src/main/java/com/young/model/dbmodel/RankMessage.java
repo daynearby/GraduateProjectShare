@@ -9,6 +9,7 @@ public class RankMessage extends DBModel {
 
     private User userId;
     private String shContent;
+
     private List<String> shImgs;
     private String shLocation;
     private String shTag;

@@ -1,6 +1,7 @@
 package com.young.share.ViewPager;
 
 import android.content.Context;
+import android.os.Message;
 import android.view.View;
 
 import com.young.base.BasePager;
@@ -21,6 +22,11 @@ public class DiscountPager extends BasePager {
 
     @Override
     public void bindData() {
+
+    }
+
+    @Override
+    public void handler(Message msg) {
 
     }
 }

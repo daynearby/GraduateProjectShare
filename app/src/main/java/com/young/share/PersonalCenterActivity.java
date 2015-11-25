@@ -25,7 +25,7 @@ import com.young.annotation.InjectView;
 import com.young.base.BaseAppCompatActivity;
 import com.young.config.Contants;
 import com.young.model.User;
-import com.young.myCallback.GoToUploadImages;
+import com.young.myInterface.GoToUploadImages;
 import com.young.network.BmobApi;
 import com.young.utils.DisplayUtils;
 import com.young.utils.ImageHandlerUtils;

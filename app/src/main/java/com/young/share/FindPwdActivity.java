@@ -12,7 +12,7 @@ import com.young.annotation.InjectView;
 import com.young.base.CustomActBarActivity;
 import com.young.config.Contants;
 import com.young.model.User;
-import com.young.myCallback.GotoAsyncFunction;
+import com.young.myInterface.GotoAsyncFunction;
 import com.young.network.BmobApi;
 import com.young.utils.LogUtils;
 

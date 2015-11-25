@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import com.young.adapter.MainPagerAdapter;
 import com.young.base.CustomActBarActivity;
+import com.young.config.ApplicationConfig;
 import com.young.config.Contants;
 import com.young.model.MyBmobInstallation;
 import com.young.model.User;
@@ -429,5 +430,6 @@ public class MainActivity extends CustomActBarActivity {
         if (isRegistBordcast) {
             unregisterReceiver(mBroadcastReceiver);
         }
+        ApplicationConfig.getInstance().getThreadInstance().stop();
     }
 }

@@ -2,7 +2,6 @@ package com.young.adapter;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -62,7 +61,7 @@ public class WellcomePagerAdapter extends PagerAdapter {
 //                            //动画完成监听
 //                        }
 //                    });
-                    ImageHandlerUtils.loadIamge(ctx, urlList.get(0), photo0);
+                    ImageHandlerUtils.loadIamge(ctx, urlList.get(0), photo0, false);
                     break;
                 case 1:
                     PhotoView photo1 = (PhotoView) view.findViewById(R.id.im_image_pager_two);
@@ -72,7 +71,7 @@ public class WellcomePagerAdapter extends PagerAdapter {
 // 从一张图片信息变化到现在的图片，用于图片点击后放大浏览，具体使用可以参照demo的使用
                     photo1.animaFrom(info1);
 
-                    ImageHandlerUtils.loadIamge(ctx, urlList.get(1), photo1);
+                    ImageHandlerUtils.loadIamge(ctx, urlList.get(1), photo1, false);
                     break;
                 case 2:
                     PhotoView photo2 = (PhotoView) view.findViewById(R.id.im_image_pager_three);
@@ -83,7 +82,7 @@ public class WellcomePagerAdapter extends PagerAdapter {
                     photo2.animaFrom(info);
 
 
-                    ImageHandlerUtils.loadIamge(ctx, urlList.get(2), photo2);
+                    ImageHandlerUtils.loadIamge(ctx, urlList.get(2), photo2, false);
                     break;
                 case 3:
                     PhotoView photo3 = (PhotoView) view.findViewById(R.id.im_image_pager_four);
@@ -93,7 +92,7 @@ public class WellcomePagerAdapter extends PagerAdapter {
 // 从一张图片信息变化到现在的图片，用于图片点击后放大浏览，具体使用可以参照demo的使用
                     photo3.animaFrom(info3);
 
-                    ImageHandlerUtils.loadIamge(ctx, urlList.get(3), photo3);
+                    ImageHandlerUtils.loadIamge(ctx, urlList.get(3), photo3, false);
                     break;
                 case 4:
                     PhotoView photo4 = (PhotoView) view.findViewById(R.id.im_image_pager_five);
@@ -103,7 +102,7 @@ public class WellcomePagerAdapter extends PagerAdapter {
 // 从一张图片信息变化到现在的图片，用于图片点击后放大浏览，具体使用可以参照demo的使用
                     photo4.animaFrom(info4);
 
-                    ImageHandlerUtils.loadIamge(ctx, urlList.get(4), photo4);
+                    ImageHandlerUtils.loadIamge(ctx, urlList.get(4), photo4, false);
                     break;
                 case 5:
                     PhotoView photo5 = (PhotoView) view.findViewById(R.id.im_image_pager_six);
@@ -113,7 +112,7 @@ public class WellcomePagerAdapter extends PagerAdapter {
 // 从一张图片信息变化到现在的图片，用于图片点击后放大浏览，具体使用可以参照demo的使用
                     photo5.animaFrom(info5);
 
-                    ImageHandlerUtils.loadIamge(ctx, urlList.get(5), photo5);
+                    ImageHandlerUtils.loadIamge(ctx, urlList.get(5), photo5, false);
 
                     break;
             }

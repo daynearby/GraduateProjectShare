@@ -5,10 +5,11 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.young.adapter.WellcomePagerAdapter;
-import com.young.annotation.InjectView;
 import com.young.base.BasePopupWin;
 import com.young.share.R;
 import com.young.utils.DisplayUtils;
@@ -24,7 +25,7 @@ import java.util.List;
 public class PopupWinImageBrowser extends BasePopupWin {
 
     private ViewPager viewPager;
-    private List<View>  view_list = new ArrayList<>();
+    private List<View> view_list = new ArrayList<>();
     private List<String> im_url;
 
     private int[] pager = new int[]{R.layout.image_pager_one, R.layout.image_pager_two,
@@ -55,19 +56,33 @@ public class PopupWinImageBrowser extends BasePopupWin {
     }
 
     private void initSize() {
-        setContentView(view);
-        setWidth(DisplayUtils.getScreenWidthPixels((Activity) context) + 10);
-        setHeight(DisplayUtils.getScreenHeightPixels((Activity) context) + 10);
+        int width = DisplayUtils.getScreenWidthPixels((Activity) context);
+        int height = DisplayUtils.getScreenHeightPixels((Activity) context);
+        setWidth(width + 10);
+        setHeight(height + 10);
+//        RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.layout_content_window_image_brower);
+//        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(width, height);
+//        layoutParams.height = ;
+//        layoutParams.width = ;
+//
+//        relativeLayout.setLayoutParams(layoutParams);
+//        relativeLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dismiss();
+//            }
+//        });
 //        setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
 //        setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
 
     }
 
-    protected void findView(){}
+    protected void findView() {
+    }
+
     private void findViews() {
 //        im_browser = new PhotoView[im_url.size()];
         im_indictor = new ImageView[im_url.size() + 1];
-
 
 
         for (int i = 0; i < im_url.size(); i++) {

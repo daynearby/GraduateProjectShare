@@ -10,13 +10,17 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.young.utils.ThreadUtils;
 
 import org.litepal.LitePalApplication;
 
 import java.io.File;
+import java.util.concurrent.ExecutorService;
 
 
 /**
+ * 应有全局application
+ *
  * Created by Nearby Yang on 2015-07-02.
  */
 public class ApplicationConfig extends LitePalApplication {
@@ -27,14 +31,12 @@ public class ApplicationConfig extends LitePalApplication {
     //单例模式
     private volatile static ApplicationConfig instance;
 
+    public ThreadUtils threadUtils;
 
     @Override
     public void onCreate() {
         super.onCreate();
         initConfig();
-//初始化imageloader
-        initImageLoader(getApplicationContext());
-
     }
 
     /**
@@ -43,9 +45,24 @@ public class ApplicationConfig extends LitePalApplication {
     private void initConfig() {
 
         LitePalApplication.initialize(this);
-        // TODO: 2015-10-25 信息sdk的初始化
-//        SMSSDK.initSDK(this, Contants.SMS_APP_KEY, Contants.SMS_APP_SECRET);
+        //初始化imageloader
+        initImageLoader(getApplicationContext());
+
+
     }
+
+    /**
+     * 可回收线程池
+     *
+     * @return
+     */
+    public ThreadUtils getThreadInstance() {
+        threadUtils = new ThreadUtils();
+        threadUtils.init();
+        threadUtils.getInstance();
+        return threadUtils;
+    }
+
 
     private void initImageLoader(Context ctx) {
 
@@ -87,4 +104,6 @@ public class ApplicationConfig extends LitePalApplication {
         }
         return instance;
     }
+
+
 }

@@ -28,7 +28,7 @@ import com.young.base.BaseAppCompatActivity;
 import com.young.base.ItemActBarActivity;
 import com.young.config.Contants;
 import com.young.model.ShareMessage_HZ;
-import com.young.myCallback.GoToUploadImages;
+import com.young.myInterface.GoToUploadImages;
 import com.young.network.BmobApi;
 import com.young.utils.DisplayUtils;
 import com.young.utils.EmotionUtils;

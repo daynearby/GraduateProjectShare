@@ -34,7 +34,7 @@ import java.util.List;
 public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
 
     private GridView myGridview;
-//    private ShareMessage_HZ shareMessage;
+//    private ShareMessage shareMessage;
     private PopupWinUserInfo userInfo;
 
     /**
