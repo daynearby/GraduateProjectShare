@@ -15,10 +15,8 @@ public class CommonUtils {
      */
     public static boolean isNetworkAvailable(Context context) {
         NetworkInfo info = getNetworkInfo(context);
-        if (info != null) {
-            return info.isAvailable();
-        }
-        return false;
+        return info != null && info.isAvailable();
+
     }
 
     /**
@@ -27,8 +25,7 @@ public class CommonUtils {
     public static boolean isWifi(Context context) {
         NetworkInfo info = getNetworkInfo(context);
         if (info != null) {
-            if (info.getType() == ConnectivityManager.TYPE_WIFI)
-                return true;
+            return info.getType() == ConnectivityManager.TYPE_WIFI;
         }
         return false;
     }
@@ -39,8 +36,7 @@ public class CommonUtils {
     public static boolean isMobile(Context context) {
         NetworkInfo info = getNetworkInfo(context);
         if (info != null) {
-            if (info.getType() == ConnectivityManager.TYPE_MOBILE)
-                return true;
+            return info.getType() == ConnectivityManager.TYPE_MOBILE;
         }
         return false;
     }
@@ -132,6 +128,7 @@ public class CommonUtils {
 
     /**
      * 获取程序分配到的内存空间
+     *
      * @return
      */
     public static int getRuntimeRAM() {

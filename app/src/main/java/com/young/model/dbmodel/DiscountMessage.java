@@ -1,6 +1,6 @@
 package com.young.model.dbmodel;
 
-import java.util.List;
+import java.sql.Blob;
 
 /**
  * 分享信息，本地数据库的表
@@ -11,11 +11,11 @@ public class DiscountMessage extends DBModel {
 
     private User userId;
     private String shContent;
-    private List<String> shImgs;
+    private Blob shImgs;
     private String shLocation;
     private String shTag;
-    private List<String> shWantedNum;
-    private List<String> shVisitedNum;
+    private Blob shWantedNum;
+    private Blob shVisitedNum;
 
     public User getUserId() {
         return userId;
@@ -25,20 +25,21 @@ public class DiscountMessage extends DBModel {
         this.userId = userId;
     }
 
-    public List<String> getShVisitedNum() {
-        return shVisitedNum;
+    public String getShContent() {
+        return shContent;
     }
 
-    public void setShVisitedNum(List<String> shVisitedNum) {
-        this.shVisitedNum = shVisitedNum;
+    public void setShContent(String shContent) {
+        this.shContent = shContent;
     }
 
-    public List<String> getShWantedNum() {
-        return shWantedNum;
+
+    public String getShLocation() {
+        return shLocation;
     }
 
-    public void setShWantedNum(List<String> shWantedNum) {
-        this.shWantedNum = shWantedNum;
+    public void setShLocation(String shLocation) {
+        this.shLocation = shLocation;
     }
 
     public String getShTag() {
@@ -49,27 +50,27 @@ public class DiscountMessage extends DBModel {
         this.shTag = shTag;
     }
 
-    public String getShLocation() {
-        return shLocation;
-    }
-
-    public void setShLocation(String shLocation) {
-        this.shLocation = shLocation;
-    }
-
-    public List<String> getShImgs() {
+    public Blob getShImgs() {
         return shImgs;
     }
 
-    public void setShImgs(List<String> shImgs) {
+    public void setShImgs(Blob shImgs) {
         this.shImgs = shImgs;
     }
 
-    public String getShContent() {
-        return shContent;
+    public Blob getShWantedNum() {
+        return shWantedNum;
     }
 
-    public void setShContent(String shContent) {
-        this.shContent = shContent;
+    public void setShWantedNum(Blob shWantedNum) {
+        this.shWantedNum = shWantedNum;
+    }
+
+    public Blob getShVisitedNum() {
+        return shVisitedNum;
+    }
+
+    public void setShVisitedNum(Blob shVisitedNum) {
+        this.shVisitedNum = shVisitedNum;
     }
 }

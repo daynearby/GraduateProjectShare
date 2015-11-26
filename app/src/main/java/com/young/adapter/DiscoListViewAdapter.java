@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.young.adapter.CommentAdapter.CommAdapter;
 import com.young.adapter.CommentAdapter.ViewHolder;
@@ -23,6 +24,9 @@ import com.young.views.PopupWinUserInfo;
 
 import java.util.List;
 
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.listener.UpdateListener;
+
 /**
  * 实例化
  * <p/>
@@ -34,8 +38,10 @@ import java.util.List;
 public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
 
     private GridView myGridview;
-//    private ShareMessage shareMessage;
+    //    private ShareMessage shareMessage;
     private PopupWinUserInfo userInfo;
+    private User user;
+    private int strId;
 
     /**
      * 实例化对象
@@ -44,6 +50,7 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
      */
     public DiscoListViewAdapter(Context context) {
         super(context);
+        user = BmobUser.getCurrentUser(ctx, User.class);
     }
 
 
@@ -98,6 +105,7 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
     private class click implements View.OnClickListener {
 
         private Object o;
+        private ShareMessage_HZ shareMessage;
 
         public click(Object o) {
             this.o = o;
@@ -107,20 +115,34 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
         public void onClick(View v) {
 
             switch (v.getId()) {
-                case R.id.id_im_userH ://用户资料
+                case R.id.id_im_userH://用户资料
                     User u = (User) o;
                     userInfo = new PopupWinUserInfo(ctx, u);
                     userInfo.onShow(v);
-                    LogUtils.logD("用户资料 = "+u.toString());
-//// TODO: 2015-11-15 查看用户资料
+                    LogUtils.logD("用户资料 = " + u.toString());
                     break;
 
                 case R.id.id_tx_wantogo://想去--数量
+                    boolean hadWant = false;
+                    shareMessage = (ShareMessage_HZ) o;
+                    List<String> shWantedNum = shareMessage.getShWantedNum();
+                    for (String userId : shWantedNum) {
+                        hadWant = user.getObjectId().equals(userId);
+                    }
+                    wantToGo(hadWant, shareMessage, v);
+
 
                     break;
 
                 case R.id.id_hadgo://去过--数量
+                    boolean hadGo = false;
+                    shareMessage = (ShareMessage_HZ) o;
+                    List<String> shVisitedNum = shareMessage.getShVisitedNum();
+                    for (String userId : shVisitedNum) {
+                        hadGo = user.getObjectId().equals(userId);
+                    }
 
+                    visit(hadGo, shareMessage, v);
                     break;
 
                 case R.id.id_tx_comment://评论数量
@@ -132,6 +154,74 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
 
             }
         }
+    }
+
+    /**
+     * 去过的逻辑处理
+     *
+     * @param hadGo
+     * @param shareMessage
+     * @param v
+     */
+    private void visit(boolean hadGo, ShareMessage_HZ shareMessage, View v) {
+        if (hadGo) {
+            strId = R.string.not_visit;
+            shareMessage.getShVisitedNum().remove(user.getObjectId());
+        } else {
+            strId = R.string.cancel_collect_success;
+            shareMessage.getShVisitedNum().add(user.getObjectId());
+        }
+
+
+        ((TextView) v).setText(String.valueOf(shareMessage.getShVisitedNum() == null ?
+                0 : shareMessage.getShVisitedNum().size()));
+
+        shareMessage.update(ctx, shareMessage.getObjectId(), new UpdateListener() {
+            @Override
+            public void onSuccess() {
+                mToast(strId);
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                LogUtils.logD(" wantToGo faile  erro code = " + i + " erro message = " + s);
+            }
+        });
+
+    }
+
+    /**
+     * 想去逻辑处理
+     *
+     * @param hadWant
+     * @param shareMessage
+     * @param v
+     */
+    private void wantToGo(boolean hadWant, ShareMessage_HZ shareMessage, View v) {
+
+        if (hadWant) {
+            strId = R.string.cancel_collect_success;
+            shareMessage.getShWantedNum().remove(user.getObjectId());
+        } else {
+            strId = R.string.collect_success;
+            shareMessage.getShWantedNum().add(user.getObjectId());
+        }
+
+        ((TextView) v).setText(String.valueOf(shareMessage.getShWantedNum() == null ?
+                0 : shareMessage.getShWantedNum().size()));
+
+        shareMessage.update(ctx, shareMessage.getObjectId(), new UpdateListener() {
+            @Override
+            public void onSuccess() {
+                mToast(strId);
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                LogUtils.logD(" wantToGo faile  erro code = " + i + " erro message = " + s);
+            }
+        });
+
     }
 
     private void updateShMs() {
@@ -159,5 +249,14 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
             popupView.setCurrentPager(position);
             popupView.onShow(view);
         }
+    }
+
+    /**
+     * toast 提示
+     *
+     * @param strResId 提示文字 - 资源
+     */
+    private void mToast(int strResId) {
+        Toast.makeText(ctx, strResId, Toast.LENGTH_LONG).show();
     }
 }

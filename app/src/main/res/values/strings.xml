@@ -116,4 +116,8 @@
     <string name="tips_loading_faile">加载失败，请稍候再试</string>
     <string name="tips_loading_cancel">下载已取消</string>
     <string name="no_more_messages">没有更多的信息</string>
+    <string name="cancel_collect_success">去过了</string>
+    <string name="collect_success">想去</string>
+    <string name="not_visit">没去过</string>
+    <string name="title_body">正文</string>
 </resources>

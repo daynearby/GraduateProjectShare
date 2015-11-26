@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="@dimen/paddingHit"
-    android:layout_marginLeft="@dimen/paddingMic"
-    android:layout_marginRight="@dimen/paddingMic"
+    android:layout_marginLeft="@dimen/paddingMediu"
+    android:layout_marginRight="@dimen/paddingMediu"
     android:layout_marginTop="@dimen/paddingHit"
+    android:descendantFocusability="blocksDescendants"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="@dimen/radius_mic">
 
@@ -39,9 +40,9 @@
                 style="@style/gridViwe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/paddingMic"
                 android:layout_marginLeft="@dimen/size40"
                 android:layout_marginRight="@dimen/size40"
+                android:layout_marginTop="@dimen/paddingMic"
                 android:visibility="visible" />
 
             <TextView

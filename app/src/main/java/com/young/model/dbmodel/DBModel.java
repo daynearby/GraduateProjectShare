@@ -14,18 +14,17 @@ public class DBModel extends DataSupport implements Serializable {
 
     private int id;
     private String objectId;
-    private String accessToken;
     private String createdAt;
     private String updatedAt;
 
     public int getId() {
         return id;
     }
-
+//
     public void setId(int id) {
         this.id = id;
     }
-
+//
     public String getUpdatedAt() {
         return updatedAt;
     }
@@ -42,13 +41,7 @@ public class DBModel extends DataSupport implements Serializable {
         this.objectId = objectId;
     }
 
-    public String getAccessToken() {
-        return accessToken;
-    }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
 
     public String getCreatedAt() {
         return createdAt;

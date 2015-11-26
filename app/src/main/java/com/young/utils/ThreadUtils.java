@@ -15,7 +15,7 @@ import java.util.concurrent.Future;
  * 先获取对象，初始化
  * 执行任务先添加任务，再启动
  * 最后在activity停止的时候应该停止该线程，释放资源
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-11-21.
  */
 public class ThreadUtils {
@@ -35,6 +35,12 @@ public class ThreadUtils {
     //线程池是否处于运行状态(即:是否被释放!)
     private boolean isRuning = true;
 
+    public ThreadUtils(){
+
+        getInstance();
+        init();
+
+    }
 
     /**
      * 获取线程池对象
@@ -57,7 +63,7 @@ public class ThreadUtils {
      * 初始化
      */
     public void init() {
-        getInstance();
+
 
         if (taskQueue == null) {
             taskQueue = new ConcurrentLinkedQueue<MyRunnable>();
@@ -159,14 +165,8 @@ public class ThreadUtils {
 //        mHandler.sendEmptyMessage(0);
         isRuning = false;
 
-        Iterator iter = taskMap.entrySet().iterator();
-
-        while (iter.hasNext()) {
-            Map.Entry<Future, MyRunnable> entry = (Map.Entry<Future, MyRunnable>) iter.next();
+        for (Map.Entry<Future, MyRunnable> entry : taskMap.entrySet()) {
             Future result = entry.getKey();
-            if (result == null) {
-                continue;
-            }
             result.cancel(true);
             taskMap.remove(result);
         }
@@ -206,4 +206,5 @@ public class ThreadUtils {
         stop();
         release();
     }
+
 }

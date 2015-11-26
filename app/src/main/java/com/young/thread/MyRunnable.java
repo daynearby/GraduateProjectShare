@@ -13,6 +13,8 @@ package com.young.thread;
 import android.os.Handler;
 import android.util.Log;
 
+import com.young.utils.LogUtils;
+
 /**
  * 线程 =- 运行
  */
@@ -22,26 +24,22 @@ public class MyRunnable implements Runnable {
 
     private boolean cancleException = false;
 
-    private Handler mHandler = null;
-    private GotoRunnable mRunnable;
+//    private Handler mHandler = null;
+    private GotoRunnable gotoRunnable;
 
-    public MyRunnable(GotoRunnable mRunnable) {
-        this.mRunnable = mRunnable;
+    public MyRunnable(GotoRunnable gotoRunnable) {
+        this.gotoRunnable = gotoRunnable;
     }
-
-    public MyRunnable(Handler mHandler) {
-        this.mHandler = mHandler;
-    }
-
 
     @Override
     public void run() {
-//        if (!cancleTask) {
-//            running();
-//        }
 
-        if (!cancleTask && mRunnable != null) {
-            mRunnable.running();
+
+        if (!cancleTask) {
+            LogUtils.logD("cancle = "+!cancleTask);
+
+            gotoRunnable.running();
+            LogUtils.logD("running");
         }
 
 //        if (!cancleTask && mHandler != null) {
@@ -86,7 +84,6 @@ public class MyRunnable implements Runnable {
 
     public void setCancleTaskUnit(boolean cancleTask) {
         this.cancleTask = cancleTask;
-        Log.i("KKK", "点击了取消任务按钮 ！！！");
         // mHandler.sendEmptyMessage(0);
     }
 

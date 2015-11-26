@@ -95,12 +95,12 @@ public abstract class ItemActBarActivity extends BaseAppCompatActivity {
         if (left) {
             backto_im.setVisibility(View.VISIBLE);
         } else {
-            backto_im.setVisibility(View.GONE);
+            backto_im.setVisibility(View.INVISIBLE);
         }
         if (right) {
             barRightItem_tv.setVisibility(View.VISIBLE);
         } else {
-            barRightItem_tv.setVisibility(View.GONE);
+            barRightItem_tv.setVisibility(View.INVISIBLE);
         }
 
     }

@@ -1,5 +1,7 @@
 package com.young.model.dbmodel;
 
+import java.sql.Blob;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,12 +11,11 @@ public class RankMessage extends DBModel {
 
     private User userId;
     private String shContent;
-
-    private List<String> shImgs;
+    private Blob shImgs ;
     private String shLocation;
     private String shTag;
-    private int shWantedNum;
-    private int shVisitedNum;
+    private Blob shWantedNum;
+    private Blob shVisitedNum ;
     private int shCommNum;
 
     public User getUserId() {
@@ -25,32 +26,21 @@ public class RankMessage extends DBModel {
         this.userId = userId;
     }
 
+    public String getShContent() {
+        return shContent;
+    }
+
     public void setShContent(String shContent) {
         this.shContent = shContent;
     }
 
-    public int getShCommNum() {
-        return shCommNum;
+
+    public String getShLocation() {
+        return shLocation;
     }
 
-    public void setShCommNum(int shCommNum) {
-        this.shCommNum = shCommNum;
-    }
-
-    public int getShVisitedNum() {
-        return shVisitedNum;
-    }
-
-    public void setShVisitedNum(int shVisitedNum) {
-        this.shVisitedNum = shVisitedNum;
-    }
-
-    public int getShWantedNum() {
-        return shWantedNum;
-    }
-
-    public void setShWantedNum(int shWantedNum) {
-        this.shWantedNum = shWantedNum;
+    public void setShLocation(String shLocation) {
+        this.shLocation = shLocation;
     }
 
     public String getShTag() {
@@ -61,23 +51,35 @@ public class RankMessage extends DBModel {
         this.shTag = shTag;
     }
 
-    public String getShLocation() {
-        return shLocation;
+    public int getShCommNum() {
+        return shCommNum;
     }
 
-    public void setShLocation(String shLocation) {
-        this.shLocation = shLocation;
+    public void setShCommNum(int shCommNum) {
+        this.shCommNum = shCommNum;
     }
 
-    public List<String> getShImgs() {
+    public Blob getShImgs() {
         return shImgs;
     }
 
-    public void setShImgs(List<String> shImgs) {
+    public void setShImgs(Blob shImgs) {
         this.shImgs = shImgs;
     }
 
-    public String getShContent() {
-        return shContent;
+    public Blob getShWantedNum() {
+        return shWantedNum;
+    }
+
+    public void setShWantedNum(Blob shWantedNum) {
+        this.shWantedNum = shWantedNum;
+    }
+
+    public Blob getShVisitedNum() {
+        return shVisitedNum;
+    }
+
+    public void setShVisitedNum(Blob shVisitedNum) {
+        this.shVisitedNum = shVisitedNum;
     }
 }

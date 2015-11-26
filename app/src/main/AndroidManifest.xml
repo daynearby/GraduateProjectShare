@@ -114,6 +114,9 @@
         <!-- 修改个人信息-->
         <activity android:name=".EditPersonalInfoActivity" />
 
+        <!-- 信息详细页面 -->
+        <activity android:name=".MessageDetail"/>
+
         <!-- 百度定位 services -->
         <service
             android:name="com.baidu.location.f"

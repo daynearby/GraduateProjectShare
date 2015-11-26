@@ -96,4 +96,19 @@ public class Contants {
     public static final int PAGER_NUMBER = 50;//一次请求的数据条数，与云端代码相符
     public static final String SKIP = "skip";//请求参数
 
+
+    //************************* 类的跳转 标识***************************************
+    public static final String CLAZZ_NAME = "clazz_name";//类名
+    public static final String CLAZZ_MAINACTIVITY = "clazz_name_mainactivity";//类名
+    public static final String CLAZZ_DISCOVER_ACTIVITY = "clazz_discover_activity";//类名
+
+    public static final String CLAZZ_DATA_SHARE_MESSAGE = "data_share_message";//数据
+    public static final String CLAZZ_DATA_MODEL = "data_model";//传输数据
+
+    //************************** 数据model 类型******************************
+    public static final int DATA_MODEL_SHARE_MESSAGES = 1010;//传输数据
+
+
+
+
 }

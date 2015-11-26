@@ -6,16 +6,20 @@ import android.widget.ListView;
 
 /**
  * 上拉加载的滑动监听器
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-11-15.
  */
-public class ListViewRefreshListener implements AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener {
+public class ListViewRefreshListener implements AbsListView.OnScrollListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
     private boolean isLastItem = false;
     private RefreshListener refreshlistener;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ListView listView;
 
-    public ListViewRefreshListener(ListView listView, SwipeRefreshLayout swipeRefreshLayout, RefreshListener refreshlistener) {
+    public ListViewRefreshListener(ListView listView, SwipeRefreshLayout swipeRefreshLayout,
+                                   RefreshListener refreshlistener) {
+        this.listView = listView;
         this.swipeRefreshLayout = swipeRefreshLayout;
         this.refreshlistener = refreshlistener;
 
@@ -40,7 +44,8 @@ public class ListViewRefreshListener implements AbsListView.OnScrollListener, Sw
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        isLastItem = (totalItemCount - 1) == visibleItemCount;
+        isLastItem = (totalItemCount - 1) == listView.getLastVisiblePosition();
+//        LogUtils.logD("totalitemCount = " + totalItemCount + " lastItemcount = " + listView.getLastVisiblePosition());
     }
 
     @Override

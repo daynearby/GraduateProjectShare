@@ -6,7 +6,6 @@
         <!-- API 14 theme customizations can go here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
 
-
     </style>
 
     <!-- 使用toolbar的activity需要使用这个主题-->
@@ -35,7 +34,7 @@
         <item name="android:textSize">@dimen/textSizeMediu</item>
         <item name="android:drawablePadding">@dimen/paddingHit</item>
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">@dimen/size40</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">@dimen/paddingHit</item>
@@ -91,5 +90,11 @@
         <item name="android:paddingRight">@dimen/paddingMediu</item>
     </style>
 
+    <style name="AnimationActivity" parent="@android:style/Animation.Activity"  mce_bogus="1">
+        <item name="android:activityOpenEnterAnimation">@animator/activity_slid_left_in</item>
+        <item name="android:activityOpenExitAnimation">@animator/activity_slid_left_out</item>
+        <item name="android:activityCloseEnterAnimation">@animator/activity_slid_right_in</item>
+        <item name="android:activityCloseExitAnimation">@animator/activity_slid_right_out</item>
+    </style>
 
 </resources>

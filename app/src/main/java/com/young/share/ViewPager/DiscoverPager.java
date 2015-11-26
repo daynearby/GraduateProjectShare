@@ -1,7 +1,11 @@
 package com.young.share.ViewPager;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
@@ -17,11 +21,13 @@ import com.young.model.dbmodel.ShareMessage;
 import com.young.myInterface.GotoAsyncFunction;
 import com.young.myInterface.ListViewRefreshListener;
 import com.young.network.BmobApi;
+import com.young.share.MessageDetail;
 import com.young.share.R;
 import com.young.thread.MyRunnable;
 import com.young.utils.CommonUtils;
 import com.young.utils.DBUtils;
 import com.young.utils.LogUtils;
+import com.young.utils.ThreadUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,7 +41,6 @@ import java.util.List;
  */
 public class DiscoverPager extends BasePager {
 
-    // TODO: 15/10/10 分页显示
     private JazzyListView listView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private DiscoListViewAdapter listviewAdapter;
@@ -48,13 +53,12 @@ public class DiscoverPager extends BasePager {
     private int endIndex = 20;
     protected static final int pageSize = 20;
     private int PUSH_TIMES = 1;
-
+    private ThreadUtils threadUtils;
 
     private int startRow = 0;//从第一条开始
 
     @Override
     public void initView() {
-
         listviewAdapter = new DiscoListViewAdapter(ctx);
 
         listView = $(R.id.list_discover);
@@ -64,40 +68,70 @@ public class DiscoverPager extends BasePager {
         listView.setTransitionEffect(new SlideInEffect());
 
         //ListView的上拉、下拉刷新
-        new ListViewRefreshListener(listView, swipeRefreshLayout, new ListViewRefreshListener.RefreshListener() {
+        new ListViewRefreshListener(listView, swipeRefreshLayout,
+                new ListViewRefreshListener.RefreshListener() {
+                    @Override
+                    public void pushToRefresh() {
+                        if (CommonUtils.isNetworkAvailable(ctx)) {//有网络
+                            startRow = startRow + Contants.PAGER_NUMBER;
+
+                            if (dataList.size() > pageSize) {
+
+                                endIndex = dataList.size() < endIndex + PUSH_TIMES * pageSize ? dataList.size() :
+                                        endIndex + PUSH_TIMES * pageSize;
+                                listviewAdapter.setData(dataList.subList(starIndex, endIndex));
+
+
+                                PUSH_TIMES++;
+
+                            } else {
+                                Toast.makeText(ctx, R.string.no_more_messages, Toast.LENGTH_SHORT).show();
+
+                            }
+                        } else {
+                            SVProgressHUD.showInfoWithStatus(ctx, ctx.getString(R.string.without_network));
+                            getDataFromLocat();//没有网络
+                        }
+
+                        swipeRefreshLayout.setRefreshing(false);
+                        LogUtils.logD("上拉刷新");
+                    }
+
+                    @Override
+                    public void pullToRefresh() {
+                        LogUtils.logD("下拉刷新");
+                        PUSH_TIMES = 1;
+
+                        if (CommonUtils.isNetworkAvailable(ctx)) {//有网络
+                            getDataFromRemote();
+                        } else {
+                            SVProgressHUD.showInfoWithStatus(ctx, ctx.getString(R.string.without_network));
+                            getDataFromLocat();//没有网络
+                        }
+
+                    }
+                });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void pushToRefresh() {
-                startRow = startRow + Contants.PAGER_NUMBER;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent();
+                intent.putExtra(Contants.CLAZZ_NAME, Contants.CLAZZ_DISCOVER_ACTIVITY);
+                intent.setClass(ctx, MessageDetail.class);
 
-                if (dataList.size() > pageSize) {
-
-                    endIndex = dataList.size() < endIndex + PUSH_TIMES * pageSize ? dataList.size() :
-                            endIndex + PUSH_TIMES * pageSize;
-                    listviewAdapter.setData(dataList.subList(starIndex, endIndex));
-
-
-                    PUSH_TIMES++;
-
-                } else {
-                    Toast.makeText(ctx, R.string.no_more_messages, Toast.LENGTH_SHORT).show();
-
-                }
-
-                swipeRefreshLayout.setRefreshing(false);
-            }
-
-            @Override
-            public void pullToRefresh() {
-                PUSH_TIMES = 1;
-                getDataFromRemote();
+                intent.putExtra(Contants.CLAZZ_DATA_MODEL,dataList.get(position));
+                ctx.startActivity(intent);
+                ((Activity) ctx).overridePendingTransition(R.animator.activity_slid_right_in, R.animator.activity_slid_left_out);
             }
         });
+
 
     }
 
 
     @Override
     public void bindData() {
+
+        threadUtils = new ThreadUtils();
 
         if (CommonUtils.isNetworkAvailable(ctx)) {//有网络
             getDataFromRemote();
@@ -127,8 +161,7 @@ public class DiscoverPager extends BasePager {
 
     private void getDataFromLocat() {
 
-        // TODO: 2015-11-16 从本地数据库上获取数据
-        app.getThreadInstance().startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+        threadUtils.addTask(new MyRunnable(new MyRunnable.GotoRunnable() {
 
             @Override
             public void running() {
@@ -141,13 +174,13 @@ public class DiscoverPager extends BasePager {
     }
 
     private void getDataFromRemote() {
-        // TODO: 2015-11-16 从远程数据库获取新的数据
 
 
         JSONObject params = new JSONObject();
         try {
             params.put(Contants.SKIP, String.valueOf(startRow));
         } catch (JSONException e) {
+
             LogUtils.logD("添加 网络参数 失败 = " + e.toString());
         }
 
@@ -174,10 +207,9 @@ public class DiscoverPager extends BasePager {
     }
 
     private void formatData(final List<com.young.model.ShareMessage_HZ> shareList) {
-// TODO: 2015-11-25 在handler中更新数据
 
 
-        app.getThreadInstance().startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+        threadUtils.addTask(new MyRunnable(new MyRunnable.GotoRunnable() {
 
             @Override
             public void running() {
@@ -186,17 +218,21 @@ public class DiscoverPager extends BasePager {
                     //分享信息
                     ShareMessage shareMessageHZ = new ShareMessage();
                     shareMessageHZ.setObjectId(share.getObjectId());
-                    shareMessageHZ.setShImgs(share.getShImgs());
+                    shareMessageHZ.setShImgs(String.valueOf(share.getShImgs()));
                     shareMessageHZ.setShContent(share.getShContent());
                     shareMessageHZ.setCreatedAt(share.getCreatedAt());
                     shareMessageHZ.setShLocation(share.getShLocation());
-                    shareMessageHZ.setShVisitedNum(share.getShVisitedNum());
+                    shareMessageHZ.setShVisitedNum(String.valueOf(share.getShVisitedNum()));
                     shareMessageHZ.setShCommNum(share.getShCommNum());
-                    shareMessageHZ.setShWantedNum(share.getShWantedNum());
+                    shareMessageHZ.setShWantedNum(String.valueOf(share.getShWantedNum()));
+                    shareMessageHZ.setShTag(share.getShTag());
+                    shareMessageHZ.setUpdatedAt(share.getUpdatedAt());
                     //用户信息
                     User user = share.getUserId();
                     com.young.model.dbmodel.User u = new com.young.model.dbmodel.User();
+
                     u.setCreatedAt(user.getCreatedAt());
+                    u.setUpdatedAt(user.getUpdatedAt());
                     u.setAddress(user.getAddress());
                     u.setGender(user.isGender());
                     u.setAge(user.getAge());
@@ -207,12 +243,17 @@ public class DiscoverPager extends BasePager {
                     u.setMobilePhoneNumber(user.getMobilePhoneNumber());
                     u.setNickName(user.getNickName());
                     u.setMobilePhoneNumberVerified(user.getMobilePhoneNumberVerified());
+                    u.setEmailVerified(user.getEmailVerified());
                     u.setObjectId(user.getObjectId());
                     u.setAccessToken(user.getSessionToken());
-                    u.save();
+                    u.setUsername(user.getUsername());
+
+                    boolean usave = u.save();
 
                     shareMessageHZ.setUserId(u);
-                    shareMessageHZ.save();
+                    boolean shareM = shareMessageHZ.save();
+
+//                    LogUtils.logD("save result = " + usave + " shareM = " + shareM);
 
 
                 }
@@ -221,6 +262,9 @@ public class DiscoverPager extends BasePager {
 
             }
         }));
+
+        threadUtils.start();
+
     }
 
     /**

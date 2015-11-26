@@ -1,6 +1,5 @@
 package com.young.model.dbmodel;
 
-import java.util.List;
 
 /**
  * 分享信息，本地数据库的表
@@ -12,11 +11,11 @@ public class ShareMessage extends DBModel{
 
     private User userId;
     private String shContent;
-    private List<String> shImgs;
+    private String shImgs;
     private String shLocation;
     private String shTag;
-    private List<String>  shWantedNum;
-    private List<String> shVisitedNum;
+    private String shWantedNum;
+    private String shVisitedNum;
     private int shCommNum;
 
     public User getUserId() {
@@ -27,40 +26,12 @@ public class ShareMessage extends DBModel{
         this.userId = userId;
     }
 
+    public String getShContent() {
+        return shContent;
+    }
+
     public void setShContent(String shContent) {
         this.shContent = shContent;
-    }
-
-    public int getShCommNum() {
-        return shCommNum;
-    }
-
-    public void setShCommNum(int shCommNum) {
-        this.shCommNum = shCommNum;
-    }
-
-    public List<String> getShVisitedNum() {
-        return shVisitedNum;
-    }
-
-    public void setShVisitedNum(List<String> shVisitedNum) {
-        this.shVisitedNum = shVisitedNum;
-    }
-
-    public List<String>  getShWantedNum() {
-        return shWantedNum;
-    }
-
-    public void setShWantedNum(List<String> shWantedNum) {
-        this.shWantedNum = shWantedNum;
-    }
-
-    public String getShTag() {
-        return shTag;
-    }
-
-    public void setShTag(String shTag) {
-        this.shTag = shTag;
     }
 
     public String getShLocation() {
@@ -71,15 +42,44 @@ public class ShareMessage extends DBModel{
         this.shLocation = shLocation;
     }
 
-    public List<String> getShImgs() {
+    public String getShTag() {
+        return shTag;
+    }
+
+    public void setShTag(String shTag) {
+        this.shTag = shTag;
+    }
+
+    public int getShCommNum() {
+        return shCommNum;
+    }
+
+    public void setShCommNum(int shCommNum) {
+        this.shCommNum = shCommNum;
+    }
+
+    public String getShImgs() {
         return shImgs;
     }
 
-    public void setShImgs(List<String> shImgs) {
+    public void setShImgs(String shImgs) {
         this.shImgs = shImgs;
     }
 
-    public String getShContent() {
-        return shContent;
+    public String getShWantedNum() {
+        return shWantedNum;
     }
+
+    public void setShWantedNum(String shWantedNum) {
+        this.shWantedNum = shWantedNum;
+    }
+
+    public String getShVisitedNum() {
+        return shVisitedNum;
+    }
+
+    public void setShVisitedNum(String shVisitedNum) {
+        this.shVisitedNum = shVisitedNum;
+    }
+
 }

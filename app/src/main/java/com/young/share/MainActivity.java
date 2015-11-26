@@ -430,6 +430,6 @@ public class MainActivity extends CustomActBarActivity {
         if (isRegistBordcast) {
             unregisterReceiver(mBroadcastReceiver);
         }
-        ApplicationConfig.getInstance().getThreadInstance().stop();
+//        ApplicationConfig.getInstance().getThreadInstance().stop();
     }
 }

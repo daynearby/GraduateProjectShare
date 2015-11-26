@@ -31,7 +31,7 @@ public class ApplicationConfig extends LitePalApplication {
     //单例模式
     private volatile static ApplicationConfig instance;
 
-    public ThreadUtils threadUtils;
+//    public ThreadUtils threadUtils;
 
     @Override
     public void onCreate() {
@@ -56,12 +56,11 @@ public class ApplicationConfig extends LitePalApplication {
      *
      * @return
      */
-    public ThreadUtils getThreadInstance() {
-        threadUtils = new ThreadUtils();
-        threadUtils.init();
-        threadUtils.getInstance();
-        return threadUtils;
-    }
+//    public ThreadUtils getThreadInstance() {
+//        threadUtils = new ThreadUtils();
+//
+//        return threadUtils;
+//    }
 
 
     private void initImageLoader(Context ctx) {

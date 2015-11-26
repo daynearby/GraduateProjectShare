@@ -1,5 +1,7 @@
 package com.young.model.dbmodel;
 
+import org.litepal.annotation.Column;
+
 /**
  * Created by Nearby Yang on 2015-11-19.
  */
@@ -13,10 +15,11 @@ public class User extends DBModel {
     private String signture;
     private String email;
     private String mobilePhoneNumber;
-    private boolean mobilePhoneNumberVerified;
+    private Boolean mobilePhoneNumberVerified;
     private String nickName;
-    private boolean emailVerified;
+    private Boolean emailVerified;
     private String username;
+    private String accessToken;
 
     public String getUsername() {
         return username;
@@ -26,19 +29,19 @@ public class User extends DBModel {
         this.username = username;
     }
 
-    public boolean isMobilePhoneNumberVerified() {
+    public Boolean isMobilePhoneNumberVerified() {
         return mobilePhoneNumberVerified;
     }
 
-    public void setMobilePhoneNumberVerified(boolean mobilePhoneNumberVerified) {
+    public void setMobilePhoneNumberVerified(Boolean mobilePhoneNumberVerified) {
         this.mobilePhoneNumberVerified = mobilePhoneNumberVerified;
     }
 
-    public boolean isEmailVerified() {
+    public Boolean isEmailVerified() {
         return emailVerified;
     }
 
-    public void setEmailVerified(boolean emailVerified) {
+    public void setEmailVerified(Boolean emailVerified) {
         this.emailVerified = emailVerified;
     }
 
@@ -113,6 +116,21 @@ public class User extends DBModel {
 
     public void setGender(boolean gender) {
         this.gender = gender;
+    }
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public Boolean getMobilePhoneNumberVerified() {
+        return mobilePhoneNumberVerified;
+    }
+
+    public Boolean getEmailVerified() {
+        return emailVerified;
     }
 
 }

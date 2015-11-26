@@ -13,7 +13,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.young.annotation.Injector;
+import com.young.config.Contants;
 import com.young.model.User;
+import com.young.share.MainActivity;
 import com.young.share.R;
 
 import cn.bmob.v3.BmobUser;
@@ -74,7 +76,26 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         mStartActivity(clazz, null, TYPE_DEFUAL);
     }
 
+    /**
+     * 返回上一级界面，不带参数
+     *
+     * @param clazz
+     */
     public void mBackStartActivity(Class clazz) {
+        mStartActivity(clazz, null, TYPE_BACK);
+    }
+
+    public void mBackStartActivity(String tagClazz) {
+        Class clazz = MainActivity.class;
+
+        switch (tagClazz) {
+
+            case Contants.CLAZZ_MAINACTIVITY:
+                clazz = MainActivity.class;
+                break;
+
+        }
+
         mStartActivity(clazz, null, TYPE_BACK);
     }
 
@@ -118,7 +139,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
     }
 
-    public  Handler mHandler = new Handler() {
+    public Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);

@@ -22,13 +22,14 @@
             <TextView
                 android:id="@+id/id_tx_wantogo"
                 style="@style/text_style"
-                android:drawableLeft="@drawable/icon_wantogo_30"
+                android:drawableLeft="@drawable/icon_wantogo"
+                android:drawablePadding="@dimen/paddingHit"
                 android:text="@string/tx_wantogo" />
 
             <TextView
                 android:id="@+id/id_hadgo"
                 style="@style/text_style"
-                android:drawableLeft="@drawable/icon_hadgo_30"
+                android:drawableLeft="@drawable/icon_bottombar_hadgo"
                 android:text="@string/hadgo" />
 
             <TextView

@@ -75,4 +75,5 @@ public class User extends BmobUser {
     public void setAge(int age) {
         this.age = age;
     }
+
 }

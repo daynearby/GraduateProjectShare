@@ -8,6 +8,7 @@ import com.young.model.dbmodel.ShareMessage;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -80,13 +81,13 @@ public class DBUtils {
 
         for (ShareMessage share : shMsgList) {
             shareMessage = new ShareMessage_HZ();
-            shareMessage.setShImgs(share.getShImgs());
+            shareMessage.setShImgs(Collections.singletonList(share.getShImgs()));
             shareMessage.setShCommNum(share.getShCommNum());
             shareMessage.setShContent(share.getShContent());
             shareMessage.setShLocation(share.getShLocation());
             shareMessage.setShTag(share.getShTag());
-            shareMessage.setShVisitedNum(share.getShVisitedNum());
-            shareMessage.setShWantedNum(share.getShWantedNum());
+            shareMessage.setShVisitedNum(Collections.singletonList(share.getShVisitedNum()));
+            shareMessage.setShWantedNum(Collections.singletonList(share.getShWantedNum()));
 
             user = new User();
             com.young.model.dbmodel.User userId = share.getUserId();
