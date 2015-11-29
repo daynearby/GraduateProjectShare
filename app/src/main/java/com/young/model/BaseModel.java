@@ -5,8 +5,13 @@ package com.young.model;
  * Created by Nearby Yang on 2015-11-16.
  */
 public class BaseModel {
+
     private int code;
     private String data;
+
+    public static final int SUCCESS = 0;
+    public static final int FAILE = 1;
+
 
     public String getData() {
         return data;

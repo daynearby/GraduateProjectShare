@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/paddingMic">
+<TextView
+    android:id="@+id/tv_message_detail_comment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/defaul_share_text"
+    android:textSize="@dimen/textSizeSmall"
+    android:textColor="@android:color/black"/>
+</RelativeLayout>

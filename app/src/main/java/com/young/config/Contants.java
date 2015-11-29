@@ -106,8 +106,19 @@ public class Contants {
     public static final String CLAZZ_DATA_MODEL = "data_model";//传输数据
 
     //************************** 数据model 类型******************************
-    public static final int DATA_MODEL_SHARE_MESSAGES = 1010;//传输数据
+    public static final int DATA_MODEL_SHARE_MESSAGES = 1010;//分享信息数据
 
+    public static final int DATA_MODEL_HEAD = 1100;//第一条
+    public static final int DATA_MODEL_BODY = 1101;//评论与回复
+    public static final int DATA_MODEL_BODY_COMM = 1110;//评论与回复
+    public static final int DATA_MODEL_BODY_REPLY = 1111;//评论与回复
+    public static final String DATA_SINGEL_AT = "@";//符号@
+    public static final String DATA_SINGEL_ENTER = "\n";//符号
+    public static final String DATA_SINGEL_COLON = ":";//符号
+    public static final String DATA_SINGEL_SAPCE = "  ";//符号
+
+    public static final int MESSAGE_TYPE_SHAREMESSAGE = 100;
+    public static final int MESSAGE_TYPE_DISCOUNT = 101;
 
 
 

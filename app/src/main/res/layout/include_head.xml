@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/paddingMic">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -12,8 +11,8 @@
 
         <com.young.views.CircleImageView
             android:id="@+id/id_im_userH"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="@dimen/avatar_size_default"
+            android:layout_height="@dimen/avatar_size_default"
             android:scaleType="centerCrop"
             android:src="@drawable/icon_avatar" />
 

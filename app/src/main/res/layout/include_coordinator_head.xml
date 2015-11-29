@@ -18,11 +18,9 @@
         android:src="@drawable/for_tran_foreground" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+       style="@style/linearLayout_v"
         android:layout_centerInParent="true"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:gravity="center">
 
         <com.young.views.CircleImageView
             android:id="@+id/id_im_personal_avatar"
@@ -33,12 +31,19 @@
 
         <TextView
             android:id="@+id/tv_user_nickname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/text_style_match"
             android:gravity="center"
             android:text="@string/user_name_defual"
-            android:textColor="@color/theme_puple"
-            android:textSize="@dimen/textSizeMediu" />
+            android:textColor="@color/white"
+            android:textSize="@dimen/textSizeLarge" />
+        <TextView
+            android:id="@+id/tv_user_signture"
+           style="@style/text_style_match"
+            android:gravity="center_horizontal"
+            android:text="@string/user_info_hint_enjoy_life"
+            android:textSize="@dimen/textSizeMediu"
+            android:textColor="@color/white"
+            />
     </LinearLayout>
 
 

@@ -25,4 +25,9 @@
 
     <dimen name="maginMediu">30dp</dimen>
 
+    <dimen name="avatar_size_default">80dp</dimen>
+    <dimen name="avatar_size_mediu">100dp</dimen>
+    <dimen name="btnSizeDefault">50dp</dimen>
+
+
 </resources>

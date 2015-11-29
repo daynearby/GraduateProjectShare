@@ -1,11 +1,9 @@
-package com.young.adapter.CommentAdapter;
+package com.young.adapter.CommonAdapter;
 
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-
-import com.young.utils.LogUtils;
 
 import java.util.List;
 
@@ -50,23 +48,24 @@ public abstract class CommAdapter<T> extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ViewHolder holder = ViewHolder.get(ctx, position, getlayoutid(), convertView, parent);
+        ViewHolder holder = ViewHolder.get(ctx, position, getlayoutid(position), convertView, parent);
 
 
-        convert(holder, getItem(position));
+        convert(holder, getItem(position),position);
 
         return holder.getConvertView();
     }
 
     //adapter获取view实例\绑定数据
-    public abstract void convert(ViewHolder holder, T t);
+    public abstract void convert(ViewHolder holder, T t, int position);
 
     /**
      * item布局的layoutId
      *
      * @return
+     * @param position
      */
-    public abstract int getlayoutid();
+    public abstract int getlayoutid(int position);
 
 
 }

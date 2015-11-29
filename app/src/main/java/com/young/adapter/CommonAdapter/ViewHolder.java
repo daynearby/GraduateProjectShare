@@ -1,4 +1,4 @@
-package com.young.adapter.CommentAdapter;
+package com.young.adapter.CommonAdapter;
 
 import android.content.Context;
 import android.util.SparseArray;

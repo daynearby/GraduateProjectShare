@@ -51,6 +51,8 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
     private ImageView avatar_bg_im;
     @InjectView(R.id.tv_user_nickname)
     private TextView nickname_tv;
+    @InjectView(R.id.tv_user_signture)
+    private TextView signture_tv;
     @InjectView(R.id.ls_include_content_scrolling_content_list)
     private ListView select_ls;
     @InjectView(R.id.btn_include_content_scrolling_logout)
@@ -102,6 +104,8 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
         select_ls.setAdapter(arrayAdapter);
         select_ls.setOnItemClickListener(new onitemClick());
 
+        nickname_tv.setText(TextUtils.isEmpty(mUser.getNickName()) ? getString(R.string.user_name_defual) : mUser.getNickName());
+        signture_tv.setText(TextUtils.isEmpty(mUser.getSignture())?getString(R.string.user_info_hint_enjoy_life):mUser.getSignture());
         loadingAvatar();
     }
 

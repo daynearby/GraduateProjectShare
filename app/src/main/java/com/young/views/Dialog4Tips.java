@@ -2,6 +2,7 @@ package com.young.views;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.young.share.LoginActivity;
 import com.young.share.R;
 import com.young.utils.DisplayUtils;
 
@@ -120,6 +122,40 @@ public class Dialog4Tips extends Dialog implements View.OnClickListener {
 
     }
 
+    /**
+     * 自定义登录弹窗
+     * @param activity
+     */
+    public static void loginFunction(final Activity activity) {
+        final Dialog4Tips dialog4Tips = new Dialog4Tips(activity);
+
+        dialog4Tips.setBtnCancelText(activity.getString(R.string.skin));
+        dialog4Tips.setBtnOkText(activity.getString(R.string.login_text));
+        dialog4Tips.setContent(activity.getString(R.string.login_tips_text));
+        dialog4Tips.setBtnCancelVisi(View.VISIBLE);
+
+        dialog4Tips.setDialogListener(new Dialog4Tips.Listener() {
+            @Override
+            public void btnOkListenter() {//登陆  按钮 ，进入登陆界面
+
+                dialog4Tips.dismiss();
+                activity.startActivity(new Intent(activity, LoginActivity.class));
+                activity.overridePendingTransition(R.animator.activity_slid_right_in,
+                        R.animator.activity_slid_left_out);
+            }
+
+            @Override
+            public void btnCancelListener() {//跳过  按钮 进入主界面
+
+                dialog4Tips.dismiss();
+
+            }
+        });
+
+        dialog4Tips.show();
+
+    }
+
 
     /**
      * 监听事件的回调函数
@@ -129,12 +165,12 @@ public class Dialog4Tips extends Dialog implements View.OnClickListener {
         /**
          * 确定按钮的回调
          */
-         void btnOkListenter();
+        void btnOkListenter();
 
         /**
          * 取消按钮的回调
          */
-         void btnCancelListener();
+        void btnCancelListener();
     }
 
     /**

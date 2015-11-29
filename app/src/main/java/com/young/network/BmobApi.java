@@ -8,6 +8,11 @@ import com.bmob.btp.callback.UploadBatchListener;
 import com.google.gson.Gson;
 import com.young.config.Contants;
 import com.young.model.BaseModel;
+import com.young.model.Collection_HZ;
+import com.young.model.DiscountMessage_HZ;
+import com.young.model.ShareMessage_HZ;
+import com.young.model.User;
+import com.young.model.dbmodel.ShareMessage;
 import com.young.myInterface.GoToUploadImages;
 import com.young.myInterface.GotoAsyncFunction;
 import com.young.utils.LogUtils;
@@ -15,6 +20,7 @@ import com.young.utils.LogUtils;
 import org.json.JSONObject;
 
 import cn.bmob.v3.AsyncCustomEndpoints;
+import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.CloudCodeListener;
 
@@ -28,8 +34,8 @@ public class BmobApi {
 
     //找回密码
     public static final String FINDPWD = "FindPwd";
-    public static final String GET_RECENTLY_SHAREMESSAGES = "GetRecentlyShareMessages";
-
+    public static final String GET_RECENTLY_SHAREMESSAGES = "GetRecentlyShareMessages";//获取最新的的前50条记录
+    public static final String REMOVE_COLLECTION = "RemoveCollection";//移除收藏
 
     private static Gson gson = new Gson();
 
@@ -167,6 +173,37 @@ public class BmobApi {
                 LogUtils.logE("setThumbnail faile  code = " + statuscode + "  errormsg = " + errormsg);
             }
         });
+    }
+
+    /**
+     * 收藏分享信息
+     *
+     * @param ctx
+     * @param user
+     * @param bmobObject
+     * @param messageType Contants.MESSAGE_TYPE_SHAREMESSAGE://分享信息  Contants.MESSAGE_TYPE_DISCOUNT://商家优惠
+     */
+    public static void saveCollectionShareMessage(Context ctx,User user,BmobObject bmobObject,int messageType){
+
+        Collection_HZ collection = new Collection_HZ();
+        collection.setCollUserId(user);//current user
+
+        switch (messageType){
+            case Contants.MESSAGE_TYPE_SHAREMESSAGE://分享信息
+                ShareMessage_HZ shareMessage = (ShareMessage_HZ) bmobObject;
+                collection.setShUserId(shareMessage.getUserId());
+                collection.setShMsgId(shareMessage);
+                break;
+
+            case Contants.MESSAGE_TYPE_DISCOUNT://商家优惠
+                DiscountMessage_HZ discountMessage = (DiscountMessage_HZ) bmobObject;
+                collection.setShUserId(discountMessage.getUserId());
+                collection.setDtMsgId(discountMessage);
+                break;
+        }
+
+        collection.save(ctx);
+
     }
 }
 

@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="@dimen/paddingHit"
-    android:layout_marginLeft="@dimen/paddingMediu"
-    android:layout_marginRight="@dimen/paddingMediu"
+    android:layout_marginLeft="@dimen/paddingMic"
+    android:layout_marginRight="@dimen/paddingMic"
     android:layout_marginTop="@dimen/paddingHit"
     android:descendantFocusability="blocksDescendants"
     app:cardBackgroundColor="@color/white"
@@ -49,7 +49,9 @@
                 android:id="@+id/tv_item_share_main_created_at"
                 style="@style/text_style_match"
                 android:gravity="right"
-                android:padding="@dimen/paddingMic"
+                android:paddingTop="@dimen/paddingMic"
+                android:paddingLeft="@dimen/paddingMic"
+                android:paddingRight="@dimen/paddingMic"
                 android:text="@string/created_at" />
 
 

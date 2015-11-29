@@ -21,8 +21,7 @@
             android:gravity="start"
             android:hint="@string/share_what_hint"
             android:inputType="textMultiLine"
-            android:maxLines="5"
-            android:minLines="5"
+            android:lines="3"
             android:padding="@dimen/paddingHit" />
 
         <LinearLayout

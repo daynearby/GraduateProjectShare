@@ -45,6 +45,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import cn.bmob.v3.listener.SaveListener;
@@ -55,7 +56,7 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
  * <p/>
  * Created by Nearby Yang on 2015-10-23.
  */
-public class ShareMessageActivity extends ItemActBarActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class ShareMessageActivity extends ItemActBarActivity implements View.OnClickListener {
 
     @InjectView(R.id.et_contnent_popupwin_content)
     private EditText content_et;
@@ -79,10 +80,8 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     private TextView tag_tv;
 
     private myGridViewAdapter gridViewAdapter;
-    private EmotionPagerAdapter emotionPagerGvAdapter;
     private InputMethodManager imm;
 
-    private List<String> tagList;//标签
     private PopupWinListView popupWinListView;
     private boolean isResgiter = false;
     private String locationInfo;//定位信息
@@ -109,7 +108,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     public void bindData() {
 
 
-        tagList = XmlUtils.getSelectTag(this);
+        List<String> tagList = XmlUtils.getSelectTag(this);
         tagList.remove(0);
 
         popupWinListView = new PopupWinListView(this, tagList,false);
@@ -133,8 +132,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         //监听
         setItemListener(new itemClick());
         //表情
-        initEmotion();
-
+       new EmotionUtils(mActivity,vp_emotion_dashboard,content_et);
         acache = ACache.get(mActivity);
         darftUtils = DarftUtils.builder(mActivity);
         dialog = new Dialog4Tips(mActivity);
@@ -422,9 +420,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                             if (isFinish) {
                                 List<String> list = new ArrayList<>();
 
-                                for (int i = 0; i < urls.length; i++) {
-                                    list.add(urls[i]);
-                                }
+                                Collections.addAll(list, urls);
 
                                 shareMessage_hz.setShImgs(list);
                                 //保存分享信息到云端
@@ -476,7 +472,6 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         shareMessage_hz.save(mActivity, new SaveListener() {
             @Override
             public void onSuccess() {
-//                SVProgressHUD.showSuccessWithStatus(mActivity, getString(R.string.share_messages_success));
                 mToast(R.string.share_messages_success);
 //                LogUtils.logI("share messages success ");
                 mHandler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Contants.ONE_SECOND);
@@ -486,7 +481,6 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
             @Override
             public void onFailure(int i, String s) {
                 mToast(R.string.share_message_fail);
-//                SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.share_message_fail));
 //                LogUtils.logI("share messages faile ");
                 darftUtils.saveDraft(
                         content_et.getText().toString(),
@@ -506,99 +500,6 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         tag_tv.setText("");
         gridViewAdapter.setDatas(null,true);
 
-    }
-
-    /**
-     * 初始化表情面板内容
-     */
-    private void initEmotion() {
-        // 获取屏幕宽度
-        int gvWidth = DisplayUtils.getScreenWidthPixels(mActivity);
-        // 表情边距
-        int spacing = DisplayUtils.dp2px(mActivity, 8);
-        // GridView中item的宽度
-        int itemWidth = (gvWidth - spacing * 8) / 7;
-        int gvHeight = itemWidth * 3 + spacing * 4;
-
-        List<GridView> gvs = new ArrayList<GridView>();
-        List<String> emotionNames = new ArrayList<String>();
-        // 遍历所有的表情名字
-        for (String emojiName : EmotionUtils.emojiMap.keySet()) {
-            emotionNames.add(emojiName);
-            // 每20个表情作为一组,同时添加到ViewPager对应的view集合中
-            if (emotionNames.size() == 20) {
-                GridView gv = createEmotionGridView(emotionNames, gvWidth, spacing, itemWidth, gvHeight);
-                gvs.add(gv);
-                // 添加完一组表情,重新创建一个表情名字集合
-                emotionNames = new ArrayList<String>();
-            }
-        }
-
-        // 检查最后是否有不足20个表情的剩余情况
-        if (emotionNames.size() > 0) {
-            GridView gv = createEmotionGridView(emotionNames, gvWidth, spacing, itemWidth, gvHeight);
-            gvs.add(gv);
-        }
-
-//        ViewGroup.LayoutParams layoutParams = vp_emotion_dashboard.getLayoutParams();
-        // 将多个GridView添加显示到ViewPager中
-        emotionPagerGvAdapter = new EmotionPagerAdapter(gvs);
-        vp_emotion_dashboard.setAdapter(emotionPagerGvAdapter);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(gvWidth, gvHeight);
-        vp_emotion_dashboard.setLayoutParams(params);
-    }
-
-    /**
-     * 创建显示表情的GridView
-     */
-    private GridView createEmotionGridView(List<String> emotionNames, int gvWidth, int padding, int itemWidth, int gvHeight) {
-        // 创建GridView
-        GridView gv = new GridView(mActivity);
-        gv.setBackgroundColor(Color.rgb(233, 233, 233));
-        gv.setSelector(android.R.color.transparent);
-        gv.setNumColumns(7);
-        gv.setPadding(padding, padding, padding, padding);
-        gv.setHorizontalSpacing(padding);
-        gv.setVerticalSpacing(padding);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(gvWidth, gvHeight);
-        gv.setLayoutParams(params);
-        // 给GridView设置表情图片
-        EmotionGvAdapter adapter = new EmotionGvAdapter(this, emotionNames, itemWidth);
-        gv.setAdapter(adapter);
-        gv.setOnItemClickListener(this);
-        return gv;
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Object itemAdapter = parent.getAdapter();
-
-        if (itemAdapter instanceof EmotionGvAdapter) {
-            // 点击的是表情
-            EmotionGvAdapter emotionGvAdapter = (EmotionGvAdapter) itemAdapter;
-
-            if (position == emotionGvAdapter.getCount() - 1) {
-                // 如果点击了最后一个回退按钮,则调用删除键事件
-                content_et.dispatchKeyEvent(new KeyEvent(
-                        KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
-            } else {
-                // 如果点击了表情,则添加到输入框中
-                String emotionName = emotionGvAdapter.getItem(position);
-
-                // 获取当前光标位置,在指定位置上添加表情图片文本
-                int curPosition = content_et.getSelectionStart();
-                StringBuilder sb = new StringBuilder(content_et.getText().toString());
-                sb.insert(curPosition, emotionName);
-
-                // 特殊文字处理,将表情等转换一下
-                content_et.setText(StringUtils.getEmotionContent(
-                        mActivity, content_et, sb.toString()));
-
-                // 将光标设置到新增完表情的右侧
-                content_et.setSelection(curPosition + emotionName.length());
-            }
-
-        }
     }
 
 

@@ -199,33 +199,34 @@ public class MainActivity extends CustomActBarActivity {
      * 没有登录过，则不进行其他操作
      */
     private void loginFunction() {
+        Dialog4Tips.loginFunction(mActivity);
 
-        final Dialog4Tips dialog4Tips = new Dialog4Tips(mActivity);
-
-        dialog4Tips.setBtnCancelText(getString(R.string.skin));
-        dialog4Tips.setBtnOkText(getString(R.string.login_text));
-        dialog4Tips.setContent(getString(R.string.login_tips_text));
-        dialog4Tips.setBtnCancelVisi(View.VISIBLE);
-
-        dialog4Tips.setDialogListener(new Dialog4Tips.Listener() {
-            @Override
-            public void btnOkListenter() {//登陆  按钮 ，进入登陆界面
-
-                dialog4Tips.dismiss();
-
-                mStartActivity(LoginActivity.class);
-            }
-
-            @Override
-            public void btnCancelListener() {//跳过  按钮 进入主界面
-
-
-                dialog4Tips.dismiss();
-
-            }
-        });
-
-        dialog4Tips.show();
+//        final Dialog4Tips dialog4Tips = new Dialog4Tips(mActivity);
+//
+//        dialog4Tips.setBtnCancelText(getString(R.string.skin));
+//        dialog4Tips.setBtnOkText(getString(R.string.login_text));
+//        dialog4Tips.setContent(getString(R.string.login_tips_text));
+//        dialog4Tips.setBtnCancelVisi(View.VISIBLE);
+//
+//        dialog4Tips.setDialogListener(new Dialog4Tips.Listener() {
+//            @Override
+//            public void btnOkListenter() {//登陆  按钮 ，进入登陆界面
+//
+//                dialog4Tips.dismiss();
+//
+//                mStartActivity(LoginActivity.class);
+//            }
+//
+//            @Override
+//            public void btnCancelListener() {//跳过  按钮 进入主界面
+//
+//
+//                dialog4Tips.dismiss();
+//
+//            }
+//        });
+//
+//        dialog4Tips.show();
 
 
     }

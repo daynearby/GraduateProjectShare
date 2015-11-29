@@ -1,10 +1,13 @@
 package com.young.utils;
 
+import android.app.Activity;
 import android.graphics.Color;
+import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
@@ -18,14 +21,127 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.smssdk.gui.GroupListView;
+
 public class EmotionUtils implements Serializable {
 
-	private EmotionPagerAdapter emotionPagerGvAdapter;
+	private ViewPager vp;
+	private Activity mActivity;
+	private EditText content_et;
+
+	public EmotionUtils(Activity mActivity,ViewPager vp, EditText content_et) {
+		this.vp = vp;
+		this.mActivity = mActivity;
+		this.content_et =content_et;
+		initEmotion();
+	}
+
+	public static int getImgByName(String imgName) {
+		Integer integer = emojiMap.get(imgName);
+		return integer == null ? -1 : integer;
+	}
+
+	/**
+	 * 初始化表情面板内容
+	 */
+	private void initEmotion() {
+		// 获取屏幕宽度
+		int gvWidth = DisplayUtils.getScreenWidthPixels(mActivity);
+		// 表情边距
+		int spacing = DisplayUtils.dp2px(mActivity, 8);
+		// GridView中item的宽度
+		int itemWidth = (gvWidth - spacing * 8) / 7;
+		int gvHeight = itemWidth * 3 + spacing * 4;
+
+		List<GridView> gvs = new ArrayList<GridView>();
+		List<String> emotionNames = new ArrayList<String>();
+		// 遍历所有的表情名字
+		for (String emojiName : EmotionUtils.emojiMap.keySet()) {
+			emotionNames.add(emojiName);
+			// 每20个表情作为一组,同时添加到ViewPager对应的view集合中
+			if (emotionNames.size() == 20) {
+				GridView gv = createEmotionGridView(emotionNames, gvWidth, spacing, itemWidth, gvHeight);
+				gvs.add(gv);
+				// 添加完一组表情,重新创建一个表情名字集合
+				emotionNames = new ArrayList<String>();
+			}
+		}
+
+		// 检查最后是否有不足20个表情的剩余情况
+		if (emotionNames.size() > 0) {
+			GridView gv = createEmotionGridView(emotionNames, gvWidth, spacing, itemWidth, gvHeight);
+			gvs.add(gv);
+		}
+
+//        ViewGroup.LayoutParams layoutParams = vp_emotion_dashboard.getLayoutParams();
+		// 将多个GridView添加显示到ViewPager中
+		EmotionPagerAdapter emotionPagerGvAdapter = new EmotionPagerAdapter(gvs);
+		vp.setAdapter(emotionPagerGvAdapter);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(gvWidth, gvHeight);
+		vp.setLayoutParams(params);
+	}
+
+	/**
+	 * 创建显示表情的GridView
+	 */
+	private GridView createEmotionGridView(List<String> emotionNames, int gvWidth, int padding, int itemWidth, int gvHeight) {
+		// 创建GridView
+		GridView gv = new GridView(mActivity);
+		gv.setBackgroundColor(Color.rgb(233, 233, 233));
+		gv.setSelector(android.R.color.transparent);
+		gv.setNumColumns(7);
+		gv.setPadding(padding, padding, padding, padding);
+		gv.setHorizontalSpacing(padding);
+		gv.setVerticalSpacing(padding);
+		ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(gvWidth, gvHeight);
+		gv.setLayoutParams(params);
+		// 给GridView设置表情图片
+		EmotionGvAdapter adapter = new EmotionGvAdapter(mActivity, emotionNames, itemWidth);
+		gv.setAdapter(adapter);
+
+		gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Object itemAdapter = parent.getAdapter();
+
+				if (itemAdapter instanceof EmotionGvAdapter) {
+					// 点击的是表情
+					EmotionGvAdapter emotionGvAdapter = (EmotionGvAdapter) itemAdapter;
+
+					if (position == emotionGvAdapter.getCount() - 1) {
+						// 如果点击了最后一个回退按钮,则调用删除键事件
+						content_et.dispatchKeyEvent(new KeyEvent(
+								KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
+					} else {
+						// 如果点击了表情,则添加到输入框中
+						String emotionName = emotionGvAdapter.getItem(position);
+
+						// 获取当前光标位置,在指定位置上添加表情图片文本
+						int curPosition = content_et.getSelectionStart();
+						StringBuilder sb = new StringBuilder(content_et.getText().toString());
+						sb.insert(curPosition, emotionName);
+
+						// 特殊文字处理,将表情等转换一下
+						content_et.setText(StringUtils.getEmotionContent(
+								mActivity, content_et, sb.toString()));
+
+						// 将光标设置到新增完表情的右侧
+						content_et.setSelection(curPosition + emotionName.length());
+					}
+
+				}
+			}
+		});
+		return gv;
+	}
+
+
+
 	/**
 	 * key-表情文字;value-表情图片资源
 	 */
 	public static Map<String, Integer> emojiMap;
-	
+
 	static {
 		emojiMap = new HashMap<String, Integer>();
 		emojiMap.put("[呵呵]", R.drawable.d_hehe);
@@ -84,9 +200,6 @@ public class EmotionUtils implements Serializable {
 		emojiMap.put("[熊猫]", R.drawable.d_xiongmao);
 		emojiMap.put("[兔子]", R.drawable.d_tuzi);
 	}
-	
-	public static int getImgByName(String imgName) {
-		Integer integer = emojiMap.get(imgName);
-		return integer == null ? -1 : integer;
-	}
+
+
 }

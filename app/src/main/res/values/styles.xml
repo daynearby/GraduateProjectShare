@@ -5,6 +5,7 @@
         <!-- Customize your theme here. -->
         <!-- API 14 theme customizations can go here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="linkBuilderStyle">@style/LinkBuilder</item>
 
     </style>
 
@@ -97,4 +98,8 @@
         <item name="android:activityCloseExitAnimation">@animator/activity_slid_right_out</item>
     </style>
 
+    <!-- 超链接颜色 -->
+    <style name="LinkBuilder">
+        <item name="defaultLinkColor">@color/theme_puple</item>
+    </style>
 </resources>
