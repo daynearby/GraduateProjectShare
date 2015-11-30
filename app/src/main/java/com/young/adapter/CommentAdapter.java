@@ -48,6 +48,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
     private ToReply toReply;
     private User user;
     private int strId;
+    private CommRemoteModel commRemoteModel;
 
     private static final int ITEM_TYPE_SIZE = 2;
     private static final int ITEM_TYPE_HEAD = 1;
@@ -113,7 +114,6 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
                 .build();
 
 
-
     }
 
     /**
@@ -148,7 +148,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
      */
     private void listviewHead(ViewHolder holder, CommRemoteModel commRemoteModel) {
 
-
+        this.commRemoteModel = commRemoteModel;
         User user = commRemoteModel.getUser();
 
         ImageView avatar = holder.getView(R.id.id_im_userH);//用户头像
@@ -181,12 +181,12 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         gridViewAdapter.setDatas(commRemoteModel.getImages(), false);
         myGridview.setOnItemClickListener(new itemClick(commRemoteModel.getImages()));
 
-        nickname_tv.setOnClickListener(new click(user));
-        avatar.setOnClickListener(new click(user));
-        wanto_tv.setOnClickListener(new click(commRemoteModel));
-        hadgo_tv.setOnClickListener(new click(commRemoteModel));
-        comment_tv.setOnClickListener(new click(commRemoteModel));
-        tag_tv.setOnClickListener(new click(commRemoteModel.getTag()));
+        nickname_tv.setOnClickListener(new click());
+        avatar.setOnClickListener(new click());
+        wanto_tv.setOnClickListener(new click());
+        hadgo_tv.setOnClickListener(new click());
+        comment_tv.setOnClickListener(new click());
+        tag_tv.setOnClickListener(new click());
 
     }
 
@@ -204,23 +204,14 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
      */
     private class click implements View.OnClickListener {
 
-        private Object o;
-        private ShareMessage_HZ shareMessage;
-
-        public click(Object o) {
-            this.o = o;
-
-
-//            LogUtils.logD("dian ji ");
-        }
 
         @Override
         public void onClick(View v) {
 
             switch (v.getId()) {
                 case R.id.id_im_userH://用户资料
-                    User u = (User) o;
-                    PopupWinUserInfo userInfo = new PopupWinUserInfo(ctx, u);
+
+                    PopupWinUserInfo userInfo = new PopupWinUserInfo(ctx, commRemoteModel.getUser());
                     userInfo.onShow(v);
 //                    LogUtils.logD("用户资料 = " + u.toString());
                     break;
@@ -232,12 +223,11 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
 
                         boolean hadWant = false;
-                        shareMessage = (ShareMessage_HZ) o;
-                        List<String> shWantedNum = shareMessage.getShWantedNum();
+                        List<String> shWantedNum = commRemoteModel.getWanted();
                         for (String userId : shWantedNum) {
                             hadWant = user.getObjectId().equals(userId);
                         }
-                        wantToGo(hadWant, shareMessage, v);
+                        wantToGo(hadWant, v);
                     } else {
                         Dialog4Tips.loginFunction((Activity) ctx);
                     }
@@ -249,13 +239,12 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
                     getUser();
                     if (user != null) {
                         boolean hadGo = false;
-                        shareMessage = (ShareMessage_HZ) o;
-                        List<String> shVisitedNum = shareMessage.getShVisitedNum();
+                        List<String> shVisitedNum = commRemoteModel.getVisited();
                         for (String userId : shVisitedNum) {
                             hadGo = user.getObjectId().equals(userId);
                         }
 
-                        visit(hadGo, shareMessage, v);
+                        visit(hadGo,  v);
                     } else {
                         Dialog4Tips.loginFunction((Activity) ctx);
                     }
@@ -274,6 +263,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
             }
         }
     }
+
     /**
      * item click listener
      */
@@ -337,23 +327,25 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
      * 去过的逻辑处理
      *
      * @param hadGo
-     * @param shareMessage
      * @param v
      */
-    private void visit(boolean hadGo, ShareMessage_HZ shareMessage, View v) {
+    private void visit(boolean hadGo, View v) {
+
         if (hadGo) {
             strId = R.string.not_visit;
-            shareMessage.getShVisitedNum().remove(user.getObjectId());
+            commRemoteModel.getVisited().remove(user.getObjectId());
         } else {
             strId = R.string.cancel_collect_success;
-            shareMessage.getShVisitedNum().add(user.getObjectId());
+            commRemoteModel.getVisited().add(user.getObjectId());
         }
 
 
-        ((TextView) v).setText(String.valueOf(shareMessage.getShVisitedNum() == null ?
-                0 : shareMessage.getShVisitedNum().size()));
+        ((TextView) v).setText(String.valueOf(commRemoteModel.getVisited() == null ?
+                0 : commRemoteModel.getVisited().size()));
 
-        shareMessage.update(ctx, shareMessage.getObjectId(), new UpdateListener() {
+        ShareMessage_HZ shareMessage = new ShareMessage_HZ();
+        shareMessage.setShVisitedNum(commRemoteModel.getVisited());
+        shareMessage.update(ctx, commRemoteModel.getObjectId(), new UpdateListener() {
             @Override
             public void onSuccess() {
                 mToast(strId);
@@ -371,16 +363,16 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
      * 想去逻辑处理
      *
      * @param hadWant
-     * @param shareMessage
      * @param v
      */
-    private void wantToGo(boolean hadWant, ShareMessage_HZ shareMessage, View v) {
+    private void wantToGo(boolean hadWant,  View v) {
 
         JSONObject jsonObject = new JSONObject();//参数
+        ShareMessage_HZ shareMessage = new ShareMessage_HZ();
         try {
             jsonObject.put("message", "1");
             jsonObject.put("userid", user.getObjectId());
-            jsonObject.put("collectionid", shareMessage.getObjectId());
+            jsonObject.put("collectionid", commRemoteModel.getObjectId());
 
         } catch (JSONException e) {
 //            e.printStackTrace();
@@ -389,7 +381,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
         if (hadWant) {
             strId = R.string.cancel_collect_success;
-            shareMessage.getShWantedNum().remove(user.getObjectId());
+            commRemoteModel.getWanted().remove(user.getObjectId());
 
 //操作收藏表
             BmobApi.AsyncFunction(ctx, jsonObject, BmobApi.REMOVE_COLLECTION, new GotoAsyncFunction() {
@@ -414,15 +406,18 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
             });
         } else {
             strId = R.string.collect_success;
-            shareMessage.getShWantedNum().add(user.getObjectId());
+            commRemoteModel.getWanted().add(user.getObjectId());
+            shareMessage.setObjectId(commRemoteModel.getObjectId());
 
             BmobApi.saveCollectionShareMessage(ctx, user, shareMessage, Contants.MESSAGE_TYPE_SHAREMESSAGE);
+
         }
 
-        ((TextView) v).setText(String.valueOf(shareMessage.getShWantedNum() == null ?
-                0 : shareMessage.getShWantedNum().size()));
+        ((TextView) v).setText(String.valueOf(commRemoteModel.getWanted() == null ?
+                0 : commRemoteModel.getWanted().size()));
 
 
+        shareMessage.setShVisitedNum(commRemoteModel.getVisited());
         shareMessage.update(ctx, shareMessage.getObjectId(), new UpdateListener() {
             @Override
             public void onSuccess() {
@@ -440,11 +435,12 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
     /**
      * 再获取当前用户是否存在
      */
-    private void getUser(){
+    private void getUser() {
         if (user == null) {
             user = BmobUser.getCurrentUser(ctx, User.class);
         }
     }
+
     /**
      * 恢复按钮回调
      *
