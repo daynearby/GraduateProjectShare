@@ -109,6 +109,10 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
         return R.layout.item_share_main;
     }
 
+    /**
+     * 点击事件
+     *
+     */
     private class click implements View.OnClickListener {
 
         private Object o;
@@ -116,8 +120,9 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
 
         public click(Object o) {
             this.o = o;
-            user = BmobUser.getCurrentUser(ctx, User.class);
-            LogUtils.logD("dian ji ");
+
+
+//            LogUtils.logD("dian ji ");
         }
 
         @Override
@@ -128,10 +133,12 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
                     User u = (User) o;
                     userInfo = new PopupWinUserInfo(ctx, u);
                     userInfo.onShow(v);
-                    LogUtils.logD("用户资料 = " + u.toString());
+//                    LogUtils.logD("用户资料 = " + u.toString());
                     break;
 
                 case R.id.id_tx_wantogo://想去--数量
+
+                    getUser();
                     if (user != null) {
 
 
@@ -149,6 +156,8 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
                     break;
 
                 case R.id.id_hadgo://去过--数量
+
+                    getUser();
                     if (user != null) {
                         boolean hadGo = false;
                         shareMessage = (ShareMessage_HZ) o;
@@ -164,13 +173,25 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
                     break;
 
                 case R.id.id_tx_comment://评论数量
+                    getUser();
+
 
                     break;
                 case R.id.id_tx_tab://标签
 
+
                     break;
 
             }
+        }
+    }
+
+    /**
+     * 再获取当前用户是否存在
+     */
+    private void getUser(){
+        if (user == null) {
+            user = BmobUser.getCurrentUser(ctx, User.class);
         }
     }
 
@@ -305,12 +326,5 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
         }
     }
 
-    /**
-     * toast 提示
-     *
-     * @param strResId 提示文字 - 资源
-     */
-    private void mToast(int strResId) {
-        Toast.makeText(ctx, strResId, Toast.LENGTH_LONG).show();
-    }
+
 }

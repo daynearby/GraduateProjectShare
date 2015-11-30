@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
+import com.bmob.BmobPro;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.soundcloud.android.crop.ActivityResult;
 import com.young.annotation.InjectView;
@@ -212,7 +213,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
      */
     private void clearCache() {
         SVProgressHUD.showWithStatus(this, getString(R.string.cleaning_cache));
-
+        BmobPro.getInstance(mActivity).clearCache();
         ImageLoader.getInstance().clearDiskCache();
         SVProgressHUD.dismiss(this);
     }

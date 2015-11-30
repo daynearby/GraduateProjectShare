@@ -19,6 +19,7 @@ public class CommRemoteModel extends BmobObject{
     private String tag;
     private List<String> wanted;
     private List<String> visited;
+    private String mcreatedAt;
     private int comment;
     private int type;
 
@@ -76,6 +77,14 @@ public class CommRemoteModel extends BmobObject{
 
     public void setVisited(List<String> visited) {
         this.visited = visited;
+    }
+
+    public String getMcreatedAt() {
+        return mcreatedAt;
+    }
+
+    public void setMcreatedAt(String mcreatedAt) {
+        this.mcreatedAt = mcreatedAt;
     }
 
     public int getComment() {

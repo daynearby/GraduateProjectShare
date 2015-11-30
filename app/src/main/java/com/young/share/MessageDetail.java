@@ -10,16 +10,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
+import com.twotoasters.jazzylistview.JazzyListView;
+import com.twotoasters.jazzylistview.effects.SlideInEffect;
 import com.young.adapter.CommentAdapter;
 import com.young.annotation.InjectView;
 import com.young.base.ItemActBarActivity;
 import com.young.config.Contants;
 import com.young.model.BaseModel;
-import com.young.model.Collection_HZ;
 import com.young.model.CommRemoteModel;
 import com.young.model.ShareMessage_HZ;
 import com.young.myInterface.GotoAsyncFunction;
@@ -33,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.listener.UpdateListener;
@@ -44,7 +45,7 @@ import cn.bmob.v3.listener.UpdateListener;
 public class MessageDetail extends ItemActBarActivity implements View.OnClickListener {
 
     @InjectView(R.id.listview_discover)
-    private ListView listView;
+    private JazzyListView listView;
     @InjectView(R.id.edt_message_detail_comment)
     private EditText sendComment_edt;
     @InjectView(R.id.btn_message_detail_tosend)
@@ -53,18 +54,19 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
     private ImageView emotion_im;
     @InjectView(R.id.vp_popupwindow_emotion_dashboard)
     private ViewPager vp_emotion_dashboard;
-    @InjectView(R.id.id_tx_wantogo)
-    private TextView wantogo_txt;
-    @InjectView(R.id.id_hadgo)
-    private TextView hadgo_txt;
-    @InjectView(R.id.id_tx_comment)
-    private TextView comment_txt;
+    //    @InjectView(R.id.id_tx_wantogo)
+//    private TextView wantogo_txt;
+//    @InjectView(R.id.id_hadgo)
+//    private TextView hadgo_txt;
+//    @InjectView(R.id.id_tx_comment)
+//    private TextView comment_txt;
     @InjectView(R.id.llayout_message_detail_input_comment)
     private LinearLayout layout_comment;
 
 
     private static String backTagClazz;
     private static CommRemoteModel commModel = new CommRemoteModel();
+    private List<CommRemoteModel> dataList = new ArrayList<>();//数据
     private List<String> commentList;
     private CommentAdapter commAdapter;
     private InputMethodManager imm;
@@ -120,15 +122,17 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
         commAdapter = new CommentAdapter(mActivity);
 
         listView.setAdapter(commAdapter);
+        listView.setTransitionEffect(new SlideInEffect());
+
         //表情
         new EmotionUtils(mActivity, vp_emotion_dashboard, sendComment_edt);
 
         sendComment_edt.setOnClickListener(this);
         tosend_btn.setOnClickListener(this);
         emotion_im.setOnClickListener(this);
-        wantogo_txt.setOnClickListener(this);
-        hadgo_txt.setOnClickListener(this);
-        comment_txt.setOnClickListener(this);
+//        wantogo_txt.setOnClickListener(this);
+//        hadgo_txt.setOnClickListener(this);
+//        comment_txt.setOnClickListener(this);
 
     }
 
@@ -166,6 +170,9 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
         switch (msg.what) {
             case MESSAGE_FORMATE_DATA:
 
+                dataList.add( commModel);
+                commAdapter.setData(dataList);
+
                 break;
         }
     }
@@ -191,6 +198,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
         commModel.setWanted(shareMessage.getShWantedNum());
         commModel.setObjectId(shareMessage.getObjectId());
         commModel.setComment(shareMessage.getShCommNum());
+        commModel.setMcreatedAt(shareMessage.getCreatedAt());
         commModel.setType(Contants.DATA_MODEL_SHARE_MESSAGES);//属于分享信息
 
         mHandler.sendEmptyMessage(MESSAGE_FORMATE_DATA);
@@ -310,7 +318,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
             shareMessage.setShWantedNum(commModel.getWanted());
 
 //添加收藏
-            BmobApi.saveCollectionShareMessage(mActivity,mUser,shareMessage,Contants.MESSAGE_TYPE_SHAREMESSAGE);
+            BmobApi.saveCollectionShareMessage(mActivity, mUser, shareMessage, Contants.MESSAGE_TYPE_SHAREMESSAGE);
 
         }
 

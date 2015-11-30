@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -54,6 +55,15 @@ public abstract class CommAdapter<T> extends BaseAdapter {
         convert(holder, getItem(position),position);
 
         return holder.getConvertView();
+    }
+
+    /**
+     * toast 提示
+     *
+     * @param strResId 提示文字 - 资源
+     */
+    public void mToast(int strResId) {
+        Toast.makeText(ctx, strResId, Toast.LENGTH_LONG).show();
     }
 
     //adapter获取view实例\绑定数据
