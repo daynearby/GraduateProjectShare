@@ -137,9 +137,9 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
                     break;
 
                 case R.id.id_tx_wantogo://想去--数量
-
+                    v.setClickable(false);
                     getUser();
-                    if (user != null) {
+                    if (user != null) {//用户是否登陆
 
 
                         boolean hadWant = false;
@@ -156,8 +156,8 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
                     break;
 
                 case R.id.id_hadgo://去过--数量
-
-                    getUser();
+                    v.setClickable(false);
+                    getUser();//用户是否登陆
                     if (user != null) {
                         boolean hadGo = false;
                         shareMessage = (ShareMessage_HZ) o;
@@ -202,7 +202,7 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
      * @param shareMessage
      * @param v
      */
-    private void visit(boolean hadGo, ShareMessage_HZ shareMessage, View v) {
+    private void visit(boolean hadGo, ShareMessage_HZ shareMessage, final View v) {
         if (hadGo) {
             strId = R.string.not_visit;
             shareMessage.getShVisitedNum().remove(user.getObjectId());
@@ -218,11 +218,14 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
         shareMessage.update(ctx, shareMessage.getObjectId(), new UpdateListener() {
             @Override
             public void onSuccess() {
+
+                v.setClickable(false);
                 mToast(strId);
             }
 
             @Override
             public void onFailure(int i, String s) {
+                v.setClickable(false);
                 LogUtils.logD(" wantToGo faile  erro code = " + i + " erro message = " + s);
             }
         });
@@ -236,7 +239,7 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
      * @param shareMessage
      * @param v
      */
-    private void wantToGo(boolean hadWant, ShareMessage_HZ shareMessage, View v) {
+    private void wantToGo(boolean hadWant, ShareMessage_HZ shareMessage, final View v) {
 
         JSONObject jsonObject = new JSONObject();//参数
         try {
@@ -288,11 +291,14 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
         shareMessage.update(ctx, shareMessage.getObjectId(), new UpdateListener() {
             @Override
             public void onSuccess() {
+
+                v.setClickable(false);
                 mToast(strId);
             }
 
             @Override
             public void onFailure(int i, String s) {
+                v.setClickable(false);
                 LogUtils.logD(" wantToGo faile  erro code = " + i + " erro message = " + s);
             }
         });

@@ -6,6 +6,7 @@
     >
 
         <View
+            android:id="@+id/view_bottom_bar_divilier"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/primary_text_disabled_material_light" />

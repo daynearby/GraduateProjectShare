@@ -36,7 +36,7 @@ public class MyRunnable implements Runnable {
 
 
         if (!cancleTask) {
-            LogUtils.logD("cancle = "+!cancleTask);
+//            LogUtils.logD("cancle = "+!cancleTask);
 
             gotoRunnable.running();
             LogUtils.logD("running");

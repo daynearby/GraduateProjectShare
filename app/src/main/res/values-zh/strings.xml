@@ -124,4 +124,6 @@
     <string name="txt_comment">评论</string>
     <string name="comment_not_empty">评论内容不能为空</string>
     <string name="operation_success">操作成功</string>
+    <string name="network_erro">网络不通畅</string>
+    <string name="user_name_defual0">二货</string>
 </resources>

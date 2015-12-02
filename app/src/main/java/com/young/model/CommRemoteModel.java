@@ -13,6 +13,8 @@ import cn.bmob.v3.BmobObject;
 public class CommRemoteModel extends BmobObject{
 
     private User user;
+    private User sender;
+    private User receiver;
     private String content;
     private List<String> images;
     private String locationInfo;
@@ -29,6 +31,22 @@ public class CommRemoteModel extends BmobObject{
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public User getSender() {
+        return sender;
+    }
+
+    public void setSender(User sender) {
+        this.sender = sender;
+    }
+
+    public User getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
     }
 
     public String getContent() {

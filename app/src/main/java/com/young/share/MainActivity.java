@@ -15,7 +15,6 @@ import android.widget.ImageView;
 
 import com.young.adapter.MainPagerAdapter;
 import com.young.base.CustomActBarActivity;
-import com.young.config.ApplicationConfig;
 import com.young.config.Contants;
 import com.young.model.MyBmobInstallation;
 import com.young.model.User;
@@ -37,10 +36,7 @@ import cn.bmob.v3.BmobUser;
 
 public class MainActivity extends CustomActBarActivity {
 
-    private ViewPager viewPager;
-    private List<View> list;
     private ArcMenu mArcMenu;
-    private SharePreferenceUtils sharePreferenceUtils;
     private BDLBSUtils bdlbsUtils;
 
     private String province = "广东省";
@@ -62,8 +58,8 @@ public class MainActivity extends CustomActBarActivity {
     @Override
     public void findviewbyid() {
 
-        list = new ArrayList<>();
-        viewPager = $(R.id.vp_main);
+        List<View> list = new ArrayList<>();
+        ViewPager viewPager = $(R.id.vp_main);
         mArcMenu = $(R.id.id_menu);
 
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -91,7 +87,7 @@ public class MainActivity extends CustomActBarActivity {
         bdlbsUtils = BDLBSUtils.builder(this, new locationListener());
         bdlbsUtils.startLocation();
 
-        sharePreferenceUtils = new SharePreferenceUtils(this);
+        SharePreferenceUtils sharePreferenceUtils = new SharePreferenceUtils(this);
     }
 
     /**
@@ -101,7 +97,8 @@ public class MainActivity extends CustomActBarActivity {
         // 初始化BmobSDK
         Bmob.initialize(this, Contants.BMOB_APP_KEY);
         // 使用推送服务时的初始化操作
-        MyBmobInstallation.getCurrentInstallation(this).save();
+        savaUserWithInsId();
+
         // 启动推送服务
         BmobPush.startWork(this, Contants.BMOB_APP_KEY);
         //注册信息接收者
@@ -396,10 +393,23 @@ public class MainActivity extends CustomActBarActivity {
         }
     }
 
+    /**
+     * 将installationId与user绑定
+     */
+    private void savaUserWithInsId() {
+        if (mUser != null) {
+            MyBmobInstallation myBmobInstallation = new MyBmobInstallation(this);
+            myBmobInstallation.setUser(mUser);
+            myBmobInstallation.setInstallationId(MyBmobInstallation.getInstallationId(this));
+            myBmobInstallation.save(this);
+        }
+    }
+
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        mUser =BmobUser.getCurrentUser(mActivity,User.class);
+    protected void onResume() {
+        super.onResume();
+        mUser = BmobUser.getCurrentUser(mActivity, User.class);
+        savaUserWithInsId();
     }
 
     @Override

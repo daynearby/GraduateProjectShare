@@ -1,6 +1,7 @@
 package com.young.network;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.bmob.BmobProFile;
 import com.bmob.btp.callback.ThumbnailListener;
@@ -9,20 +10,24 @@ import com.google.gson.Gson;
 import com.young.config.Contants;
 import com.young.model.BaseModel;
 import com.young.model.Collection_HZ;
+import com.young.model.Comment_HZ;
 import com.young.model.DiscountMessage_HZ;
+import com.young.model.Message_HZ;
 import com.young.model.ShareMessage_HZ;
 import com.young.model.User;
-import com.young.model.dbmodel.ShareMessage;
 import com.young.myInterface.GoToUploadImages;
 import com.young.myInterface.GotoAsyncFunction;
+import com.young.share.R;
 import com.young.utils.LogUtils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import cn.bmob.v3.AsyncCustomEndpoints;
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.CloudCodeListener;
+import cn.bmob.v3.listener.SaveListener;
 
 /**
  * 网络请求 基类
@@ -36,6 +41,8 @@ public class BmobApi {
     public static final String FINDPWD = "FindPwd";
     public static final String GET_RECENTLY_SHAREMESSAGES = "GetRecentlyShareMessages";//获取最新的的前50条记录
     public static final String REMOVE_COLLECTION = "RemoveCollection";//移除收藏
+    public static final String PUSH_MESSAGE_BY_UID = "PushMessageByUID";//发送信息
+
 
     private static Gson gson = new Gson();
 
@@ -183,12 +190,12 @@ public class BmobApi {
      * @param bmobObject
      * @param messageType Contants.MESSAGE_TYPE_SHAREMESSAGE://分享信息  Contants.MESSAGE_TYPE_DISCOUNT://商家优惠
      */
-    public static void saveCollectionShareMessage(Context ctx,User user,BmobObject bmobObject,int messageType){
+    public static void saveCollectionShareMessage(Context ctx, User user, BmobObject bmobObject, int messageType) {
 
         Collection_HZ collection = new Collection_HZ();
         collection.setCollUserId(user);//current user
 
-        switch (messageType){
+        switch (messageType) {
             case Contants.MESSAGE_TYPE_SHAREMESSAGE://分享信息
                 ShareMessage_HZ shareMessage = (ShareMessage_HZ) bmobObject;
                 collection.setShUserId(shareMessage.getUserId());
@@ -204,6 +211,130 @@ public class BmobApi {
 
         collection.save(ctx);
 
+    }
+
+
+    /**
+     * 发送信息
+     * 将信息保存到远程数据库
+     * 将信息推送给指定的人
+     *
+     * @param context
+     * @param senderId
+     * @param receiverId
+     * @param content
+     * @param shareId
+     * @param sendMessageCall
+     */
+    public static void sendMessage(final Context context, String senderId, final String receiverId,
+                                   final String content, String shareId, final SendMessageCallback sendMessageCall) {
+        User sender = new User();
+        User receiver = new User();
+        ShareMessage_HZ shareMessage = new ShareMessage_HZ();
+        final Message_HZ message = new Message_HZ();
+        final Comment_HZ comment = new Comment_HZ();
+
+//        1.将信息保存到远程数据库
+
+        sender.setObjectId(senderId);
+        receiver.setObjectId(receiverId);
+        shareMessage.setObjectId(shareId);
+
+        comment.setReveicerId(receiver);
+        comment.setSenderId(sender);
+        comment.setShMsgId(shareMessage);
+
+        message.setCommContent(content);
+        message.setRead(false);
+
+        message.save(context, new SaveListener() {
+            @Override
+            public void onSuccess() {
+
+                comment.setMessageId(message);
+                comment.save(context, new SaveListener() {
+                    @Override
+                    public void onSuccess() {
+                        //保存信息成功。开始发送信息
+                        sendMessage(context, receiverId, content,sendMessageCall);
+                    }
+
+                    @Override
+                    public void onFailure(int i, String s) {
+                        mToast(context, R.string.network_erro);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                mToast(context, R.string.network_erro);
+            }
+        });
+
+
+//                2.将信息推送给指定的人
+
+
+    }
+
+    /**
+     * 使用云端代码。发送信息
+     *
+     * @param ctx
+     * @param receiverId
+     * @param content
+     */
+    private static void sendMessage(final Context ctx, String receiverId,
+                                    String content, final SendMessageCallback sendMessageCall) {
+        JSONObject params = new JSONObject();
+        try {
+            params.put("uid", receiverId);
+            params.put("content", content);
+        } catch (JSONException e) {
+            LogUtils.logD("send messa add params fail " + e.toString());
+        }
+
+
+        AsyncFunction(ctx, params, PUSH_MESSAGE_BY_UID, new GotoAsyncFunction() {
+            @Override
+            public void onSuccess(Object object) {
+                BaseModel baseModel = (BaseModel) object;
+                if (baseModel.getCode() == BaseModel.SUCCESS) {
+//刷新前台数据
+                    if (sendMessageCall != null) {
+                        sendMessageCall.onSuccessReflesh();
+                    }
+
+                } else {
+                    mToast(ctx, R.string.network_erro);
+                }
+            }
+
+            @Override
+            public void onFailure(int code, String msg) {
+                LogUtils.logD("send message faile code = " + code + " message = " + msg);
+            }
+        });
+
+    }
+
+    /**
+     * toast
+     *
+     * @param context
+     * @param strId   提示语
+     */
+    private static void mToast(Context context, int strId) {
+        Toast.makeText(context, strId, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * 发送信息成功的回调
+     */
+    public interface SendMessageCallback {
+        void onSuccessReflesh();
     }
 }
 

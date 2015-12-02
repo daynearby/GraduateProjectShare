@@ -34,13 +34,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:background="@color/white"
                 android:padding="@dimen/paddingHit"
                 android:visibility="gone">
 
                 <EditText
                     android:id="@+id/edt_message_detail_comment"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    style="@style/text_style.0dp"
                     android:layout_gravity="bottom"
                     android:layout_weight="1"
                     android:inputType="textMultiLine" />

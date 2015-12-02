@@ -94,18 +94,27 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
     /**
      * body，评论回复
+     * sender receiver
      *
      * @param holder
      * @param commRemoteModel
      */
     private void listviewBody(ViewHolder holder, CommRemoteModel commRemoteModel) {
         content_txt = holder.getView(R.id.tv_message_detail_comment);
-        User user = commRemoteModel.getUser();
-        String nickname = TextUtils.isEmpty(user.getNickName()) ?
-                ctx.getString(R.string.user_name_defual) : user.getNickName();
+        User sender = commRemoteModel.getSender();
+        User receiver = commRemoteModel.getReceiver();
 
-        String content = nickname + Contants.DATA_SINGEL_COLON + commRemoteModel.getContent() + Contants.DATA_SINGEL_ENTER +
-                commRemoteModel.getCreatedAt() + Contants.DATA_SINGEL_SAPCE + ctx.getString(R.string.txt_replay);
+        String senderNickname = TextUtils.isEmpty(sender.getNickName()) ?
+                ctx.getString(R.string.user_name_defual) : sender.getNickName();
+
+        String receiverNickname = TextUtils.isEmpty(receiver.getNickName()) ?
+                ctx.getString(R.string.user_name_defual0) : receiver.getNickName();
+
+        String content = senderNickname + Contants.DATA_SINGEL_COLON +
+                Contants.DATA_SINGEL_AT + receiverNickname +
+                commRemoteModel.getContent() + Contants.DATA_SINGEL_ENTER +
+                commRemoteModel.getCreatedAt() + Contants.DATA_SINGEL_SAPCE +
+                ctx.getString(R.string.txt_replay);
 
         content_txt.setText(StringUtils.getEmotionContent(ctx, content_txt, content));
 
@@ -125,15 +134,24 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
     private List<Link> getLinks(CommRemoteModel commRemoteModel) {
         List<Link> links = new ArrayList<>();
 
+        String senderNickname = TextUtils.isEmpty(commRemoteModel.getSender().getNickName()) ?
+                ctx.getString(R.string.user_name_defual) : commRemoteModel.getSender().getNickName();
+
+        String receiverNickname = TextUtils.isEmpty(commRemoteModel.getReceiver().getNickName()) ?
+                ctx.getString(R.string.user_name_defual0) : commRemoteModel.getReceiver().getNickName();
+
         //用户名
-        Link nickname = new Link(commRemoteModel.getUser().getNickName());
+        Link sender = new Link(senderNickname);
+        sender.setOnClickListener(new linkOnclick(commRemoteModel.getSender(), CLICK_TYPE_USER_INFO));
+        links.add(sender);
 
-        nickname.setOnClickListener(new linkOnclick(commRemoteModel.getUser(), CLICK_TYPE_USER_INFO));
+        //收到评论者
+        Link receiver = new Link(receiverNickname);
+        receiver.setOnClickListener(new linkOnclick(commRemoteModel.getReceiver(), CLICK_TYPE_USER_INFO));
+        links.add(receiver);
 
-        links.add(nickname);
 //回复
         Link reply = new Link(ctx.getString(R.string.txt_replay));
-
         reply.setOnClickListener(new linkOnclick(commRemoteModel.getUser(), CLICK_TYPE_REPLY));
         links.add(reply);
 
@@ -151,6 +169,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         this.commRemoteModel = commRemoteModel;
         User user = commRemoteModel.getUser();
 
+//        holder.getView(R.id.view_bottom_bar_divilier).setVisibility(View.GONE);
         ImageView avatar = holder.getView(R.id.id_im_userH);//用户头像
         TextView nickname_tv = holder.getView(R.id.id_userName);//昵称
         TextView tag_tv = holder.getView(R.id.id_tx_tab);//标签
@@ -244,7 +263,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
                             hadGo = user.getObjectId().equals(userId);
                         }
 
-                        visit(hadGo,  v);
+                        visit(hadGo, v);
                     } else {
                         Dialog4Tips.loginFunction((Activity) ctx);
                     }
@@ -252,6 +271,10 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
                 case R.id.id_tx_comment://评论数量
                     getUser();
+                    if (user != null && toReply != null) {
+
+                        toReply.reply(commRemoteModel.getUser().getObjectId());
+                    }
 
 
                     break;
@@ -286,7 +309,10 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         }
     }
 
-
+    /**
+     * 超链接 点击事件监听
+     * 评论内容的监听
+     */
     private class linkOnclick implements Link.OnClickListener {
 
         private User user;
@@ -311,11 +337,13 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
                     break;
 
                 case CLICK_TYPE_REPLY://回复
+                    getUser();
+                    if (user != null) {
 
-                    if (toReply != null) {
-                        toReply.reply(user.getObjectId());
+                        if (toReply != null) {
+                            toReply.reply(user.getObjectId());
+                        }
                     }
-
                     break;
 
             }
@@ -345,6 +373,8 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
         ShareMessage_HZ shareMessage = new ShareMessage_HZ();
         shareMessage.setShVisitedNum(commRemoteModel.getVisited());
+        shareMessage.setUserId(commRemoteModel.getUser());
+
         shareMessage.update(ctx, commRemoteModel.getObjectId(), new UpdateListener() {
             @Override
             public void onSuccess() {
@@ -365,7 +395,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
      * @param hadWant
      * @param v
      */
-    private void wantToGo(boolean hadWant,  View v) {
+    private void wantToGo(boolean hadWant, View v) {
 
         JSONObject jsonObject = new JSONObject();//参数
         ShareMessage_HZ shareMessage = new ShareMessage_HZ();
@@ -408,6 +438,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
             strId = R.string.collect_success;
             commRemoteModel.getWanted().add(user.getObjectId());
             shareMessage.setObjectId(commRemoteModel.getObjectId());
+            shareMessage.setUserId(commRemoteModel.getUser());
 
             BmobApi.saveCollectionShareMessage(ctx, user, shareMessage, Contants.MESSAGE_TYPE_SHAREMESSAGE);
 

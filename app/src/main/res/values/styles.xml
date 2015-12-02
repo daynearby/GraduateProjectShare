@@ -29,6 +29,12 @@
 
     </style>
 
+    <style name="text_style.0dp" parent="Theme.AppCompat.Light">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
+
+    </style>
+
     <style name="text_style">
 
         <item name="android:textColor">@color/theme_puple</item>
