@@ -29,5 +29,6 @@
     <dimen name="avatar_size_mediu">100dp</dimen>
     <dimen name="btnSizeDefault">50dp</dimen>
 
+    <dimen name="stroke_width">1dp</dimen>
 
 </resources>

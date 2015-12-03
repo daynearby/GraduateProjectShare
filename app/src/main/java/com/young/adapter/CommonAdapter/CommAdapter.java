@@ -6,7 +6,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
+import com.young.model.User;
+
 import java.util.List;
+
+import cn.bmob.v3.BmobUser;
 
 /**
  * 通用的baseAdapter
@@ -17,9 +21,11 @@ public abstract class CommAdapter<T> extends BaseAdapter {
 
     public List<T> beanList;
     public Context ctx;
+    public User cuser;
 
     public CommAdapter(Context context) {
         ctx = context;
+        cuser = BmobUser.getCurrentUser(ctx, User.class);
     }
 
     public void setData(List<T> beanList) {
@@ -64,6 +70,16 @@ public abstract class CommAdapter<T> extends BaseAdapter {
      */
     public void mToast(int strResId) {
         Toast.makeText(ctx, strResId, Toast.LENGTH_LONG).show();
+    }
+
+
+    /**
+     * 再获取当前用户是否存在
+     */
+    public void getUser() {
+        if (cuser == null) {
+            cuser = BmobUser.getCurrentUser(ctx, User.class);
+        }
     }
 
     //adapter获取view实例\绑定数据

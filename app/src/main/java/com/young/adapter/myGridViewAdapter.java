@@ -62,52 +62,11 @@ public class myGridViewAdapter extends BaseAdapter {
         this.data = datas;
         this.isLocation = isLocation;
 
-//        if (data != null) {
-//            for (String s : data) {
-//                LogUtils.logE("set data = " + s);
-//            }
-//        }
-
-//        if (isUpload) {
-//
-//            if (data == null) {
-//                data = new ArrayList<>();
-//            }
-//
-////1~5需要加
-//            if (data.size() >= 0 && data.size() < Contants.IMAGENUMBER) {
-//
-//
-//                data.add(data.size(), Contants.LAST_ADD_IMG);
-//            }
-//
-//        }
-
         notifyDataSetChanged();
     }
 
     public ArrayList<String> getData() {
         ArrayList<String> dataL = (ArrayList<String>) data;
-//
-//        if (dataL != null) {
-//            //1 ·· 5
-//            if (dataL.size() > 0 && dataL.size() < Contants.IMAGENUMBER) {
-//                dataL.remove(data.size() - 1);
-//
-//                // 6
-//            } else if (dataL.size() == Contants.IMAGENUMBER) {
-//
-//                if (dataL.get(Contants.IMAGENUMBER - 1).equals(Contants.LAST_ADD_IMG)) {
-//                    dataL.remove(Contants.IMAGENUMBER - 1);
-//                }
-//            }
-//
-//        }
-//
-//        //log
-//        for (String s : dataL) {
-//            LogUtils.logE("get data = " + s);
-//        }
 
         return dataL;
     }
@@ -147,7 +106,6 @@ public class myGridViewAdapter extends BaseAdapter {
         if (data != null) {
             imageUrl = data.get(position);
         }
-// TODO: 2015-11-12 get数据的时候偶尔会空指针
 
         if (convertView == null) {
 
@@ -171,19 +129,11 @@ public class myGridViewAdapter extends BaseAdapter {
             if (!imageUrl.equals(Contants.LAST_ADD_IMG)) {
                 holder.isUpload.setVisibility(View.VISIBLE);
                 holder.isUpload.setOnClickListener(new deleteListener(position));
-//                holder.imageView.setClickable(true);
-//                holder.imageView.setOnClickListener(new deleteListener(position));
 
             } else {
                 holder.isUpload.setVisibility(View.INVISIBLE);
             }
 
-//            if (data.size() > Contants.IMAGENUMBER) {
-//                data.remove(data.size() - 1);
-//            }
-
-
-//            holder.imageView.enable();
         } else {
             holder.isUpload.setVisibility(View.GONE);
 
@@ -206,7 +156,6 @@ public class myGridViewAdapter extends BaseAdapter {
         } else {
             ImageHandlerUtils.loadIamgeThumbnail(mactivity, imageUrl, holder.imageView);
         }
-//        ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(mactivity, imageUrl,isLocation), holder.imageView, ImageHandlerUtils.imageloaderOption());
 
 
         return convertView;

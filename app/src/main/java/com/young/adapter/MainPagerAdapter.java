@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.young.share.ViewPager.DiscountPager;
 import com.young.share.ViewPager.DiscoverPager;
 import com.young.share.ViewPager.RankPager;
+import com.young.utils.ThreadUtils;
 
 import java.util.List;
 
@@ -18,10 +19,12 @@ public class MainPagerAdapter extends PagerAdapter {
     private DiscountPager discountPager;
     private DiscoverPager discoverPager;
     private RankPager rankPager;
+    private ThreadUtils threadUtils;
 
-    public MainPagerAdapter(Context context, List<View> views) {
+    public MainPagerAdapter(Context context, List<View> views,ThreadUtils threadUtils) {
         this.context = context;
         this.views = views;
+        this.threadUtils =threadUtils;
 
     }
 
@@ -59,18 +62,18 @@ public class MainPagerAdapter extends PagerAdapter {
     }
     private void initDiscountPager(View v) {
         discountPager = new DiscountPager();
-        discountPager.init(context, v);
+        discountPager.init(context, v,threadUtils);
 
 
     }
   
     private void initDiscoverPager(View v) {
         discoverPager = new DiscoverPager();
-        discoverPager.init(context, v);
+        discoverPager.init(context, v,threadUtils);
     }
     private void initRankPager(View v) {
         rankPager = new RankPager();
-        rankPager.init(context, v);
+        rankPager.init(context, v,threadUtils);
     }
 
   

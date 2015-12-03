@@ -27,7 +27,6 @@ import com.young.network.BmobApi;
 import com.young.thread.MyRunnable;
 import com.young.utils.EmotionUtils;
 import com.young.utils.LogUtils;
-import com.young.utils.ThreadUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,12 +51,6 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
     private ImageView emotion_im;
     @InjectView(R.id.vp_popupwindow_emotion_dashboard)
     private ViewPager vp_emotion_dashboard;
-    //    @InjectView(R.id.id_tx_wantogo)
-//    private TextView wantogo_txt;
-//    @InjectView(R.id.id_hadgo)
-//    private TextView hadgo_txt;
-//    @InjectView(R.id.id_tx_comment)
-//    private TextView comment_txt;
     @InjectView(R.id.llayout_message_detail_input_comment)
     private LinearLayout layout_comment;
 
@@ -65,7 +58,6 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
     private static String superTagClazz;
     private static CommRemoteModel commModel = new CommRemoteModel();
     private List<CommRemoteModel> dataList = new ArrayList<>();//数据
-    private List<String> commentList;
     private CommentAdapter commAdapter;
     private InputMethodManager imm;
     private String receiverId;//接收消息者id
@@ -90,12 +82,11 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
         superTagClazz = getIntent().getStringExtra(Contants.CLAZZ_NAME);
 
-        ThreadUtils threadUtils = new ThreadUtils();
         //提示
         SVProgressHUD.showWithStatus(mActivity, getString(R.string.tips_loading));
 
         //线程
-        threadUtils.addTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+        threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
             @Override
             public void running() {
 
@@ -105,7 +96,8 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
                         formateDataDiscover(getIntent().getSerializableExtra(Contants.CLAZZ_DATA_MODEL));
                         //获取最新的评论
-                        getComment(getIntent().getSerializableExtra(Contants.CLAZZ_DATA_MODEL));
+                        ShareMessage_HZ shareMessage = (ShareMessage_HZ) getIntent().getSerializableExtra(Contants.CLAZZ_DATA_MODEL);
+                        getComment(shareMessage.getObjectId());
 
                         break;
 
@@ -114,8 +106,6 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
             }
         }));
-
-        threadUtils.start();
 
     }
 
@@ -231,14 +221,14 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
     /**
      * 获取评论数据
      *
-     * @param serializableExtra
+     * @param messageId
      */
-    private void getComment(Serializable serializableExtra) {
+    private void getComment(String messageId) {
 
-        ShareMessage_HZ shareMessage = (ShareMessage_HZ) serializableExtra;
+
         JSONObject params = new JSONObject();
         try {
-            params.put("messageID", shareMessage.getObjectId());
+            params.put("messageID", messageId);
         } catch (JSONException e) {
             LogUtils.logD("get comment add params failure" + e.toString());
         }
@@ -360,6 +350,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
         ShareMessage_HZ share = new ShareMessage_HZ();
         share.setObjectId(commModel.getObjectId());
         share.increment("shCommNum");
+        share.update(mActivity);
     }
 
     /**

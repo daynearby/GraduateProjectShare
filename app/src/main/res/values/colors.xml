@@ -11,7 +11,7 @@
     <color name="gray">#dddddd</color>
     <color name="lake_blue">#1E90FF</color>
 
-    <color name="colorPrimary">#9D55B8</color>
+    <color name="colorPrimary">#9d55b8</color>
     <color name="colorPrimaryDark">#9055B8</color>
     <color name="colorAccent">#FF4081</color>
     <color name="cherry_red">#fd495a</color>
@@ -22,5 +22,7 @@
 
     <color name="green_default">#54ca65</color>
     <color name="green_press">#5cc46b</color>
+    <color name="background_material_light">#ebebeb</color>
+    <color name="abc_secondary_text_material_light">#000000</color>
 
 </resources>

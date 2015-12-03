@@ -12,26 +12,18 @@ import android.widget.TextView;
 import com.young.adapter.CommonAdapter.CommAdapter;
 import com.young.adapter.CommonAdapter.ViewHolder;
 import com.young.config.Contants;
-import com.young.model.BaseModel;
 import com.young.model.ShareMessage_HZ;
 import com.young.model.User;
-import com.young.myInterface.GotoAsyncFunction;
-import com.young.network.BmobApi;
 import com.young.share.R;
 import com.young.utils.ImageHandlerUtils;
-import com.young.utils.LogUtils;
+import com.young.utils.LocationUtils;
 import com.young.utils.StringUtils;
+import com.young.utils.UserUtils;
 import com.young.views.Dialog4Tips;
 import com.young.views.PopupWinImageBrowser;
 import com.young.views.PopupWinUserInfo;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.List;
-
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * 实例化
@@ -46,8 +38,7 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
     private GridView myGridview;
     //    private ShareMessage shareMessage;
     private PopupWinUserInfo userInfo;
-    private User user;
-    private int strId;
+//    private int strId;
 
     /**
      * 实例化对象
@@ -56,7 +47,6 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
      */
     public DiscoListViewAdapter(Context context) {
         super(context);
-        user = BmobUser.getCurrentUser(ctx, User.class);
     }
 
 
@@ -93,9 +83,12 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
         tag_tv.setText(shareMessage.getShTag());
 
         wanto_tv.setText(shareMessage.getShWantedNum() == null ? "0" : String.valueOf(shareMessage.getShWantedNum().size()));
-        leftDrawableWantoGO(wanto_tv, shareMessage.getShWantedNum());//设置图标
         hadgo_tv.setText(shareMessage.getShVisitedNum() == null ? "0" : String.valueOf(shareMessage.getShVisitedNum().size()));
-        leftDrawableVisited(hadgo_tv,shareMessage.getShVisitedNum());//设置图标
+
+        if (cuser != null) {
+            LocationUtils.leftDrawableWantoGO(wanto_tv, shareMessage.getShWantedNum(), cuser.getObjectId());//设置图标
+            LocationUtils.leftDrawableVisited(hadgo_tv, shareMessage.getShVisitedNum(), cuser.getObjectId());//设置图标
+        }
 
         comment_tv.setText(String.valueOf(shareMessage.getShCommNum()));
 
@@ -149,12 +142,12 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
                     v.setClickable(false);
 
                     getUser();
-                    if (user != null) {//用户是否登陆
+                    if (cuser != null) {//用户是否登陆
 
                         shareMessage = (ShareMessage_HZ) o;
                         List<String> shWantedNum = shareMessage.getShWantedNum();
 
-                        wantToGo(isHadCurrentUser(shWantedNum), shareMessage, v);
+                        LocationUtils.wantToGo(ctx, cuser, UserUtils.isHadCurrentUser(shWantedNum, cuser.getObjectId()), shareMessage, v);
                     } else {
                         Dialog4Tips.loginFunction((Activity) ctx);
                     }
@@ -166,11 +159,11 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
                     v.setClickable(false);
 
                     getUser();//用户是否登陆
-                    if (user != null) {
 
+                    if (cuser != null) {
                         shareMessage = (ShareMessage_HZ) o;
                         List<String> shVisitedNum = shareMessage.getShVisitedNum();
-                        visit(isHadCurrentUser(shVisitedNum), shareMessage, v);
+                        LocationUtils.visit(ctx, cuser, UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()), shareMessage, v);
 
                     } else {
                         Dialog4Tips.loginFunction((Activity) ctx);
@@ -191,176 +184,6 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
         }
     }
 
-    /**
-     * 再获取当前用户是否存在
-     */
-    private void getUser() {
-        if (user == null) {
-            user = BmobUser.getCurrentUser(ctx, User.class);
-        }
-    }
-
-    /**
-     * 判断用户是否存在于列表中
-     *
-     * @param usersID
-     * @return
-     */
-    private boolean isHadCurrentUser(List<String> usersID) {
-        boolean isHad = false;
-        for (String userId : usersID) {
-
-            if (user.getObjectId().equals(userId)) {
-                isHad = true;
-                break;
-            }
-        }
-        return isHad;
-    }
-
-    /**
-     * 用户想去与否
-     * @param tv
-     * @param userID
-     */
-    private void leftDrawableWantoGO(TextView tv, List<String> userID) {
-        int drawableId;
-
-        if (isHadCurrentUser(userID)) {
-            drawableId = R.drawable.icon_wantogo_light;
-        } else {
-            drawableId = R.drawable.icon_wantogo;
-        }
-        tv.setCompoundDrawablesWithIntrinsicBounds(drawableId, 0, 0, 0);
-
-    }
-
-    /**
-     * 用户去过与否
-     * @param tv
-     * @param userID
-     */
-    private void leftDrawableVisited(TextView tv, List<String> userID) {
-        int drawableId;
-
-        if (isHadCurrentUser(userID)) {
-            drawableId = R.drawable.icon_hadgo;
-        } else {
-            drawableId = R.drawable.icon_bottombar_hadgo;
-        }
-        tv.setCompoundDrawablesWithIntrinsicBounds(drawableId, 0, 0, 0);
-    }
-
-
-    /**
-     * 去过的逻辑处理
-     *
-     * @param hadGo
-     * @param shareMessage
-     * @param v
-     */
-    private void visit(boolean hadGo, ShareMessage_HZ shareMessage, final View v) {
-        if (hadGo) {
-            strId = R.string.not_visit;
-            shareMessage.getShVisitedNum().remove(user.getObjectId());
-        } else {
-            strId = R.string.cancel_collect_success;
-            shareMessage.getShVisitedNum().add(user.getObjectId());
-        }
-
-
-        ((TextView) v).setText(String.valueOf(shareMessage.getShVisitedNum() == null ?
-                0 : shareMessage.getShVisitedNum().size()));
-
-        shareMessage.update(ctx, shareMessage.getObjectId(), new UpdateListener() {
-            @Override
-            public void onSuccess() {
-
-                v.setClickable(false);
-                mToast(strId);
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-                v.setClickable(false);
-                LogUtils.logD(" wantToGo faile  erro code = " + i + " erro message = " + s);
-            }
-        });
-
-    }
-
-    /**
-     * 想去逻辑处理
-     *
-     * @param hadWant
-     * @param shareMessage
-     * @param v
-     */
-    private void wantToGo(boolean hadWant, ShareMessage_HZ shareMessage, final View v) {
-
-        JSONObject jsonObject = new JSONObject();//参数
-        try {
-            jsonObject.put("message", "1");
-            jsonObject.put("userid", user.getObjectId());
-            jsonObject.put("collectionid", shareMessage.getObjectId());
-
-        } catch (JSONException e) {
-//            e.printStackTrace();
-            LogUtils.logD("云端代码 添加参数失败 " + e.toString());
-        }
-
-        if (hadWant) {
-            strId = R.string.cancel_collect_success;
-            shareMessage.getShWantedNum().remove(user.getObjectId());
-
-//操作收藏表
-            BmobApi.AsyncFunction(ctx, jsonObject, BmobApi.REMOVE_COLLECTION, new GotoAsyncFunction() {
-                @Override
-                public void onSuccess(Object object) {
-
-                    BaseModel baseModel = (BaseModel) object;
-
-                    if (baseModel.getCode() == BaseModel.SUCCESS) {
-//                        mToast(R.string.operation_success);
-                        LogUtils.logD("删除收藏记录 成功  data = " + baseModel.getData());
-                    } else {
-
-                        LogUtils.logD("删除收藏记录 失败  data = " + baseModel.getData());
-                    }
-                }
-
-                @Override
-                public void onFailure(int code, String msg) {
-
-                }
-            });
-        } else {
-            strId = R.string.collect_success;
-            shareMessage.getShWantedNum().add(user.getObjectId());
-
-            BmobApi.saveCollectionShareMessage(ctx, user, shareMessage, Contants.MESSAGE_TYPE_SHAREMESSAGE);
-        }
-
-        ((TextView) v).setText(String.valueOf(shareMessage.getShWantedNum() == null ?
-                0 : shareMessage.getShWantedNum().size()));
-
-
-        shareMessage.update(ctx, shareMessage.getObjectId(), new UpdateListener() {
-            @Override
-            public void onSuccess() {
-
-                v.setClickable(false);
-                mToast(strId);
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-                v.setClickable(false);
-                LogUtils.logD(" wantToGo faile  erro code = " + i + " erro message = " + s);
-            }
-        });
-
-    }
 
     private void updateShMs() {
 //shareMessage

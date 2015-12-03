@@ -27,7 +27,6 @@ import com.young.thread.MyRunnable;
 import com.young.utils.CommonUtils;
 import com.young.utils.DBUtils;
 import com.young.utils.LogUtils;
-import com.young.utils.ThreadUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,7 +40,6 @@ import java.util.List;
  */
 public class DiscoverPager extends BasePager {
 
-    private JazzyListView listView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private DiscoListViewAdapter listviewAdapter;
     private static List<ShareMessage_HZ> dataList = new ArrayList<>();
@@ -53,7 +51,6 @@ public class DiscoverPager extends BasePager {
     private int endIndex = 20;
     protected static final int pageSize = 20;
     private int PUSH_TIMES = 1;
-    private ThreadUtils threadUtils;
 
     private int startRow = 0;//从第一条开始
 
@@ -61,7 +58,7 @@ public class DiscoverPager extends BasePager {
     public void initView() {
         listviewAdapter = new DiscoListViewAdapter(ctx);
 
-        listView = $(R.id.list_discover);
+        JazzyListView listView = $(R.id.list_discover);
         swipeRefreshLayout = $(R.id.sw_refresh_pager_discover);
 
         listView.setAdapter(listviewAdapter);
@@ -131,7 +128,6 @@ public class DiscoverPager extends BasePager {
     @Override
     public void bindData() {
 
-        threadUtils = new ThreadUtils();
 
         if (CommonUtils.isNetworkAvailable(ctx)) {//有网络
             getDataFromRemote();
@@ -164,7 +160,7 @@ public class DiscoverPager extends BasePager {
 
     private void getDataFromLocat() {
 
-        threadUtils.addTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+        threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
 
             @Override
             public void running() {
@@ -178,7 +174,6 @@ public class DiscoverPager extends BasePager {
 
     private void getDataFromRemote() {
 
-        SVProgressHUD.showWithStatus(ctx, ctx.getString(R.string.tips_loading));
 
         JSONObject params = new JSONObject();
         try {
@@ -196,7 +191,6 @@ public class DiscoverPager extends BasePager {
                         formatData(shareMessageList.getShareMessageHzList());
                         dataList = shareMessageList.getShareMessageHzList();
 
-                        SVProgressHUD.dismiss(ctx);
                         refreshUI();
 
                     }
@@ -268,7 +262,6 @@ public class DiscoverPager extends BasePager {
             }
         }));
 
-        threadUtils.start();
 
     }
 

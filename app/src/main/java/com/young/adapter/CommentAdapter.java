@@ -23,8 +23,10 @@ import com.young.network.BmobApi;
 import com.young.share.R;
 import com.young.utils.DateUtils;
 import com.young.utils.ImageHandlerUtils;
+import com.young.utils.LocationUtils;
 import com.young.utils.LogUtils;
 import com.young.utils.StringUtils;
+import com.young.utils.UserUtils;
 import com.young.views.Dialog4Tips;
 import com.young.views.PopupWinImageBrowser;
 import com.young.views.PopupWinUserInfo;
@@ -47,9 +49,9 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
     private TextView content_txt;
     private ToReply toReply;
-    private User user;
-    private int strId;//提示文字资源id
-    private int leftDrawID ;//提示图片资源id
+
+//    private int strId;//提示文字资源id
+
     private CommRemoteModel commRemoteModel;
 
     private static final int ITEM_TYPE_SIZE = 2;
@@ -60,7 +62,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
     public CommentAdapter(Context context) {
         super(context);
-        user = BmobUser.getCurrentUser(ctx, User.class);
+
 
     }
 
@@ -108,6 +110,8 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
     private void listviewBody(ViewHolder holder, CommRemoteModel commRemoteModel) {
 
         content_txt = holder.getView(R.id.tv_message_detail_comment);
+        TextView createdAt = holder.getView(R.id.tv_message_detail_reply);
+
         User sender = commRemoteModel.getSender();
         User receiver = commRemoteModel.getReceiver();
 
@@ -121,20 +125,31 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
                 Contants.DATA_SINGEL_COLON +
                 Contants.DATA_SINGEL_AT +
                 receiverNickname +
-                Contants.DATA_SINGEL_ENTER +
-                commRemoteModel.getContent() +
-                Contants.DATA_SINGEL_ENTER +
-                DateUtils.convertDate2Str(commRemoteModel.getMcreatedAt()) +
+                Contants.DATA_SINGEL_ENTER ;
+
+        String created = DateUtils.convertDate2Str(commRemoteModel.getMcreatedAt()) +
                 Contants.DATA_SINGEL_SAPCE +
                 ctx.getString(R.string.txt_replay);
 
-        content_txt.setText(StringUtils.getEmotionContent(ctx, content_txt, content));
+        content_txt.setText(content);
 
         LinkBuilder.on(content_txt)
                 .addLinks(getLinks(commRemoteModel))
                 .build();
 
+        content_txt.append(StringUtils.getEmotionContent(ctx, content_txt, commRemoteModel.getContent()));
 
+        createdAt.setText(created);
+
+
+
+        //回复
+        Link reply = new Link(ctx.getString(R.string.txt_replay));
+        reply.setOnClickListener(new linkOnclick(commRemoteModel.getUser(), CLICK_TYPE_REPLY));
+
+        LinkBuilder.on(createdAt)
+                .addLink(reply)
+                .build();
     }
 
     /**
@@ -162,10 +177,6 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         receiver.setOnClickListener(new linkOnclick(commRemoteModel.getReceiver(), CLICK_TYPE_USER_INFO));
         links.add(receiver);
 
-//回复
-        Link reply = new Link(ctx.getString(R.string.txt_replay));
-        reply.setOnClickListener(new linkOnclick(commRemoteModel.getUser(), CLICK_TYPE_REPLY));
-        links.add(reply);
 
         return links;
     }
@@ -207,7 +218,14 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
         tag_tv.setText(commRemoteModel.getTag());
         wanto_tv.setText(commRemoteModel.getWanted() == null ? "0" : String.valueOf(commRemoteModel.getWanted().size()));
+
         hadgo_tv.setText(commRemoteModel.getVisited() == null ? "0" : String.valueOf(commRemoteModel.getVisited().size()));
+        //判断当前用户是否点赞
+        if (cuser != null) {
+            LocationUtils.leftDrawableWantoGO(wanto_tv, commRemoteModel.getWanted(), cuser.getObjectId());//设置图标
+            LocationUtils.leftDrawableVisited(hadgo_tv, commRemoteModel.getVisited(), cuser.getObjectId());
+        }
+
         comment_tv.setText(String.valueOf(commRemoteModel.getComment()));
         gridViewAdapter.setDatas(commRemoteModel.getImages(), false);
         myGridview.setOnItemClickListener(new itemClick(commRemoteModel.getImages()));
@@ -250,15 +268,12 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
                 case R.id.id_tx_wantogo://想去--数量
 
                     getUser();
-                    if (user != null) {
+                    if (cuser != null) {
 
-
-                        boolean hadWant = false;
                         List<String> shWantedNum = commRemoteModel.getWanted();
-                        for (String userId : shWantedNum) {
-                            hadWant = user.getObjectId().equals(userId);
-                        }
-                        wantToGo(hadWant, v);
+
+                        wantToGo(UserUtils.isHadCurrentUser(shWantedNum, cuser.getObjectId()), v);
+
                     } else {
                         Dialog4Tips.loginFunction((Activity) ctx);
                     }
@@ -268,14 +283,10 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
                 case R.id.id_hadgo://去过--数量
 
                     getUser();
-                    if (user != null) {
-                        boolean hadGo = false;
+                    if (cuser != null) {
                         List<String> shVisitedNum = commRemoteModel.getVisited();
-                        for (String userId : shVisitedNum) {
-                            hadGo = user.getObjectId().equals(userId);
-                        }
 
-                        visit(hadGo, v);
+                        visit(UserUtils.isHadCurrentUser(shVisitedNum,cuser.getObjectId()), v);
                     } else {
                         Dialog4Tips.loginFunction((Activity) ctx);
                     }
@@ -283,7 +294,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
                 case R.id.id_tx_comment://评论数量
                     getUser();
-                    if (user != null && toReply != null) {
+                    if (cuser != null && toReply != null) {
 
                         toReply.reply(commRemoteModel.getUser().getObjectId());
                     }
@@ -349,13 +360,19 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
                     break;
 
                 case CLICK_TYPE_REPLY://回复
+
+                    LogUtils.logD("reply user not null");
                     getUser();
+
                     if (user != null) {
 
                         if (toReply != null) {
+                            LogUtils.logD("reply callback  not null");
+
                             toReply.reply(user.getObjectId());
                         }
                     }
+
                     break;
 
             }
@@ -371,16 +388,16 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
      */
     private void visit(boolean hadGo, View v) {
 
-
+         int leftDrawID;//提示图片资源id
         if (hadGo) {
-            strId = R.string.not_visit;
-            leftDrawID = R.drawable.icon_wantogo;
+//            strId = R.string.not_visit;
+            leftDrawID = R.drawable.icon_bottombar_hadgo;
 
-            commRemoteModel.getVisited().remove(user.getObjectId());
+            commRemoteModel.getVisited().remove(cuser.getObjectId());
         } else {
-            strId = R.string.cancel_collect_success;
-            leftDrawID = R.drawable.icon_wantogo_light;
-            commRemoteModel.getVisited().add(user.getObjectId());
+//            strId = R.string.cancel_collect_success;
+            leftDrawID = R.drawable.icon_hadgo;
+            commRemoteModel.getVisited().add(cuser.getObjectId());
         }
 
 
@@ -395,7 +412,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         shareMessage.update(ctx, commRemoteModel.getObjectId(), new UpdateListener() {
             @Override
             public void onSuccess() {
-                mToast(strId);
+//                mToast(strId);
             }
 
             @Override
@@ -406,6 +423,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
     }
 
+
     /**
      * 想去逻辑处理
      *
@@ -414,12 +432,12 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
      */
     private void wantToGo(boolean hadWant, View v) {
 
-
+         int leftDrawID;//提示图片资源id
         JSONObject jsonObject = new JSONObject();//参数
         ShareMessage_HZ shareMessage = new ShareMessage_HZ();
         try {
             jsonObject.put("message", "1");
-            jsonObject.put("userid", user.getObjectId());
+            jsonObject.put("userid", cuser.getObjectId());
             jsonObject.put("collectionid", commRemoteModel.getObjectId());
 
         } catch (JSONException e) {
@@ -428,10 +446,10 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         }
 
         if (hadWant) {
-            strId = R.string.cancel_collect_success;
-            leftDrawID = R.drawable.icon_bottombar_hadgo;
+//            strId = R.string.cancel_collect_success;
+            leftDrawID = R.drawable.icon_wantogo;
 
-            commRemoteModel.getWanted().remove(user.getObjectId());
+            commRemoteModel.getWanted().remove(cuser.getObjectId());
 
 //操作收藏表
             BmobApi.AsyncFunction(ctx, jsonObject, BmobApi.REMOVE_COLLECTION, new GotoAsyncFunction() {
@@ -455,14 +473,14 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
                 }
             });
         } else {
-            strId = R.string.collect_success;
+//            strId = R.string.collect_success;
             leftDrawID = R.drawable.icon_wantogo_light;
 
-            commRemoteModel.getWanted().add(user.getObjectId());
+            commRemoteModel.getWanted().add(cuser.getObjectId());
             shareMessage.setObjectId(commRemoteModel.getObjectId());
             shareMessage.setUserId(commRemoteModel.getUser());
 
-            BmobApi.saveCollectionShareMessage(ctx, user, shareMessage, Contants.MESSAGE_TYPE_SHAREMESSAGE);
+            BmobApi.saveCollectionShareMessage(ctx, cuser, shareMessage, Contants.MESSAGE_TYPE_SHAREMESSAGE);
 
         }
 
@@ -474,7 +492,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         shareMessage.update(ctx, shareMessage.getObjectId(), new UpdateListener() {
             @Override
             public void onSuccess() {
-                mToast(strId);
+//                mToast(strId);
             }
 
             @Override
@@ -483,15 +501,6 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
             }
         });
 
-    }
-
-    /**
-     * 再获取当前用户是否存在
-     */
-    private void getUser() {
-        if (user == null) {
-            user = BmobUser.getCurrentUser(ctx, User.class);
-        }
     }
 
     /**

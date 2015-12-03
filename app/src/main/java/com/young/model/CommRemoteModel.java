@@ -1,6 +1,8 @@
 package com.young.model;
 
 
+import com.young.model.dbmodel.DBModel;
+
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
@@ -10,7 +12,7 @@ import cn.bmob.v3.BmobObject;
  * <p>
  * Created by Nearby Yang on 2015-10-16.
  */
-public class CommRemoteModel extends BmobObject{
+public class CommRemoteModel extends DBModel{
 
     private User user;
     private User sender;

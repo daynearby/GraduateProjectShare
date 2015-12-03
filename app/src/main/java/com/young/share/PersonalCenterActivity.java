@@ -66,7 +66,6 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
     private Dialog4UploadAvatar dialog4UploadAvater;
 
 
-    // TODO: 2015-10-31  界面效果
     @Override
     public int getLayoutId() {
         return R.layout.activity_personal_center;
@@ -79,7 +78,6 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
         params.height = displayHeightDp / 2 + 44;
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         relativeLayout.setLayoutParams(params);
-//        displayHeightDp - DisplayUtils.px2dp(mActivity, 180);
         ViewGroup.LayoutParams layoutParams = select_ls.getLayoutParams();
         layoutParams.height = displayHeightDp / 2;
         layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -106,7 +104,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
         select_ls.setOnItemClickListener(new onitemClick());
 
         nickname_tv.setText(TextUtils.isEmpty(mUser.getNickName()) ? getString(R.string.user_name_defual) : mUser.getNickName());
-        signture_tv.setText(TextUtils.isEmpty(mUser.getSignture())?getString(R.string.user_info_hint_enjoy_life):mUser.getSignture());
+        signture_tv.setText(TextUtils.isEmpty(mUser.getSignture()) ? getString(R.string.user_info_hint_enjoy_life) : mUser.getSignture());
         loadingAvatar();
     }
 
@@ -166,8 +164,20 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
      * 加载头像
      */
     private void loadingAvatar() {
-        ImageHandlerUtils.loadIamge(this, mUser.getAvatar(), avatar_im,false);
-        ImageHandlerUtils.loadIamge(this, mUser.getAvatar(), avatar_bg_im,false);
+        //默认头像
+        String url;
+        boolean isLocation;
+
+        if (!TextUtils.isEmpty(mUser.getAvatar())) {
+            url = mUser.getAvatar();
+            isLocation = false;
+        } else {
+            url = Contants.DEFAULT_AVATAR;
+            isLocation = true;
+        }
+
+        ImageHandlerUtils.loadIamge(this, url, avatar_im, isLocation);
+        ImageHandlerUtils.loadIamge(this, url, avatar_bg_im, isLocation);
 
 
     }
@@ -185,7 +195,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
 
                     break;
                 case 1://<item>分享记录</item>
-
+                    mStartActivity(RecordCommActivity.class);
 
                     break;
                 case 2:// <item>修改资料</item>

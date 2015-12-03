@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 
-import com.young.config.ApplicationConfig;
+import com.young.utils.ThreadUtils;
 
 /**
  * view pager 的基类
@@ -15,18 +15,19 @@ import com.young.config.ApplicationConfig;
 public abstract class BasePager {
     public Context ctx;
     public View view;
-    public ApplicationConfig app;
+    public ThreadUtils threadUtils;
 
-    public void init(Context ctx, View view) {
+
+    public void init(Context ctx, View view, ThreadUtils threadUtils) {
         this.ctx = ctx;
         this.view = view;
-        app = ApplicationConfig.getInstance();
+        this.threadUtils = threadUtils;
 
         initView();
         bindData();
     }
 
-    public  Handler mhandler = new Handler(){
+    public Handler mhandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);

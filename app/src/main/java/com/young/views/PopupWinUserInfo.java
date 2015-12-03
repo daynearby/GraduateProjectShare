@@ -86,6 +86,7 @@ public class PopupWinUserInfo extends BasePopupWin {
 
     @Override
     protected void bindData() {
+
         ImageHandlerUtils.loadIamge(context, user.getAvatar(), avatar, false);
 
         nickname.setText(user.getNickName() == null ?
@@ -95,36 +96,36 @@ public class PopupWinUserInfo extends BasePopupWin {
                 context.getText(R.string.user_info_hint_enjoy_life) : user.getSignture());
 
         int genderId = user.isGender() ? R.drawable.icon_male : R.drawable.icon_female;
+
         nickname.setCompoundDrawablesWithIntrinsicBounds(0, 0, genderId, 0);
 
         if (!TextUtils.isEmpty(user.getQq())) {
             qq.setText(user.getQq());
             qq_layout.setVisibility(View.VISIBLE);
+        }else {
+            qq_layout.setVisibility(View.GONE);
         }
         if (!TextUtils.isEmpty(user.getEmail())) {
             email.setText(user.getEmail());
             email_layout.setVisibility(View.VISIBLE);
+        }else {
+            email_layout.setVisibility(View.GONE);
         }
 
         if (!TextUtils.isEmpty(user.getAddress())) {
             hometown.setText(user.getAddress());
             hometown_layout.setVisibility(View.VISIBLE);
+        }else {
+            hometown_layout.setVisibility(View.GONE);
         }
 
 
     }
 
-    public void background() {
-
-//        WindowManager.LayoutParams lp = context.getWindow().getAttributes();
-//        lp.alpha = bgAlpha; //0.0-1.0
-//        getWindow().setAttributes(lp);
-    }
 
 
     @Override
     public void onShow(View v) {
         showAtLocation(v, Gravity.CENTER, 0, 0);
-        background();
     }
 }

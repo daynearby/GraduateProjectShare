@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:padding="@dimen/paddingMic"
-    android:text="item"
-    android:textSize="@dimen/textSizeMediu">
+    android:text="item">
 
 </TextView>

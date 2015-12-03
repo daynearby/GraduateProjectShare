@@ -70,7 +70,7 @@ public class BmobApi {
 
                         gotoListener.onSuccess(gson.fromJson(object.toString(), clazz));
 
-                        LogUtils.logE("云端usertest方法返回:" + object.toString());
+                        LogUtils.logE("返回JSON数据:" + object.toString());
                     }
 
                     @Override

@@ -17,6 +17,11 @@ public class DateUtils {
     public static Calendar calendar;
 
     private static final String TAG = "DateUtils";
+    private static final String YESTERDAY = "昨天 ";
+    private static final String BEFORE_YESTERDAY = "前天 ";
+
+
+
     private static final int HOUR_SDUR = 1;//两个时间段相隔的时间
 
     private static final int MINUT = 1;
@@ -27,8 +32,10 @@ public class DateUtils {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         timeFormat = new SimpleDateFormat("hh:mm:ss");
         longFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         calendar = Calendar.getInstance();
         String timezoneID = TimeZone.getDefault().getID();
+
     }
 
     public static String getOffsetDate(String date, int offset) {
@@ -191,15 +198,23 @@ public class DateUtils {
         Date nowDate = new Date(timeStamp);
 
         //得到两个时间相差的天数
-        long day = (nowDate.getTime() - date.getTime()) / (24 * 60 * 60 * 1000);
+        int day = (int) ((nowDate.getTime() - date.getTime()) / (24 * 60 * 60 * 1000));
 
-        if (day == 0) {
-            mDate = longFormat.format(date).substring(11, 16);
-        } else if (day == 1) {
-            mDate = "昨天 " + longFormat.format(date).substring(11, 16);
-        } else {
-            mDate = longFormat.format(date).substring(5, 16);
+        switch (day){
+            case 0:
+                mDate = longFormat.format(date).substring(11, 16);
+                break;
+            case 1:
+                mDate = YESTERDAY + longFormat.format(date).substring(11, 16);
+                break;
+            case 2:
+                mDate = BEFORE_YESTERDAY + longFormat.format(date).substring(11, 16);
+                break;
+            default:
+                mDate = longFormat.format(date).substring(5, 16);
+                break;
         }
+
 
         return mDate;
     }

@@ -15,12 +15,11 @@ import com.young.utils.ThreadUtils;
 import org.litepal.LitePalApplication;
 
 import java.io.File;
-import java.util.concurrent.ExecutorService;
 
 
 /**
  * 应有全局application
- *
+ * <p/>
  * Created by Nearby Yang on 2015-07-02.
  */
 public class ApplicationConfig extends LitePalApplication {
@@ -31,7 +30,7 @@ public class ApplicationConfig extends LitePalApplication {
     //单例模式
     private volatile static ApplicationConfig instance;
 
-//    public ThreadUtils threadUtils;
+    public ThreadUtils threadUtils;
 
     @Override
     public void onCreate() {
@@ -51,16 +50,16 @@ public class ApplicationConfig extends LitePalApplication {
 
     }
 
-//    /**
-//     * 可回收线程池
-//     *
-//     * @return
-//     */
-//    public ThreadUtils getThreadInstance() {
-//        threadUtils = new ThreadUtils();
-//
-//        return threadUtils;
-//    }
+    /**
+     * 可回收线程池
+     *
+     * @return
+     */
+    public ThreadUtils getThreadInstance() {
+        threadUtils = new ThreadUtils();
+        threadUtils.start();
+        return threadUtils;
+    }
 
 
     private void initImageLoader(Context ctx) {

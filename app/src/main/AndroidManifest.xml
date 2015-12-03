@@ -117,6 +117,9 @@
         <!-- 信息详细页面 -->
         <activity android:name=".MessageDetail"/>
 
+        <!--通用记录查看 -->
+        <activity android:name=".RecordCommActivity"/>
+
         <!-- 百度定位 services -->
         <service
             android:name="com.baidu.location.f"

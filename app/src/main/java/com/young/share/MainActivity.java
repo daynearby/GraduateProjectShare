@@ -21,6 +21,7 @@ import com.young.model.User;
 import com.young.utils.BDLBSUtils;
 import com.young.utils.LogUtils;
 import com.young.utils.SharePreferenceUtils;
+import com.young.utils.ThreadUtils;
 import com.young.utils.XmlUtils;
 import com.young.views.ArcMenu;
 import com.young.views.Dialog4Tips;
@@ -70,7 +71,7 @@ public class MainActivity extends CustomActBarActivity {
 
         mArcMenu.setOnMenuItemClickListener(new onitmeListener());
 
-        MainPagerAdapter pagerAdapter = new MainPagerAdapter(this, list);
+        MainPagerAdapter pagerAdapter = new MainPagerAdapter(this, list, threadUtils);
 
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new pageChangeListener());

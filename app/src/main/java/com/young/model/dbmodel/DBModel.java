@@ -1,5 +1,6 @@
 package com.young.model.dbmodel;
 
+import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.io.Serializable;
 public class DBModel extends DataSupport implements Serializable {
 
     private int id;
+    @Column(unique = true)
     private String objectId;
     private String createdAt;
     private String updatedAt;

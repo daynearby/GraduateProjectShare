@@ -1,30 +1,31 @@
 <resources>
 
-    <dimen name="paddingLarg">60dp</dimen>
-    <dimen name="paddingMediu">24dp</dimen>
-    <dimen name="paddingMic">16dp</dimen>
-    <dimen name="paddingHit">6dp</dimen>
+
+    <dimen name="paddingLarg">48dp</dimen>
+    <dimen name="paddingMediu">16dp</dimen>
+    <dimen name="paddingMic">8dp</dimen>
+    <dimen name="paddingHit">4dp</dimen>
 
     <dimen name="size40">40dp</dimen>
     <dimen name="dp20">20dp</dimen>
 
     <dimen name="textSizeMicro">12sp</dimen>
     <dimen name="textSizeSmall">16sp</dimen>
-    <dimen name="textSizeMediu">20sp</dimen>
-    <dimen name="textSizeLarge">24sp</dimen>
+    <dimen name="textSizeMediu">18sp</dimen>
+    <dimen name="textSizeLarge">22sp</dimen>
     <dimen name="textSizeXLarge">28sp</dimen>
-    <dimen name="textSizeXXLarge">48sp</dimen>
+    <dimen name="textSizeXXLarge">42sp</dimen>
 
-    <dimen name="micro">4dp</dimen>
+    <dimen name="micro">2dp</dimen>
     <dimen name="radius">10dp</dimen>
-    <dimen name="radius_mic">5dp</dimen>
+    <dimen name="radius_mic">4dp</dimen>
 
-    <dimen name="app_bar_height">200dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
-    <dimen name="maginMediu">40dp</dimen>
-    <dimen name="avatar_size_default">90dp</dimen>
-    <dimen name="avatar_size_mediu">110dp</dimen>
-    <dimen name="btnSizeDefault">70dp</dimen>
+    <dimen name="maginMediu">35dp</dimen>
+    <dimen name="avatar_size_default">80dp</dimen>
+    <dimen name="avatar_size_mediu">100dp</dimen>
+    <dimen name="btnSizeDefault">60dp</dimen>
 </resources>

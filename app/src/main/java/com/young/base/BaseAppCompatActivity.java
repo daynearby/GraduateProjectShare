@@ -13,10 +13,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.young.annotation.Injector;
+import com.young.config.ApplicationConfig;
 import com.young.config.Contants;
 import com.young.model.User;
 import com.young.share.MainActivity;
 import com.young.share.R;
+import com.young.utils.ThreadUtils;
 
 import cn.bmob.v3.BmobUser;
 
@@ -33,8 +35,9 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public Activity mActivity;
     public Intent intents = new Intent();
     public IntentFilter myIntentFilter = new IntentFilter();
-    ;
+    public ApplicationConfig app;
     public User mUser;
+    public ThreadUtils threadUtils;
 
     public final static String BUNDLE_TAG = "Serializable_Data";
     public final static String BUNDLE_BROADCAST = "sendBroadcast";
@@ -51,6 +54,8 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         Injector.inject(this);
         mUser = BmobUser.getCurrentUser(this, User.class);
         mActivity = this;
+        app = ApplicationConfig.getInstance();
+        threadUtils = app.getThreadInstance();
 //        initActionBar();
         initData();
         findviewbyid();
