@@ -21,7 +21,7 @@ public class Contants {
     public static final String SH_PWD = "pwd";
     //*******************字符串长度**************************
     public static final int PWD_LENGHT = 6;
-    public static final int NICKNAME_MIN_LENGHT = 2;
+    public static final int NICKNAME_MIN_LENGHT = 4;
     public static final int NICKNAME_MAX_LENGHT = 12;
 
 

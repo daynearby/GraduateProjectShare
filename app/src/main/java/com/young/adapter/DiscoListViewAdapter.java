@@ -8,7 +8,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.young.adapter.CommonAdapter.CommAdapter;
 import com.young.adapter.CommonAdapter.ViewHolder;
@@ -79,6 +78,8 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
         myGridViewAdapter gridViewAdapter = new myGridViewAdapter((Activity) ctx, myGridview, false);
         myGridview.setAdapter(gridViewAdapter);
 
+//************************************************初始化数据********************************************
+
 //        StringBuilder sb = new StringBuilder(shareMessage.getShContent());
         // 特殊文字处理,将表情等转换一下
         content_tv.setText(StringUtils.getEmotionContent(
@@ -90,18 +91,26 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
                 TextUtils.isEmpty(user.getAvatar()) ? Contants.DEFAULT_AVATAR : user.getAvatar(), avatar);
 
         tag_tv.setText(shareMessage.getShTag());
+
         wanto_tv.setText(shareMessage.getShWantedNum() == null ? "0" : String.valueOf(shareMessage.getShWantedNum().size()));
+        leftDrawableWantoGO(wanto_tv, shareMessage.getShWantedNum());//设置图标
         hadgo_tv.setText(shareMessage.getShVisitedNum() == null ? "0" : String.valueOf(shareMessage.getShVisitedNum().size()));
+        leftDrawableVisited(hadgo_tv,shareMessage.getShVisitedNum());//设置图标
+
         comment_tv.setText(String.valueOf(shareMessage.getShCommNum()));
+
+        //图片显示
         gridViewAdapter.setDatas(shareMessage.getShImgs(), false);
         myGridview.setOnItemClickListener(new itemClick(shareMessage.getShImgs()));
 
+//添加监听事件
         nickname_tv.setOnClickListener(new click(user));
         avatar.setOnClickListener(new click(user));
         wanto_tv.setOnClickListener(new click(shareMessage));
         hadgo_tv.setOnClickListener(new click(shareMessage));
         comment_tv.setOnClickListener(new click(shareMessage));
         tag_tv.setOnClickListener(new click(shareMessage.getShTag()));
+
     }
 
     @Override
@@ -111,7 +120,6 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
 
     /**
      * 点击事件
-     *
      */
     private class click implements View.OnClickListener {
 
@@ -137,18 +145,16 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
                     break;
 
                 case R.id.id_tx_wantogo://想去--数量
+                    //防止请求尚未完成，再次点击。防止重复点击
                     v.setClickable(false);
+
                     getUser();
                     if (user != null) {//用户是否登陆
 
-
-                        boolean hadWant = false;
                         shareMessage = (ShareMessage_HZ) o;
                         List<String> shWantedNum = shareMessage.getShWantedNum();
-                        for (String userId : shWantedNum) {
-                            hadWant = user.getObjectId().equals(userId);
-                        }
-                        wantToGo(hadWant, shareMessage, v);
+
+                        wantToGo(isHadCurrentUser(shWantedNum), shareMessage, v);
                     } else {
                         Dialog4Tips.loginFunction((Activity) ctx);
                     }
@@ -156,17 +162,16 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
                     break;
 
                 case R.id.id_hadgo://去过--数量
+
                     v.setClickable(false);
+
                     getUser();//用户是否登陆
                     if (user != null) {
-                        boolean hadGo = false;
+
                         shareMessage = (ShareMessage_HZ) o;
                         List<String> shVisitedNum = shareMessage.getShVisitedNum();
-                        for (String userId : shVisitedNum) {
-                            hadGo = user.getObjectId().equals(userId);
-                        }
+                        visit(isHadCurrentUser(shVisitedNum), shareMessage, v);
 
-                        visit(hadGo, shareMessage, v);
                     } else {
                         Dialog4Tips.loginFunction((Activity) ctx);
                     }
@@ -189,11 +194,63 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
     /**
      * 再获取当前用户是否存在
      */
-    private void getUser(){
+    private void getUser() {
         if (user == null) {
             user = BmobUser.getCurrentUser(ctx, User.class);
         }
     }
+
+    /**
+     * 判断用户是否存在于列表中
+     *
+     * @param usersID
+     * @return
+     */
+    private boolean isHadCurrentUser(List<String> usersID) {
+        boolean isHad = false;
+        for (String userId : usersID) {
+
+            if (user.getObjectId().equals(userId)) {
+                isHad = true;
+                break;
+            }
+        }
+        return isHad;
+    }
+
+    /**
+     * 用户想去与否
+     * @param tv
+     * @param userID
+     */
+    private void leftDrawableWantoGO(TextView tv, List<String> userID) {
+        int drawableId;
+
+        if (isHadCurrentUser(userID)) {
+            drawableId = R.drawable.icon_wantogo_light;
+        } else {
+            drawableId = R.drawable.icon_wantogo;
+        }
+        tv.setCompoundDrawablesWithIntrinsicBounds(drawableId, 0, 0, 0);
+
+    }
+
+    /**
+     * 用户去过与否
+     * @param tv
+     * @param userID
+     */
+    private void leftDrawableVisited(TextView tv, List<String> userID) {
+        int drawableId;
+
+        if (isHadCurrentUser(userID)) {
+            drawableId = R.drawable.icon_hadgo;
+        } else {
+            drawableId = R.drawable.icon_bottombar_hadgo;
+        }
+        tv.setCompoundDrawablesWithIntrinsicBounds(drawableId, 0, 0, 0);
+    }
+
 
     /**
      * 去过的逻辑处理

@@ -67,6 +67,21 @@ public class DateUtils {
         return null;
     }
 
+    /**
+     * 将长的字符串转换成Date格式
+     * @param str
+     * @return
+     */
+    public static Date convertStr2LongDate(String str) {
+        try {
+            return longFormat.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     public static boolean isFuture(String goalDate) {
         return convertStr2Date(goalDate).after(calendar.getTime());
     }
@@ -159,6 +174,13 @@ public class DateUtils {
         return HOUR_SDUR <= hours;
     }
 
+    /**
+     * 转换成字符串，比较时间，是当天显示小时分钟，前一天显示昨天，再之前就显示完整一天
+     *
+     *
+     * @param date
+     * @return
+     */
     public static String convertDate2Str(Date date) {
 
         String mDate = null;
@@ -182,7 +204,21 @@ public class DateUtils {
         return mDate;
     }
 
-    public static String convertTimeStamp2Time(long timestamp) {
+    /**
+     *
+     * @param date
+     * @return
+     */
+
+    public static String convertDate2Str(String date) {
+       return convertDate2Str( convertStr2LongDate(date));
+
+    }
+
+
+
+
+        public static String convertTimeStamp2Time(long timestamp) {
         Date date = new Date(timestamp);
         return DateUtils.convertDate2Str(date);
     }

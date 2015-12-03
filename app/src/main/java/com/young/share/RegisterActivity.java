@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.young.config.Contants;
 import com.young.model.User;
 import com.young.utils.BDLBSUtils;
 import com.young.utils.LogUtils;
+import com.young.utils.StringUtils;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -99,19 +101,20 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
                 pwd = registPwd.getText().toString().trim();
                 config_pwd = registConfigPwd.getText().toString().trim();
 
-                if (email != null) {
+                if (!TextUtils.isEmpty(email)) {
 
-                    if (email.length() >3) {
+                    if (email.length() > 3) {
 
 
-                        if (pwd != null || config_pwd != null) {
+                        if (!TextUtils.isEmpty(pwd) || !TextUtils.isEmpty(config_pwd)) {
                             if (pwd.length() > 5) {
 
 
                                 if (pwd.equals(config_pwd)) {
 
                                     SVProgressHUD.show(this);
-
+                                    //随机字符串
+                                    userRegister.setNickName(StringUtils.getRanDom());
                                     userRegister.setEmail(email);
                                     userRegister.setPassword(pwd);
                                     userRegister.setAddress(province + " " + city + " " + district);
@@ -122,7 +125,7 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
                                         public void onSuccess() {
 
                                             SVProgressHUD.showSuccessWithStatus(RegisterActivity.this, getString(R.string.register_success));
-                                            mHandler.sendEmptyMessageDelayed(101,Contants.ONE_SECOND);
+                                            mHandler.sendEmptyMessageDelayed(101, Contants.ONE_SECOND);
 
                                         }
 
@@ -169,7 +172,6 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
                 break;
         }
     }
-
 
 
     private void uploadAvatarAndRegisrter(final User user) {

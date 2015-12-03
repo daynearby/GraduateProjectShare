@@ -288,7 +288,7 @@ public class MainActivity extends CustomActBarActivity {
                 intents.putExtra(BUNDLE_BROADCAST, bundle);
                 sendBroadcast(intents);
 
-                LogUtils.logI("定位成功 定位信息 发送广播 ");
+//                LogUtils.logI("定位成功 定位信息 发送广播 ");
 
                 bdlbsUtils.stopLocation();
             }
@@ -321,7 +321,7 @@ public class MainActivity extends CustomActBarActivity {
 
             } else if (intent.getAction().equals(Contants.BORDCAST_REQUEST_LOCATIONINFO)) {
                 //开始 百度定位
-                LogUtils.logI("main 收到广播 开始 定位");
+//                LogUtils.logI("main 收到广播 开始 定位");
 
                 startLocation();
 

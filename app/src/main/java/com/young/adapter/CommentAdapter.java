@@ -21,6 +21,7 @@ import com.young.model.User;
 import com.young.myInterface.GotoAsyncFunction;
 import com.young.network.BmobApi;
 import com.young.share.R;
+import com.young.utils.DateUtils;
 import com.young.utils.ImageHandlerUtils;
 import com.young.utils.LogUtils;
 import com.young.utils.StringUtils;
@@ -47,11 +48,13 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
     private TextView content_txt;
     private ToReply toReply;
     private User user;
-    private int strId;
+    private int strId;//提示文字资源id
+    private int leftDrawID ;//提示图片资源id
     private CommRemoteModel commRemoteModel;
 
     private static final int ITEM_TYPE_SIZE = 2;
-    private static final int ITEM_TYPE_HEAD = 1;
+    private static final int ITEM_TYPE_BODY = 1;
+    private static final int ITEM_TYPE_HEAD = 0;
     private static final int CLICK_TYPE_USER_INFO = 3;
     private static final int CLICK_TYPE_REPLY = 4;
 
@@ -71,19 +74,22 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
     public int getItemViewType(int position) {
 
         switch (beanList.get(position).getType()) {
+
             case Contants.DATA_MODEL_HEAD:
-                return 0;
-            case Contants.DATA_MODEL_BODY:
-                return 1;
+                return ITEM_TYPE_HEAD;
+
+            case Contants.DATA_MODEL_BODY://评论回复
+                return ITEM_TYPE_BODY;
+
         }
 
-        return 1;
+        return 10;
     }
 
     @Override
     public void convert(ViewHolder holder, CommRemoteModel commRemoteModel, int position) {
 
-        if (getItemViewType(position) != ITEM_TYPE_HEAD) {
+        if (getItemViewType(position) == ITEM_TYPE_BODY) {
             listviewBody(holder, commRemoteModel);//body，评论回复
         } else {
             listviewHead(holder, commRemoteModel);//信息主题内容
@@ -100,6 +106,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
      * @param commRemoteModel
      */
     private void listviewBody(ViewHolder holder, CommRemoteModel commRemoteModel) {
+
         content_txt = holder.getView(R.id.tv_message_detail_comment);
         User sender = commRemoteModel.getSender();
         User receiver = commRemoteModel.getReceiver();
@@ -110,10 +117,15 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         String receiverNickname = TextUtils.isEmpty(receiver.getNickName()) ?
                 ctx.getString(R.string.user_name_defual0) : receiver.getNickName();
 
-        String content = senderNickname + Contants.DATA_SINGEL_COLON +
-                Contants.DATA_SINGEL_AT + receiverNickname +
-                commRemoteModel.getContent() + Contants.DATA_SINGEL_ENTER +
-                commRemoteModel.getCreatedAt() + Contants.DATA_SINGEL_SAPCE +
+        String content = senderNickname +
+                Contants.DATA_SINGEL_COLON +
+                Contants.DATA_SINGEL_AT +
+                receiverNickname +
+                Contants.DATA_SINGEL_ENTER +
+                commRemoteModel.getContent() +
+                Contants.DATA_SINGEL_ENTER +
+                DateUtils.convertDate2Str(commRemoteModel.getMcreatedAt()) +
+                Contants.DATA_SINGEL_SAPCE +
                 ctx.getString(R.string.txt_replay);
 
         content_txt.setText(StringUtils.getEmotionContent(ctx, content_txt, content));
@@ -212,7 +224,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
     @Override
     public int getlayoutid(int position) {
 
-        return position == 0 ?
+        return getItemViewType(position) == ITEM_TYPE_HEAD ?
                 R.layout.item_message_detail_head : R.layout.item_message_detail;
 
     }
@@ -359,17 +371,22 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
      */
     private void visit(boolean hadGo, View v) {
 
+
         if (hadGo) {
             strId = R.string.not_visit;
+            leftDrawID = R.drawable.icon_wantogo;
+
             commRemoteModel.getVisited().remove(user.getObjectId());
         } else {
             strId = R.string.cancel_collect_success;
+            leftDrawID = R.drawable.icon_wantogo_light;
             commRemoteModel.getVisited().add(user.getObjectId());
         }
 
 
         ((TextView) v).setText(String.valueOf(commRemoteModel.getVisited() == null ?
                 0 : commRemoteModel.getVisited().size()));
+        ((TextView) v).setCompoundDrawablesWithIntrinsicBounds(leftDrawID, 0, 0, 0);
 
         ShareMessage_HZ shareMessage = new ShareMessage_HZ();
         shareMessage.setShVisitedNum(commRemoteModel.getVisited());
@@ -397,6 +414,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
      */
     private void wantToGo(boolean hadWant, View v) {
 
+
         JSONObject jsonObject = new JSONObject();//参数
         ShareMessage_HZ shareMessage = new ShareMessage_HZ();
         try {
@@ -411,6 +429,8 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
         if (hadWant) {
             strId = R.string.cancel_collect_success;
+            leftDrawID = R.drawable.icon_bottombar_hadgo;
+
             commRemoteModel.getWanted().remove(user.getObjectId());
 
 //操作收藏表
@@ -436,6 +456,8 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
             });
         } else {
             strId = R.string.collect_success;
+            leftDrawID = R.drawable.icon_wantogo_light;
+
             commRemoteModel.getWanted().add(user.getObjectId());
             shareMessage.setObjectId(commRemoteModel.getObjectId());
             shareMessage.setUserId(commRemoteModel.getUser());
@@ -446,7 +468,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
         ((TextView) v).setText(String.valueOf(commRemoteModel.getWanted() == null ?
                 0 : commRemoteModel.getWanted().size()));
-
+        ((TextView) v).setCompoundDrawablesWithIntrinsicBounds(leftDrawID, 0, 0, 0);
 
         shareMessage.setShVisitedNum(commRemoteModel.getVisited());
         shareMessage.update(ctx, shareMessage.getObjectId(), new UpdateListener() {

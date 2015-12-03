@@ -1,78 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/paddingHit"
-    android:descendantFocusability="blocksDescendants"
-    android:fitsSystemWindows="true"
-    app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="@dimen/radius_mic">
+    android:scrollbars="none"
+    android:fitsSystemWindows="true">
 
-    <RelativeLayout
+    <android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/paddingHit"
+        android:descendantFocusability="blocksDescendants"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/radius_mic">
 
-        <com.twotoasters.jazzylistview.JazzyListView
-            android:id="@+id/listview_discover"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@null"
-            android:overScrollMode="never"
-            android:padding="@dimen/paddingHit"/>
+            android:layout_height="match_parent">
 
+            <com.young.views.EffectListView
+                android:id="@+id/listview_discover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/paddingHit"
+                android:divider="@null"
+                android:overScrollMode="never"
+                android:scrollbars="none" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/llayout_message_detail_input_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/white"
-                android:padding="@dimen/paddingHit"
-                android:visibility="gone">
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/edt_message_detail_comment"
-                    style="@style/text_style.0dp"
-                    android:layout_gravity="bottom"
-                    android:layout_weight="1"
-                    android:inputType="textMultiLine" />
-
-                <ImageView
-                    android:id="@+id/im_message_detail_emotion"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/llayout_message_detail_input_comment"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
+                    android:background="@color/white"
+                    android:orientation="horizontal"
                     android:padding="@dimen/paddingHit"
-                    android:src="@drawable/icon_emotion_def" />
+                    android:visibility="gone">
 
-                <Button
-                    android:id="@+id/btn_message_detail_tosend"
-                    android:layout_width="@dimen/btnSizeDefault"
+                    <EditText
+                        android:id="@+id/edt_message_detail_comment"
+                        style="@style/text_style.0dp"
+                        android:layout_gravity="bottom"
+                        android:layout_weight="1"
+                        android:inputType="textMultiLine" />
+
+                    <ImageView
+                        android:id="@+id/im_message_detail_emotion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:padding="@dimen/paddingHit"
+                        android:src="@drawable/icon_emotion_def" />
+
+                    <Button
+                        android:id="@+id/btn_message_detail_tosend"
+                        android:layout_width="@dimen/btnSizeDefault"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/sele_btn_send"
+                        android:text="@string/send"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/textSizeMediu" />
+                </LinearLayout>
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/vp_popupwindow_emotion_dashboard"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:background="@drawable/sele_btn_send"
-                    android:text="@string/send"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/textSizeMediu" />
+                    android:layout_marginTop="@dimen/paddingHit"
+                    android:overScrollMode="never"
+                    android:visibility="gone" />
+
             </LinearLayout>
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/vp_popupwindow_emotion_dashboard"
-                android:layout_marginTop="@dimen/paddingHit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:overScrollMode="never"
-                android:visibility="gone" />
-
-        </LinearLayout>
-
-    </RelativeLayout>
-</android.support.v7.widget.CardView>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</ScrollView>

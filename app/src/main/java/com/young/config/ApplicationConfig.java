@@ -51,11 +51,11 @@ public class ApplicationConfig extends LitePalApplication {
 
     }
 
-    /**
-     * 可回收线程池
-     *
-     * @return
-     */
+//    /**
+//     * 可回收线程池
+//     *
+//     * @return
+//     */
 //    public ThreadUtils getThreadInstance() {
 //        threadUtils = new ThreadUtils();
 //

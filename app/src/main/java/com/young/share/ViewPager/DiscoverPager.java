@@ -118,7 +118,7 @@ public class DiscoverPager extends BasePager {
                 intent.putExtra(Contants.CLAZZ_NAME, Contants.CLAZZ_DISCOVER_ACTIVITY);
                 intent.setClass(ctx, MessageDetail.class);
 
-                intent.putExtra(Contants.CLAZZ_DATA_MODEL,dataList.get(position));
+                intent.putExtra(Contants.CLAZZ_DATA_MODEL, dataList.get(position));
                 ctx.startActivity(intent);
                 ((Activity) ctx).overridePendingTransition(R.animator.activity_slid_right_in, R.animator.activity_slid_left_out);
             }
@@ -150,6 +150,9 @@ public class DiscoverPager extends BasePager {
                 refreshUI();
 
                 break;
+            case FIRST_GETDATA:
+
+                break;
 
             default:
                 LogUtils.logD("收到信息 = " + msg);
@@ -175,6 +178,7 @@ public class DiscoverPager extends BasePager {
 
     private void getDataFromRemote() {
 
+        SVProgressHUD.showWithStatus(ctx, ctx.getString(R.string.tips_loading));
 
         JSONObject params = new JSONObject();
         try {
@@ -190,8 +194,9 @@ public class DiscoverPager extends BasePager {
                         @SuppressWarnings("unchecked")
                         ShareMessageList shareMessageList = (ShareMessageList) object;
                         formatData(shareMessageList.getShareMessageHzList());
-
                         dataList = shareMessageList.getShareMessageHzList();
+
+                        SVProgressHUD.dismiss(ctx);
                         refreshUI();
 
                     }
@@ -248,11 +253,11 @@ public class DiscoverPager extends BasePager {
                     u.setAccessToken(user.getSessionToken());
                     u.setUsername(user.getUsername());
 
-                    boolean usave = u.save();
-
+                    u.save();
+//                    boolean usave =
                     shareMessageHZ.setUserId(u);
-                    boolean shareM = shareMessageHZ.save();
-
+                    shareMessageHZ.save();
+//                    boolean shareM =
 //                    LogUtils.logD("save result = " + usave + " shareM = " + shareM);
 
 

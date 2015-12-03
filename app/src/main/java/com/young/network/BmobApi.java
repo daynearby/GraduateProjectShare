@@ -42,6 +42,7 @@ public class BmobApi {
     public static final String GET_RECENTLY_SHAREMESSAGES = "GetRecentlyShareMessages";//获取最新的的前50条记录
     public static final String REMOVE_COLLECTION = "RemoveCollection";//移除收藏
     public static final String PUSH_MESSAGE_BY_UID = "PushMessageByUID";//发送信息
+    public static final String GET_MESSAGE_COMMENTS = "GetMessageComments";//获取全部的评论数据
 
 
     private static Gson gson = new Gson();
@@ -53,7 +54,7 @@ public class BmobApi {
      * @param params        JSONObject 请求参数
      * @param funcationName 方法名
      */
-    public static void AsyncFunction(Context ctx, JSONObject params, String funcationName,
+    public static void AsyncFunction(final Context ctx, JSONObject params, String funcationName,
                                      final Class clazz, final GotoAsyncFunction gotoListener) {
 
         AsyncCustomEndpoints ace = new AsyncCustomEndpoints();
@@ -74,8 +75,11 @@ public class BmobApi {
 
                     @Override
                     public void onFailure(int code, String msg) {
+
                         gotoListener.onFailure(code, msg);
-                        LogUtils.logE("访问云端usertest方法失败:" + msg);
+                        mToast(ctx,R.string.network_erro);
+
+                        LogUtils.logE("访问云端方法失败:" + msg);
                     }
                 });
     }
@@ -336,6 +340,10 @@ public class BmobApi {
     public interface SendMessageCallback {
         void onSuccessReflesh();
     }
+
+
+
+
 }
 
 
