@@ -35,7 +35,6 @@ import cn.bmob.v3.listener.SaveListener;
  */
 public class BmobApi {
 
-    // TODO: 2015-10-17 volley请求
 
     //找回密码
     public static final String FINDPWD = "FindPwd";
@@ -43,6 +42,7 @@ public class BmobApi {
     public static final String REMOVE_COLLECTION = "RemoveCollection";//移除收藏
     public static final String PUSH_MESSAGE_BY_UID = "PushMessageByUID";//发送信息
     public static final String GET_MESSAGE_COMMENTS = "GetMessageComments";//获取全部的评论数据
+    public static final String GET_SHARE_RECROD = "GetShareRecord";//获取全部分享记录
 
 
     private static Gson gson = new Gson();
@@ -68,9 +68,9 @@ public class BmobApi {
                     @Override
                     public void onSuccess(Object object) {
 
+                        LogUtils.logE("返回JSON数据:" + object.toString());
                         gotoListener.onSuccess(gson.fromJson(object.toString(), clazz));
 
-                        LogUtils.logE("返回JSON数据:" + object.toString());
                     }
 
                     @Override

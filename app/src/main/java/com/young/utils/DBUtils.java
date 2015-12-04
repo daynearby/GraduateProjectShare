@@ -4,6 +4,7 @@ import com.young.model.ShareMessage_HZ;
 import com.young.model.User;
 import com.young.model.dbmodel.DBModel;
 import com.young.model.dbmodel.ShareMessage;
+import com.young.model.dbmodel.ShareRecrod;
 
 import org.litepal.crud.DataSupport;
 
@@ -114,4 +115,53 @@ public class DBUtils {
         return dataList;
     }
 
+    /**
+     * 保存 发送记录
+     *
+     * @param messageRec
+     * @return
+     */
+    public static boolean saveShareRecord(ShareRecrod messageRec) {
+
+        List<ShareRecrod> recList = DataSupport.where("shContent = ?", messageRec.getShContent())
+                .find(ShareRecrod.class);
+        if (recList == null) {//直接保存
+            return messageRec.save();
+        } else {//不保存
+            int result = messageRec.updateAll("shContent = ?", messageRec.getShContent());
+            LogUtils.logI("返回码 " + result);
+            //++++++++++++++++++返回码++++++++++++++++++++++
+            return true;
+        }
+    }
+
+    /**
+     * 获取分享记录的前50条记录
+     * 超出这50条则向云端取
+     *
+     * @return
+     */
+    public static List<ShareMessage_HZ> getShareRecord(){
+
+        List<ShareMessage_HZ> dataList = new ArrayList<>();
+        List<ShareRecrod> shMsgList = DataSupport.limit(50).order("createdAt")
+                .find(ShareRecrod.class);
+
+        for (ShareRecrod share : shMsgList) {
+            ShareMessage_HZ shareMessage = new ShareMessage_HZ();
+            shareMessage.setShImgs(Collections.singletonList(share.getShImgs()));
+            shareMessage.setShCommNum(share.getShCommNum());
+            shareMessage.setShContent(share.getShContent());
+            shareMessage.setShLocation(share.getShLocation());
+            shareMessage.setShTag(share.getShTag());
+            shareMessage.setShVisitedNum(Collections.singletonList(share.getShVisitedNum()));
+            shareMessage.setShWantedNum(Collections.singletonList(share.getShWantedNum()));
+
+            dataList.add(shareMessage);
+
+        }
+
+        return dataList;
+
+    }
 }

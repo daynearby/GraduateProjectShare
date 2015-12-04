@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -39,7 +40,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public User mUser;
     public ThreadUtils threadUtils;
 
-    public final static String BUNDLE_TAG = "Serializable_Data";
+
     public final static String BUNDLE_BROADCAST = "sendBroadcast";
 
     private final static int TYPE_BACK = 0x1;
@@ -78,8 +79,31 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public void mStartActivity(Class clazz) {
 
 
-        mStartActivity(clazz, null, TYPE_DEFUAL);
+        mStartActivity(clazz, null, TYPE_DEFUAL,null);
     }
+
+    /**
+     * 跳转界面，带参数的
+     * @param clazz
+     * @param bundle
+     */
+    public void mStartActivity(Class clazz,Bundle bundle) {
+
+
+        mStartActivity(clazz, bundle, TYPE_DEFUAL,null);
+    }
+
+    /**
+     *  跳转界面，带参数的,参数标识tag
+     * @param clazz
+     * @param bundle
+     * @param bundleTag
+     */
+    public void mStartActivity(Class clazz,Bundle bundle,String bundleTag) {
+
+        mStartActivity(clazz, bundle, TYPE_DEFUAL,bundleTag);
+    }
+
 
     /**
      * 返回上一级界面，不带参数
@@ -87,7 +111,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * @param clazz
      */
     public void mBackStartActivity(Class clazz) {
-        mStartActivity(clazz, null, TYPE_BACK);
+        mStartActivity(clazz, null, TYPE_BACK,null);
     }
 
     public void mBackStartActivity(String tagClazz) {
@@ -101,7 +125,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
         }
 
-        mStartActivity(clazz, null, TYPE_BACK);
+        mStartActivity(clazz, null, TYPE_BACK,null);
     }
 
     /**
@@ -110,12 +134,17 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * @param clazz  要跳转的类，也就是要传递参数的类
      * @param bundle serializable
      */
-    public void mStartActivity(Class clazz, Bundle bundle, int type) {
+    public void mStartActivity(Class clazz, Bundle bundle, int type,String bundleTag) {
 
         Intent intent = new Intent();
         intent.setClass(this, clazz);
+
         if (bundle != null) {
-            intent.putExtra(BUNDLE_TAG, bundle);
+            if (TextUtils.isEmpty(bundleTag)) {
+                intent.putExtras(bundle);
+            }else {
+                intent.putExtra(bundleTag, bundle);
+            }
         }
 
         startActivity(intent);

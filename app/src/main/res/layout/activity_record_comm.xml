@@ -2,14 +2,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/sw_record_comm_refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <com.twotoasters.jazzylistview.JazzyListView
         android:id="@+id/lv_record_comm"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="@dimen/paddingMic"
+        android:dividerHeight="@dimen/paddingHit"
         android:scrollbars="none"
         android:overScrollMode="never"/>
-
+</android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

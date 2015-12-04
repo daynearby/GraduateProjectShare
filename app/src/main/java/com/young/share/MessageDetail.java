@@ -1,6 +1,7 @@
 package com.young.share;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -25,6 +26,7 @@ import com.young.model.ShareMessage_HZ;
 import com.young.myInterface.GotoAsyncFunction;
 import com.young.network.BmobApi;
 import com.young.thread.MyRunnable;
+import com.young.utils.DataFormateUtils;
 import com.young.utils.EmotionUtils;
 import com.young.utils.LogUtils;
 
@@ -79,8 +81,9 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
         setBarItemVisible(true, false);
         setTvTitle(R.string.title_body);
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        final Bundle bundle = getIntent().getExtras();
 
-        superTagClazz = getIntent().getStringExtra(Contants.CLAZZ_NAME);
+        superTagClazz = bundle.getString(Contants.CLAZZ_NAME);
 
         //提示
         SVProgressHUD.showWithStatus(mActivity, getString(R.string.tips_loading));
@@ -94,7 +97,8 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
                     case Contants.CLAZZ_DISCOVER_ACTIVITY://shareMessage
 
-                        formateDataDiscover(getIntent().getSerializableExtra(Contants.CLAZZ_DATA_MODEL));
+                        formateDataDiscover(bundle.getSerializable(Contants.CLAZZ_DATA_MODEL));
+
                         //获取最新的评论
                         ShareMessage_HZ shareMessage = (ShareMessage_HZ) getIntent().getSerializableExtra(Contants.CLAZZ_DATA_MODEL);
                         getComment(shareMessage.getObjectId());
@@ -192,26 +196,13 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
     /**
      * sharemessage
-     * <p/>
+     * <p>
      * 处理数据
      *
      * @param serializableExtra
      */
     private void formateDataDiscover(Serializable serializableExtra) {
-
-        ShareMessage_HZ shareMessage = (ShareMessage_HZ) serializableExtra;
-
-        commModel.setContent(shareMessage.getShContent());
-        commModel.setImages(shareMessage.getShImgs());
-        commModel.setLocationInfo(shareMessage.getShLocation());
-        commModel.setTag(shareMessage.getShTag());
-        commModel.setUser(shareMessage.getUserId());
-        commModel.setVisited(shareMessage.getShVisitedNum());
-        commModel.setWanted(shareMessage.getShWantedNum());
-        commModel.setObjectId(shareMessage.getObjectId());
-        commModel.setComment(shareMessage.getShCommNum());
-        commModel.setMcreatedAt(shareMessage.getCreatedAt());
-        commModel.setType(Contants.DATA_MODEL_HEAD);//属于分享信息
+        commModel = DataFormateUtils.formateDataDiscover(serializableExtra);
 
         dataList.add(0, commModel);
 
@@ -269,7 +260,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
     /**
      * 格式化数据
-     * <p/>
+     * <p>
      * 将Comment_HZ中的数据转换成CommRemoteModel
      *
      * @param comm

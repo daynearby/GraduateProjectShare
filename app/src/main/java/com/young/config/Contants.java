@@ -71,6 +71,8 @@ public class Contants {
 
     public static final String BORDCAST_IMAGEPATH_LIST = "bordcast_imagrpath_list";
 
+
+    public final static String BUNDLE_TAG = "Serializable_Data";
     //                                  Acache keys
     //******************************** 保存草稿 keys**********************************************
 
@@ -100,7 +102,7 @@ public class Contants {
     //************************* 类的跳转 标识***************************************
     public static final String CLAZZ_NAME = "clazz_name";//类名
     public static final String CLAZZ_MAINACTIVITY = "clazz_name_mainactivity";//类名
-    public static final String CLAZZ_DISCOVER_ACTIVITY = "clazz_discover_activity";//类名
+    public static final String CLAZZ_DISCOVER_ACTIVITY = "share_message";//类名
 
     public static final String CLAZZ_DATA_SHARE_MESSAGE = "data_share_message";//数据
     public static final String CLAZZ_DATA_MODEL = "data_model";//传输数据
@@ -120,6 +122,11 @@ public class Contants {
     public static final int MESSAGE_TYPE_SHAREMESSAGE = 100;
     public static final int MESSAGE_TYPE_DISCOUNT = 101;
 
+    //****************************** 记录类型 **************************************
+    public static final String RECORD_TYPE = "record_type";//符号@
+    public static final int RECORD_TYPE_SHARE = 10;//分享记录
+    public static final int RECORD_TYPE_COLLECT = 11;//收藏记录
+    public static final int RECORD_LENGHT = 50;//记录条数
 
 
 }

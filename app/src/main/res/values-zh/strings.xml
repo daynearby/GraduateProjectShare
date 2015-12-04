@@ -126,4 +126,5 @@
     <string name="operation_success">操作成功</string>
     <string name="network_erro">网络不通畅</string>
     <string name="user_name_defual0">二货</string>
+    <string name="click_get_more">点击查看</string>
 </resources>

@@ -2,6 +2,7 @@ package com.young.share.ViewPager;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
@@ -112,10 +113,13 @@ public class DiscoverPager extends BasePager {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent();
-                intent.putExtra(Contants.CLAZZ_NAME, Contants.CLAZZ_DISCOVER_ACTIVITY);
-                intent.setClass(ctx, MessageDetail.class);
+                Bundle bundle = new Bundle();
 
-                intent.putExtra(Contants.CLAZZ_DATA_MODEL, dataList.get(position));
+                bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_DISCOVER_ACTIVITY);
+                bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, dataList.get(position));
+
+                intent.putExtras(bundle);
+                intent.setClass(ctx, MessageDetail.class);
                 ctx.startActivity(intent);
                 ((Activity) ctx).overridePendingTransition(R.animator.activity_slid_right_in, R.animator.activity_slid_left_out);
             }
@@ -250,7 +254,7 @@ public class DiscoverPager extends BasePager {
                     u.save();
 //                    boolean usave =
                     shareMessageHZ.setUserId(u);
-                    shareMessageHZ.save();
+                    DBUtils.saveShMessages(shareMessageHZ);
 //                    boolean shareM =
 //                    LogUtils.logD("save result = " + usave + " shareM = " + shareM);
 

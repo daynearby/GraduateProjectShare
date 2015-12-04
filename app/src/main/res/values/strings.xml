@@ -77,7 +77,7 @@
     <string name="revise_pwd">修改密码</string>
     <string name="old_pwd">原密码</string>
     <string name="new_pwd">新密码</string>
-    <string name="confirm_pwd" translatable="false">确认密码</string>
+    <string name="confirm_pwd">确认密码</string>
     <string name="save_pwd">更改</string>
     <string name="old_pwd_empty">原密码不能为空</string>
     <string name="revising">修改中&#8230;</string>
@@ -126,5 +126,6 @@
     <string name="operation_success">操作成功</string>
     <string name="network_erro">网络不通畅</string>
     <string name="user_name_defual0">二货</string>
+    <string name="click_get_more">点击查看</string>
 
 </resources>
