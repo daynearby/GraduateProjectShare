@@ -10,9 +10,6 @@
  */
 package com.young.thread;
 
-import android.os.Handler;
-import android.util.Log;
-
 import com.young.utils.LogUtils;
 
 /**
@@ -22,9 +19,7 @@ public class MyRunnable implements Runnable {
 
     private boolean cancleTask = false;
 
-    private boolean cancleException = false;
 
-//    private Handler mHandler = null;
     private GotoRunnable gotoRunnable;
 
     public MyRunnable(GotoRunnable gotoRunnable) {
@@ -34,57 +29,20 @@ public class MyRunnable implements Runnable {
     @Override
     public void run() {
 
+        LogUtils.logD("cancle task = " + cancleTask);
 
         if (!cancleTask) {
-//            LogUtils.logD("cancle = "+!cancleTask);
-
-            gotoRunnable.running();
             LogUtils.logD("running");
+            gotoRunnable.running();
+
         }
 
-//        if (!cancleTask && mHandler != null) {
-//
-//        }
 
-
-    }
-
-
-    /**
-     *
-     */
-    private void running() {
-        try {
-            // 做点有可能会出异常的事情！！！
-            int prog = 0;
-            if (!cancleTask && !cancleException) {
-//                while (prog < 101) {
-////                    if ((prog > 0 || prog == 0) && prog < 70)
-////                    {
-////                        SystemClock.sleep(100);
-////                    }
-////                    else
-////                    {
-////                        SystemClock.sleep(300);
-////                    }
-//                    if (!cancleTask) {
-//                        mHandler.sendEmptyMessage(prog++);
-//                        Log.i("KKK", "调用 prog++ = " + (prog));
-//                    }
-//
-//                }
-
-
-            }
-        } catch (Exception e) {
-            cancleException = true;
-        }
     }
 
 
     public void setCancleTaskUnit(boolean cancleTask) {
         this.cancleTask = cancleTask;
-        // mHandler.sendEmptyMessage(0);
     }
 
 

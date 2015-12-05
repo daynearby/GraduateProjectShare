@@ -85,6 +85,11 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
     }
 
     @Override
+    public void mBack() {
+        mBackStartActivity(LoginActivity.class);
+    }
+
+    @Override
     public void onClick(View v) {
 
         String email;

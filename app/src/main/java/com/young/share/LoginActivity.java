@@ -80,6 +80,11 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
         LoginActivity.this.finish();
     }
 
+    @Override
+    public void mBack() {
+
+    }
+
     /**
      * 保存当前用户在installtion表中
      *

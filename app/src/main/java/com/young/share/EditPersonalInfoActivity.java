@@ -156,6 +156,11 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
         back2super();
     }
 
+    @Override
+    public void mBack() {
+        back2super();
+    }
+
     private void back2super() {
         mBackStartActivity(PersonalCenterActivity.class);
         finish();

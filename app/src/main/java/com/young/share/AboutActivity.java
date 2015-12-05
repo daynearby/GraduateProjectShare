@@ -49,15 +49,10 @@ public class AboutActivity extends ItemActBarActivity {
     }
 
     @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
-                && event.getAction() != KeyEvent.ACTION_UP) {
-            back2super();
-        }
-
-
-        return super.dispatchKeyEvent(event);
+    public void mBack() {
+        back2super();
     }
+
 
     /**
      * 返回上一层

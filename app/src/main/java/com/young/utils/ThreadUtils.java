@@ -2,7 +2,6 @@ package com.young.utils;
 
 import com.young.thread.MyRunnable;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -15,7 +14,7 @@ import java.util.concurrent.Future;
  * 先获取对象，初始化
  * 执行任务先添加任务，再启动
  * 最后在activity停止的时候应该停止该线程，释放资源
- * <p/>
+ * <p>
  * Created by Nearby Yang on 2015-11-21.
  */
 public class ThreadUtils {
@@ -35,7 +34,7 @@ public class ThreadUtils {
     //线程池是否处于运行状态(即:是否被释放!)
     private boolean isRuning = true;
 
-    public ThreadUtils(){
+    public ThreadUtils() {
 
         getInstance();
         init();
@@ -84,6 +83,8 @@ public class ThreadUtils {
             public void run() {
                 if (isRuning) {
 
+                    LogUtils.logD("thread star task");
+
                     MyRunnable myRunnable = null;
 
                     synchronized (lock) {
@@ -92,13 +93,11 @@ public class ThreadUtils {
 
                         if (myRunnable == null) {
                             isNotify = true;
-
-                        } else {
-
-                            taskMap.put(getInstance().submit(myRunnable), myRunnable);
-
                         }
+                    }
 
+                    if (myRunnable != null) {
+                        taskMap.put(mES.submit(myRunnable), myRunnable);
                     }
                 }
 
@@ -151,6 +150,7 @@ public class ThreadUtils {
                 taskQueue.offer(mr);
                 // taskQueue.add(mr);
                 notifyWork();
+                LogUtils.logD("thread add task ");
             }
         });
 

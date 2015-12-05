@@ -82,6 +82,12 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
     }
 
     @Override
+    public void mBack() {
+        mBackStartActivity(LoginActivity.class);
+        this.finish();
+    }
+
+    @Override
     public void onClick(View v) {
 
         String userName = et_user_name.getText().toString().trim();
@@ -194,7 +200,7 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
 
         }
 
-        if (pwd != null) {
+        if (!TextUtils.isEmpty(pwd)) {
 
             try {
                 params.put("password", pwd);

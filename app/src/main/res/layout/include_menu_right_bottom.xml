@@ -16,18 +16,18 @@
 
 
     <ImageView
-        style="@style/arcButton"
+        style="@style/arcButtonChild"
         android:src="@drawable/icon_share_messages"
         android:tag="Place" />
 
 
     <ImageView
-        style="@style/arcButton"
+        style="@style/arcButtonChild"
         android:src="@drawable/icon_comment"
         android:tag="Sun" />
 
     <ImageView
-        style="@style/arcButton"
+        style="@style/arcButtonChild"
         android:src="@drawable/icon_personal_centre"
         android:tag="People" />
 

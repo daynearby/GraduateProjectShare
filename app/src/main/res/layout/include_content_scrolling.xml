@@ -8,7 +8,7 @@
     android:layout_marginRight="@dimen/paddingMediu"
     android:layout_marginTop="@dimen/paddingMediu"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_scrolling">
+    >
 
     <RelativeLayout
         android:id="@+id/rtl_include_content_csrcolling"
@@ -17,9 +17,11 @@
 
         <ListView
             android:id="@+id/ls_include_content_scrolling_content_list"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:overScrollMode="never">
+            android:overScrollMode="never"
+            android:layout_centerHorizontal="true"
+            >
 
         </ListView>
 

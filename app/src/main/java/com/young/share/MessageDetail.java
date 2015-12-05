@@ -65,7 +65,8 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
     private String receiverId;//接收消息者id
 
 
-    private static final int MESSAGE_FORMATE_DATA = 1;//格式化数据
+    private static final int GET_MESSAGE = 1;//格式化数据
+
     private boolean SendMessageFinish = true;//消息是否已经发送
 
 
@@ -85,23 +86,39 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
         superTagClazz = bundle.getString(Contants.CLAZZ_NAME);
 
+
         //提示
         SVProgressHUD.showWithStatus(mActivity, getString(R.string.tips_loading));
 
         //线程
         threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+
             @Override
             public void running() {
 
+
+
                 switch (superTagClazz) {
 
-                    case Contants.CLAZZ_DISCOVER_ACTIVITY://shareMessage
+                    case Contants.CLAZZ_DISCOVER_ACTIVITY://shareMessage详细信息
 
-                        formateDataDiscover(bundle.getSerializable(Contants.CLAZZ_DATA_MODEL));
 
+                        ShareMessage_HZ shareMessage = (ShareMessage_HZ) bundle.getSerializable(Contants.CLAZZ_DATA_MODEL);
+                        assert shareMessage != null;
+                        formateDataDiscover(shareMessage);
                         //获取最新的评论
-                        ShareMessage_HZ shareMessage = (ShareMessage_HZ) getIntent().getSerializableExtra(Contants.CLAZZ_DATA_MODEL);
                         getComment(shareMessage.getObjectId());
+
+                        break;
+
+                    case Contants.CLAZZ_PERSONAL_ACTIVITY://分析消息记录
+
+
+                        ShareMessage_HZ shareMessageRec = (ShareMessage_HZ) bundle.getSerializable(Contants.BUNDLE_TAG);
+                        assert shareMessageRec != null;
+                        formateDataDiscover(shareMessageRec);
+                        //获取最新的评论
+                        getComment(shareMessageRec.getObjectId());
 
                         break;
 
@@ -138,8 +155,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
         setItemListener(new BarItemOnClick() {
             @Override
             public void leftClick(View v) {
-                mBackStartActivity(superTagClazz);
-                mActivity.finish();
+                back2superClazz();
             }
 
             @Override
@@ -165,13 +181,25 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
     public void handerMessage(Message msg) {
 
         switch (msg.what) {
-            case MESSAGE_FORMATE_DATA:
+            case GET_MESSAGE:
 
                 commAdapter.setData(dataList);
 
         }
     }
 
+    @Override
+    public void mBack() {
+       back2superClazz();
+    }
+
+    /**
+     * 返回上一级
+     */
+    private void back2superClazz(){
+        mBackStartActivity(superTagClazz);
+        this.finish();
+    }
     /**
      * 准备发送评论工作
      */
@@ -196,7 +224,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
     /**
      * sharemessage
-     * <p>
+     * <p/>
      * 处理数据
      *
      * @param serializableExtra
@@ -206,7 +234,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
         dataList.add(0, commModel);
 
-        mHandler.sendEmptyMessage(MESSAGE_FORMATE_DATA);
+        mHandler.sendEmptyMessage(GET_MESSAGE);
     }
 
     /**
@@ -218,12 +246,12 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
 
         JSONObject params = new JSONObject();
+
         try {
             params.put("messageID", messageId);
         } catch (JSONException e) {
             LogUtils.logD("get comment add params failure" + e.toString());
         }
-
 
         BmobApi.AsyncFunction(mActivity, params, BmobApi.GET_MESSAGE_COMMENTS, CommentList.class, new GotoAsyncFunction() {
             @Override
@@ -234,25 +262,21 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
                 for (Comment_HZ comm : comList) {
                     //格式化数据
                     dataList.add(formateComments(comm));
-
                 }
 
-                if (SVProgressHUD.isShowing(mActivity)) {
-                    //提示
-                    SVProgressHUD.dismiss(mActivity);
-                }
+                processDialogDismisson();
 
 //刷新界面
-                mHandler.sendEmptyMessage(MESSAGE_FORMATE_DATA);
+                mHandler.sendEmptyMessage(GET_MESSAGE);
 
 
             }
 
             @Override
             public void onFailure(int code, String msg) {
+                processDialogDismisson();
 
-                SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.tips_loading_faile));
-
+                mToast(R.string.tips_loading_faile);
                 LogUtils.logD("get comment add params failure.  code = " + code + " message =  " + msg);
             }
         });
@@ -260,7 +284,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
     /**
      * 格式化数据
-     * <p>
+     * <p/>
      * 将Comment_HZ中的数据转换成CommRemoteModel
      *
      * @param comm
@@ -355,5 +379,16 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
         getComment(commModel.getObjectId());
     }
 
+    /**
+     * 关闭进度条提示
+     */
+    private void processDialogDismisson() {
+        LogUtils.logD(" isshow" + SVProgressHUD.isShowing(mActivity));
+        if (SVProgressHUD.isShowing(mActivity)) {
+
+            //提示
+            SVProgressHUD.dismiss(mActivity);
+        }
+    }
 
 }

@@ -3,16 +3,12 @@ package com.young.share;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -20,8 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.young.adapter.EmotionGvAdapter;
-import com.young.adapter.EmotionPagerAdapter;
 import com.young.adapter.myGridViewAdapter;
 import com.young.annotation.InjectView;
 import com.young.base.BaseAppCompatActivity;
@@ -30,11 +24,9 @@ import com.young.config.Contants;
 import com.young.model.ShareMessage_HZ;
 import com.young.myInterface.GoToUploadImages;
 import com.young.network.BmobApi;
-import com.young.utils.DisplayUtils;
 import com.young.utils.EmotionUtils;
 import com.young.utils.ImageHandlerUtils;
 import com.young.utils.LogUtils;
-import com.young.utils.StringUtils;
 import com.young.utils.XmlUtils;
 import com.young.utils.cache.ACache;
 import com.young.utils.cache.DarftUtils;
@@ -91,6 +83,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     private DarftUtils darftUtils;//草稿
     private static final int FINISH_ACTIVITY = 0;
 
+    // TODO: 2015-12-05 移除item而不需要刷新整个ListView
     @Override
     public int getLayoutId() {
         return R.layout.activity_share_message;
@@ -111,9 +104,9 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         List<String> tagList = XmlUtils.getSelectTag(this);
         tagList.remove(0);
 
-        popupWinListView = new PopupWinListView(this, tagList,false);
+        popupWinListView = new PopupWinListView(this, tagList, false);
         gridViewAdapter = new myGridViewAdapter(this, gv_img, true);
-        gridViewAdapter.setDatas(null,true);
+        gridViewAdapter.setDatas(null, true);
 
         gv_img.setAdapter(gridViewAdapter);
 
@@ -132,7 +125,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         //监听
         setItemListener(new itemClick());
         //表情
-       new EmotionUtils(mActivity,vp_emotion_dashboard,content_et);
+        new EmotionUtils(mActivity, vp_emotion_dashboard, content_et);
         acache = ACache.get(mActivity);
         darftUtils = DarftUtils.builder(mActivity);
         dialog = new Dialog4Tips(mActivity);
@@ -169,7 +162,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                             }
                         }
 
-                        gridViewAdapter.setDatas(list,true);
+                        gridViewAdapter.setDatas(list, true);
                     }
 
                     //删除草稿
@@ -310,7 +303,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                     }
 
                     //图片路径
-                    gridViewAdapter.setDatas(mSelectPath,true);
+                    gridViewAdapter.setDatas(mSelectPath, true);
                 }
 
 
@@ -334,6 +327,56 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         mActivity.finish();
     }
 
+    @Override
+    public void mBack() {
+        goback();
+    }
+
+    private void goback() {
+
+        if (!TextUtils.isEmpty(content_et.getText().toString())) {
+
+
+            dialog.setContent(getString(R.string.need_to_save_draft));
+            dialog.setBtnOkText(getString(R.string.save));
+            dialog.setBtnCancelText(getString(R.string.do_not_save));
+            dialog.setDialogListener(new Dialog4Tips.Listener() {
+                @Override
+                public void btnOkListenter() {
+
+                    darftUtils.saveDraft(content_et.getText().toString(),
+                            shareLocation_tv.getText().toString(),
+                            tag_tv.getText().toString(),
+                            gridViewAdapter.getData()
+                    );
+                    back2MainActivity();
+
+                }
+
+                @Override
+                public void btnCancelListener() {
+                    back2MainActivity();
+
+                }
+            });
+            dialog.show();
+
+        } else {
+            back2MainActivity();
+        }
+    }
+    /**
+     * 回到MainActivity
+     */
+    private void back2MainActivity() {
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
+
+        mBackStartActivity(MainActivity.class);
+        mActivity.finish();
+    }
+
     /**
      * 点击事件监听
      */
@@ -341,48 +384,11 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
         @Override
         public void leftClick(View v) {
+            /**
+             * 返回上一级前，先询问是否保存草稿
+             */
+            goback();
 
-            if (!TextUtils.isEmpty(content_et.getText().toString())) {
-
-
-                dialog.setContent(getString(R.string.need_to_save_draft));
-                dialog.setBtnOkText(getString(R.string.save));
-                dialog.setBtnCancelText(getString(R.string.do_not_save));
-                dialog.setDialogListener(new Dialog4Tips.Listener() {
-                    @Override
-                    public void btnOkListenter() {
-
-                        darftUtils.saveDraft(content_et.getText().toString(),
-                                shareLocation_tv.getText().toString(),
-                                tag_tv.getText().toString(),
-                                gridViewAdapter.getData()
-                        );
-                        back2MainActivity();
-
-                    }
-
-                    @Override
-                    public void btnCancelListener() {
-                        back2MainActivity();
-
-                    }
-                });
-                dialog.show();
-
-            } else {
-                back2MainActivity();
-            }
-
-
-        }
-
-        /**
-         * 回到MainActivity
-         */
-        private void back2MainActivity() {
-            dialog.dismiss();
-            mBackStartActivity(MainActivity.class);
-            mActivity.finish();
         }
 
         @Override
@@ -498,7 +504,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         content_et.setText("");
         shareLocation_tv.setText("");
         tag_tv.setText("");
-        gridViewAdapter.setDatas(null,true);
+        gridViewAdapter.setDatas(null, true);
 
     }
 

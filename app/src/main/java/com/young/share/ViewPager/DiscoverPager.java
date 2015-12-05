@@ -52,6 +52,7 @@ public class DiscoverPager extends BasePager {
     private int endIndex = 20;
     protected static final int pageSize = 20;
     private int PUSH_TIMES = 1;
+    private boolean isGetMore = false;//从远程数据库获取更多数据
 
     private int startRow = 0;//从第一条开始
 
@@ -71,20 +72,22 @@ public class DiscoverPager extends BasePager {
                     @Override
                     public void pushToRefresh() {
                         if (CommonUtils.isNetworkAvailable(ctx)) {//有网络
-                            startRow = startRow + Contants.PAGER_NUMBER;
+                            startRow += Contants.PAGER_NUMBER;
 
-                            if (dataList.size() > pageSize) {
+                            if (dataList.size() > pageSize * PUSH_TIMES) {
 
                                 endIndex = dataList.size() < endIndex + PUSH_TIMES * pageSize ? dataList.size() :
                                         endIndex + PUSH_TIMES * pageSize;
-                                listviewAdapter.setData(dataList.subList(starIndex, endIndex));
 
+                                listviewAdapter.setData(dataList.subList(starIndex, endIndex));
 
                                 PUSH_TIMES++;
 
                             } else {
-                                Toast.makeText(ctx, R.string.no_more_messages, Toast.LENGTH_SHORT).show();
-
+                                isGetMore = true;
+//                                Toast.makeText(ctx, R.string.no_more_messages, Toast.LENGTH_SHORT).show();
+                                startRow = dataList.size();
+                                getDataFromRemote();
                             }
                         } else {
                             SVProgressHUD.showInfoWithStatus(ctx, ctx.getString(R.string.without_network));
@@ -99,8 +102,11 @@ public class DiscoverPager extends BasePager {
                     public void pullToRefresh() {
                         LogUtils.logD("下拉刷新");
                         PUSH_TIMES = 1;
+                        startRow = 0;
+                        isGetMore = false;
 
                         if (CommonUtils.isNetworkAvailable(ctx)) {//有网络
+
                             getDataFromRemote();
                         } else {
                             SVProgressHUD.showInfoWithStatus(ctx, ctx.getString(R.string.without_network));
@@ -193,7 +199,18 @@ public class DiscoverPager extends BasePager {
                         @SuppressWarnings("unchecked")
                         ShareMessageList shareMessageList = (ShareMessageList) object;
                         formatData(shareMessageList.getShareMessageHzList());
-                        dataList = shareMessageList.getShareMessageHzList();
+
+                        if (isGetMore) {
+                            if (shareMessageList.getShareMessageHzList().size() > 0) {
+                                dataList.addAll(shareMessageList.getShareMessageHzList());
+                            } else {
+                                Toast.makeText(ctx, R.string.no_more_messages, Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            dataList.clear();
+                            dataList = shareMessageList.getShareMessageHzList();
+                        }
 
                         refreshUI();
 
@@ -273,8 +290,12 @@ public class DiscoverPager extends BasePager {
      * 刷新列表，最新数据
      */
     private void refreshUI() {
-        endIndex = dataList.size() < pageSize ? dataList.size() : endIndex;
 
+        if (isGetMore) {
+            endIndex = dataList.size() < (PUSH_TIMES + 1) * pageSize ? dataList.size() : (PUSH_TIMES + 1) * pageSize;
+        }else {
+            endIndex = dataList.size() < pageSize ? dataList.size() : endIndex;
+        }
         listviewAdapter.setData(dataList.subList(starIndex, endIndex));
         swipeRefreshLayout.setRefreshing(false);
     }

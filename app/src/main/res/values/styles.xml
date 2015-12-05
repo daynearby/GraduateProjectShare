@@ -118,4 +118,9 @@
         <item name="android:layout_height">@android:dimen/notification_large_icon_width</item>
         <item name="android:padding">@dimen/paddingMic</item>
     </style>
+    <style name="arcButtonChild">
+        <item name="android:layout_width">@dimen/arcButtonChild</item>
+        <item name="android:layout_height">@dimen/arcButtonChild</item>
+        <item name="android:padding">@dimen/paddingMic</item>
+    </style>
 </resources>

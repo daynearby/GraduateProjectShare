@@ -132,6 +132,11 @@ public class MainActivity extends CustomActBarActivity {
 
     }
 
+    @Override
+    public void mBack() {
+
+    }
+
     private class pageChangeListener implements ViewPager.OnPageChangeListener {
 
         @Override

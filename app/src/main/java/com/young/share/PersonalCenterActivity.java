@@ -2,6 +2,7 @@ package com.young.share;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -113,6 +114,11 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
 
     }
 
+    @Override
+    public void mBack() {
+        mBackStartActivity(MainActivity.class);
+    }
+
     /**
      * toolbar 初始化
      */
@@ -191,11 +197,14 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
             switch (position) {
 
                 case 0://<item>我想去</item>
-
-
+                    Bundle bundle =new Bundle();
+                    bundle.putInt(Contants.RECORD_TYPE, Contants.RECORD_TYPE_COLLECT);
+                    mStartActivity(RecordCommActivity.class, bundle);
                     break;
                 case 1://<item>分享记录</item>
-                    mStartActivity(RecordCommActivity.class);
+                    Bundle bundle_share =new Bundle();
+                    bundle_share.putInt(Contants.RECORD_TYPE, Contants.RECORD_TYPE_SHARE);
+                    mStartActivity(RecordCommActivity.class,bundle_share);
 
                     break;
                 case 2:// <item>修改资料</item>
@@ -283,14 +292,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
 
     }
 
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
-                && event.getAction() != KeyEvent.ACTION_UP) {
-            mBackStartActivity(MainActivity.class);
-        }
 
 
-        return super.dispatchKeyEvent(event);
-    }
+
 }

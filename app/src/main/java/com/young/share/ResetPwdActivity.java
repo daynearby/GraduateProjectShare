@@ -74,6 +74,11 @@ public class ResetPwdActivity extends ItemActBarActivity implements View.OnClick
         back2super();
     }
 
+    @Override
+    public void mBack() {
+        mBackStartActivity(LoginActivity.class);
+    }
+
 
     /**
      * 重置密码

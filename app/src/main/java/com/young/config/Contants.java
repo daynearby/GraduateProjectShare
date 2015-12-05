@@ -103,6 +103,8 @@ public class Contants {
     public static final String CLAZZ_NAME = "clazz_name";//类名
     public static final String CLAZZ_MAINACTIVITY = "clazz_name_mainactivity";//类名
     public static final String CLAZZ_DISCOVER_ACTIVITY = "share_message";//类名
+    public static final String CLAZZ_PERSONAL_ACTIVITY = "personal_center";//类名
+
 
     public static final String CLAZZ_DATA_SHARE_MESSAGE = "data_share_message";//数据
     public static final String CLAZZ_DATA_MODEL = "data_model";//传输数据
@@ -127,6 +129,11 @@ public class Contants {
     public static final int RECORD_TYPE_SHARE = 10;//分享记录
     public static final int RECORD_TYPE_COLLECT = 11;//收藏记录
     public static final int RECORD_LENGHT = 50;//记录条数
+    //参数名
+    public static final String PARAM_USERID = "userID";//参数名
+    public static final String PARAM_SKIP = "skip";//参数名
+
+
 
 
 }

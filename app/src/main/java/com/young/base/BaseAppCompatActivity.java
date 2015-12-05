@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -18,7 +19,9 @@ import com.young.config.ApplicationConfig;
 import com.young.config.Contants;
 import com.young.model.User;
 import com.young.share.MainActivity;
+import com.young.share.PersonalCenterActivity;
 import com.young.share.R;
+import com.young.share.RecordCommActivity;
 import com.young.utils.ThreadUtils;
 
 import cn.bmob.v3.BmobUser;
@@ -79,29 +82,31 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public void mStartActivity(Class clazz) {
 
 
-        mStartActivity(clazz, null, TYPE_DEFUAL,null);
+        mStartActivity(clazz, null, TYPE_DEFUAL, null);
     }
 
     /**
      * 跳转界面，带参数的
+     *
      * @param clazz
      * @param bundle
      */
-    public void mStartActivity(Class clazz,Bundle bundle) {
+    public void mStartActivity(Class clazz, Bundle bundle) {
 
 
-        mStartActivity(clazz, bundle, TYPE_DEFUAL,null);
+        mStartActivity(clazz, bundle, TYPE_DEFUAL, null);
     }
 
     /**
-     *  跳转界面，带参数的,参数标识tag
+     * 跳转界面，带参数的,参数标识tag
+     *
      * @param clazz
      * @param bundle
      * @param bundleTag
      */
-    public void mStartActivity(Class clazz,Bundle bundle,String bundleTag) {
+    public void mStartActivity(Class clazz, Bundle bundle, String bundleTag) {
 
-        mStartActivity(clazz, bundle, TYPE_DEFUAL,bundleTag);
+        mStartActivity(clazz, bundle, TYPE_DEFUAL, bundleTag);
     }
 
 
@@ -111,7 +116,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * @param clazz
      */
     public void mBackStartActivity(Class clazz) {
-        mStartActivity(clazz, null, TYPE_BACK,null);
+        mStartActivity(clazz, null, TYPE_BACK, null);
     }
 
     public void mBackStartActivity(String tagClazz) {
@@ -122,10 +127,13 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
             case Contants.CLAZZ_MAINACTIVITY:
                 clazz = MainActivity.class;
                 break;
+            case Contants.CLAZZ_PERSONAL_ACTIVITY:
 
+                clazz = RecordCommActivity.class;
+                break;
         }
 
-        mStartActivity(clazz, null, TYPE_BACK,null);
+        mStartActivity(clazz, null, TYPE_BACK, null);
     }
 
     /**
@@ -134,7 +142,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * @param clazz  要跳转的类，也就是要传递参数的类
      * @param bundle serializable
      */
-    public void mStartActivity(Class clazz, Bundle bundle, int type,String bundleTag) {
+    public void mStartActivity(Class clazz, Bundle bundle, int type, String bundleTag) {
 
         Intent intent = new Intent();
         intent.setClass(this, clazz);
@@ -142,7 +150,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         if (bundle != null) {
             if (TextUtils.isEmpty(bundleTag)) {
                 intent.putExtras(bundle);
-            }else {
+            } else {
                 intent.putExtra(bundleTag, bundle);
             }
         }
@@ -181,6 +189,18 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
+           mBack();
+        }
+
+
+        return super.dispatchKeyEvent(event);
+    }
+
+
     //主界面layout的id
     public abstract int getLayoutId();
 
@@ -198,6 +218,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
     public abstract void handerMessage(Message msg);
 
+    public abstract void mBack();
     /**
      * 简化findviewbyid
      *
