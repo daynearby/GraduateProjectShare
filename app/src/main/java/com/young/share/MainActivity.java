@@ -21,7 +21,6 @@ import com.young.model.User;
 import com.young.utils.BDLBSUtils;
 import com.young.utils.LogUtils;
 import com.young.utils.SharePreferenceUtils;
-import com.young.utils.ThreadUtils;
 import com.young.utils.XmlUtils;
 import com.young.views.ArcMenu;
 import com.young.views.Dialog4Tips;
@@ -187,8 +186,17 @@ public class MainActivity extends CustomActBarActivity {
 
     //注册广播接收者。Bmob推送消息 更新UI
     public void registerBoradcastReceiverRequestLocation() {
-//        myIntentFilter= new IntentFilter();
         myIntentFilter.addAction(Contants.BORDCAST_REQUEST_LOCATIONINFO);
+        //注册广播
+        registerReceiver(mBroadcastReceiver, myIntentFilter);
+
+        isRegistBordcast = true;
+
+    }
+
+    //注册广播接收者。查看消息
+    public void registerBoradcastReceiverClearMessages() {
+        myIntentFilter.addAction(Contants.BORDCAST_CLEAR_MESSAGES);
         //注册广播
         registerReceiver(mBroadcastReceiver, myIntentFilter);
 
@@ -276,9 +284,6 @@ public class MainActivity extends CustomActBarActivity {
             times++;
 
             if (Province != null) {
-//                cityList = XmlUtils.getSelectCities(mActivity);
-
-//                for (int i = 0; i < cityList.size(); i++) {
 
                 getCity_tv().setText(city);
 
@@ -307,35 +312,60 @@ public class MainActivity extends CustomActBarActivity {
 
     /**
      * 消息的广播接收者
+     * 处理说到的广播信息
      */
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 
-        private ImageView imageView;
 
         @Override
         public void onReceive(Context context, Intent intent) {
-//"Bmob  信息
-            if (intent.getAction().equals(Contants.BMOB_PUSH_MESSAGES)) {
 
-                LogUtils.logE("Bmob 收到信息" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
 
-                imageView = (ImageView) mArcMenu.getChildAt(0);
-                imageView.setImageResource(R.drawable.icon_more_light);
+            switch (intent.getAction()) {
+                case Contants.BMOB_PUSH_MESSAGES://"Bmob  信息
 
-                imageView = (ImageView) mArcMenu.getChildAt(2);
-                imageView.setImageResource(R.drawable.icon_comment_light);
+                    LogUtils.logE("Bmob 收到信息" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
+                    initMessagesIcon(true);
 
-            } else if (intent.getAction().equals(Contants.BORDCAST_REQUEST_LOCATIONINFO)) {
-                //开始 百度定位
-//                LogUtils.logI("main 收到广播 开始 定位");
 
-                startLocation();
+                    break;
+                case Contants.BORDCAST_REQUEST_LOCATIONINFO://使用百度定位
+                    //开始 百度定位
+                    startLocation();
+                    break;
 
+                case Contants.BORDCAST_CLEAR_MESSAGES://清空消息
+                    initMessagesIcon(false);
+                    break;
             }
+
         }
 
     };
 
+    /**
+     * 有新消息，改变图标
+     *
+     * @param hadNewMessage true -- > 有新消息，出现小红点。反之
+     */
+    private void initMessagesIcon(boolean hadNewMessage) {
+        ImageView imageView;
+
+        if (hadNewMessage) {
+            imageView = (ImageView) mArcMenu.getChildAt(0);
+            imageView.setImageResource(R.drawable.icon_more_light);
+
+            imageView = (ImageView) mArcMenu.getChildAt(2);
+            imageView.setImageResource(R.drawable.icon_comment_light);
+        } else {
+            imageView = (ImageView) mArcMenu.getChildAt(0);
+            imageView.setImageResource(R.drawable.icon_more);
+
+            imageView = (ImageView) mArcMenu.getChildAt(2);
+            imageView.setImageResource(R.drawable.icon_comment);
+        }
+
+    }
 
     /**
      * 自定义按钮的点击事件
@@ -364,25 +394,23 @@ public class MainActivity extends CustomActBarActivity {
                     }
 
                     break;
-                case 2://评论
-// TODO: 2015-10-22 查看评论列表
-                    itemIm.setImageResource(R.drawable.icon_comment);
+                case 2://消息中心
 
                     if (mUser != null) {
-
-                        //跳转到评论页面
-//                        mStartActivity(ShareMessageActivity.class);
+                        //注册广播接收者
+                        registerBoradcastReceiverClearMessages();
+                        mStartActivity(MessageCenterActivity.class);
 
                     } else {
-
+//用户还没登陆
                         loginFunction();
 
                     }
                     break;
                 case 3://个人中心
 
-// TODO: 2015-10-22 判断是否已经登录，已经等了进入个人中心，未登录进入登录界面
                     if (mUser != null) {
+
                         mStartActivity(PersonalCenterActivity.class);
 
                     } else {

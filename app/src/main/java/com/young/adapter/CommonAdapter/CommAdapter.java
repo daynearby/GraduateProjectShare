@@ -14,7 +14,7 @@ import cn.bmob.v3.BmobUser;
 
 /**
  * 通用的baseAdapter
- * <p>
+ * <p/>
  * Created by yangfujing on 15/10/10.
  */
 public abstract class CommAdapter<T> extends BaseAdapter {
@@ -31,6 +31,10 @@ public abstract class CommAdapter<T> extends BaseAdapter {
     public void setData(List<T> beanList) {
         this.beanList = beanList;
         notifyDataSetChanged();
+    }
+
+    public List<T> getData() {
+        return beanList;
     }
 
     @Override
@@ -58,7 +62,7 @@ public abstract class CommAdapter<T> extends BaseAdapter {
         ViewHolder holder = ViewHolder.get(ctx, position, getlayoutid(position), convertView, parent);
 
 
-        convert(holder, getItem(position),position);
+        convert(holder, getItem(position), position);
 
         return holder.getConvertView();
     }
@@ -88,8 +92,8 @@ public abstract class CommAdapter<T> extends BaseAdapter {
     /**
      * item布局的layoutId
      *
-     * @return
      * @param position
+     * @return
      */
     public abstract int getlayoutid(int position);
 

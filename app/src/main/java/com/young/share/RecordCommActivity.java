@@ -20,6 +20,7 @@ import com.young.myInterface.GotoAsyncFunction;
 import com.young.myInterface.ListViewRefreshListener;
 import com.young.network.BmobApi;
 import com.young.thread.MyRunnable;
+import com.young.utils.LocationUtils;
 import com.young.utils.LogUtils;
 
 import org.json.JSONException;
@@ -155,8 +156,8 @@ public class RecordCommActivity extends ItemActBarActivity {
 
     @Override
     public void handerMessage(Message msg) {
-//弹窗处理
-        processDialog();
+//提示框处理
+        LocationUtils.processDialog(mActivity);
 
         switch (msg.what) {
 
@@ -250,7 +251,8 @@ public class RecordCommActivity extends ItemActBarActivity {
             @Override
             public void onFailure(int code, String msg) {
 
-                processDialog();
+                //提示框处理
+                LocationUtils.processDialog(mActivity);
 
                 mToast(R.string.tips_loading_faile);
                 LogUtils.logD("get share messages failure. code = " + code + " message = " + msg);
@@ -298,8 +300,8 @@ public class RecordCommActivity extends ItemActBarActivity {
             @Override
             public void onFailure(int code, String msg) {
 
-                processDialog();
-
+                //提示框处理
+                LocationUtils.processDialog(mActivity);
                 mToast(R.string.tips_loading_faile);
                 LogUtils.logD("get share messages failure. code = " + code + " message = " + msg);
 
@@ -332,12 +334,4 @@ public class RecordCommActivity extends ItemActBarActivity {
         }
     }
 
-    /**
-     * 关闭弹窗
-     */
-    private void processDialog() {
-        if (SVProgressHUD.isShowing(mActivity)) {
-            SVProgressHUD.dismiss(mActivity);
-        }
-    }
 }

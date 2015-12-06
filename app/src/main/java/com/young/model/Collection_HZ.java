@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import cn.bmob.v3.BmobObject;
 
 /**
+ * 用户收藏记录
  * Created by Nearby Yang on 2015-10-16.
  */
 public class Collection_HZ extends BmobObject {

@@ -92,14 +92,14 @@
     <string name="mobile_phone_tips">*找回密码通过绑定手机号码</string>
     <string name="hometown">故乡</string>
     <string name="input_mobile_phone_number">请输入正确的手机号</string>
-    <string name="input_hint_nickname">*昵称长度不少于2个字符，不多于12个字符</string>
+    <string name="input_hint_nickname">*昵称长度不少于4个字符，不多于12个字符</string>
     <string name="age">年龄</string>
     <string name="age_22">22</string>
     <string name="gender">性别</string>
     <string name="male">男</string>
     <string name="gd_hz">惠州市 惠城区</string>
     <string name="nickname_empty">昵称不能不为空</string>
-    <string name="nickname_lenght_short">昵称长度应不少于两个字符</string>
+    <string name="nickname_lenght_short">昵称长度应不少于%s个字符</string>
     <string name="nickname_lenght_toolong">昵称长度太长\\n昵称应少于%s个字符</string>
     <string name="update_user_info_faile">更新信息失败\n请稍后再试</string>
     <string name="update_user_info_success">更新信息成功</string>
@@ -126,8 +126,10 @@
     <string name="operation_success">操作成功</string>
     <string name="network_erro">网络不通畅</string>
     <string name="user_name_defual0">二货</string>
-    <string name="click_get_more"><a hrf="">点击查看全文</a></string>
+    <string name="click_get_more"><a href="">点击查看全文</a></string>
     <string name="share_record">分享记录</string>
     <string name="collection_record">收藏记录</string>
+    <string name="back_superclazz">返回</string>
+    <string name="messages_center">消息列表</string>
 
 </resources>

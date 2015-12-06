@@ -44,6 +44,7 @@ public class BmobApi {
     public static final String GET_MESSAGE_COMMENTS = "GetMessageComments";//获取全部的评论数据
     public static final String GET_SHARE_RECROD = "GetShareRecord";//获取全部分享记录
     public static final String GET_RECOLLECTION_RECORD = "GetRecollectionRecord";//获取全部收藏记录
+    public static final String GET_NEW_MESSAGES = "GetNewMessages";//获取全部消息记录
 
 
     private static Gson gson = new Gson();

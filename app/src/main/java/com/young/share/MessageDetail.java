@@ -28,6 +28,7 @@ import com.young.network.BmobApi;
 import com.young.thread.MyRunnable;
 import com.young.utils.DataFormateUtils;
 import com.young.utils.EmotionUtils;
+import com.young.utils.LocationUtils;
 import com.young.utils.LogUtils;
 
 import org.json.JSONException;
@@ -63,9 +64,11 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
     private CommentAdapter commAdapter;
     private InputMethodManager imm;
     private String receiverId;//接收消息者id
-
+    private int commentClick;//是否是点击评论进去
 
     private static final int GET_MESSAGE = 1;//格式化数据
+    private static final int COMMENT_CLICK = 0;//点击事件，是评论
+
 
     private boolean SendMessageFinish = true;//消息是否已经发送
 
@@ -85,6 +88,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
         final Bundle bundle = getIntent().getExtras();
 
         superTagClazz = bundle.getString(Contants.CLAZZ_NAME);
+        commentClick = bundle.getInt(Contants.EXPEND_OPTION_ONE, 0);
 
 
         //提示
@@ -97,17 +101,20 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
             public void running() {
 
 
-
                 switch (superTagClazz) {
 
                     case Contants.CLAZZ_DISCOVER_ACTIVITY://shareMessage详细信息
 
 
                         ShareMessage_HZ shareMessage = (ShareMessage_HZ) bundle.getSerializable(Contants.CLAZZ_DATA_MODEL);
-                        assert shareMessage != null;
                         formateDataDiscover(shareMessage);
                         //获取最新的评论
-                        getComment(shareMessage.getObjectId());
+                        if (shareMessage != null) {
+                            getComment(shareMessage.getObjectId());
+                        } else {
+                            LocationUtils.processDialog(mActivity);
+
+                        }
 
                         break;
 
@@ -115,11 +122,25 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
 
                         ShareMessage_HZ shareMessageRec = (ShareMessage_HZ) bundle.getSerializable(Contants.BUNDLE_TAG);
-                        assert shareMessageRec != null;
                         formateDataDiscover(shareMessageRec);
                         //获取最新的评论
-                        getComment(shareMessageRec.getObjectId());
+                        if (shareMessageRec != null) {
+                            getComment(shareMessageRec.getObjectId());
+                        } else {
+                            LocationUtils.processDialog(mActivity);
+                        }
 
+                        break;
+
+                    case  Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY://消息列表
+                        ShareMessage_HZ shareMessageMessage = (ShareMessage_HZ) bundle.getSerializable(Contants.CLAZZ_DATA_MESSAGE);
+                        formateDataDiscover(shareMessageMessage);
+                        //获取最新的评论
+                        if (shareMessageMessage != null) {
+                            getComment(shareMessageMessage.getObjectId() );
+                        } else {
+                            LocationUtils.processDialog(mActivity);
+                        }
                         break;
 
                 }
@@ -128,6 +149,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
             }
         }));
 
+
     }
 
 
@@ -135,6 +157,15 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
     public void findviewbyid() {
 
         commAdapter = new CommentAdapter(mActivity);
+//回复评论
+        commAdapter.setToReply(new CommentAdapter.ToReply() {
+            @Override
+            public void reply(String uId) {
+                LogUtils.logD("callback  messagedetail");
+                receiverId = uId;
+                startPrepare();
+            }
+        });
 
         listView.setAdapter(commAdapter);
         listView.setTransitionEffect(new SlideInEffect());
@@ -165,21 +196,13 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
         });
 
 
-//回复评论
-        commAdapter.setToReply(new CommentAdapter.ToReply() {
-            @Override
-            public void reply(String uId) {
-
-                receiverId = uId;
-                startPrepare();
-            }
-        });
-
     }
 
     @Override
     public void handerMessage(Message msg) {
-
+        if (commentClick == Contants.EXPEND_START_INPUT) {
+            startPrepare();
+        }
         switch (msg.what) {
             case GET_MESSAGE:
 
@@ -190,16 +213,32 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
     @Override
     public void mBack() {
-       back2superClazz();
+        back2superClazz();
     }
 
     /**
      * 返回上一级
      */
-    private void back2superClazz(){
-        mBackStartActivity(superTagClazz);
-        this.finish();
+    private void back2superClazz() {
+//LogUtils.logD("tagclazz = "+superTagClazz);
+        switch (superTagClazz) {
+
+            case Contants.CLAZZ_DISCOVER_ACTIVITY://shareMessage详细信息
+
+                mBackStartActivity(superTagClazz);
+                this.finish();
+                break;
+            case Contants.CLAZZ_PERSONAL_ACTIVITY://分析消息记录
+                this.finish();
+                break;
+            case Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY://消息列表
+
+                mBackStartActivity(superTagClazz);
+                this.finish();
+                break;
+        }
     }
+
     /**
      * 准备发送评论工作
      */
@@ -257,11 +296,18 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
             @Override
             public void onSuccess(Object object) {
                 CommentList commentList = (CommentList) object;
-                List<Comment_HZ> comList = commentList.getCommentList();
 
-                for (Comment_HZ comm : comList) {
-                    //格式化数据
-                    dataList.add(formateComments(comm));
+                if (commentList.getCommentList().size() > 0) {
+
+                    CommRemoteModel commRemoteModle = dataList.get(0);
+                    dataList.clear();
+                    dataList.add(commRemoteModle);
+
+                    for (Comment_HZ comm : commentList.getCommentList()) {
+                        //格式化数据
+                        dataList.add(formateComments(comm));
+                    }
+
                 }
 
                 processDialogDismisson();

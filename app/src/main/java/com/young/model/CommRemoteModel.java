@@ -26,6 +26,8 @@ public class CommRemoteModel extends DBModel{
     private String mcreatedAt;
     private int comment;
     private int type;
+    private boolean read;
+    private ShareMessage_HZ shareMessage;
 
     public User getUser() {
         return user;
@@ -121,5 +123,21 @@ public class CommRemoteModel extends DBModel{
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
+    }
+
+    public ShareMessage_HZ getShareMessage() {
+        return shareMessage;
+    }
+
+    public void setShareMessage(ShareMessage_HZ shareMessage) {
+        this.shareMessage = shareMessage;
     }
 }

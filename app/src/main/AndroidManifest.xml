@@ -50,7 +50,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             >
 
         </activity>
@@ -95,7 +95,7 @@
         <!-- 个人中心-->
         <activity
             android:name=".PersonalCenterActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- 选择照片-->
         <activity
@@ -120,13 +120,16 @@
         <!--通用记录查看 -->
         <activity android:name=".RecordCommActivity"/>
 
+        <!--消息中心 -->
+        <activity android:name=".MessageCenterActivity"/>
+
         <!-- 百度定位 services -->
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote">
             <intent-filter>
-                <action android:name="com.baidu.location.service_v2.2"></action>
+                <action android:name="com.baidu.location.service_v2.2"/>
             </intent-filter>
         </service>
 

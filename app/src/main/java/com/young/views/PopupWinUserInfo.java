@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.young.base.BasePopupWin;
+import com.young.config.Contants;
 import com.young.model.User;
 import com.young.share.R;
 import com.young.utils.DisplayUtils;
@@ -87,7 +88,18 @@ public class PopupWinUserInfo extends BasePopupWin {
     @Override
     protected void bindData() {
 
-        ImageHandlerUtils.loadIamge(context, user.getAvatar(), avatar, false);
+        boolean isLoaction;
+        String url;
+
+        if (TextUtils.isEmpty(user.getAvatar())) {
+            url = Contants.DEFAULT_AVATAR;
+            isLoaction = true;
+        } else {
+            url = user.getAvatar();
+            isLoaction = false;
+        }
+
+        ImageHandlerUtils.loadIamge(context, url, avatar, isLoaction);
 
         nickname.setText(user.getNickName() == null ?
                 context.getText(R.string.user_name_defual) : user.getNickName());
@@ -102,26 +114,25 @@ public class PopupWinUserInfo extends BasePopupWin {
         if (!TextUtils.isEmpty(user.getQq())) {
             qq.setText(user.getQq());
             qq_layout.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             qq_layout.setVisibility(View.GONE);
         }
         if (!TextUtils.isEmpty(user.getEmail())) {
             email.setText(user.getEmail());
             email_layout.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             email_layout.setVisibility(View.GONE);
         }
 
         if (!TextUtils.isEmpty(user.getAddress())) {
             hometown.setText(user.getAddress());
             hometown_layout.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             hometown_layout.setVisibility(View.GONE);
         }
 
 
     }
-
 
 
     @Override

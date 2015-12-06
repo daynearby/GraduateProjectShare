@@ -19,7 +19,7 @@ public class ShareMessage_HZ extends BmobObject{
     private String shTag;
     private List<String> shWantedNum;
     private List<String> shVisitedNum;
-    private int shCommNum;
+    private Integer shCommNum;
 
     public User getUserId() {
         return userId;
@@ -77,11 +77,11 @@ public class ShareMessage_HZ extends BmobObject{
         this.shVisitedNum = shVisitedNum;
     }
 
-    public int getShCommNum() {
+    public Integer getShCommNum() {
         return shCommNum;
     }
 
-    public void setShCommNum(int shCommNum) {
+    public void setShCommNum(Integer shCommNum) {
         this.shCommNum = shCommNum;
     }
 }

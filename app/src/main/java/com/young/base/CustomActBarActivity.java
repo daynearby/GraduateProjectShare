@@ -1,5 +1,6 @@
 package com.young.base;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.ActionBar;
@@ -54,6 +55,7 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
     public void initActionBar() {
 
         mActionbar = getSupportActionBar();
+        assert mActionbar != null;
         mActionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         mActionbar.setCustomView(R.layout.actionbar_main);
 
@@ -69,6 +71,7 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
     /**
      * 沉浸式
      */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void setTranslucentStatus() {
         boolean on = false;
 

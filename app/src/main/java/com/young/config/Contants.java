@@ -70,7 +70,7 @@ public class Contants {
     //广播数据的标志
 
     public static final String BORDCAST_IMAGEPATH_LIST = "bordcast_imagrpath_list";
-
+    public static final String BORDCAST_CLEAR_MESSAGES = "bordcastClearMessages";
 
     public final static String BUNDLE_TAG = "Serializable_Data";
     //                                  Acache keys
@@ -104,10 +104,14 @@ public class Contants {
     public static final String CLAZZ_MAINACTIVITY = "clazz_name_mainactivity";//类名
     public static final String CLAZZ_DISCOVER_ACTIVITY = "share_message";//类名
     public static final String CLAZZ_PERSONAL_ACTIVITY = "personal_center";//类名
+    public static final String CLAZZ_MESSAGE_CENTER_ACTIVITY = "message_center";//类名
 
 
     public static final String CLAZZ_DATA_SHARE_MESSAGE = "data_share_message";//数据
     public static final String CLAZZ_DATA_MODEL = "data_model";//传输数据
+    public static final int EXPEND_START_INPUT = 101;//传输数据
+    public static final String EXPEND_OPTION_ONE = "expend_one";//传输数据
+    public static final String CLAZZ_DATA_MESSAGE = "data_message_center";//传输数据
 
     //************************** 数据model 类型******************************
     public static final int DATA_MODEL_SHARE_MESSAGES = 1010;//分享信息数据

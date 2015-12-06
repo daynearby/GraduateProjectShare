@@ -13,7 +13,8 @@ package com.young.thread;
 import com.young.utils.LogUtils;
 
 /**
- * 线程 =- 运行
+ * 线程
+ * 运行
  */
 public class MyRunnable implements Runnable {
 
@@ -28,8 +29,6 @@ public class MyRunnable implements Runnable {
 
     @Override
     public void run() {
-
-        LogUtils.logD("cancle task = " + cancleTask);
 
         if (!cancleTask) {
             LogUtils.logD("running");

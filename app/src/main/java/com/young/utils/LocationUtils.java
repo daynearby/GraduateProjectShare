@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.config.Contants;
 import com.young.model.BaseModel;
 import com.young.model.ShareMessage_HZ;
@@ -175,4 +176,13 @@ public class LocationUtils {
 
     }
 
+
+    /**
+     * 关闭弹窗
+     */
+    public static void processDialog(Context ctx) {
+        if (SVProgressHUD.isShowing(ctx)) {
+            SVProgressHUD.dismiss(ctx);
+        }
+    }
 }

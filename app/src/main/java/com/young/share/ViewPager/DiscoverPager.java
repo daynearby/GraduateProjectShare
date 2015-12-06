@@ -51,7 +51,7 @@ public class DiscoverPager extends BasePager {
     private int starIndex = 0;
     private int endIndex = 20;
     protected static final int pageSize = 20;
-    private int PUSH_TIMES = 1;
+    private int PUSH_TIMES = 0;
     private boolean isGetMore = false;//从远程数据库获取更多数据
 
     private int startRow = 0;//从第一条开始
@@ -70,14 +70,14 @@ public class DiscoverPager extends BasePager {
         new ListViewRefreshListener(listView, swipeRefreshLayout,
                 new ListViewRefreshListener.RefreshListener() {
                     @Override
-                    public void pushToRefresh() {
+                    public void pushToRefresh() {//上拉刷新
                         if (CommonUtils.isNetworkAvailable(ctx)) {//有网络
                             startRow += Contants.PAGER_NUMBER;
 
                             if (dataList.size() > pageSize * PUSH_TIMES) {
 
-                                endIndex = dataList.size() < endIndex + PUSH_TIMES * pageSize ? dataList.size() :
-                                        endIndex + PUSH_TIMES * pageSize;
+                                endIndex = dataList.size() < pageSize +   pageSize* PUSH_TIMES? dataList.size() :
+                                        pageSize +  pageSize * PUSH_TIMES;
 
                                 listviewAdapter.setData(dataList.subList(starIndex, endIndex));
 
@@ -293,7 +293,7 @@ public class DiscoverPager extends BasePager {
 
         if (isGetMore) {
             endIndex = dataList.size() < (PUSH_TIMES + 1) * pageSize ? dataList.size() : (PUSH_TIMES + 1) * pageSize;
-        }else {
+        } else {
             endIndex = dataList.size() < pageSize ? dataList.size() : endIndex;
         }
         listviewAdapter.setData(dataList.subList(starIndex, endIndex));

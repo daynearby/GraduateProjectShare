@@ -2,6 +2,8 @@ package com.young.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,6 +16,7 @@ import com.young.adapter.CommonAdapter.ViewHolder;
 import com.young.config.Contants;
 import com.young.model.ShareMessage_HZ;
 import com.young.model.User;
+import com.young.share.MessageDetail;
 import com.young.share.R;
 import com.young.utils.ImageHandlerUtils;
 import com.young.utils.LocationUtils;
@@ -172,8 +175,12 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
 
                 case R.id.id_tx_comment://评论数量
                     getUser();
-
-
+                    if (cuser != null) {//用户已登录
+                        shareMessage = (ShareMessage_HZ) o;
+                        comment(shareMessage);
+                    } else {
+                        Dialog4Tips.loginFunction((Activity) ctx);
+                    }
                     break;
                 case R.id.id_tx_tab://标签
 
@@ -212,5 +219,18 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
         }
     }
 
+    private void comment(ShareMessage_HZ shareMessage) {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+
+        bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_DISCOVER_ACTIVITY);
+        bundle.putInt(Contants.EXPEND_OPTION_ONE,Contants.EXPEND_START_INPUT);
+        bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, shareMessage);
+
+        intent.putExtras(bundle);
+        intent.setClass(ctx, MessageDetail.class);
+        ctx.startActivity(intent);
+        ((Activity) ctx).overridePendingTransition(R.animator.activity_slid_right_in, R.animator.activity_slid_left_out);
+    }
 
 }

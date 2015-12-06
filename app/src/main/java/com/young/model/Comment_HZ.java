@@ -3,6 +3,7 @@ package com.young.model;
 import cn.bmob.v3.BmobObject;
 
 /**
+ * 评论、回复与分享信息的关系
  * Created by Nearby Yang on 2015-10-16.
  */
 public class Comment_HZ extends BmobObject {

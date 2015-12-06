@@ -19,7 +19,7 @@ import java.util.concurrent.Future;
  */
 public class ThreadUtils {
 
-    private static ExecutorService mES;
+    private  ExecutorService mES;
     private ConcurrentLinkedQueue<MyRunnable> taskQueue = null;//任务队列
     /**
      * 正在等待执行或已经完成的任务队列

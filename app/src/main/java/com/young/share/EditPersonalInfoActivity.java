@@ -166,16 +166,7 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
         finish();
     }
 
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
-                && event.getAction() != KeyEvent.ACTION_UP) {
-            mBackStartActivity(MainActivity.class);
-        }
 
-
-        return super.dispatchKeyEvent(event);
-    }
 
     @Override
     public void onClick(View v) {
@@ -205,12 +196,28 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
     private void handlerUIDatas() {
         //1手机号，邮箱，昵称，qq，家乡，性别，年龄
         if (!TextUtils.isEmpty(nickname_et.getText().toString()) && nickname_et.getText().toString().length() >= Contants.NICKNAME_MIN_LENGHT) {
+
             if (nickname_et.getText().toString().length() <= Contants.NICKNAME_MAX_LENGHT) {
 //User user = new User();
+
                 if (!TextUtils.isEmpty(mobilePhone_et.getText().toString())) {
-                    smsVerfied(mobilePhone_et.getText().toString());
+
+                    //未验证
+                    if (!mUser.getMobilePhoneNumberVerified()) {
+
+                        smsVerfied(mobilePhone_et.getText().toString());
+
+                    } else {//已经验证。验证的手机号和当前验证的手机号不相符。则需要进行验证手机号
+                        if (!mobilePhone_et.getText().toString().equals(mUser.getMobilePhoneNumber())){
+                            smsVerfied(mobilePhone_et.getText().toString());
+                        }
+                    }
+
+
 
                 } else {
+                    mUser.setMobilePhoneNumber("");
+                    mUser.setMobilePhoneNumberVerified(false);
                     updateUserInfo();
                 }
 
@@ -219,7 +226,7 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
                 SVProgressHUD.showErrorWithStatus(this, String.format(getString(R.string.nickname_lenght_toolong), Contants.NICKNAME_MAX_LENGHT));
             }
         } else {//你曾长度太短
-            SVProgressHUD.showErrorWithStatus(this, getString(R.string.nickname_lenght_short));
+            SVProgressHUD.showErrorWithStatus(this, String.format(getString(R.string.nickname_lenght_short), Contants.NICKNAME_MAX_LENGHT));
         }
     }
 
@@ -257,10 +264,6 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
      */
     private void smsVerfied(final String mobilePhoneNumber) {
 
-        if (mUser.getEmailVerified()&&mobilePhoneNumber.equals(mUser.getMobilePhoneNumber())) {
-            updateUserInfo();
-            return;
-        }
 
         //打开注册页面
         RegisterPage registerPage = new RegisterPage();

@@ -19,6 +19,7 @@ import com.young.config.ApplicationConfig;
 import com.young.config.Contants;
 import com.young.model.User;
 import com.young.share.MainActivity;
+import com.young.share.MessageCenterActivity;
 import com.young.share.PersonalCenterActivity;
 import com.young.share.R;
 import com.young.share.RecordCommActivity;
@@ -130,6 +131,10 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
             case Contants.CLAZZ_PERSONAL_ACTIVITY:
 
                 clazz = RecordCommActivity.class;
+                break;
+            case Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY://消息中心
+                clazz = MessageCenterActivity.class;
+
                 break;
         }
 

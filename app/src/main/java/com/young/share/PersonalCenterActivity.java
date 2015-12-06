@@ -8,7 +8,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -127,8 +126,6 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        ViewGroup.LayoutParams layoutParams = appBarLayout.getLayoutParams();
-        layoutParams.height = displayHeightDp / 3;
         toolBarLayout.setTitle(getString(R.string.personal_center));
         toolBarLayout.setExpandedTitleColor(Color.argb(0, 0, 0, 0));
 
@@ -197,14 +194,14 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
             switch (position) {
 
                 case 0://<item>我想去</item>
-                    Bundle bundle =new Bundle();
+                    Bundle bundle = new Bundle();
                     bundle.putInt(Contants.RECORD_TYPE, Contants.RECORD_TYPE_COLLECT);
                     mStartActivity(RecordCommActivity.class, bundle);
                     break;
                 case 1://<item>分享记录</item>
-                    Bundle bundle_share =new Bundle();
+                    Bundle bundle_share = new Bundle();
                     bundle_share.putInt(Contants.RECORD_TYPE, Contants.RECORD_TYPE_SHARE);
-                    mStartActivity(RecordCommActivity.class,bundle_share);
+                    mStartActivity(RecordCommActivity.class, bundle_share);
 
                     break;
                 case 2:// <item>修改资料</item>
@@ -291,8 +288,6 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
         }
 
     }
-
-
 
 
 }

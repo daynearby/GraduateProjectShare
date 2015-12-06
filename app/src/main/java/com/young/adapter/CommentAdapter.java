@@ -37,7 +37,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
@@ -64,6 +63,10 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         super(context);
 
 
+    }
+    public CommentAdapter(Context context,ToReply toReply) {
+        this(context);
+        this.toReply = toReply;
     }
 
 
@@ -125,7 +128,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
                 Contants.DATA_SINGEL_COLON +
                 Contants.DATA_SINGEL_AT +
                 receiverNickname +
-                Contants.DATA_SINGEL_ENTER ;
+                Contants.DATA_SINGEL_ENTER;
 
         String created = DateUtils.convertDate2Str(commRemoteModel.getMcreatedAt()) +
                 Contants.DATA_SINGEL_SAPCE +
@@ -136,12 +139,10 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         LinkBuilder.on(content_txt)
                 .addLinks(getLinks(commRemoteModel))
                 .build();
-
+//表情
         content_txt.append(StringUtils.getEmotionContent(ctx, content_txt, commRemoteModel.getContent()));
 
         createdAt.setText(created);
-
-
 
         //回复
         Link reply = new Link(ctx.getString(R.string.txt_replay));
@@ -286,7 +287,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
                     if (cuser != null) {
                         List<String> shVisitedNum = commRemoteModel.getVisited();
 
-                        visit(UserUtils.isHadCurrentUser(shVisitedNum,cuser.getObjectId()), v);
+                        visit(UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()), v);
                     } else {
                         Dialog4Tips.loginFunction((Activity) ctx);
                     }
@@ -351,6 +352,9 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         @Override
         public void onClick(String clickedText) {
 
+
+            LogUtils.logD("reply user not null.clickType = " + clickType + " clickText = " + clickedText);
+
             switch (clickType) {
 
                 case CLICK_TYPE_USER_INFO://查看用户数据
@@ -361,15 +365,12 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
                 case CLICK_TYPE_REPLY://回复
 
-                    LogUtils.logD("reply user not null");
                     getUser();
 
-                    if (user != null) {
 
+                    if (cuser != null) {
                         if (toReply != null) {
-                            LogUtils.logD("reply callback  not null");
-
-                            toReply.reply(user.getObjectId());
+                            toReply.reply(cuser.getObjectId());
                         }
                     }
 
@@ -388,7 +389,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
      */
     private void visit(boolean hadGo, View v) {
 
-         int leftDrawID;//提示图片资源id
+        int leftDrawID;//提示图片资源id
         if (hadGo) {
 //            strId = R.string.not_visit;
             leftDrawID = R.drawable.icon_bottombar_hadgo;
@@ -432,7 +433,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
      */
     private void wantToGo(boolean hadWant, View v) {
 
-         int leftDrawID;//提示图片资源id
+        int leftDrawID;//提示图片资源id
         JSONObject jsonObject = new JSONObject();//参数
         ShareMessage_HZ shareMessage = new ShareMessage_HZ();
         try {
@@ -503,11 +504,6 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
     }
 
-    /**
-     * 恢复按钮回调
-     *
-     * @param toReply
-     */
     public void setToReply(ToReply toReply) {
         this.toReply = toReply;
     }
