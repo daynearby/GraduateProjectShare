@@ -57,7 +57,6 @@ public class ApplicationConfig extends LitePalApplication {
      */
     public ThreadUtils getThreadInstance() {
         threadUtils = new ThreadUtils();
-        threadUtils.start();
         return threadUtils;
     }
 

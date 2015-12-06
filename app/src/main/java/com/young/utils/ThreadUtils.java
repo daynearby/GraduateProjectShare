@@ -21,6 +21,7 @@ public class ThreadUtils {
 
     private  ExecutorService mES;
     private ConcurrentLinkedQueue<MyRunnable> taskQueue = null;//任务队列
+//    private static final int count = Runtime.getRuntime().availableProcessors() * 3 + 2;
     /**
      * 正在等待执行或已经完成的任务队列
      * 备注：Future类，一个用于存储异步任务执行的结果，比如：判断是否取消、是否可以取消、是否正在执行、是否已经完成等
@@ -33,6 +34,8 @@ public class ThreadUtils {
 
     //线程池是否处于运行状态(即:是否被释放!)
     private boolean isRuning = true;
+
+    private static final int COUNT = 3;//并发线程数量
 
     public ThreadUtils() {
 
@@ -50,7 +53,7 @@ public class ThreadUtils {
         if (mES == null) {
             synchronized (ThreadUtils.class) {
                 if (mES == null) {
-                    mES = Executors.newCachedThreadPool();
+                    mES = Executors.newFixedThreadPool(COUNT);
                 }
             }
         }

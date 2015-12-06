@@ -99,6 +99,7 @@ public class MessageCenterActivity extends ItemActBarActivity {
         listView.setAdapter(messageAdapter);
         listView.setOnItemClickListener(new itemClick());
 
+
         new ListViewRefreshListener(listView, swipeRefresh, new ListViewRefreshListener.RefreshListener() {
             @Override
             public void pushToRefresh() {
