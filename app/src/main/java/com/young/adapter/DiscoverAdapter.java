@@ -36,7 +36,7 @@ import java.util.List;
  * <p/>
  * Created by yangfujing on 15/10/10.
  */
-public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
+public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 
     private GridView myGridview;
     //    private ShareMessage shareMessage;
@@ -48,7 +48,7 @@ public class DiscoListViewAdapter extends CommAdapter<ShareMessage_HZ> {
      *
      * @param context
      */
-    public DiscoListViewAdapter(Context context) {
+    public DiscoverAdapter(Context context) {
         super(context);
     }
 

@@ -14,7 +14,10 @@ import com.young.base.BasePager;
 public class RankPager extends BasePager {
 
 
+    @Override
+    public void initData() {
 
+    }
 
     @Override
     public void initView() {

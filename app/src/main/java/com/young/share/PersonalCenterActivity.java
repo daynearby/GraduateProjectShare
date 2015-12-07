@@ -192,6 +192,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
 
 
             switch (position) {
+//// TODO: 2015-12-07 滑动删除收藏记录
 
                 case 0://<item>我想去</item>
                     Bundle bundle = new Bundle();

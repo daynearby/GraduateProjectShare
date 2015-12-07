@@ -23,6 +23,7 @@ public abstract class BasePager {
         this.view = view;
         this.threadUtils = threadUtils;
 
+        initData();
         initView();
         bindData();
     }
@@ -35,8 +36,13 @@ public abstract class BasePager {
         }
     };
 
+    //初始化数据
+    public abstract void initData();
+
+    //实例化控件
     public abstract void initView();
 
+    //绑定数据
     public abstract void bindData();
 
     public abstract void handler(Message msg);

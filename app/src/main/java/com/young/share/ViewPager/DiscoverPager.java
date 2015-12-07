@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.twotoasters.jazzylistview.JazzyListView;
 import com.twotoasters.jazzylistview.effects.SlideInEffect;
-import com.young.adapter.DiscoListViewAdapter;
+import com.young.adapter.DiscoverAdapter;
 import com.young.base.BasePager;
 import com.young.config.Contants;
 import com.young.model.ShareMessageList;
@@ -42,7 +42,7 @@ import java.util.List;
 public class DiscoverPager extends BasePager {
 
     private SwipeRefreshLayout swipeRefreshLayout;
-    private DiscoListViewAdapter listviewAdapter;
+    private DiscoverAdapter listviewAdapter;
     private static List<ShareMessage_HZ> dataList = new ArrayList<>();
 
     private static final int FIRST_GETDATA = 0x1001;
@@ -57,8 +57,24 @@ public class DiscoverPager extends BasePager {
     private int startRow = 0;//从第一条开始
 
     @Override
+    public void initData() {
+        threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+            @Override
+            public void running() {
+                if (CommonUtils.isNetworkAvailable(ctx)) {//有网络
+                    getDataFromRemote();
+                } else {
+                    SVProgressHUD.showInfoWithStatus(ctx, ctx.getString(R.string.without_network));
+                    getDataFromLocat();//没有网络
+                }
+
+            }
+        }));
+    }
+
+    @Override
     public void initView() {
-        listviewAdapter = new DiscoListViewAdapter(ctx);
+        listviewAdapter = new DiscoverAdapter(ctx);
 
         JazzyListView listView = $(R.id.list_discover);
         swipeRefreshLayout = $(R.id.sw_refresh_pager_discover);
@@ -76,8 +92,8 @@ public class DiscoverPager extends BasePager {
 
                             if (dataList.size() > pageSize * PUSH_TIMES) {
 
-                                endIndex = dataList.size() < pageSize +   pageSize* PUSH_TIMES? dataList.size() :
-                                        pageSize +  pageSize * PUSH_TIMES;
+                                endIndex = dataList.size() < pageSize + pageSize * PUSH_TIMES ? dataList.size() :
+                                        pageSize + pageSize * PUSH_TIMES;
 
                                 listviewAdapter.setData(dataList.subList(starIndex, endIndex));
 
@@ -139,12 +155,6 @@ public class DiscoverPager extends BasePager {
     public void bindData() {
 
 
-        if (CommonUtils.isNetworkAvailable(ctx)) {//有网络
-            getDataFromRemote();
-        } else {
-            SVProgressHUD.showInfoWithStatus(ctx, ctx.getString(R.string.without_network));
-            getDataFromLocat();//没有网络
-        }
 
     }
 

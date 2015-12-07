@@ -1,10 +1,12 @@
 package com.young.share.ViewPager;
 
-import android.content.Context;
 import android.os.Message;
-import android.view.View;
+import android.support.v4.widget.SwipeRefreshLayout;
 
+import com.twotoasters.jazzylistview.JazzyListView;
 import com.young.base.BasePager;
+import com.young.share.R;
+import com.young.thread.MyRunnable;
 
 /**
  * 商家优惠
@@ -12,10 +14,28 @@ import com.young.base.BasePager;
  */
 public class DiscountPager extends BasePager {
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private JazzyListView listview;
 
+    @Override
+    public void initData() {
+
+        threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+            @Override
+            public void running() {
+
+
+            }
+        }));
+
+    }
 
     @Override
     public void initView() {
+        swipeRefreshLayout = $(R.id.sw_discount_refresh);
+        listview = $(R.id.list_discount);
+
+
 
     }
 
@@ -23,10 +43,12 @@ public class DiscountPager extends BasePager {
     @Override
     public void bindData() {
 
+
     }
 
     @Override
     public void handler(Message msg) {
+
 
     }
 }

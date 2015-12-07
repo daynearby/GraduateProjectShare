@@ -4,13 +4,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/sw_discount_refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <com.twotoasters.jazzylistview.JazzyListView
         android:id="@+id/list_discount"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null" />
-
+        android:divider="@null"
+        android:dividerHeight="@dimen/paddingHit"/>
+</android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>
