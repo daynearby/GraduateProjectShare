@@ -58,8 +58,11 @@ public class DBUtils {
         List<ShareMessage> shMsgList = DataSupport.where("shContent = ?", shMsg.getShContent())
                 .find(ShareMessage.class);
         if (shMsgList == null) {//直接保存
+
             return shMsg.save();
+
         } else {//不保存
+
             int result = shMsg.updateAll("shContent = ?", shMsg.getShContent());
             LogUtils.logI("返回码 " + result);
             //++++++++++++++++++返回码++++++++++++++++++++++

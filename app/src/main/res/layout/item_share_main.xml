@@ -10,7 +10,8 @@
     android:layout_marginTop="@dimen/paddingHit"
     android:descendantFocusability="blocksDescendants"
     app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="@dimen/radius_mic">
+    app:cardCornerRadius="@dimen/radius_mic"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"

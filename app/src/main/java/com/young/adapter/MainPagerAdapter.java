@@ -5,9 +5,11 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.young.config.Contants;
 import com.young.share.ViewPager.DiscountPager;
 import com.young.share.ViewPager.DiscoverPager;
 import com.young.share.ViewPager.RankPager;
+import com.young.utils.LogUtils;
 import com.young.utils.ThreadUtils;
 
 import java.util.List;
@@ -21,10 +23,10 @@ public class MainPagerAdapter extends PagerAdapter {
     private RankPager rankPager;
     private ThreadUtils threadUtils;
 
-    public MainPagerAdapter(Context context, List<View> views,ThreadUtils threadUtils) {
+    public MainPagerAdapter(Context context, List<View> views, ThreadUtils threadUtils) {
         this.context = context;
         this.views = views;
-        this.threadUtils =threadUtils;
+        this.threadUtils = threadUtils;
 
     }
 
@@ -60,23 +62,43 @@ public class MainPagerAdapter extends PagerAdapter {
         }
         return view;
     }
+
     private void initDiscountPager(View v) {
         discountPager = new DiscountPager();
-        discountPager.init(context, v,threadUtils);
+        discountPager.init(context, v, threadUtils);
 
 
     }
-  
+
     private void initDiscoverPager(View v) {
         discoverPager = new DiscoverPager();
-        discoverPager.init(context, v,threadUtils);
-    }
-    private void initRankPager(View v) {
-        rankPager = new RankPager();
-        rankPager.init(context, v,threadUtils);
+        discoverPager.init(context, v, threadUtils);
     }
 
-  
+    private void initRankPager(View v) {
+        rankPager = new RankPager();
+        rankPager.init(context, v, threadUtils);
+    }
+
+    /**
+     * 刷新ui
+     *
+     * @param requestCode
+     */
+    public void refreshUI(int requestCode) {
+        LogUtils.logD("pageAdapter refresh UI .code = " + requestCode);
+
+        if (requestCode == Contants.REFRESH_TYPE_DISCOUNT) {
+
+            discountPager.getRemoteData();
+
+        } else {
+
+            discoverPager.initData();
+
+        }
+
+    }
 
 
 }

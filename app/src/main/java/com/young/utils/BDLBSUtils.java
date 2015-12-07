@@ -13,6 +13,7 @@ import com.baidu.location.LocationClientOption;
  * Created by Nearby Yang on 2015-10-20.
  */
 public class BDLBSUtils {
+
     private Context ctx;
     private LocationInfoListener locationInfoListener;
 

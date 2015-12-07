@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * 需要传入图片的url
- * <p/>
+ * <p>
  * Created by Nearby Yang on 2015-06-28.
  */
 public class myGridViewAdapter extends BaseAdapter {
@@ -66,9 +66,8 @@ public class myGridViewAdapter extends BaseAdapter {
     }
 
     public ArrayList<String> getData() {
-        ArrayList<String> dataL = (ArrayList<String>) data;
+        return (ArrayList<String>) data;
 
-        return dataL;
     }
 
     @Override

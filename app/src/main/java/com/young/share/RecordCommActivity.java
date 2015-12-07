@@ -47,7 +47,6 @@ public class RecordCommActivity extends ItemActBarActivity {
 
     private int starIndex = 0;
     private int endIndex = 20;
-    protected static final int pageSize = 20;//一页显示的数量
     private int PUSH_TIMES = 1;//上拉次数
     private boolean isGetMore = false;//从远程数据库获取更多数据
 
@@ -112,10 +111,10 @@ public class RecordCommActivity extends ItemActBarActivity {
                 Skip += Contants.RECORD_LENGHT;
 
                 //分享信息
-                if (dataList.size() > pageSize * PUSH_TIMES) {
+                if (dataList.size() > Contants.PAGE_SIZE * PUSH_TIMES) {
 
-                    endIndex = dataList.size() < endIndex + PUSH_TIMES * pageSize ? dataList.size() :
-                            endIndex + PUSH_TIMES * pageSize;
+                    endIndex = dataList.size() < endIndex + PUSH_TIMES * Contants.PAGE_SIZE ? dataList.size() :
+                            endIndex + PUSH_TIMES * Contants.PAGE_SIZE;
                     recAdapter.setData(dataList.subList(starIndex, endIndex));
 
                     PUSH_TIMES++;
@@ -180,9 +179,9 @@ public class RecordCommActivity extends ItemActBarActivity {
     private void refreshUI() {
 
         if (isGetMore) {
-            endIndex = dataList.size() < (PUSH_TIMES + 1) * pageSize ? dataList.size() : (PUSH_TIMES + 1) * pageSize;
+            endIndex = dataList.size() < (PUSH_TIMES + 1) * Contants.PAGE_SIZE ? dataList.size() : (PUSH_TIMES + 1) * Contants.PAGE_SIZE;
         } else {
-            endIndex = dataList.size() < pageSize ? dataList.size() : endIndex;
+            endIndex = dataList.size() < Contants.PAGE_SIZE ? dataList.size() : endIndex;
         }
         //刷新UI
         recAdapter.setData(dataList.subList(starIndex, endIndex));

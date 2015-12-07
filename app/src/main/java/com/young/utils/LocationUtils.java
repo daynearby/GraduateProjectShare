@@ -1,31 +1,48 @@
 package com.young.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.config.Contants;
 import com.young.model.BaseModel;
+import com.young.model.DiscountMessage_HZ;
 import com.young.model.ShareMessage_HZ;
 import com.young.model.User;
 import com.young.myInterface.GotoAsyncFunction;
 import com.young.network.BmobApi;
+import com.young.share.MessageDetail;
 import com.young.share.R;
+import com.young.views.PopupWinImageBrowser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * sharemessage 一些公共方法
- *
+ * <p/>
  * Created by Nearby Yang on 2015-12-03.
  */
 public class LocationUtils {
+
+    private static final String MESSAGE_TYPE = "message";//类型
+    private static final String MESSAGE_TYPE_DISCOVER = "1";
+    private static final String MESSAGE_TYPE_DISCOUNT = "2";
+    private static final String USER_ID = "userid";
+    private static final String COLLECTION_ID = "collectionid";
+
+
 
     /**
      * 用户想去与否
@@ -33,10 +50,10 @@ public class LocationUtils {
      * @param tv
      * @param userID
      */
-    public static void leftDrawableWantoGO(TextView tv, List<String> userID,String currentUserID) {
+    public static void leftDrawableWantoGO(TextView tv, List<String> userID, String currentUserID) {
         int drawableId;
 
-        if (UserUtils.isHadCurrentUser(userID,currentUserID)) {
+        if (UserUtils.isHadCurrentUser(userID, currentUserID)) {
             drawableId = R.drawable.icon_wantogo_light;
         } else {
             drawableId = R.drawable.icon_wantogo;
@@ -51,7 +68,7 @@ public class LocationUtils {
      * @param tv
      * @param userID
      */
-    public static void leftDrawableVisited(TextView tv, List<String> userID,String currentUserID) {
+    public static void leftDrawableVisited(TextView tv, List<String> userID, String currentUserID) {
         int drawableId;
 
         if (UserUtils.isHadCurrentUser(userID, currentUserID)) {
@@ -71,7 +88,7 @@ public class LocationUtils {
      * @param shareMessage
      * @param v
      */
-    public static void visit(Context ctx,User cuser,boolean hadGo, ShareMessage_HZ shareMessage, final View v) {
+    public static void visit(Context ctx, User cuser, boolean hadGo, ShareMessage_HZ shareMessage, final View v) {
         if (hadGo) {
             shareMessage.getShVisitedNum().remove(cuser.getObjectId());
         } else {
@@ -88,13 +105,13 @@ public class LocationUtils {
             @Override
             public void onSuccess() {
 
-                v.setClickable(false);
+                v.setClickable(true);
 //                mToast(strId);
             }
 
             @Override
             public void onFailure(int i, String s) {
-                v.setClickable(false);
+                v.setClickable(true);
                 LogUtils.logD(" wantToGo faile  erro code = " + i + " erro message = " + s);
             }
         });
@@ -110,13 +127,13 @@ public class LocationUtils {
      * @param shareMessage
      * @param v
      */
-    public static void wantToGo(Context ctx,User cuser,boolean hadWant, ShareMessage_HZ shareMessage, final View v) {
+    public static void wantToGo(Context ctx, User cuser, boolean hadWant, ShareMessage_HZ shareMessage, final View v) {
 
         JSONObject jsonObject = new JSONObject();//参数
         try {
-            jsonObject.put("message", "1");
-            jsonObject.put("userid", cuser.getObjectId());
-            jsonObject.put("collectionid", shareMessage.getObjectId());
+            jsonObject.put(MESSAGE_TYPE, MESSAGE_TYPE_DISCOVER);//分享信息
+            jsonObject.put(USER_ID, cuser.getObjectId());
+            jsonObject.put(COLLECTION_ID, shareMessage.getObjectId());
 
         } catch (JSONException e) {
 //            e.printStackTrace();
@@ -163,13 +180,13 @@ public class LocationUtils {
             @Override
             public void onSuccess() {
 
-                v.setClickable(false);
+                v.setClickable(true);
 //                mToast(strId);
             }
 
             @Override
             public void onFailure(int i, String s) {
-                v.setClickable(false);
+                v.setClickable(true);
                 LogUtils.logD(" wantToGo faile  erro code = " + i + " erro message = " + s);
             }
         });
@@ -185,4 +202,186 @@ public class LocationUtils {
             SVProgressHUD.dismiss(ctx);
         }
     }
+
+    /**
+     * 商家优惠 "想去"逻辑处理
+     * @param ctx
+     * @param cuser
+     * @param discountMessage
+     * @param hadWant
+     * @param v
+     */
+    public static void discountWanto(Context ctx,User cuser,DiscountMessage_HZ discountMessage,
+                                     boolean hadWant, final TextView v) {
+
+        JSONObject jsonObject = new JSONObject();//参数
+
+        try {
+            jsonObject.put(MESSAGE_TYPE, MESSAGE_TYPE_DISCOUNT);//分享信息
+            jsonObject.put(USER_ID, cuser.getObjectId());
+            jsonObject.put(COLLECTION_ID, discountMessage.getObjectId());
+
+        } catch (JSONException e) {
+//            e.printStackTrace();
+            LogUtils.logD("云端代码 添加参数失败 " + e.toString());
+        }
+
+        if (hadWant) {
+
+            discountMessage.getDtWantedNum().remove(cuser.getObjectId());
+
+//操作收藏表
+            BmobApi.AsyncFunction(ctx, jsonObject, BmobApi.REMOVE_COLLECTION, new GotoAsyncFunction() {
+                @Override
+                public void onSuccess(Object object) {
+
+                    BaseModel baseModel = (BaseModel) object;
+
+                    if (baseModel.getCode() == BaseModel.SUCCESS) {
+//                        mToast(R.string.operation_success);
+                        LogUtils.logD("删除收藏记录 成功  data = " + baseModel.getData());
+
+                    } else {
+
+                        LogUtils.logD("删除收藏记录 失败  data = " + baseModel.getData());
+                    }
+                }
+
+                @Override
+                public void onFailure(int code, String msg) {
+
+                    LogUtils.logD("删除收藏记录 请求 失败  code = " + code+" message = "+msg);
+
+                }
+            });
+
+        } else {
+//            strId = R.string.collect_success;
+            if (discountMessage.getDtWantedNum()==null){
+                discountMessage.setDtWantedNum(new ArrayList<String>());
+            }
+            discountMessage.getDtWantedNum().add(cuser.getObjectId());
+
+            BmobApi.saveCollectionShareMessage(ctx, cuser, discountMessage, Contants.MESSAGE_TYPE_DISCOUNT);
+        }
+
+        v.setText(String.valueOf(discountMessage.getDtWantedNum() == null ?
+                0 : discountMessage.getDtWantedNum().size()));
+
+        LocationUtils.leftDrawableWantoGO(v, discountMessage.getDtWantedNum(), cuser.getObjectId());
+
+        discountMessage.update(ctx,discountMessage.getObjectId(), new UpdateListener() {
+            @Override
+            public void onSuccess() {
+
+                v.setClickable(true);
+//                mToast(strId);
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+
+                v.setClickable(true);
+
+                LogUtils.logD(" wantToGo faile  erro code = " + i + " erro message = " + s);
+            }
+        });
+    }
+
+    /**
+     * 商家优惠 “去过”逻辑处理
+     * @param ctx
+     * @param cuser
+     * @param discountMessage
+     * @param hadGo
+     * @param v
+     */
+    public static void discountVisit(Context ctx,User cuser,DiscountMessage_HZ discountMessage,
+                                     boolean hadGo,final TextView v){
+
+        if (hadGo) {
+            discountMessage.getDtVisitedNum().remove(cuser.getObjectId());
+        } else {
+            if (discountMessage.getDtVisitedNum()==null){
+                discountMessage.setDtVisitedNum(new ArrayList<String>());
+            }
+            discountMessage.getDtVisitedNum().add(cuser.getObjectId());
+        }
+
+
+        v.setText(String.valueOf(discountMessage.getDtVisitedNum() == null ?
+                0 : discountMessage.getDtVisitedNum().size()));
+
+        LocationUtils.leftDrawableVisited(v, discountMessage.getDtVisitedNum(), cuser.getObjectId());
+
+        discountMessage.update(ctx, discountMessage.getObjectId(), new UpdateListener() {
+            @Override
+            public void onSuccess() {
+
+                v.setClickable(true);
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                v.setClickable(true);
+
+                LogUtils.logD(" wantToGo faile  erro code = " + i + " erro message = " + s);
+            }
+        });
+    }
+
+    /**
+     * 启动activity
+     *
+     * @param ctx
+     * @param bundle
+     * @param clazz
+     */
+    public static void startActivity(Context ctx,Bundle bundle,Class clazz){
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        intent.setClass(ctx, clazz);
+        ctx.startActivity(intent);
+        ((Activity) ctx).overridePendingTransition(R.animator.activity_slid_right_in,
+                R.animator.activity_slid_left_out);
+    }
+
+    /**
+     * 查看照片
+     * item click listener
+     */
+    public static class itemClick implements AdapterView.OnItemClickListener {
+
+        private PopupWinImageBrowser popupView;
+
+        public itemClick(Context ctx,List<String> list) {
+            popupView = new PopupWinImageBrowser(ctx);
+
+            if (list != null) {
+                popupView.setData(list);
+            }
+
+        }
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            popupView.setCurrentPager(position);
+            popupView.onShow(view);
+        }
+    }
+
+
+    /**
+     * 发送广播刷新UI
+     * @param ctx
+     * @param refreshType
+     */
+    public static void sendBordCast(Context ctx,int refreshType){
+        Intent intent = new Intent();
+        intent.putExtra(Contants.REFRESH_TYPE,refreshType);
+        intent.setAction(Contants.BORDCAST_REQUEST_REFRESH);
+        ctx.sendBroadcast(intent);
+    }
+
 }

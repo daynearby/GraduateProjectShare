@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,7 +22,6 @@ import com.young.utils.LocationUtils;
 import com.young.utils.StringUtils;
 import com.young.utils.UserUtils;
 import com.young.views.Dialog4Tips;
-import com.young.views.PopupWinImageBrowser;
 import com.young.views.PopupWinUserInfo;
 
 import java.util.List;
@@ -85,19 +83,34 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 
         tag_tv.setText(shareMessage.getShTag());
 
-        wanto_tv.setText(shareMessage.getShWantedNum() == null ? "0" : String.valueOf(shareMessage.getShWantedNum().size()));
-        hadgo_tv.setText(shareMessage.getShVisitedNum() == null ? "0" : String.valueOf(shareMessage.getShVisitedNum().size()));
+        String wanto;
+        if (shareMessage.getShWantedNum() != null && shareMessage.getShWantedNum().size() > 0) {
+            wanto = String.valueOf(shareMessage.getShWantedNum().size());
+        } else {
+            wanto = ctx.getString(R.string.tx_wantogo);
+        }
+
+        String hadgo;
+        if (shareMessage.getShVisitedNum() != null && shareMessage.getShVisitedNum().size() > 0) {
+            hadgo = String.valueOf(shareMessage.getShVisitedNum().size());
+        } else {
+            hadgo = ctx.getString(R.string.hadgo);
+        }
+
+        wanto_tv.setText(wanto);
+        hadgo_tv.setText(hadgo);
 
         if (cuser != null) {
             LocationUtils.leftDrawableWantoGO(wanto_tv, shareMessage.getShWantedNum(), cuser.getObjectId());//设置图标
             LocationUtils.leftDrawableVisited(hadgo_tv, shareMessage.getShVisitedNum(), cuser.getObjectId());//设置图标
         }
 
-        comment_tv.setText(String.valueOf(shareMessage.getShCommNum()));
+        comment_tv.setText(shareMessage.getShCommNum() > 0 ?
+                String.valueOf(shareMessage.getShCommNum()) : ctx.getString(R.string.tx_comment));
 
         //图片显示
         gridViewAdapter.setDatas(shareMessage.getShImgs(), false);
-        myGridview.setOnItemClickListener(new itemClick(shareMessage.getShImgs()));
+        myGridview.setOnItemClickListener(new LocationUtils.itemClick(ctx, shareMessage.getShImgs()));
 
 //添加监听事件
         nickname_tv.setOnClickListener(new click(user));
@@ -152,6 +165,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 
                         LocationUtils.wantToGo(ctx, cuser, UserUtils.isHadCurrentUser(shWantedNum, cuser.getObjectId()), shareMessage, v);
                     } else {
+                        v.setClickable(true);
                         Dialog4Tips.loginFunction((Activity) ctx);
                     }
 
@@ -169,6 +183,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                         LocationUtils.visit(ctx, cuser, UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()), shareMessage, v);
 
                     } else {
+                        v.setClickable(true);
                         Dialog4Tips.loginFunction((Activity) ctx);
                     }
                     break;
@@ -192,39 +207,12 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
     }
 
 
-    private void updateShMs() {
-//shareMessage
-
-    }
-
-    /**
-     * item click listener
-     */
-    private class itemClick implements AdapterView.OnItemClickListener {
-
-        private PopupWinImageBrowser popupView = new PopupWinImageBrowser(ctx);
-
-        public itemClick(List<String> list) {
-            if (list != null) {
-                popupView.setData(list);
-            }
-
-        }
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            popupView.setCurrentPager(position);
-            popupView.onShow(view);
-        }
-    }
-
     private void comment(ShareMessage_HZ shareMessage) {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
 
         bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_DISCOVER_ACTIVITY);
-        bundle.putInt(Contants.EXPEND_OPTION_ONE,Contants.EXPEND_START_INPUT);
+        bundle.putInt(Contants.EXPEND_OPTION_ONE, Contants.EXPEND_START_INPUT);
         bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, shareMessage);
 
         intent.putExtras(bundle);

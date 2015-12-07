@@ -131,5 +131,6 @@
     <string name="collection_record">收藏记录</string>
     <string name="back_superclazz">返回</string>
     <string name="messages_center">消息列表</string>
+    <string name="tips_discount_hint">*当前分享信息为商家优惠信息</string>
 
 </resources>

@@ -2,10 +2,12 @@ package com.young.base;
 
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 
+import com.young.utils.LogUtils;
 import com.young.utils.ThreadUtils;
 
 /**
@@ -16,7 +18,6 @@ public abstract class BasePager {
     public Context ctx;
     public View view;
     public ThreadUtils threadUtils;
-
 
     public void init(Context ctx, View view, ThreadUtils threadUtils) {
         this.ctx = ctx;

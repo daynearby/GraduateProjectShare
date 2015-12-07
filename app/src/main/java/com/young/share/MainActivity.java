@@ -38,6 +38,7 @@ public class MainActivity extends CustomActBarActivity {
 
     private ArcMenu mArcMenu;
     private BDLBSUtils bdlbsUtils;
+    private MainPagerAdapter pagerAdapter;
 
     private String province = "广东省";
     private String city = "惠州市";
@@ -49,6 +50,7 @@ public class MainActivity extends CustomActBarActivity {
     private static final int callbackTimes = 10;//回调10次
     private boolean isToggle = false;
     private boolean isRegistBordcast = false;//是否注册了广播接收者
+    private boolean isDiscount = false;//当前是否为商家优惠界面。true -->是
 
     @Override
     public int getLayoutId() {
@@ -70,7 +72,7 @@ public class MainActivity extends CustomActBarActivity {
 
         mArcMenu.setOnMenuItemClickListener(new onitmeListener());
 
-        MainPagerAdapter pagerAdapter = new MainPagerAdapter(this, list, threadUtils);
+         pagerAdapter = new MainPagerAdapter(this, list, threadUtils);
 
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new pageChangeListener());
@@ -86,8 +88,8 @@ public class MainActivity extends CustomActBarActivity {
 
         bdlbsUtils = BDLBSUtils.builder(this, new locationListener());
         bdlbsUtils.startLocation();
-
-        SharePreferenceUtils sharePreferenceUtils = new SharePreferenceUtils(this);
+        registerBoradcastReceiverRefreshUI();
+//        SharePreferenceUtils sharePreferenceUtils = new SharePreferenceUtils(this);
     }
 
     /**
@@ -152,20 +154,23 @@ public class MainActivity extends CustomActBarActivity {
         public void onPageSelected(int arg0) {
 
             switch (arg0) {
+
 // TODO: 2015-10-09 页面切换更换title 
                 case 0:
                     settitle(R.string.discount);
-
+                    mArcMenu.setVisibility(View.VISIBLE);
+                    isDiscount = true;
                     break;
 
                 case 1:
                     settitle(R.string.discover);
-
+                    mArcMenu.setVisibility(View.VISIBLE);
+                    isDiscount = false;
                     break;
 
                 case 2:
                     settitle(R.string.rank);
-
+                    mArcMenu.setVisibility(View.GONE);
                     break;
 
             }
@@ -204,6 +209,15 @@ public class MainActivity extends CustomActBarActivity {
 
     }
 
+    //注册广播接收者。在修改了数据后刷新列表
+
+    public void registerBoradcastReceiverRefreshUI() {
+        myIntentFilter.addAction(Contants.BORDCAST_REQUEST_REFRESH);
+        //注册广播
+        registerReceiver(mBroadcastReceiver, myIntentFilter);
+        isRegistBordcast = true;
+
+    }
 
     /**
      * 登录过，才能进行登录
@@ -331,12 +345,19 @@ public class MainActivity extends CustomActBarActivity {
                     break;
                 case Contants.BORDCAST_REQUEST_LOCATIONINFO://使用百度定位
                     //开始 百度定位
+                    times = 0;
                     startLocation();
                     break;
 
                 case Contants.BORDCAST_CLEAR_MESSAGES://清空消息
                     initMessagesIcon(false);
                     break;
+                case Contants.BORDCAST_REQUEST_REFRESH:
+                    pagerAdapter.refreshUI(intent.getIntExtra(Contants.REFRESH_TYPE,0));
+                    LogUtils.logD("get refresh broadcast code = "+intent.getIntExtra(Contants.REFRESH_TYPE,0));
+                    break;
+
+
             }
 
         }
@@ -382,11 +403,14 @@ public class MainActivity extends CustomActBarActivity {
 
             switch (pos) {
                 case 1://分享信息
+
                     if (mUser != null) {
 
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean(Contants.BUNDLE_CURRENT_IS_DISCOUNT,isDiscount);
                         //定位信息请求，注册广播接收者
                         registerBoradcastReceiverRequestLocation();
-                        mStartActivity(ShareMessageActivity.class);
+                        mStartActivity(ShareMessageActivity.class,bundle);
 
                     } else {
 

@@ -123,6 +123,9 @@
         <!--消息中心 -->
         <activity android:name=".MessageCenterActivity"/>
 
+        <!-- 详细优惠信息 -->
+        <activity android:name=".DiscoutDetailActivity"/>
+
         <!-- 百度定位 services -->
         <service
             android:name="com.baidu.location.f"

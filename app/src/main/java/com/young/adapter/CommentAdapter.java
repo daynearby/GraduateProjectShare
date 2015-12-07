@@ -48,6 +48,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
     private TextView content_txt;
     private ToReply toReply;
+    private boolean isClick = false;
 
 //    private int strId;//提示文字资源id
 
@@ -64,7 +65,8 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
 
     }
-    public CommentAdapter(Context context,ToReply toReply) {
+
+    public CommentAdapter(Context context, ToReply toReply) {
         this(context);
         this.toReply = toReply;
     }
@@ -260,35 +262,44 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
             switch (v.getId()) {
                 case R.id.id_im_userH://用户资料
-
-                    PopupWinUserInfo userInfo = new PopupWinUserInfo(ctx, commRemoteModel.getUser());
-                    userInfo.onShow(v);
+                    showUserInfo(v);
 //                    LogUtils.logD("用户资料 = " + u.toString());
+                    break;
+                case R.id.id_userName:
+                    showUserInfo(v);
                     break;
 
                 case R.id.id_tx_wantogo://想去--数量
-
+                    v.setClickable(false);
                     getUser();
+
                     if (cuser != null) {
 
                         List<String> shWantedNum = commRemoteModel.getWanted();
 
                         wantToGo(UserUtils.isHadCurrentUser(shWantedNum, cuser.getObjectId()), v);
-
+                        isClick = true;
                     } else {
+                        v.setClickable(true);
                         Dialog4Tips.loginFunction((Activity) ctx);
                     }
 
                     break;
 
                 case R.id.id_hadgo://去过--数量
-
+                    v.setClickable(false);
                     getUser();
+
                     if (cuser != null) {
+
                         List<String> shVisitedNum = commRemoteModel.getVisited();
 
                         visit(UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()), v);
+
+                        isClick = true;
+
                     } else {
+                        v.setClickable(true);
                         Dialog4Tips.loginFunction((Activity) ctx);
                     }
                     break;
@@ -296,7 +307,6 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
                 case R.id.id_tx_comment://评论数量
                     getUser();
                     if (cuser != null && toReply != null) {
-
                         toReply.reply(commRemoteModel.getUser().getObjectId());
                     }
 
@@ -309,6 +319,17 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
             }
         }
+    }
+
+    /**
+     * 查看用户资料
+     *
+     * @param v
+     */
+    private void showUserInfo(View v) {
+
+        PopupWinUserInfo userInfo = new PopupWinUserInfo(ctx, commRemoteModel.getUser());
+        userInfo.onShow(v);
     }
 
     /**
@@ -365,8 +386,9 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
 
                 case CLICK_TYPE_REPLY://回复
 
-                    getUser();
+                    isClick = true;
 
+                    getUser();
 
                     if (cuser != null) {
                         if (toReply != null) {
@@ -387,7 +409,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
      * @param hadGo
      * @param v
      */
-    private void visit(boolean hadGo, View v) {
+    private void visit(boolean hadGo, final View v) {
 
         int leftDrawID;//提示图片资源id
         if (hadGo) {
@@ -414,10 +436,12 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
             @Override
             public void onSuccess() {
 //                mToast(strId);
+                v.setClickable(true);
             }
 
             @Override
             public void onFailure(int i, String s) {
+                v.setClickable(true);
                 LogUtils.logD(" wantToGo faile  erro code = " + i + " erro message = " + s);
             }
         });
@@ -431,7 +455,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
      * @param hadWant
      * @param v
      */
-    private void wantToGo(boolean hadWant, View v) {
+    private void wantToGo(boolean hadWant, final View v) {
 
         int leftDrawID;//提示图片资源id
         JSONObject jsonObject = new JSONObject();//参数
@@ -494,10 +518,12 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
             @Override
             public void onSuccess() {
 //                mToast(strId);
+                v.setClickable(true);
             }
 
             @Override
             public void onFailure(int i, String s) {
+                v.setClickable(true);
                 LogUtils.logD(" wantToGo faile  erro code = " + i + " erro message = " + s);
             }
         });
@@ -515,5 +541,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         void reply(String objId);
     }
 
-
+    public boolean isClick() {
+        return isClick;
+    }
 }

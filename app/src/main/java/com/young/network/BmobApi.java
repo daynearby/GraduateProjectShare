@@ -45,6 +45,7 @@ public class BmobApi {
     public static final String GET_SHARE_RECROD = "GetShareRecord";//获取全部分享记录
     public static final String GET_RECOLLECTION_RECORD = "GetRecollectionRecord";//获取全部收藏记录
     public static final String GET_NEW_MESSAGES = "GetNewMessages";//获取全部消息记录
+    public static final String GET_RECENTLY_DICOUNT = "GetRecentlyDicount";//获取全部商家优惠
 
 
     private static Gson gson = new Gson();

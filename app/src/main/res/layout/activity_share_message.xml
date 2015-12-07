@@ -2,21 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:padding="@dimen/paddingMic">
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/tv_share_message_tips"
+            style="@style/text_style_match"
+            android:text="@string/tips_discount_hint"
+            android:padding="@dimen/paddingHit"
+            android:visibility="invisible"/>
 
         <EditText
             android:id="@+id/et_contnent_popupwin_content"
             style="@style/text_style_match"
-            android:layout_marginLeft="@dimen/paddingHit"
-            android:layout_marginRight="@dimen/paddingHit"
-            android:layout_marginTop="@dimen/paddingHit"
+            android:layout_marginTop="@dimen/paddingMic"
             android:background="@drawable/bg_rectangle"
             android:gravity="start"
             android:hint="@string/share_what_hint"
@@ -29,7 +32,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:orientation="horizontal"
-            android:padding="@dimen/paddingMic">
+            android:padding="@dimen/paddingMediu">
 
             <ImageView
                 android:id="@+id/im_content_popupwin_share_seletag"
@@ -37,12 +40,13 @@
                 android:layout_height="wrap_content"
                 android:scaleType="centerInside"
                 android:src="@drawable/icon_tag" />
+
             <TextView
                 android:id="@+id/tv_content_popupwin_share_seletag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/lake_blue"
-                android:layout_gravity="bottom"/>
+                android:layout_gravity="bottom"
+                android:textColor="@color/lake_blue" />
 
             <ImageView
                 android:id="@+id/im_content_popupwin_share_lacation_i"
@@ -56,8 +60,8 @@
                 android:id="@+id/tv_content_popupwin_share_lacation_i"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/lake_blue"
-                android:layout_gravity="bottom"/>
+                android:layout_gravity="bottom"
+                android:textColor="@color/lake_blue" />
 
             <ImageView
                 android:id="@+id/im_activity_share_message_addimg"

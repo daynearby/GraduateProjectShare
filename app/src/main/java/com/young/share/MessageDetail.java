@@ -58,8 +58,8 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
     private LinearLayout layout_comment;
 
 
-    private static String superTagClazz;
-    private static CommRemoteModel commModel = new CommRemoteModel();
+    private String superTagClazz;
+    private CommRemoteModel commModel = new CommRemoteModel();
     private List<CommRemoteModel> dataList = new ArrayList<>();//数据
     private CommentAdapter commAdapter;
     private InputMethodManager imm;
@@ -69,7 +69,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
     private static final int GET_MESSAGE = 1;//格式化数据
     private static final int COMMENT_CLICK = 0;//点击事件，是评论
 
-
+    private boolean isClick = false;//是否点击过
     private boolean SendMessageFinish = true;//消息是否已经发送
 
 
@@ -132,12 +132,12 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
                         break;
 
-                    case  Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY://消息列表
+                    case Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY://消息列表
                         ShareMessage_HZ shareMessageMessage = (ShareMessage_HZ) bundle.getSerializable(Contants.CLAZZ_DATA_MESSAGE);
                         formateDataDiscover(shareMessageMessage);
                         //获取最新的评论
                         if (shareMessageMessage != null) {
-                            getComment(shareMessageMessage.getObjectId() );
+                            getComment(shareMessageMessage.getObjectId());
                         } else {
                             LocationUtils.processDialog(mActivity);
                         }
@@ -225,6 +225,9 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
             case Contants.CLAZZ_DISCOVER_ACTIVITY://shareMessage详细信息
 
+                if (isClick || commAdapter.isClick()) {//点击过则刷新界面
+                    LocationUtils.sendBordCast(mActivity, Contants.REFRESH_TYPE_DISCOVER);
+                }
                 mBackStartActivity(superTagClazz);
                 this.finish();
                 break;
@@ -255,6 +258,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
      * 点击发送 处理工作
      */
     private void finishPrepare() {
+
         sendComment_edt.clearFocus();
         vp_emotion_dashboard.setVisibility(View.GONE);
         layout_comment.setVisibility(View.GONE);
@@ -370,6 +374,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
                 finishPrepare();
                 receiverId = commModel.getUser().getObjectId();
                 sendComment();
+                isClick = true;
                 break;
 
 

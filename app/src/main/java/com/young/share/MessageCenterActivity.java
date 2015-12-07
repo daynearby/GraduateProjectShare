@@ -103,7 +103,7 @@ public class MessageCenterActivity extends ItemActBarActivity {
         new ListViewRefreshListener(listView, swipeRefresh, new ListViewRefreshListener.RefreshListener() {
             @Override
             public void pushToRefresh() {
-                Skip += Contants.RECORD_LENGHT;
+//                Skip += Contants.RECORD_LENGHT;
 
                 //分享信息
                 if (dataList.size() > pageSize * PUSH_TIMES) {

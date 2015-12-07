@@ -155,11 +155,12 @@ public class ImageHandlerUtils {
 
 
     /**
+     * 具有回调，显示状态
      * @param ctx
      * @param imageUrl
      * @param im
      */
-    public static void loadIamge(final Context ctx, String imageUrl, ImageView im) {
+    public static void loadIamgeWithState(final Context ctx, String imageUrl, ImageView im) {
 
 
         ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(ctx, imageUrl, false), im, imageloaderOption(), new ImageLoadingListener() {

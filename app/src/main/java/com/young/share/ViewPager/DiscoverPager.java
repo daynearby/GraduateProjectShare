@@ -27,6 +27,7 @@ import com.young.share.R;
 import com.young.thread.MyRunnable;
 import com.young.utils.CommonUtils;
 import com.young.utils.DBUtils;
+import com.young.utils.LocationUtils;
 import com.young.utils.LogUtils;
 
 import org.json.JSONException;
@@ -48,10 +49,9 @@ public class DiscoverPager extends BasePager {
     private static final int FIRST_GETDATA = 0x1001;
     private static final int GET_LOACTIOPN_DATA = 0x1002;
 
-    private int starIndex = 0;
+    private int startIndex = 0;
     private int endIndex = 20;
-    protected static final int pageSize = 20;
-    private int PUSH_TIMES = 0;
+    private int PUSH_TIMES = 0;//下拉次数
     private boolean isGetMore = false;//从远程数据库获取更多数据
 
     private int startRow = 0;//从第一条开始
@@ -64,7 +64,8 @@ public class DiscoverPager extends BasePager {
                 if (CommonUtils.isNetworkAvailable(ctx)) {//有网络
                     getDataFromRemote();
                 } else {
-                    SVProgressHUD.showInfoWithStatus(ctx, ctx.getString(R.string.without_network));
+                    SVProgressHUD.showInfoWithStatus(ctx,
+                            ctx.getString(R.string.without_network));
                     getDataFromLocat();//没有网络
                 }
 
@@ -88,14 +89,15 @@ public class DiscoverPager extends BasePager {
                     @Override
                     public void pushToRefresh() {//上拉刷新
                         if (CommonUtils.isNetworkAvailable(ctx)) {//有网络
-                            startRow += Contants.PAGER_NUMBER;
+//                            startRow += Contants.PAGER_NUMBER;
 
-                            if (dataList.size() > pageSize * PUSH_TIMES) {
+                            if (dataList.size() > Contants.PAGE_SIZE * PUSH_TIMES) {
 
-                                endIndex = dataList.size() < pageSize + pageSize * PUSH_TIMES ? dataList.size() :
-                                        pageSize + pageSize * PUSH_TIMES;
+                                endIndex = dataList.size() < Contants.PAGE_SIZE +
+                                        Contants.PAGE_SIZE * PUSH_TIMES ? dataList.size() :
+                                        Contants.PAGE_SIZE + Contants.PAGE_SIZE * PUSH_TIMES;
 
-                                listviewAdapter.setData(dataList.subList(starIndex, endIndex));
+                                listviewAdapter.setData(dataList.subList(startIndex, endIndex));
 
                                 PUSH_TIMES++;
 
@@ -134,16 +136,12 @@ public class DiscoverPager extends BasePager {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                Bundle bundle = new Bundle();
 
+                Bundle bundle = new Bundle();
                 bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_DISCOVER_ACTIVITY);
                 bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, dataList.get(position));
 
-                intent.putExtras(bundle);
-                intent.setClass(ctx, MessageDetail.class);
-                ctx.startActivity(intent);
-                ((Activity) ctx).overridePendingTransition(R.animator.activity_slid_right_in, R.animator.activity_slid_left_out);
+                LocationUtils.startActivity(ctx,bundle,MessageDetail.class);
             }
         });
 
@@ -203,7 +201,8 @@ public class DiscoverPager extends BasePager {
             LogUtils.logD("添加 网络参数 失败 = " + e.toString());
         }
 
-        BmobApi.AsyncFunction(ctx, params, BmobApi.GET_RECENTLY_SHAREMESSAGES, ShareMessageList.class, new GotoAsyncFunction() {
+        BmobApi.AsyncFunction(ctx, params, BmobApi.GET_RECENTLY_SHAREMESSAGES,
+                ShareMessageList.class, new GotoAsyncFunction() {
                     @Override
                     public void onSuccess(Object object) {
                         @SuppressWarnings("unchecked")
@@ -302,11 +301,12 @@ public class DiscoverPager extends BasePager {
     private void refreshUI() {
 
         if (isGetMore) {
-            endIndex = dataList.size() < (PUSH_TIMES + 1) * pageSize ? dataList.size() : (PUSH_TIMES + 1) * pageSize;
+            endIndex = dataList.size() < (PUSH_TIMES + 1) * Contants.PAGE_SIZE ?
+                    dataList.size() : (PUSH_TIMES + 1) * Contants.PAGE_SIZE;
         } else {
-            endIndex = dataList.size() < pageSize ? dataList.size() : endIndex;
+            endIndex = dataList.size() < Contants.PAGE_SIZE ? dataList.size() : endIndex;
         }
-        listviewAdapter.setData(dataList.subList(starIndex, endIndex));
+        listviewAdapter.setData(dataList.subList(startIndex, endIndex));
         swipeRefreshLayout.setRefreshing(false);
     }
 

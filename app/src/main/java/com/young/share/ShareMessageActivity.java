@@ -21,6 +21,7 @@ import com.young.annotation.InjectView;
 import com.young.base.BaseAppCompatActivity;
 import com.young.base.ItemActBarActivity;
 import com.young.config.Contants;
+import com.young.model.DiscountMessage_HZ;
 import com.young.model.ShareMessage_HZ;
 import com.young.myInterface.GoToUploadImages;
 import com.young.network.BmobApi;
@@ -45,7 +46,7 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * 发送分享信息
- * <p/>
+ * <p>
  * Created by Nearby Yang on 2015-10-23.
  */
 public class ShareMessageActivity extends ItemActBarActivity implements View.OnClickListener {
@@ -70,6 +71,8 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     private ImageView tag_im;
     @InjectView(R.id.tv_content_popupwin_share_seletag)
     private TextView tag_tv;
+    @InjectView(R.id.tv_share_message_tips)
+    private TextView tips_tv;
 
     private myGridViewAdapter gridViewAdapter;
     private InputMethodManager imm;
@@ -82,6 +85,8 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     private Dialog4Tips dialog;//保存草稿的提示框
     private DarftUtils darftUtils;//草稿
     private static final int FINISH_ACTIVITY = 0;
+    private boolean currentIsDiscount;//当前页面是否为商家优惠
+    private String draftType;//草稿类型
 
     // TODO: 2015-12-05 移除item而不需要刷新整个ListView
     @Override
@@ -92,8 +97,22 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     @Override
     public void initData() {
         super.initData();
+        Bundle bundle = getIntent().getExtras();
+        currentIsDiscount = bundle.getBoolean(Contants.BUNDLE_CURRENT_IS_DISCOUNT, false);
+
+
+        if (currentIsDiscount) {
+            tips_tv.setVisibility(View.VISIBLE);
+            draftType = Contants.DRAFT_TYPE_DICOUNT;
+        } else {
+            tips_tv.setVisibility(View.INVISIBLE);
+            draftType = Contants.DRAFT_TYPE_DICOVER;
+        }
+
         setTvTitle(R.string.let_me_share);
         setTvRight(R.string.send);
+
+
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
@@ -138,28 +157,55 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
      * 恢复草稿
      */
     private void resetDraft() {
-        final List<String> list = new ArrayList<>();
-        final String darft_content = acache.getAsString(Contants.DRAFT_CONTENT);
 
-        if (darft_content != null) {
+        String draft_type = acache.getAsString(Contants.DRAFT_TYPE);
+
+        if (!TextUtils.isEmpty(draft_type)) {
+
+            if (currentIsDiscount && draft_type.equals(Contants.DRAFT_TYPE_DICOUNT)) {//商家优惠
+
+                setDraft();
+            } else if (!currentIsDiscount && draft_type.equals(Contants.DRAFT_TYPE_DICOVER)) {//发现
+                setDraft();
+
+            }
+        }
+
+
+    }
+
+    /**
+     * 回复草稿
+     */
+    private void setDraft() {
+
+        final List<String> list = new ArrayList<>();
+        final String draft_content = acache.getAsString(Contants.DRAFT_CONTENT);
+        final JSONArray imgJsArray = acache.getAsJSONArray(Contants.DRAFT_IMAGES_LIST);
+
+        if (draft_content != null || imgJsArray != null) {
+
             dialog.setContent(getString(R.string.had_draft_would_reset_tips));
             dialog.setBtnOkText(getString(R.string.reset));
             dialog.setBtnCancelText(getString(R.string.do_not_reset));
+
             dialog.setDialogListener(new Dialog4Tips.Listener() {
                 @Override
                 public void btnOkListenter() {
-                    content_et.setText(darft_content);
+
+                    content_et.setText(draft_content);
                     tag_tv.setText(acache.getAsString(Contants.DRAFT_TAG));
                     shareLocation_tv.setText(acache.getAsString(Contants.DRAFT_LOCATION_INFO));
-                    JSONArray imgJsArray = acache.getAsJSONArray(Contants.DRAFT_IMAGES_LIST);
 
                     if (imgJsArray != null) {
                         for (int i = 0; i < imgJsArray.length(); i++) {
+
                             try {
                                 list.add(imgJsArray.getString(i));
                             } catch (JSONException e) {
                                 LogUtils.logE("读取jsonArray数据出错" + e.toString());
                             }
+
                         }
 
                         gridViewAdapter.setDatas(list, true);
@@ -249,8 +295,9 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                 break;
 
             case R.id.im_content_popupwin_share_seletag://标签选择
-// TODO: 2015-11-13 选择标签的popupwindow的位置问题 主要是4.1的适配
+
                 popupWinListView.onShow(tag_im);
+
                 break;
         }
     }
@@ -283,6 +330,13 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
     };
 
+    /**
+     * 获取图片返回结果
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -332,10 +386,13 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         goback();
     }
 
+    /**
+     * 返回上一级
+     * 退出当前activity
+     */
     private void goback() {
 
-        if (!TextUtils.isEmpty(content_et.getText().toString())) {
-
+        if (!TextUtils.isEmpty(content_et.getText().toString()) | gridViewAdapter.getData() != null) {
 
             dialog.setContent(getString(R.string.need_to_save_draft));
             dialog.setBtnOkText(getString(R.string.save));
@@ -344,7 +401,8 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                 @Override
                 public void btnOkListenter() {
 
-                    darftUtils.saveDraft(content_et.getText().toString(),
+
+                    darftUtils.saveDraft(draftType, content_et.getText().toString(),
                             shareLocation_tv.getText().toString(),
                             tag_tv.getText().toString(),
                             gridViewAdapter.getData()
@@ -365,6 +423,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
             back2MainActivity();
         }
     }
+
     /**
      * 回到MainActivity
      */
@@ -391,81 +450,189 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
         }
 
+        /**
+         * 分享信息
+         *
+         * @param v
+         */
         @Override
         public void rightClivk(View v) {//发送按钮
 
             String content = content_et.getText().toString();
             List<String> lists = gridViewAdapter.getData();
 
-            if (!TextUtils.isEmpty(content) || lists != null) {
+            if (!TextUtils.isEmpty(content) || lists != null) {//信息或者图片不为空
 
                 mToast(R.string.sending);
                 mBackStartActivity(MainActivity.class);
 
+                //发送信息
+                if (currentIsDiscount) {//商家优惠
+                    shareDiscount(lists, content);
+                } else {
+                    shareDicover(lists, content);
+                }
 
-                final ShareMessage_HZ shareMessage_hz = new ShareMessage_HZ();
+            } else {//信息或者图片为空
 
-                shareMessage_hz.setShContent(content);
-                shareMessage_hz.setShTag(tagInfo);
-                shareMessage_hz.setShLocation(locationInfo);
-                shareMessage_hz.setUserId(mUser);
-                shareMessage_hz.setShCommNum(0);
-                shareMessage_hz.setShVisitedNum(new ArrayList<String>());
-                shareMessage_hz.setShWantedNum(new ArrayList<String>());
+                SVProgressHUD.showErrorWithStatus(mActivity, getString(R.string.share_messages_empty));
 
-                if (lists != null && !lists.isEmpty()) {//有上传图片的
+            }
 
-                    String[] files = new String[lists.size()];
-                    for (int i = 0; i < lists.size(); i++) {
-                        files[i] = lists.get(i);
+
+        }
+    }
+
+    /**
+     * 分享信息
+     */
+    private void shareDicover(List<String> lists, String content) {
+
+
+        final ShareMessage_HZ shareMessage_hz = new ShareMessage_HZ();
+
+        shareMessage_hz.setShContent(content);
+        shareMessage_hz.setShTag(tagInfo);
+        shareMessage_hz.setShLocation(locationInfo);
+        shareMessage_hz.setUserId(mUser);
+        shareMessage_hz.setShCommNum(0);
+        shareMessage_hz.setShVisitedNum(new ArrayList<String>());
+        shareMessage_hz.setShWantedNum(new ArrayList<String>());
+
+        if (lists != null && !lists.isEmpty()) {//有上传图片的
+
+            String[] files = new String[lists.size()];
+            for (int i = 0; i < lists.size(); i++) {
+                files[i] = lists.get(i);
+            }
+            BmobApi.UploadFiles(mActivity, files, Contants.IMAGE_TYPE_SHARE, new GoToUploadImages() {
+                @Override
+                public void Result(boolean isFinish, String[] urls) {
+
+                    if (isFinish) {
+                        List<String> list = new ArrayList<>();
+
+                        Collections.addAll(list, urls);
+
+                        shareMessage_hz.setShImgs(list);
+
+                        //保存分享信息到云端
+                        shareMessage(shareMessage_hz);
+
+
                     }
-                    BmobApi.UploadFiles(mActivity, files, Contants.IMAGE_TYPE_SHARE, new GoToUploadImages() {
-                        @Override
-                        public void Result(boolean isFinish, String[] urls) {
-
-                            if (isFinish) {
-                                List<String> list = new ArrayList<>();
-
-                                Collections.addAll(list, urls);
-
-                                shareMessage_hz.setShImgs(list);
-                                //保存分享信息到云端
-                                shareMessage(shareMessage_hz);
-
-
-                            } else {
-
+//                            else {
+//
 //                                LogUtils.logE("回调第一次，isfinish = " + isFinish);
 //                                SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.some_images_maybe_miss));
-                            }
-                        }
-
-                        @Override
-                        public void onError(int statuscode, String errormsg) {
-                            SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.upload_images_fail));
-                        }
-                    });
-
-                } else {//没有上传图片的
-                    mBackStartActivity(MainActivity.class);
-                    shareMessage(shareMessage_hz);
-
+//                            }
                 }
-                //在没有销毁该Activity的时候，需要清空该Activity中的数据
+
+                @Override
+                public void onError(int statuscode, String errormsg) {
+                    SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.upload_images_fail));
+                }
+            });
+
+        } else {//没有上传图片的
+            mBackStartActivity(MainActivity.class);
+            shareMessage(shareMessage_hz);
+
+        }
+        //在没有销毁该Activity的时候，需要清空该Activity中的数据
 
 //shareMessage_hz.setShImgs();
 //                LogUtils.logE("右边点击");
 
 
-            } else {
+    }
 
-                SVProgressHUD.showErrorWithStatus(mActivity, getString(R.string.share_messages_empty));
 
+    /**
+     * 分享商家优惠信息
+     */
+    private void shareDiscount(List<String> lists, String content) {
+
+        final DiscountMessage_HZ disMessages = new DiscountMessage_HZ();
+
+
+        disMessages.setDtTag(tagInfo);
+        disMessages.setDtContent(content);
+        disMessages.setDtLocation(locationInfo);
+        disMessages.setUserId(mUser);
+
+
+        if (lists != null && !lists.isEmpty()) {//有上传图片的
+
+            String[] files = new String[lists.size()];
+            for (int i = 0; i < lists.size(); i++) {
+                files[i] = lists.get(i);
             }
+            BmobApi.UploadFiles(mActivity, files, Contants.IMAGE_TYPE_SHARE, new GoToUploadImages() {
+                @Override
+                public void Result(boolean isFinish, String[] urls) {
+
+                    if (isFinish) {
+                        List<String> list = new ArrayList<>();
+
+                        Collections.addAll(list, urls);
+
+                        disMessages.setDtImgs(list);
+                        //保存分享信息到云端
+                        shareDiscountMessage(disMessages);
+
+
+                    }
+//                            else {
+//
+//                                LogUtils.logE("回调第一次，isfinish = " + isFinish);
+//                                SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.some_images_maybe_miss));
+//                            }
+                }
+
+                @Override
+                public void onError(int statuscode, String errormsg) {
+                    SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.upload_images_fail));
+                }
+            });
+
+        } else {//没有上传图片的
+
+            mBackStartActivity(MainActivity.class);
+            shareDiscountMessage(disMessages);
+
         }
 
 
     }
+
+    /**
+     * 分享优惠信息
+     *
+     * @param discountMessage
+     */
+    private void shareDiscountMessage(DiscountMessage_HZ discountMessage) {
+        //清理工作
+        clean();
+        //保存
+        discountMessage.save(mActivity, new SaveListener() {
+            @Override
+            public void onSuccess() {
+                mToast(R.string.share_messages_success);
+
+                mHandler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Contants.ONE_SECOND);
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                mToast(R.string.share_message_fail);
+                saveDarft();
+                mHandler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Contants.ONE_SECOND);
+            }
+        });
+
+    }
+
 
     /**
      * 分享信息
@@ -488,18 +655,31 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
             public void onFailure(int i, String s) {
                 mToast(R.string.share_message_fail);
 //                LogUtils.logI("share messages faile ");
-                darftUtils.saveDraft(
-                        content_et.getText().toString(),
-                        shareLocation_tv.getText().toString(),
-                        tag_tv.getText().toString(),
-                        gridViewAdapter.getData()
-                );
+                saveDarft();
+
 
                 mHandler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Contants.ONE_SECOND);
             }
         });
     }
 
+    /**
+     * 保存草稿
+     */
+    private void saveDarft() {
+
+        darftUtils.saveDraft(draftType,
+                content_et.getText().toString(),
+                shareLocation_tv.getText().toString(),
+                tag_tv.getText().toString(),
+                gridViewAdapter.getData()
+        );
+
+    }
+
+    /**
+     * 清理工作
+     */
     private void clean() {
         content_et.setText("");
         shareLocation_tv.setText("");

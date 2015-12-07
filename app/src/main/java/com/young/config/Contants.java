@@ -7,7 +7,8 @@ import com.young.share.R;
  * Created by Nearby Yang on 2015-07-02.
  */
 public class Contants {
-    //欢迎界面
+
+    //***********************欢迎界面**************
     public static final int GO_HOME = 100;
     public static final int GO_GUIDE = 101;
 
@@ -19,11 +20,14 @@ public class Contants {
 
     public static final String SH_ACCOUNT = "account";
     public static final String SH_PWD = "pwd";
+
     //*******************字符串长度**************************
     public static final int PWD_LENGHT = 6;
     public static final int NICKNAME_MIN_LENGHT = 4;
     public static final int NICKNAME_MAX_LENGHT = 12;
 
+    //一页显示的数据条数
+    public static final int PAGE_SIZE = 20;
 
     //*************************** Bmob key *****************
 
@@ -66,16 +70,24 @@ public class Contants {
     public static final String BORDCAST_SELECTIMAGES = "bordcast_select_images";
     public static final String BORDCAST_LOCATIONINFO = "bordcast_location_info";
     public static final String BORDCAST_REQUEST_LOCATIONINFO = "bordcast_request_location_info";
+    public static final String BORDCAST_REQUEST_REFRESH = "bordcast_request_refresh";
 
+    public static final String REFRESH_TYPE="refresh_type";
+    public static final int REFRESH_TYPE_DISCOUNT=10;
+    public static final int REFRESH_TYPE_DISCOVER=11;
     //广播数据的标志
 
     public static final String BORDCAST_IMAGEPATH_LIST = "bordcast_imagrpath_list";
     public static final String BORDCAST_CLEAR_MESSAGES = "bordcastClearMessages";
 
     public final static String BUNDLE_TAG = "Serializable_Data";
+    public final static String BUNDLE_CURRENT_IS_DISCOUNT = "currentIsDiscount";
+
     //                                  Acache keys
     //******************************** 保存草稿 keys**********************************************
-
+    public static final String DRAFT_TYPE = "draft_type";
+    public static final String DRAFT_TYPE_DICOUNT = "draft_type_dicount";
+    public static final String DRAFT_TYPE_DICOVER = "draft_type_dicover";
     public static final String DRAFT_CONTENT = "draft_content";
     public static final String DRAFT_TAG = "draft_tag";
     public static final String DRAFT_LOCATION_INFO = "draft_location_info";
@@ -133,11 +145,10 @@ public class Contants {
     public static final int RECORD_TYPE_SHARE = 10;//分享记录
     public static final int RECORD_TYPE_COLLECT = 11;//收藏记录
     public static final int RECORD_LENGHT = 50;//记录条数
-    //参数名
+
+    //****************参数名********************
     public static final String PARAM_USERID = "userID";//参数名
     public static final String PARAM_SKIP = "skip";//参数名
-
-
 
 
 }
