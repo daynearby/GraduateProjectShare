@@ -79,7 +79,7 @@ public class ApplicationConfig extends LitePalApplication {
                         // 由原先的discCache -> diskCache
                 .diskCache(new UnlimitedDiskCache(cacheFile))//自定义缓存路径
                 .imageDownloader(new BaseImageDownloader(ctx, 5 * 1000, 30 * 1000)) // connectTimeout (5 s), readTimeout (30 s)超时时间
-                .writeDebugLogs() // Remove for release app
+//                .writeDebugLogs() // Remove for release app
                 .build();
 
         ImageLoader.getInstance().init(imConfig);

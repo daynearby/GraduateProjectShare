@@ -28,6 +28,7 @@ import cn.bmob.v3.listener.UpdateListener;
  * Created by Nearby Yang on 2015-10-18.
  */
 public class LoginActivity extends CustomActBarActivity implements View.OnClickListener {
+
     @InjectView(R.id.et_login_email)
     private EditText et_loginEmail;
     @InjectView(R.id.et_login_pwd)
@@ -41,6 +42,7 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
 
     public static final String ACCOUNT = "account";
     public static final String PWD = "pwd";
+
     private SharePreferenceUtils sharePreferenceUtils;
 
     @Override
@@ -175,8 +177,8 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
 
         final User userLogin = new User();
 
-        final String userName = et_loginEmail.getText().toString().trim();
-        final String pwd = et_loginPwd.getText().toString().trim();
+        final String userName = et_loginEmail.getText().toString();
+        final String pwd = et_loginPwd.getText().toString();
 
         if (!TextUtils.isEmpty(userName)) {
             if (!TextUtils.isEmpty(pwd)) {

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -18,9 +19,11 @@ import com.young.base.CustomActBarActivity;
 import com.young.config.Contants;
 import com.young.model.MyBmobInstallation;
 import com.young.model.User;
+import com.young.share.fragment.DiscountFragment;
+import com.young.share.fragment.DiscoverFragment;
+import com.young.share.fragment.RankFragment;
 import com.young.utils.BDLBSUtils;
 import com.young.utils.LogUtils;
-import com.young.utils.SharePreferenceUtils;
 import com.young.utils.XmlUtils;
 import com.young.views.ArcMenu;
 import com.young.views.Dialog4Tips;
@@ -60,22 +63,22 @@ public class MainActivity extends CustomActBarActivity {
     @Override
     public void findviewbyid() {
 
-        List<View> list = new ArrayList<>();
+        List<Fragment> list = new ArrayList<>();
         ViewPager viewPager = $(R.id.vp_main);
         mArcMenu = $(R.id.id_menu);
 
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        list.add(inflater.inflate(R.layout.pager_discount, null));
-        list.add(inflater.inflate(R.layout.pager_discover, null));
-        list.add(inflater.inflate(R.layout.pager_rank, null));
+        list.add(new DiscountFragment(this));
+        list.add(new DiscoverFragment(this));
+        list.add(new RankFragment(this));
 
         mArcMenu.setOnMenuItemClickListener(new onitmeListener());
 
-         pagerAdapter = new MainPagerAdapter(this, list, threadUtils);
+        pagerAdapter = new MainPagerAdapter( list,
+                getSupportFragmentManager(), viewPager,
+                new pageChangeListener());
 
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.addOnPageChangeListener(new pageChangeListener());
         viewPager.setCurrentItem(1);
 
     }
@@ -138,22 +141,13 @@ public class MainActivity extends CustomActBarActivity {
 
     }
 
-    private class pageChangeListener implements ViewPager.OnPageChangeListener {
+    private class pageChangeListener implements MainPagerAdapter.OnPageSelected {
+
 
         @Override
-        public void onPageScrollStateChanged(int arg0) {
+        public void onselected(int position) {
 
-        }
-
-        @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-        }
-
-        @Override
-        public void onPageSelected(int arg0) {
-
-            switch (arg0) {
+            switch (position) {
 
 // TODO: 2015-10-09 页面切换更换title 
                 case 0:
@@ -353,8 +347,8 @@ public class MainActivity extends CustomActBarActivity {
                     initMessagesIcon(false);
                     break;
                 case Contants.BORDCAST_REQUEST_REFRESH:
-                    pagerAdapter.refreshUI(intent.getIntExtra(Contants.REFRESH_TYPE,0));
-                    LogUtils.logD("get refresh broadcast code = "+intent.getIntExtra(Contants.REFRESH_TYPE,0));
+                    pagerAdapter.refreshUI(intent.getIntExtra(Contants.REFRESH_TYPE, 0));
+                    LogUtils.logD("get refresh broadcast code = " + intent.getIntExtra(Contants.REFRESH_TYPE, 0));
                     break;
 
 
@@ -407,10 +401,10 @@ public class MainActivity extends CustomActBarActivity {
                     if (mUser != null) {
 
                         Bundle bundle = new Bundle();
-                        bundle.putBoolean(Contants.BUNDLE_CURRENT_IS_DISCOUNT,isDiscount);
+                        bundle.putBoolean(Contants.BUNDLE_CURRENT_IS_DISCOUNT, isDiscount);
                         //定位信息请求，注册广播接收者
                         registerBoradcastReceiverRequestLocation();
-                        mStartActivity(ShareMessageActivity.class,bundle);
+                        mStartActivity(ShareMessageActivity.class, bundle);
 
                     } else {
 
@@ -466,8 +460,9 @@ public class MainActivity extends CustomActBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mUser = BmobUser.getCurrentUser(mActivity, User.class);
-        savaUserWithInsId();
+//        mUser = BmobUser.getCurrentUser(mActivity, User.class);
+//
+//        savaUserWithInsId();
     }
 
     @Override

@@ -1,17 +1,16 @@
 package com.young.share.ViewPager;
 
-import android.content.Context;
 import android.os.Message;
-import android.view.View;
 
 import com.young.base.BasePager;
 
 /**
  * 排行榜
- *
+ * <p/>
  * Created by Nearby Yang on 2015-10-09.
  */
 public class RankPager extends BasePager {
+// TODO: 2015-12-07 pinterestView瀑布流布局，屏幕适配
 
 
     @Override
@@ -34,4 +33,5 @@ public class RankPager extends BasePager {
     public void handler(Message msg) {
 
     }
+
 }
