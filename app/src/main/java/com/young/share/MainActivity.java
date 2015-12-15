@@ -43,15 +43,8 @@ public class MainActivity extends CustomActBarActivity {
     private BDLBSUtils bdlbsUtils;
     private MainPagerAdapter pagerAdapter;
 
-    private String province = "广东省";
-    private String city = "惠州市";
-    private String district;
-    private String street;
-    private String streetNumber;
-
     private int times = 0;
     private static final int callbackTimes = 10;//回调10次
-    private boolean isToggle = false;
     private boolean isRegistBordcast = false;//是否注册了广播接收者
     private boolean isDiscount = false;//当前是否为商家优惠界面。true -->是
 
@@ -67,7 +60,6 @@ public class MainActivity extends CustomActBarActivity {
         ViewPager viewPager = $(R.id.vp_main);
         mArcMenu = $(R.id.id_menu);
 
-        LayoutInflater inflater = LayoutInflater.from(this);
 
         list.add(new DiscountFragment(this));
         list.add(new DiscoverFragment(this));
@@ -92,7 +84,6 @@ public class MainActivity extends CustomActBarActivity {
         bdlbsUtils = BDLBSUtils.builder(this, new locationListener());
         bdlbsUtils.startLocation();
         registerBoradcastReceiverRefreshUI();
-//        SharePreferenceUtils sharePreferenceUtils = new SharePreferenceUtils(this);
     }
 
     /**
@@ -149,22 +140,25 @@ public class MainActivity extends CustomActBarActivity {
 
             switch (position) {
 
-// TODO: 2015-10-09 页面切换更换title 
                 case 0:
                     settitle(R.string.discount);
                     mArcMenu.setVisibility(View.VISIBLE);
                     isDiscount = true;
+
                     break;
 
                 case 1:
+
                     settitle(R.string.discover);
                     mArcMenu.setVisibility(View.VISIBLE);
                     isDiscount = false;
+
                     break;
 
                 case 2:
                     settitle(R.string.rank);
                     mArcMenu.setVisibility(View.GONE);
+
                     break;
 
             }
@@ -283,25 +277,19 @@ public class MainActivity extends CustomActBarActivity {
         @Override
         public void LocationInfo(String Province, String City, String District, String Street, String StreetNumber) {
 
-            province = Province;
-            city = City;
-            district = District;
-            street = Street;
-            streetNumber = StreetNumber;
 
             times++;
 
             if (Province != null) {
 
-                getCity_tv().setText(city);
+                getCity_tv().setText(City);
 
-//                }
                 Bundle bundle = new Bundle();
-                bundle.putString(Contants.PROVINCE, province);
-                bundle.putString(Contants.CITY, city);
-                bundle.putString(Contants.DISTRICT, district);
-                bundle.putString(Contants.STREET, street);
-                bundle.putString(Contants.STREETNUMBER, streetNumber);
+                bundle.putString(Contants.PROVINCE, Province);
+                bundle.putString(Contants.CITY, City);
+                bundle.putString(Contants.DISTRICT, District);
+                bundle.putString(Contants.STREET, Street);
+                bundle.putString(Contants.STREETNUMBER, StreetNumber);
 
                 intents.setAction(Contants.BORDCAST_LOCATIONINFO);
                 intents.putExtra(BUNDLE_BROADCAST, bundle);

@@ -1,10 +1,12 @@
 package com.young.utils;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 
 import com.young.share.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,9 +26,7 @@ public class XmlUtils {
         List<String> itemsList = new ArrayList<>();
         String[] items = ctx.getResources().getStringArray(R.array.select_cities_items);
 
-        for (int i = 0; i < items.length; i++) {
-            itemsList.add(items[i]);
-        }
+        Collections.addAll(itemsList, items);
         return itemsList;
     }
 
@@ -40,9 +40,7 @@ public class XmlUtils {
         List<String> itemsList = new ArrayList<>();
         String[] items = ctx.getResources().getStringArray(R.array.select_tag_item);
 
-        for (int i = 0; i < items.length; i++) {
-            itemsList.add(items[i]);
-        }
+        Collections.addAll(itemsList, items);
         return itemsList;
     }
 
@@ -56,125 +54,151 @@ public class XmlUtils {
         List<String> itemsList = new ArrayList<>();
         String[] items = ctx.getResources().getStringArray(R.array.select_option_item);
 
-        for (int i = 0; i < items.length; i++) {
-            itemsList.add(items[i]);
-        }
+        Collections.addAll(itemsList, items);
         return itemsList;
     }
 
     /**
      * 性别
+     *
      * @param ctx
      * @return
      */
-    public static List<String> getSelectGender(Context ctx){
+    public static List<String> getSelectGender(Context ctx) {
         List<String> itemsList = new ArrayList<>();
         String[] items = ctx.getResources().getStringArray(R.array.select_gender_item);
 
-        for (int i = 0; i < items.length; i++) {
-            itemsList.add(items[i]);
-        }
+        Collections.addAll(itemsList, items);
         return itemsList;
     }
 
     /**
      * 年龄
+     *
      * @param ctx
      * @return
      */
-    public static List<String> getSelectAge(Context ctx){
+    public static List<String> getSelectAge(Context ctx) {
         List<String> itemsList = new ArrayList<>();
         String[] items = ctx.getResources().getStringArray(R.array.select_age_item);
 
-        for (int i = 0; i < items.length; i++) {
-            itemsList.add(items[i]);
-        }
+        Collections.addAll(itemsList, items);
         return itemsList;
     }
 
     /**
      * 城市对应的地区
+     *
      * @param ctx
      * @param tag
      * @return
      */
-    public static List<String> getSelectArea(Context ctx,int tag) {
+    public static List<String> getSelectArea(Context ctx, int tag) {
         List<String> itemsList = new ArrayList<>();
-int rsdId = 0;
-        switch (tag){
+        int rsdId = 0;
+        switch (tag) {
             case 0:
-                rsdId=R.array.select_gz_item;
+                rsdId = R.array.select_gz_item;
                 break;
             case 1:
-                rsdId=R.array.select_sz_item;
+                rsdId = R.array.select_sz_item;
                 break;
             case 2:
-                rsdId=R.array.select_fs_item;
+                rsdId = R.array.select_fs_item;
                 break;
             case 3:
-                rsdId=R.array.select_dg_item;
+                rsdId = R.array.select_dg_item;
                 break;
             case 4:
-                rsdId=R.array.select_zhs_item;
+                rsdId = R.array.select_zhs_item;
                 break;
             case 5:
-                rsdId=R.array.select_zhh_item;
+                rsdId = R.array.select_zhh_item;
                 break;
             case 6:
-                rsdId=R.array.select_jm_item;
+                rsdId = R.array.select_jm_item;
                 break;
             case 7:
-                rsdId=R.array.select_zq_item;
+                rsdId = R.array.select_zq_item;
                 break;
             case 8:
-                rsdId=R.array.select_hz_item;
+                rsdId = R.array.select_hz_item;
                 break;
             case 9:
-                rsdId=R.array.select_st_item;
+                rsdId = R.array.select_st_item;
                 break;
             case 10:
-                rsdId=R.array.select_chz_item;
+                rsdId = R.array.select_chz_item;
                 break;
             case 11:
-                rsdId=R.array.select_jy_item;
+                rsdId = R.array.select_jy_item;
                 break;
             case 12:
-                rsdId=R.array.select_shw_item;
+                rsdId = R.array.select_shw_item;
                 break;
             case 13:
-                rsdId=R.array.select_zhj_item;
+                rsdId = R.array.select_zhj_item;
                 break;
             case 14:
-                rsdId=R.array.select_mm_item;
+                rsdId = R.array.select_mm_item;
                 break;
             case 15:
-                rsdId=R.array.select_yj_item;
+                rsdId = R.array.select_yj_item;
                 break;
             case 16:
-                rsdId=R.array.select_shg_item;
+                rsdId = R.array.select_shg_item;
                 break;
             case 17:
-                rsdId=R.array.select_qy_item;
+                rsdId = R.array.select_qy_item;
                 break;
             case 18:
-                rsdId=R.array.select_yf_item;
+                rsdId = R.array.select_yf_item;
                 break;
             case 19:
-                rsdId=R.array.select_mzh_item;
+                rsdId = R.array.select_mzh_item;
                 break;
             case 20:
-                rsdId=R.array.select_hy_item;
+                rsdId = R.array.select_hy_item;
                 break;
         }
-
 
 
         String[] items = ctx.getResources().getStringArray(rsdId);
 
-        for (int i = 0; i < items.length; i++) {
-            itemsList.add(items[i]);
-        }
+        Collections.addAll(itemsList, items);
         return itemsList;
+    }
+
+    /**
+     * 获取背景颜色
+     *
+     * @param ctx
+     * @return
+     */
+    public static List<Integer> getSelectRankBackgroundColor(Context ctx) {
+        List<Integer> bacegroundColorIdList = new ArrayList<>();
+        int[] colorId = ctx.getResources().getIntArray(R.array.select_rank_backgound_color);
+        for (Integer in : colorId) {
+            bacegroundColorIdList.add(in);
+        }
+        return bacegroundColorIdList;
+    }
+
+    /**
+     * 获取rank的图标id
+     *
+     * @param ctx
+     * @return
+     */
+    public static List<Integer> getSelectRankIcon(Context ctx) {
+        List<Integer> rankIconList = new ArrayList<>();
+        TypedArray ar = ctx.getResources().obtainTypedArray(R.array.select_rank_icon);
+//        int[] drawableId = ctx.getResources().getIntArray(R.array.select_rank_icon);
+        for (int i = 0; i < ar.length(); i++) {
+            rankIconList.add(ar.getResourceId(i, 0));
+        }
+        ar.recycle();
+        return rankIconList;
     }
 
 }

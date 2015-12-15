@@ -25,4 +25,16 @@
     <color name="background_material_light">#ebebeb</color>
     <color name="abc_secondary_text_material_light">#000000</color>
 
+    <color name="rank_heat">#FE495A</color>
+    <color name="rank_heat_light">#c8fe495a</color>
+    <color name="rank_photography">#005751</color>
+    <color name="rank_photography_light">#c8005751</color>
+    <color name="rank_date">#8956A1</color>
+    <color name="rank_date_light">#c88956a1</color>
+    <color name="rank_foodacfi">#00A0E9</color>
+    <color name="rank_foodacfi_light">#c800a0e9</color>
+    <color name="rank_outdoorsport">#22AD38</color>
+    <color name="rank_outdoorsport_light">#c822ad38</color>
+
+
 </resources>

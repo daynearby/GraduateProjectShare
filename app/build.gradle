@@ -35,7 +35,6 @@ dependencies {
     compile project(':Crop')
     compile project(':JazzyListView')
     compile project(':PhotoView')
-    compile project(':PinterestView')
     compile project(':sMSSDK')
     compile project(':multiImageSelector')
     compile project(':svprogresshud')
@@ -43,4 +42,5 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.0.0'
     compile files('libs/litepal-1.3.0-src.jar')
     compile project(':TextLink')
+    compile 'com.android.support:recyclerview-v7:23.1.1'
 }

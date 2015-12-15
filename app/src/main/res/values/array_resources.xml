@@ -32,6 +32,32 @@
         <item>户外运动</item>
     </string-array>
 
+    <integer-array name="select_rank_backgound_color">
+        <item>@color/rank_heat</item>
+        <item>@color/rank_photography</item>
+        <item>@color/rank_date</item>
+        <item>@color/rank_foodacfi</item>
+        <item>@color/rank_outdoorsport</item>
+    </integer-array>
+    <!--
+      <integer-array name="select_rank_backgound_color">
+        <item>@drawable/sele_rank_heat</item>
+        <item>@drawable/sele_rank_photography</item>
+        <item>@drawable/sele_rank_date</item>
+        <item>@drawable/sele_rank_foodacfi</item>
+        <item>@drawable/sele_rank_outdoor_sport</item>
+    </integer-array>
+
+    -->
+
+    <integer-array name="select_rank_icon">
+        <item>@drawable/icon_heat_s</item>
+        <item>@drawable/icon_photography_s</item>
+        <item>@drawable/icon_date_s</item>
+        <item>@drawable/icon_food_afico_s</item>
+        <item>@drawable/icon_outdoor_sport_s</item>
+    </integer-array>
+
     <string-array name="select_option_item">
         <item>我想去</item>
         <item>分享记录</item>
@@ -41,6 +67,9 @@
         <item>关于</item>
 
     </string-array>
+
+
+
 
     <string-array name="select_gender_item">
         <item>男</item>
@@ -272,4 +301,7 @@
         <item>和平县</item>
         <item>东源县</item>
     </string-array>
+
+
+
 </resources>
