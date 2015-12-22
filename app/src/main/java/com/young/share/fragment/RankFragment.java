@@ -24,6 +24,7 @@ import java.util.List;
  * Created by Nearby Yang on 2015-12-09.
  */
 public class RankFragment extends BaseFragment {
+    // TODO: 2015-12-17 线程完成工作后立即回收
 
     private RankAdapter rankAdapter;
     private List<RankBean> dataList = new ArrayList<>();
@@ -70,7 +71,9 @@ public class RankFragment extends BaseFragment {
         rankAdapter.setOnItemClickListener(new RankAdapter.OnItemClickListener() {
             @Override
             public void onClick(View v, int position) {
+
                 Toast.makeText(context, "点击 = " + position, Toast.LENGTH_SHORT).show();
+
             }
         });
 

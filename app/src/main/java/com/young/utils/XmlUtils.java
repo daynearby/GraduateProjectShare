@@ -177,8 +177,17 @@ public class XmlUtils {
      */
     public static List<Integer> getSelectRankBackgroundColor(Context ctx) {
         List<Integer> bacegroundColorIdList = new ArrayList<>();
-        int[] colorId = ctx.getResources().getIntArray(R.array.select_rank_backgound_color);
-        for (Integer in : colorId) {
+//
+//        TypedArray ar = ctx.getResources().obtainTypedArray(R.array.select_rank_backgound_color);
+//
+//        for (int i = 0; i < ar.length(); i++) {
+//
+//            bacegroundColorIdList.add(ar.getResourceId(i, 0));
+//        }
+//        ar.recycle();
+
+        int[] drawableId = ctx.getResources().getIntArray(R.array.select_rank_backgound_color);
+        for (Integer in : drawableId) {
             bacegroundColorIdList.add(in);
         }
         return bacegroundColorIdList;

@@ -35,7 +35,7 @@ public class ThreadUtils {
     //线程池是否处于运行状态(即:是否被释放!)
     private boolean isRuning = true;
 
-    private static final int COUNT = 3;//并发线程数量
+    private static final int COUNT = 4;//并发线程数量
 
     public ThreadUtils() {
 
@@ -68,10 +68,10 @@ public class ThreadUtils {
 
 
         if (taskQueue == null) {
-            taskQueue = new ConcurrentLinkedQueue<MyRunnable>();
+            taskQueue = new ConcurrentLinkedQueue<>();
         }
         if (taskMap == null) {
-            taskMap = new ConcurrentHashMap<Future, MyRunnable>();
+            taskMap = new ConcurrentHashMap<>();
         }
 
     }
@@ -151,6 +151,7 @@ public class ThreadUtils {
                  *
                  * */
                 taskQueue.offer(mr);
+
                 // taskQueue.add(mr);
                 notifyWork();
                 LogUtils.logD("thread add task ");

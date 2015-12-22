@@ -1,6 +1,8 @@
 package com.young.adapter;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -52,11 +54,13 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.myViewHolder> 
         return dataList == null ? 0 : dataList.size();
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onBindViewHolder(myViewHolder holder, final int position) {
 
         holder.cardView.setCardBackgroundColor(dataList.get(position).getBackgroundColor());
 //        holder.cardView.setBackground(ctx.getResources().getDrawable(dataList.get(position).getBackgroundColor()));
+//        holder.cardView.setCardBackgroundColor();
         holder.icon_im.setImageResource(dataList.get(position).getIconId());
 
         holder.describe_txt.setText(dataList.get(position).getImageText());

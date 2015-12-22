@@ -4,6 +4,7 @@
     android:id="@+id/layout_rank_main_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
     app:cardBackgroundColor="@color/lake_blue"
     app:cardCornerRadius="@dimen/radius_mic">
 

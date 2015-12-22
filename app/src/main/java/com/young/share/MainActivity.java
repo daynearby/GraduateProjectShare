@@ -10,10 +10,8 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-
 import com.young.adapter.MainPagerAdapter;
 import com.young.base.CustomActBarActivity;
 import com.young.config.Contants;
@@ -27,7 +25,6 @@ import com.young.utils.LogUtils;
 import com.young.utils.XmlUtils;
 import com.young.views.ArcMenu;
 import com.young.views.Dialog4Tips;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -460,6 +457,6 @@ public class MainActivity extends CustomActBarActivity {
         if (isRegistBordcast) {
             unregisterReceiver(mBroadcastReceiver);
         }
-//        ApplicationConfig.getInstance().getThreadInstance().stop();
+       app.getThreadInstance().stopAllTask();
     }
 }

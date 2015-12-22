@@ -40,15 +40,14 @@
         <item>@color/rank_outdoorsport</item>
     </integer-array>
     <!--
-      <integer-array name="select_rank_backgound_color">
-        <item>@drawable/sele_rank_heat</item>
-        <item>@drawable/sele_rank_photography</item>
-        <item>@drawable/sele_rank_date</item>
-        <item>@drawable/sele_rank_foodacfi</item>
-        <item>@drawable/sele_rank_outdoor_sport</item>
-    </integer-array>
-
-    -->
+ <integer-array name="select_rank_backgound_color">
+     <item>@drawable/sele_rank_heat</item>
+     <item>@drawable/sele_rank_photography</item>
+     <item>@drawable/sele_rank_date</item>
+     <item>@drawable/sele_rank_foodacfi</item>
+     <item>@drawable/sele_rank_outdoor_sport</item>
+ </integer-array>
+-->
 
     <integer-array name="select_rank_icon">
         <item>@drawable/icon_heat_s</item>
@@ -67,8 +66,6 @@
         <item>关于</item>
 
     </string-array>
-
-
 
 
     <string-array name="select_gender_item">
@@ -301,7 +298,6 @@
         <item>和平县</item>
         <item>东源县</item>
     </string-array>
-
 
 
 </resources>
