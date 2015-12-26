@@ -9,9 +9,11 @@ import com.young.adapter.myGridViewAdapter;
 import com.young.annotation.InjectView;
 import com.young.base.ItemActBarActivity;
 import com.young.config.Contants;
+import com.young.model.CommRemoteModel;
 import com.young.model.DiscountMessage_HZ;
 import com.young.model.User;
 import com.young.thread.MyRunnable;
+import com.young.utils.DataFormateUtils;
 import com.young.utils.ImageHandlerUtils;
 import com.young.utils.LocationUtils;
 import com.young.utils.LogUtils;
@@ -52,7 +54,8 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
     private TextView comment_tv;
 
 
-    private DiscountMessage_HZ discountMessage;
+    DiscountMessage_HZ discountMessage ;
+    private CommRemoteModel commModel;
     private boolean isClick = false;//是否点击过
 
     private static final int GET_NEW_COUNT = 11;//刷新下面两个数量
@@ -66,11 +69,18 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
     @Override
     public void initData() {
         super.initData();
-        discountMessage = (DiscountMessage_HZ) getIntent().getExtras().getSerializable(Contants.CLAZZ_DATA_MODEL);
+        commModel = (CommRemoteModel) getIntent().getExtras().getSerializable(Contants.CLAZZ_DATA_MODEL);
+        discountMessage=new DiscountMessage_HZ();
+
         threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
             @Override
             public void running() {
-                getData(discountMessage.getObjectId());
+
+                discountMessage.setObjectId(commModel.getObjectId());
+                discountMessage.setDtVisitedNum(commModel.getVisited());
+                discountMessage.setDtWantedNum(commModel.getWanted());
+
+                getData(commModel.getObjectId());
             }
         }));
 
@@ -102,7 +112,7 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
         disQuery.getObject(mActivity, objectId, new GetListener<DiscountMessage_HZ>() {
             @Override
             public void onSuccess(DiscountMessage_HZ discountMessage_hz) {
-                initBottomBar(discountMessage_hz);
+                initBottomBar(commModel);
             }
 
             @Override
@@ -125,7 +135,7 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
     public void bindData() {
         String url;
         boolean isLocation;
-        User user = discountMessage.getUserId();
+        User user = commModel.getUser();
 
         if (user.getAvatar() == null) {
             url = Contants.DEFAULT_AVATAR;
@@ -140,32 +150,32 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
         nickname_tv.setText(user.getNickName() == null ?
                 getString(R.string.user_name_defual) : user.getNickName());
 
-        tag_tv.setText(discountMessage.getDtTag());
-        content_tv.setText(discountMessage.getDtContent());
-        createdAt.setText(discountMessage.getCreatedAt());
-        initBottomBar(discountMessage);
+        tag_tv.setText(commModel.getTag());
+        content_tv.setText(commModel.getContent());
+        createdAt.setText(commModel.getMcreatedAt());
+        initBottomBar(commModel);
 
         myGridViewAdapter gridViewAdapter = new myGridViewAdapter(mActivity, myGridview, false);
-        gridViewAdapter.setDatas(discountMessage.getDtImgs(), false);
+        gridViewAdapter.setDatas(commModel.getImages(), false);
 
         myGridview.setAdapter(gridViewAdapter);
-        myGridview.setOnItemClickListener(new LocationUtils.itemClick(mActivity, discountMessage.getDtImgs()));
+        myGridview.setOnItemClickListener(new LocationUtils.itemClick(mActivity, commModel.getImages()));
 
     }
 
     /**
      * 下方数据
      *
-     * @param discountMessage
+     * @param comm
      */
-    private void initBottomBar(DiscountMessage_HZ discountMessage) {
-        wanto_tv.setText(discountMessage.getDtWantedNum() == null ?
-                getString(R.string.tx_wantogo) : String.valueOf(discountMessage.getDtWantedNum().size()));
-        hadgo_tv.setText(discountMessage.getDtVisitedNum() == null ?
-                getString(R.string.hadgo) : String.valueOf(discountMessage.getDtVisitedNum().size()));
+    private void initBottomBar(CommRemoteModel comm ) {
+        wanto_tv.setText(comm.getWanted() == null ?
+                getString(R.string.tx_wantogo) : String.valueOf(comm.getWanted().size()));
+        hadgo_tv.setText(comm.getVisited() == null ?
+                getString(R.string.hadgo) : String.valueOf(comm.getVisited().size()));
 
-        LocationUtils.leftDrawableWantoGO(wanto_tv, discountMessage.getDtWantedNum(), mUser.getObjectId());
-        LocationUtils.leftDrawableVisited(hadgo_tv, discountMessage.getDtVisitedNum(), mUser.getObjectId());
+        LocationUtils.leftDrawableWantoGO(wanto_tv, comm.getWanted(), mUser.getObjectId());
+        LocationUtils.leftDrawableVisited(hadgo_tv, comm.getVisited(), mUser.getObjectId());
 
     }
 
@@ -200,7 +210,7 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
                 getUser();
                 if (mUser != null) {
                     LocationUtils.discountWanto(mActivity, mUser, discountMessage,
-                            UserUtils.isHadCurrentUser(discountMessage.getDtWantedNum(), mUser.getObjectId()),
+                            UserUtils.isHadCurrentUser(commModel.getWanted(), mUser.getObjectId()),
                             (TextView) v);
                     isClick = true;
                 } else {
@@ -213,8 +223,9 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
             case R.id.id_hadgo://去过
                 getUser();
                 if (mUser != null) {
+
                     LocationUtils.discountVisit(mActivity, mUser, discountMessage,
-                            UserUtils.isHadCurrentUser(discountMessage.getDtVisitedNum(), mUser.getObjectId()),
+                            UserUtils.isHadCurrentUser(commModel.getVisited(), mUser.getObjectId()),
                             (TextView) v);
                     isClick = true;
 
@@ -235,7 +246,7 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
      */
     private void userInfo(View v) {
 
-        PopupWinUserInfo userWindow = new PopupWinUserInfo(mActivity, discountMessage.getUserId());
+        PopupWinUserInfo userWindow = new PopupWinUserInfo(mActivity, commModel.getUser());
         userWindow.onShow(v);
 
     }

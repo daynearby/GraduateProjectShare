@@ -1,12 +1,16 @@
 package com.young.adapter.CommonAdapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
 import com.young.model.User;
+import com.young.share.R;
 
 import java.util.List;
 
@@ -84,6 +88,18 @@ public abstract class CommAdapter<T> extends BaseAdapter {
         if (cuser == null) {
             cuser = BmobUser.getCurrentUser(ctx, User.class);
         }
+    }
+
+    /**
+     * 跳转到详细信息中
+     * @param clazz
+     * @param bundle
+     */
+    public void startActivity(Class clazz,Bundle bundle){
+        Intent intent  = new Intent(ctx,clazz);
+        intent.putExtras(bundle);
+        ctx.startActivity(intent);
+        ((Activity) ctx).overridePendingTransition(R.animator.activity_slid_right_in, R.animator.activity_slid_left_out);
     }
 
     //adapter获取view实例\绑定数据

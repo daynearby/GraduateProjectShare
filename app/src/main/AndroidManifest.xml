@@ -8,16 +8,16 @@
     <!-- 权限 -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    <uses-permission android:name="android.permission.READ_LOGS"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
@@ -31,7 +31,7 @@
     <!-- BmobPush SDK权限 -->
     <permission
         android:name="cn.bmob.permission.push"
-        android:protectionLevel="normal"/>
+        android:protectionLevel="normal" />
     <uses-permission android:name="cn.bmob.permission.push" />
 
 
@@ -50,8 +50,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTask"
-            >
+            android:launchMode="singleTask">
 
         </activity>
 
@@ -95,7 +94,7 @@
         <!-- 个人中心-->
         <activity
             android:name=".PersonalCenterActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- 选择照片-->
         <activity
@@ -115,16 +114,27 @@
         <activity android:name=".EditPersonalInfoActivity" />
 
         <!-- 信息详细页面 -->
-        <activity android:name=".MessageDetail"/>
+        <activity
+            android:name=".MessageDetail"
+            android:launchMode="singleTask" />
 
         <!--通用记录查看 -->
-        <activity android:name=".RecordCommActivity"/>
+        <activity
+            android:name=".RecordCommActivity"
+            android:launchMode="singleTask" />
 
         <!--消息中心 -->
-        <activity android:name=".MessageCenterActivity"/>
+        <activity android:name=".MessageCenterActivity" />
 
         <!-- 详细优惠信息 -->
-        <activity android:name=".DiscoutDetailActivity"/>
+        <activity
+            android:name=".DiscoutDetailActivity"
+            android:launchMode="singleTask" />
+
+        <!--排行榜的列表-->
+        <activity
+            android:name=".RankListActivity"
+            android:launchMode="singleTask" />
 
         <!-- 百度定位 services -->
         <service
@@ -132,7 +142,7 @@
             android:enabled="true"
             android:process=":remote">
             <intent-filter>
-                <action android:name="com.baidu.location.service_v2.2"/>
+                <action android:name="com.baidu.location.service_v2.2" />
             </intent-filter>
         </service>
 

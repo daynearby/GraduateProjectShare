@@ -44,7 +44,7 @@ public class StringUtils {
             int start = matcherEmotion.start();
             // 利用表情名字获取到对应的图片
             Integer imgRes = EmotionUtils.getImgByName(key);
-            if (imgRes != null) {
+            if (imgRes != 0) {
                 // 压缩表情图片
                 int size = (int) tv.getTextSize();
                 Bitmap bitmap = BitmapFactory.decodeResource(res, imgRes);

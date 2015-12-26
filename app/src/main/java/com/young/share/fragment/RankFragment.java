@@ -1,6 +1,8 @@
 package com.young.share.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -9,9 +11,10 @@ import android.widget.Toast;
 
 import com.young.adapter.RankAdapter;
 import com.young.base.BaseFragment;
+import com.young.config.Contants;
 import com.young.model.RankBean;
 import com.young.share.R;
-import com.young.thread.MyRunnable;
+import com.young.share.RankListActivity;
 import com.young.utils.XmlUtils;
 import com.young.views.SpacesItemDecoration;
 
@@ -20,15 +23,16 @@ import java.util.List;
 
 /**
  * 排行榜
- * <p/>
+ * <p>
  * Created by Nearby Yang on 2015-12-09.
  */
+@SuppressLint("ValidFragment")
 public class RankFragment extends BaseFragment {
     // TODO: 2015-12-17 线程完成工作后立即回收
 
     private RankAdapter rankAdapter;
     private List<RankBean> dataList = new ArrayList<>();
-
+    private List<String> tagList;
 
     private static final String tag = "tank";
     private static final int GET_DATA = 101;
@@ -48,14 +52,8 @@ public class RankFragment extends BaseFragment {
     @Override
     public void initData() {
 
-        threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
-            @Override
-            public void running() {
-
-                getDatas();
-            }
-        }));
-
+        getDatas();
+  
     }
 
     @Override
@@ -73,6 +71,10 @@ public class RankFragment extends BaseFragment {
             public void onClick(View v, int position) {
 
                 Toast.makeText(context, "点击 = " + position, Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(context, RankListActivity.class);
+                intent.putExtra(Contants.INTENT_RANK_TYPE, tagList.get(position));
+                startActivity(intent);
 
             }
         });
@@ -103,7 +105,7 @@ public class RankFragment extends BaseFragment {
     public void getDatas() {
 
         RankBean rankBean;
-        List<String> tagList = XmlUtils.getSelectTag(context);
+         tagList = XmlUtils.getSelectTag(context);
         List<Integer> colorList = XmlUtils.getSelectRankBackgroundColor(context);
         List<Integer> iconList = XmlUtils.getSelectRankIcon(context);
 

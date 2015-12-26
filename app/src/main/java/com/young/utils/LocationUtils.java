@@ -127,7 +127,7 @@ public class LocationUtils {
      * @param shareMessage
      * @param v
      */
-    public static void wantToGo(Context ctx, User cuser, boolean hadWant, ShareMessage_HZ shareMessage, final View v) {
+    public static void wantToGo(Context ctx, User cuser, boolean hadWant, ShareMessage_HZ shareMessage, final TextView v) {
 
         JSONObject jsonObject = new JSONObject();//参数
         try {
@@ -172,9 +172,9 @@ public class LocationUtils {
             BmobApi.saveCollectionShareMessage(ctx, cuser, shareMessage, Contants.MESSAGE_TYPE_SHAREMESSAGE);
         }
 
-        ((TextView) v).setText(String.valueOf(shareMessage.getShWantedNum() == null ?
+         v.setText(String.valueOf(shareMessage.getShWantedNum() == null ?
                 0 : shareMessage.getShWantedNum().size()));
-        LocationUtils.leftDrawableWantoGO(((TextView) v), shareMessage.getShWantedNum(), cuser.getObjectId());
+        LocationUtils.leftDrawableWantoGO((v), shareMessage.getShWantedNum(), cuser.getObjectId());
 
         shareMessage.update(ctx, shareMessage.getObjectId(), new UpdateListener() {
             @Override
@@ -217,7 +217,7 @@ public class LocationUtils {
         JSONObject jsonObject = new JSONObject();//参数
 
         try {
-            jsonObject.put(MESSAGE_TYPE, MESSAGE_TYPE_DISCOUNT);//分享信息
+            jsonObject.put(MESSAGE_TYPE, MESSAGE_TYPE_DISCOUNT);//商家优惠信息
             jsonObject.put(USER_ID, cuser.getObjectId());
             jsonObject.put(COLLECTION_ID, discountMessage.getObjectId());
 

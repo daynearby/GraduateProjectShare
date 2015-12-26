@@ -117,6 +117,7 @@ public class Contants {
     public static final String CLAZZ_DISCOVER_ACTIVITY = "share_message";//类名
     public static final String CLAZZ_PERSONAL_ACTIVITY = "personal_center";//类名
     public static final String CLAZZ_MESSAGE_CENTER_ACTIVITY = "message_center";//类名
+    public static final String CLAZZ_RANK_LIST_ACTIVITY = "rank_list";//类名
 
 
     public static final String CLAZZ_DATA_SHARE_MESSAGE = "data_share_message";//数据
@@ -125,8 +126,11 @@ public class Contants {
     public static final String EXPEND_OPTION_ONE = "expend_one";//传输数据
     public static final String CLAZZ_DATA_MESSAGE = "data_message_center";//传输数据
 
+    public static final String INTENT_RANK_TYPE = "intent_rank_type";//intent传输数据标志
+
     //************************** 数据model 类型******************************
     public static final int DATA_MODEL_SHARE_MESSAGES = 1010;//分享信息数据
+    public static final int DATA_MODEL_DISCOUNT_MESSAGES = 1011;//商家数据
 
     public static final int DATA_MODEL_HEAD = 1100;//第一条
     public static final int DATA_MODEL_BODY = 1101;//评论与回复

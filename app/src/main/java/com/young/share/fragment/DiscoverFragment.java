@@ -1,10 +1,10 @@
 package com.young.share.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -17,7 +17,6 @@ import com.young.base.BaseFragment;
 import com.young.config.Contants;
 import com.young.model.ShareMessageList;
 import com.young.model.ShareMessage_HZ;
-import com.young.model.User;
 import com.young.model.dbmodel.ShareMessage;
 import com.young.myInterface.GotoAsyncFunction;
 import com.young.myInterface.ListViewRefreshListener;
@@ -27,6 +26,7 @@ import com.young.share.R;
 import com.young.thread.MyRunnable;
 import com.young.utils.CommonUtils;
 import com.young.utils.DBUtils;
+import com.young.utils.DataFormateUtils;
 import com.young.utils.LocationUtils;
 import com.young.utils.LogUtils;
 
@@ -40,6 +40,7 @@ import java.util.List;
  * 发现
  * Created by Nearby Yang on 2015-12-09.
  */
+@SuppressLint("ValidFragment")
 public class DiscoverFragment extends BaseFragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -48,6 +49,7 @@ public class DiscoverFragment extends BaseFragment {
 
     private static final int FIRST_GETDATA = 0x1001;
     private static final int GET_LOACTIOPN_DATA = 0x1002;
+    private static final int HANDLER_GET_DATA = 0x1003;
 
     private int startIndex = 0;
     private int endIndex = 20;
@@ -176,10 +178,10 @@ public class DiscoverFragment extends BaseFragment {
             case FIRST_GETDATA:
 
                 break;
-
-            default:
-                LogUtils.logD("收到信息 = " + msg);
+            case HANDLER_GET_DATA:
+                refreshUI();
                 break;
+
         }
     }
 
@@ -213,8 +215,7 @@ public class DiscoverFragment extends BaseFragment {
                             dataList.clear();
                             dataList = shareMessageList.getShareMessageHzList();
                         }
-
-                        refreshUI();
+                        mhandler.sendEmptyMessage(HANDLER_GET_DATA);
 
                     }
 
@@ -237,45 +238,18 @@ public class DiscoverFragment extends BaseFragment {
             public void running() {
 
                 for (com.young.model.ShareMessage_HZ share : shareList) {
+
                     //分享信息
-                    ShareMessage shareMessageHZ = new ShareMessage();
-                    shareMessageHZ.setObjectId(share.getObjectId());
-                    shareMessageHZ.setShImgs(String.valueOf(share.getShImgs()));
-                    shareMessageHZ.setShContent(share.getShContent());
-                    shareMessageHZ.setCreatedAt(share.getCreatedAt());
-                    shareMessageHZ.setShLocation(share.getShLocation());
-                    shareMessageHZ.setShVisitedNum(String.valueOf(share.getShVisitedNum()));
-                    shareMessageHZ.setShCommNum(share.getShCommNum());
-                    shareMessageHZ.setShWantedNum(String.valueOf(share.getShWantedNum()));
-                    shareMessageHZ.setShTag(share.getShTag());
-                    shareMessageHZ.setUpdatedAt(share.getUpdatedAt());
+                    ShareMessage shareMessageHZ = DataFormateUtils.formateShareMessage(share);
+
                     //用户信息
-                    User user = share.getUserId();
-                    com.young.model.dbmodel.User u = new com.young.model.dbmodel.User();
-
-                    u.setCreatedAt(user.getCreatedAt());
-                    u.setUpdatedAt(user.getUpdatedAt());
-                    u.setAddress(user.getAddress());
-                    u.setGender(user.isGender());
-                    u.setAge(user.getAge());
-                    u.setQq(user.getQq());
-                    u.setAvatar(user.getAvatar());
-                    u.setSignture(user.getSignture());
-                    u.setEmail(user.getEmail());
-                    u.setMobilePhoneNumber(user.getMobilePhoneNumber());
-                    u.setNickName(user.getNickName());
-                    u.setMobilePhoneNumberVerified(user.getMobilePhoneNumberVerified());
-                    u.setEmailVerified(user.getEmailVerified());
-                    u.setObjectId(user.getObjectId());
-                    u.setAccessToken(user.getSessionToken());
-                    u.setUsername(user.getUsername());
-
+                    com.young.model.dbmodel.User u = DataFormateUtils.formateUser(share.getUserId());
+//保存
                     u.save();
-//                    boolean usave =
+
                     shareMessageHZ.setUserId(u);
+
                     DBUtils.saveShMessages(shareMessageHZ);
-//                    boolean shareM =
-//                    LogUtils.logD("save result = " + usave + " shareM = " + shareM);
 
 
                 }

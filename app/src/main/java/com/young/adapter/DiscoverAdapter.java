@@ -23,6 +23,7 @@ import com.young.utils.StringUtils;
 import com.young.utils.UserUtils;
 import com.young.views.Dialog4Tips;
 import com.young.views.PopupWinUserInfo;
+import com.young.views.WrapHightGridview;
 
 import java.util.List;
 
@@ -36,10 +37,7 @@ import java.util.List;
  */
 public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 
-    private GridView myGridview;
-    //    private ShareMessage shareMessage;
-    private PopupWinUserInfo userInfo;
-//    private int strId;
+    //    private int strId;
 
     /**
      * 实例化对象
@@ -60,7 +58,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         TextView nickname_tv = holder.getView(R.id.id_userName);//昵称
         TextView tag_tv = holder.getView(R.id.id_tx_tab);//标签
         TextView content_tv = holder.getView(R.id.id_tx_share_content);//分享的文本内容
-        myGridview = holder.getView(R.id.id_gv_shareimg);//分享的照片
+        WrapHightGridview myGridview = holder.getView(R.id.id_gv_shareimg);
         TextView wanto_tv = holder.getView(R.id.id_tx_wantogo);//想去数量
         TextView hadgo_tv = holder.getView(R.id.id_hadgo);//去过数量
         TextView comment_tv = holder.getView(R.id.id_tx_comment);//评论数量
@@ -148,7 +146,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
             switch (v.getId()) {
                 case R.id.id_im_userH://用户资料
                     User u = (User) o;
-                    userInfo = new PopupWinUserInfo(ctx, u);
+                    PopupWinUserInfo userInfo = new PopupWinUserInfo(ctx, u);
                     userInfo.onShow(v);
 //                    LogUtils.logD("用户资料 = " + u.toString());
                     break;
@@ -163,7 +161,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                         shareMessage = (ShareMessage_HZ) o;
                         List<String> shWantedNum = shareMessage.getShWantedNum();
 
-                        LocationUtils.wantToGo(ctx, cuser, UserUtils.isHadCurrentUser(shWantedNum, cuser.getObjectId()), shareMessage, v);
+                        LocationUtils.wantToGo(ctx, cuser, UserUtils.isHadCurrentUser(shWantedNum, cuser.getObjectId()), shareMessage, (TextView) v);
                     } else {
                         v.setClickable(true);
                         Dialog4Tips.loginFunction((Activity) ctx);
@@ -206,19 +204,19 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         }
     }
 
-
+    /**
+     * 编辑发送评论
+     * @param shareMessage
+     */
     private void comment(ShareMessage_HZ shareMessage) {
-        Intent intent = new Intent();
         Bundle bundle = new Bundle();
 
         bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_DISCOVER_ACTIVITY);
         bundle.putInt(Contants.EXPEND_OPTION_ONE, Contants.EXPEND_START_INPUT);
         bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, shareMessage);
 
-        intent.putExtras(bundle);
-        intent.setClass(ctx, MessageDetail.class);
-        ctx.startActivity(intent);
-        ((Activity) ctx).overridePendingTransition(R.animator.activity_slid_right_in, R.animator.activity_slid_left_out);
+        startActivity(MessageDetail.class,bundle);
+
     }
 
 }

@@ -3,6 +3,7 @@ package com.young.utils;
 import java.util.List;
 
 /**
+ * 用户信息的操作类
  * Created by Nearby Yang on 2015-12-03.
  */
 public class UserUtils {

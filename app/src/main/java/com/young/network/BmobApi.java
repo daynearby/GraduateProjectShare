@@ -46,6 +46,7 @@ public class BmobApi {
     public static final String GET_RECOLLECTION_RECORD = "GetRecollectionRecord";//获取全部收藏记录
     public static final String GET_NEW_MESSAGES = "GetNewMessages";//获取全部消息记录
     public static final String GET_RECENTLY_DICOUNT = "GetRecentlyDicount";//获取全部商家优惠
+    public static final String GET_RANK_DATA = "GetRankData";//获取排行榜数据
 
 
     private static Gson gson = new Gson();
@@ -80,7 +81,7 @@ public class BmobApi {
                     public void onFailure(int code, String msg) {
 
                         gotoListener.onFailure(code, msg);
-                        mToast(ctx,R.string.network_erro);
+                        mToast(ctx, R.string.network_erro);
 
                         LogUtils.logE("访问云端方法失败:" + msg);
                     }
@@ -263,7 +264,7 @@ public class BmobApi {
                     @Override
                     public void onSuccess() {
                         //保存信息成功。开始发送信息
-                        sendMessage(context, receiverId, content,sendMessageCall);
+                        sendMessage(context, receiverId, content, sendMessageCall);
                     }
 
                     @Override
@@ -343,8 +344,6 @@ public class BmobApi {
     public interface SendMessageCallback {
         void onSuccessReflesh();
     }
-
-
 
 
 }

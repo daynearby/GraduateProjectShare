@@ -1,5 +1,6 @@
 package com.young.base;
 
+import android.annotation.TargetApi;
 import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.view.View;
@@ -20,8 +21,6 @@ import com.young.share.R;
  */
 public abstract class ItemActBarActivity extends BaseAppCompatActivity {
 
-    private ActionBar mActionbar;
-
     private TextView title_tv;
     private ImageView backto_im;
     private TextView barRightItem_tv;
@@ -39,9 +38,11 @@ public abstract class ItemActBarActivity extends BaseAppCompatActivity {
      */
     public void initActionBar() {
 
-        mActionbar = getSupportActionBar();
-        mActionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        mActionbar.setCustomView(R.layout.actionbar_bar_item);
+        ActionBar mActionbar = getSupportActionBar();
+        if (mActionbar != null) {
+            mActionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            mActionbar.setCustomView(R.layout.actionbar_bar_item);
+        }
 
         setTranslucentStatus();
 
@@ -56,6 +57,7 @@ public abstract class ItemActBarActivity extends BaseAppCompatActivity {
     /**
      * 沉浸式
      */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void setTranslucentStatus() {
         boolean on = false;
 

@@ -106,7 +106,9 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
                     case Contants.CLAZZ_DISCOVER_ACTIVITY://shareMessage详细信息
 
 
-                        ShareMessage_HZ shareMessage = (ShareMessage_HZ) bundle.getSerializable(Contants.CLAZZ_DATA_MODEL);
+                        ShareMessage_HZ shareMessage = (ShareMessage_HZ) bundle
+                                .getSerializable(Contants.CLAZZ_DATA_MODEL);
+
                         formateDataDiscover(shareMessage);
                         //获取最新的评论
                         if (shareMessage != null) {
@@ -121,7 +123,9 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
                     case Contants.CLAZZ_PERSONAL_ACTIVITY://分析消息记录
 
 
-                        ShareMessage_HZ shareMessageRec = (ShareMessage_HZ) bundle.getSerializable(Contants.BUNDLE_TAG);
+                        ShareMessage_HZ shareMessageRec = (ShareMessage_HZ) bundle
+                                .getSerializable(Contants.BUNDLE_TAG);
+
                         formateDataDiscover(shareMessageRec);
                         //获取最新的评论
                         if (shareMessageRec != null) {
@@ -133,7 +137,8 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
                         break;
 
                     case Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY://消息列表
-                        ShareMessage_HZ shareMessageMessage = (ShareMessage_HZ) bundle.getSerializable(Contants.CLAZZ_DATA_MESSAGE);
+                        ShareMessage_HZ shareMessageMessage = (ShareMessage_HZ) bundle
+                                .getSerializable(Contants.CLAZZ_DATA_MESSAGE);
                         formateDataDiscover(shareMessageMessage);
                         //获取最新的评论
                         if (shareMessageMessage != null) {
@@ -141,6 +146,22 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
                         } else {
                             LocationUtils.processDialog(mActivity);
                         }
+                        break;
+
+                    case Contants.CLAZZ_RANK_LIST_ACTIVITY://排行榜
+
+                        CommRemoteModel commRemoteModel = (CommRemoteModel) bundle
+                                .getSerializable(Contants.CLAZZ_DATA_MODEL);
+                        formateDataDiscover(commRemoteModel);
+
+                        if (commRemoteModel != null) {
+                                getComment(commRemoteModel.getObjectId());
+
+                        } else {
+                            LocationUtils.processDialog(mActivity);
+                        }
+
+
                         break;
 
                 }
@@ -235,11 +256,18 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
                 this.finish();
                 break;
             case Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY://消息列表
-
-                mBackStartActivity(superTagClazz);
-                this.finish();
+                backAFinsish();
+                break;
+            case Contants.CLAZZ_RANK_LIST_ACTIVITY:
+                backAFinsish();
                 break;
         }
+    }
+
+    private void backAFinsish() {
+
+        mBackStartActivity(superTagClazz);
+        this.finish();
     }
 
     /**
@@ -273,9 +301,12 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
      * @param serializableExtra
      */
     private void formateDataDiscover(Serializable serializableExtra) {
-        commModel = DataFormateUtils.formateDataDiscover(serializableExtra);
 
-        dataList.add(0, commModel);
+        commModel = !superTagClazz.equals(Contants.CLAZZ_RANK_LIST_ACTIVITY) ?
+                DataFormateUtils.formateDataDiscover(serializableExtra, Contants.DATA_MODEL_HEAD) :
+                (CommRemoteModel) serializableExtra;
+
+        dataList.add(commModel);
 
         mHandler.sendEmptyMessage(GET_MESSAGE);
     }
@@ -309,7 +340,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
                     for (Comment_HZ comm : commentList.getCommentList()) {
                         //格式化数据
-                        dataList.add(formateComments(comm));
+                        dataList.add(DataFormateUtils.formateComments(comm));
                     }
 
                 }
@@ -330,28 +361,6 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
                 LogUtils.logD("get comment add params failure.  code = " + code + " message =  " + msg);
             }
         });
-    }
-
-    /**
-     * 格式化数据
-     * <p/>
-     * 将Comment_HZ中的数据转换成CommRemoteModel
-     *
-     * @param comm
-     */
-    private CommRemoteModel formateComments(Comment_HZ comm) {
-
-        CommRemoteModel commRemoteModel = new CommRemoteModel();
-
-        commRemoteModel.setContent(comm.getMessageId().getCommContent());
-        commRemoteModel.setObjectId(comm.getMessageId().getObjectId());
-        commRemoteModel.setMcreatedAt(comm.getMessageId().getCreatedAt());
-        commRemoteModel.setSender(comm.getSenderId());
-        commRemoteModel.setReceiver(comm.getReveicerId());
-
-        commRemoteModel.setType(Contants.DATA_MODEL_BODY);//评论内容
-
-        return commRemoteModel;
     }
 
 

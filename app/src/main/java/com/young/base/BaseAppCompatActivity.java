@@ -22,6 +22,7 @@ import com.young.share.MainActivity;
 import com.young.share.MessageCenterActivity;
 import com.young.share.PersonalCenterActivity;
 import com.young.share.R;
+import com.young.share.RankListActivity;
 import com.young.share.RecordCommActivity;
 import com.young.utils.ThreadUtils;
 
@@ -134,6 +135,11 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
                 break;
             case Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY://消息中心
                 clazz = MessageCenterActivity.class;
+
+                break;
+
+            case  Contants.CLAZZ_RANK_LIST_ACTIVITY:
+                clazz =RankListActivity.class;
 
                 break;
         }

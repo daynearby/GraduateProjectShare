@@ -24,10 +24,7 @@ public class CommonUtils {
      */
     public static boolean isWifi(Context context) {
         NetworkInfo info = getNetworkInfo(context);
-        if (info != null) {
-            return info.getType() == ConnectivityManager.TYPE_WIFI;
-        }
-        return false;
+        return info != null && info.getType() == ConnectivityManager.TYPE_WIFI;
     }
 
     /**
@@ -35,10 +32,7 @@ public class CommonUtils {
      */
     public static boolean isMobile(Context context) {
         NetworkInfo info = getNetworkInfo(context);
-        if (info != null) {
-            return info.getType() == ConnectivityManager.TYPE_MOBILE;
-        }
-        return false;
+        return info != null && info.getType() == ConnectivityManager.TYPE_MOBILE;
     }
 
     private static NetworkInfo getNetworkInfo(Context context) {
@@ -52,11 +46,8 @@ public class CommonUtils {
      * 检查SD卡是否存在
      */
     public static boolean checkSdCard() {
-        if (android.os.Environment.getExternalStorageState().equals(
-                android.os.Environment.MEDIA_MOUNTED))
-            return true;
-        else
-            return false;
+        return android.os.Environment.getExternalStorageState().equals(
+                android.os.Environment.MEDIA_MOUNTED);
     }
 
     //    private void beginCrop(Uri source) {

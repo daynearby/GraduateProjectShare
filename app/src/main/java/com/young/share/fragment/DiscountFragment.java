@@ -1,5 +1,6 @@
 package com.young.share.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
@@ -23,6 +24,7 @@ import com.young.share.DiscoutDetailActivity;
 import com.young.share.R;
 import com.young.thread.MyRunnable;
 import com.young.utils.CommonUtils;
+import com.young.utils.DataFormateUtils;
 import com.young.utils.LocationUtils;
 import com.young.utils.LogUtils;
 
@@ -37,6 +39,7 @@ import java.util.List;
  *
  * Created by Nearby Yang on 2015-12-09.
  */
+@SuppressLint("ValidFragment")
 public class DiscountFragment extends BaseFragment {
 
 
@@ -227,7 +230,7 @@ public class DiscountFragment extends BaseFragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Bundle bundle = new Bundle();
 
-            bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, dataList.get(position));
+            bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, DataFormateUtils.formateDataDiscount(dataList.get(position)));
             LocationUtils.startActivity(context, bundle, DiscoutDetailActivity.class);
         }
     }

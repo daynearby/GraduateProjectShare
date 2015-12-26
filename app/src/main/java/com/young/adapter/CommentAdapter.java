@@ -220,9 +220,11 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
                 TextUtils.isEmpty(user.getAvatar()) ? Contants.DEFAULT_AVATAR : user.getAvatar(), avatar);
 
         tag_tv.setText(commRemoteModel.getTag());
-        wanto_tv.setText(commRemoteModel.getWanted() == null ? "0" : String.valueOf(commRemoteModel.getWanted().size()));
+        wanto_tv.setText(commRemoteModel.getWanted() == null ?
+                ctx.getString(R.string.tx_wantogo) : String.valueOf(commRemoteModel.getWanted().size()));
 
-        hadgo_tv.setText(commRemoteModel.getVisited() == null ? "0" : String.valueOf(commRemoteModel.getVisited().size()));
+        hadgo_tv.setText(commRemoteModel.getVisited() == null ?
+                ctx.getString(R.string.hadgo) : String.valueOf(commRemoteModel.getVisited().size()));
         //判断当前用户是否点赞
         if (cuser != null) {
             LocationUtils.leftDrawableWantoGO(wanto_tv, commRemoteModel.getWanted(), cuser.getObjectId());//设置图标
