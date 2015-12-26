@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.twotoasters.jazzylistview.JazzyListView;
+import com.twotoasters.jazzylistview.effects.SlideInEffect;
 import com.young.adapter.RankListAdapter;
 import com.young.base.ItemActBarActivity;
 import com.young.config.Contants;
@@ -42,6 +43,7 @@ public class RankListActivity extends ItemActBarActivity {
     private JazzyListView listview;
     private RankListAdapter rankAdapter;
 
+    private String tag;
     private int key;
     private int skip = 0;
     private int startIndex = 0;
@@ -73,11 +75,11 @@ public class RankListActivity extends ItemActBarActivity {
 
             }
         });
-
         //标志
-        String tag = getIntent().getStringExtra(Contants.INTENT_RANK_TYPE);
+        tag = getIntent().getStringExtra(Contants.INTENT_RANK_TYPE);
         key = getString(R.string.tag_manywanttogo).equals(tag) ? ComparatorImpl.COMPREHENSIVE : ComparatorImpl.COMPREHENSIVE_OTHERS;
 
+        setTvTitle(tag);
         remoteList = new ArrayList<>();
 
         threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
@@ -95,14 +97,30 @@ public class RankListActivity extends ItemActBarActivity {
      * 解析并且转换成remoteModel
      */
     private void getDataFromRemote() {
+
         JSONObject parameters = new JSONObject();
-        try {
-            parameters.put(Contants.SKIP, skip);
-        } catch (JSONException e) {
-            LogUtils.logD(e.toString());
+        String funcationName;
+
+        if (key == ComparatorImpl.COMPREHENSIVE) {
+            funcationName = BmobApi.GET_HEAT_MESSAGES;
+        } else {
+            funcationName = BmobApi.GET_RANK_DATA;
+            try {
+                parameters.put(Contants.PARAM_TAG, tag);
+            } catch (JSONException e) {
+                LogUtils.logD("添加参数失败 " + e.toString());
+            }
         }
 
-        BmobApi.AsyncFunction(mActivity, parameters, BmobApi.GET_RANK_DATA, RankList.class, new GotoAsyncFunction() {
+        try {
+            parameters.put(Contants.PARAM_SKIP, skip);
+
+        } catch (JSONException e) {
+            LogUtils.logD("添加参数失败 " + e.toString());
+        }
+
+
+        BmobApi.AsyncFunction(mActivity, parameters, funcationName, RankList.class, new GotoAsyncFunction() {
             @Override
             public void onSuccess(Object object) {
                 RankList rankLists = (RankList) object;
@@ -136,6 +154,11 @@ public class RankListActivity extends ItemActBarActivity {
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.sw_ranklist_refresh);
         listview = (JazzyListView) findViewById(R.id.list_ranklist);
+        rankAdapter = new RankListAdapter(mActivity);
+
+        listview.setTransitionEffect(new SlideInEffect());
+        listview.setAdapter(rankAdapter);
+
         new ListViewRefreshListener(listview, swipeRefreshLayout, new ListViewRefreshListener.RefreshListener() {
             @Override
             public void pushToRefresh() {//上拉
@@ -200,18 +223,17 @@ public class RankListActivity extends ItemActBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 CommRemoteModel comm = remoteList.get(position);
                 Bundle bundle = new Bundle();
+                bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, comm);
 
                 if (comm.getType() == Contants.DATA_MODEL_SHARE_MESSAGES) {//分享信息
 
                     bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_RANK_LIST_ACTIVITY);
-                    bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, comm);
 
                     mStartActivity(MessageDetail.class, bundle);
 
                 } else {//商家优惠
 
 
-                    bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, remoteList.get(position));
                     mStartActivity(DiscoutDetailActivity.class, bundle);
                 }
             }
@@ -236,16 +258,18 @@ public class RankListActivity extends ItemActBarActivity {
      * 刷新列表，最新数据
      */
     private void refreshUI() {
+        if (remoteList.size() > 0) {
+            if (isGetMore) {
+                endIndex = remoteList.size() < (PUSH_TIMES + 1) * Contants.PAGE_SIZE ?
+                        remoteList.size() : (PUSH_TIMES + 1) * Contants.PAGE_SIZE;
+            } else {
+                endIndex = remoteList.size() < Contants.PAGE_SIZE ? remoteList.size() : endIndex;
+            }
 
-        if (isGetMore) {
-            endIndex = remoteList.size() < (PUSH_TIMES + 1) * Contants.PAGE_SIZE ?
-                    remoteList.size() : (PUSH_TIMES + 1) * Contants.PAGE_SIZE;
+            rankAdapter.setData(remoteList.subList(startIndex, endIndex));
         } else {
-            endIndex = remoteList.size() < Contants.PAGE_SIZE ? remoteList.size() : endIndex;
+
         }
-
-        rankAdapter.setData(remoteList.subList(startIndex, endIndex));
-
         swipeRefreshLayout.setRefreshing(false);
     }
 

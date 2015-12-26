@@ -115,6 +115,14 @@ public abstract class ItemActBarActivity extends BaseAppCompatActivity {
     public void setTvTitle(int resId) {
         title_tv.setText(resId);
     }
+    /**
+     * 设置标题
+     *
+     * @param resStr
+     */
+    public void setTvTitle(String resStr) {
+        title_tv.setText(resStr);
+    }
 
     /**
      * 右边按钮显示文字

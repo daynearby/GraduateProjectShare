@@ -153,6 +153,7 @@ public class Contants {
     //****************参数名********************
     public static final String PARAM_USERID = "userID";//参数名
     public static final String PARAM_SKIP = "skip";//参数名
+    public static final String PARAM_TAG = "tag";//参数名
 
 
 }

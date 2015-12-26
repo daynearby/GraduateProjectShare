@@ -47,6 +47,7 @@ public class BmobApi {
     public static final String GET_NEW_MESSAGES = "GetNewMessages";//获取全部消息记录
     public static final String GET_RECENTLY_DICOUNT = "GetRecentlyDicount";//获取全部商家优惠
     public static final String GET_RANK_DATA = "GetRankData";//获取排行榜数据
+    public static final String GET_HEAT_MESSAGES = "GetHeatMessages";//获取排行榜热门数据
 
 
     private static Gson gson = new Gson();
@@ -72,7 +73,7 @@ public class BmobApi {
                     @Override
                     public void onSuccess(Object object) {
 
-                        LogUtils.logE("返回JSON数据:" + object.toString());
+                        LogUtils.logI("返回JSON数据:" + object.toString());
                         gotoListener.onSuccess(gson.fromJson(object.toString(), clazz));
 
                     }
@@ -83,7 +84,7 @@ public class BmobApi {
                         gotoListener.onFailure(code, msg);
                         mToast(ctx, R.string.network_erro);
 
-                        LogUtils.logE("访问云端方法失败:" + msg);
+                        LogUtils.logI("访问云端方法失败:" + msg);
                     }
                 });
     }

@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 查看详细信息
+ * 查看分享信息的详细信息
  * Created by Nearby Yang on 2015-11-26.
  */
 public class MessageDetail extends ItemActBarActivity implements View.OnClickListener {
@@ -59,7 +59,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
 
     private String superTagClazz;
-    private CommRemoteModel commModel = new CommRemoteModel();
+    private CommRemoteModel commModel = new CommRemoteModel();//存放分享信息的具体内容
     private List<CommRemoteModel> dataList = new ArrayList<>();//数据
     private CommentAdapter commAdapter;
     private InputMethodManager imm;
@@ -150,17 +150,22 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
                     case Contants.CLAZZ_RANK_LIST_ACTIVITY://排行榜
 
+                        LogUtils.logD("thread start");
                         CommRemoteModel commRemoteModel = (CommRemoteModel) bundle
                                 .getSerializable(Contants.CLAZZ_DATA_MODEL);
-                        formateDataDiscover(commRemoteModel);
+
 
                         if (commRemoteModel != null) {
-                                getComment(commRemoteModel.getObjectId());
+                            commRemoteModel.setType(Contants.DATA_MODEL_HEAD);
+                            formateDataDiscover(commRemoteModel);
+                            getComment(commRemoteModel.getObjectId());
 
                         } else {
-                            LocationUtils.processDialog(mActivity);
-                        }
 
+                            LocationUtils.processDialog(mActivity);
+
+                        }
+                        LogUtils.logD("thread end");
 
                         break;
 
@@ -176,13 +181,13 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
     @Override
     public void findviewbyid() {
-
+        LogUtils.logD("findview start");
         commAdapter = new CommentAdapter(mActivity);
 //回复评论
         commAdapter.setToReply(new CommentAdapter.ToReply() {
             @Override
             public void reply(String uId) {
-                LogUtils.logD("callback  messagedetail");
+//                LogUtils.logD("callback  messagedetail");
                 receiverId = uId;
                 startPrepare();
             }
@@ -197,7 +202,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
         sendComment_edt.setOnClickListener(this);
         tosend_btn.setOnClickListener(this);
         emotion_im.setOnClickListener(this);
-
+        LogUtils.logD("findview end");
     }
 
     @Override
@@ -221,13 +226,18 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
     @Override
     public void handerMessage(Message msg) {
+
         if (commentClick == Contants.EXPEND_START_INPUT) {
             startPrepare();
         }
-        switch (msg.what) {
-            case GET_MESSAGE:
 
+        switch (msg.what) {
+
+            case GET_MESSAGE:
+                LogUtils.logD("handler ");
                 commAdapter.setData(dataList);
+
+                break;
 
         }
     }
@@ -249,16 +259,18 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
                 if (isClick || commAdapter.isClick()) {//点击过则刷新界面
                     LocationUtils.sendBordCast(mActivity, Contants.REFRESH_TYPE_DISCOVER);
                 }
-                mBackStartActivity(superTagClazz);
-                this.finish();
+                backAFinsish();
                 break;
+
             case Contants.CLAZZ_PERSONAL_ACTIVITY://分析消息记录
                 this.finish();
                 break;
+
             case Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY://消息列表
                 backAFinsish();
                 break;
-            case Contants.CLAZZ_RANK_LIST_ACTIVITY:
+
+            case Contants.CLAZZ_RANK_LIST_ACTIVITY://排行榜
                 backAFinsish();
                 break;
         }
@@ -443,7 +455,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
      * 关闭进度条提示
      */
     private void processDialogDismisson() {
-        LogUtils.logD(" isshow" + SVProgressHUD.isShowing(mActivity));
+//        LogUtils.logD(" isshow" + SVProgressHUD.isShowing(mActivity));
         if (SVProgressHUD.isShowing(mActivity)) {
 
             //提示

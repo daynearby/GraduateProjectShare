@@ -42,7 +42,7 @@ public class ComparatorImpl implements Comparator<Object> {
                         + (data2.getVisited() == null ? 0 : data2.getVisited().size()) * 0.4
                         + (data2.getComment() * 0.1) + 1);
 
-                result = data1Compre - data2Compre;
+                result = data2Compre - data1Compre;
                 break;
 
             case COMPREHENSIVE_OTHERS://排序.想去占0.3，去过占0.6，评论占0.1
@@ -55,7 +55,7 @@ public class ComparatorImpl implements Comparator<Object> {
                         + (data4.getVisited() == null ? 0 : data4.getVisited().size()) * 0.6
                         + (data4.getComment() * 0.1) + 1);
 
-                result = data3Compre - data4Compre;
+                result = data4Compre - data3Compre;
 
                 break;
         }

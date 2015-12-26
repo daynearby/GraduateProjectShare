@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Nearby Yang on 2015-12-26.
  */
 public class RankList {
-
+//sharemessages,discountMessages
     private List<ShareMessage_HZ> sharemessages;
     private List<DiscountMessage_HZ> discountMessages;
 
