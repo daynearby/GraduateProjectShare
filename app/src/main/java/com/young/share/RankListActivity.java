@@ -258,18 +258,17 @@ public class RankListActivity extends ItemActBarActivity {
      * 刷新列表，最新数据
      */
     private void refreshUI() {
-        if (remoteList.size() > 0) {
-            if (isGetMore) {
-                endIndex = remoteList.size() < (PUSH_TIMES + 1) * Contants.PAGE_SIZE ?
-                        remoteList.size() : (PUSH_TIMES + 1) * Contants.PAGE_SIZE;
-            } else {
-                endIndex = remoteList.size() < Contants.PAGE_SIZE ? remoteList.size() : endIndex;
-            }
-
-            rankAdapter.setData(remoteList.subList(startIndex, endIndex));
+        if (isGetMore) {
+            endIndex = remoteList.size() < (PUSH_TIMES + 1) * Contants.PAGE_SIZE ?
+                    remoteList.size() : (PUSH_TIMES + 1) * Contants.PAGE_SIZE;
         } else {
 
+            endIndex = remoteList.size() < Contants.PAGE_SIZE ? remoteList.size() : endIndex;
+
         }
+
+        rankAdapter.setData(remoteList.subList(startIndex, endIndex));
+
         swipeRefreshLayout.setRefreshing(false);
     }
 

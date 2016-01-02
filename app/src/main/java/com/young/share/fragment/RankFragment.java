@@ -70,7 +70,7 @@ public class RankFragment extends BaseFragment {
             @Override
             public void onClick(View v, int position) {
 
-                Toast.makeText(context, "点击 = " + position, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "点击 = " + position, Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(context, RankListActivity.class);
                 intent.putExtra(Contants.INTENT_RANK_TYPE, tagList.get(position));

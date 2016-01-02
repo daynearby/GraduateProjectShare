@@ -2,6 +2,7 @@ package com.young.config;
 
 import android.content.Context;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
@@ -42,10 +43,11 @@ public class ApplicationConfig extends LitePalApplication {
      * 应用的基本配置
      */
     private void initConfig() {
-
         LitePalApplication.initialize(this);
         //初始化imageloader
         initImageLoader(getApplicationContext());
+        //百度基础地图定位
+        SDKInitializer.initialize(getApplicationContext());
 
 
     }
