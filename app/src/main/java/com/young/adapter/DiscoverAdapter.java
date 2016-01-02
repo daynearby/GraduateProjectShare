@@ -2,11 +2,9 @@ package com.young.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +15,7 @@ import com.young.model.ShareMessage_HZ;
 import com.young.model.User;
 import com.young.share.MessageDetail;
 import com.young.share.R;
+import com.young.share.RankListActivity;
 import com.young.utils.ImageHandlerUtils;
 import com.young.utils.LocationUtils;
 import com.young.utils.StringUtils;
@@ -29,10 +28,10 @@ import java.util.List;
 
 /**
  * 实例化
- * <p/>
+ * <p>
  * 父类中setdata并且刷新
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * Created by yangfujing on 15/10/10.
  */
 public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
@@ -198,6 +197,10 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                 case R.id.id_tx_tab://标签
 
 
+                    Bundle bundle = new Bundle();
+                    bundle.putCharSequence(Contants.INTENT_RANK_TYPE, o.toString());
+                    startActivity(RankListActivity.class, bundle);
+
                     break;
 
             }
@@ -206,6 +209,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 
     /**
      * 编辑发送评论
+     *
      * @param shareMessage
      */
     private void comment(ShareMessage_HZ shareMessage) {
@@ -215,7 +219,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         bundle.putInt(Contants.EXPEND_OPTION_ONE, Contants.EXPEND_START_INPUT);
         bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, shareMessage);
 
-        startActivity(MessageDetail.class,bundle);
+        startActivity(MessageDetail.class, bundle);
 
     }
 

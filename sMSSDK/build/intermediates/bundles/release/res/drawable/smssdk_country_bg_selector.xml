@@ -4,4 +4,3 @@
   <!-- 默认时的背景图片-->    
   <item android:drawable="@color/smssdk_white" /> 
 </selector>
-<!-- From: file:/D:/AS%20workSpace/share/sMSSDK/src/main/res/drawable/smssdk_country_bg_selector.xml -->

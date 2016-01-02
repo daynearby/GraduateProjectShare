@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/D:/AS%20workSpace/share/sMSSDK/src/main/res/values-en/smssdk_arrays.xml -->
-    <eat-comment/>
     <string-array name="smssdk_country_group_a">
 		<item>Afghanistan,93,46,41220|41230|41240|41250|41201</item>
 		<item>Albania,355,110,27601|27602|27603|27604</item>
@@ -272,11 +270,7 @@
 		<item>Zambia,260,92,64502|64501|64503</item>
 		<item>Zimbabwe,263,95,64801|64803|64804</item>
     </string-array>
-    <!-- From: file:/D:/AS%20workSpace/share/sMSSDK/src/main/res/values-en/strings.xml -->
-    <eat-comment/>
     <string name="no_contacts_permission">no permission to read contacts</string>
-    <!-- From: file:/D:/AS%20workSpace/share/sMSSDK/src/main/res/values-en/smssdk_strings.xml -->
-    <eat-comment/>
     <string name="smssdk_add_contact">Add</string>
     <string name="smssdk_back">Back </string>
     <string name="smssdk_cancel">Cancel</string>
@@ -289,8 +283,6 @@
     <string name="smssdk_contacts_phones">Phone: </string>
     <string name="smssdk_country">Country</string>
     <string name="smssdk_country_not_support_currently">Country not support, please choose other</string>
-    <!-- From: file:/D:/AS%20workSpace/share/sMSSDK/src/main/res/values-en/smssdk_errors.xml -->
-    <eat-comment/>
     <string name="smssdk_error_desc_400">Invalid request</string>
     <string name="smssdk_error_desc_401">Token is empty</string>
     <string name="smssdk_error_desc_402">Token does not exist</string>
@@ -368,8 +360,6 @@
     <string name="smssdk_error_detail_474">Server verification option is closed</string>
     <string name="smssdk_error_detail_475">no application information exists</string>
     <string name="smssdk_error_detail_500">Internal Server Error</string>
-    <!-- From: file:/D:/AS%20workSpace/share/sMSSDK/src/main/res/values-en/smssdk_strings.xml -->
-    <eat-comment/>
     <string name="smssdk_get_phone_verifycode_today_frequentlly">I am sorry, the phone number for verification code number too much, please try again tomorrow!</string>
     <string name="smssdk_get_verifycode_frequentlly">Send verification code too frequently, please try later!</string>
     <string name="smssdk_identify_code">Verification code</string>

@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/D:/AS%20workSpace/share/TextLink/src/main/res/values/attrs.xml -->
-    <eat-comment/>
     <attr format="reference" name="linkBuilderStyle"/>
     <declare-styleable name="LinkBuilder"><attr format="color" name="defaultLinkColor"/></declare-styleable>
 </resources>
