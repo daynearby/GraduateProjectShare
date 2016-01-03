@@ -148,7 +148,6 @@ public class DiscountFragment extends BaseFragment {
 
                 refreshUI();
 
-
                 break;
         }
     }
@@ -214,13 +213,17 @@ public class DiscountFragment extends BaseFragment {
     private void refreshUI() {
 
         if (isGetMore) {
+
             endIndex = dataList.size() < (PUSH_TIMES + 1) * Contants.PAGE_SIZE ?
                     dataList.size() : (PUSH_TIMES + 1) * Contants.PAGE_SIZE;
+
         } else {
+
             endIndex = dataList.size() < Contants.PAGE_SIZE ? dataList.size() : endIndex;
+
         }
 
-        discAdapter.setData(dataList.subList(startIndex, endIndex));
+        discAdapter.setData(dataList.subList(0, endIndex));
         //停止刷新动画
         swipeRefreshLayout.setRefreshing(false);
     }
