@@ -127,6 +127,7 @@ public class PopupWinImageBrowser extends BasePopupWin {
     @Override
     public void onShow(View v) {
         showAtLocation(getContentView(), Gravity.START, 0, 0);
+        this.update();
     }
 
 

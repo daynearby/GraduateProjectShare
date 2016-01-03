@@ -47,7 +47,7 @@ public class DiscoverFragment extends BaseFragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private DiscoverAdapter listviewAdapter;
-    private static List<ShareMessage_HZ> dataList = new ArrayList<>();
+    private  List<ShareMessage_HZ> dataList = new ArrayList<>();
 
     private static final int FIRST_GETDATA = 0x1001;
     private static final int GET_LOACTIOPN_DATA = 0x1002;
@@ -75,7 +75,7 @@ public class DiscoverFragment extends BaseFragment {
     public void initData() {
 
 
-        getDataFromLocat();//没有网络
+//        getDataFromLocat();//没有网络
         threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
             @Override
             public void running() {
@@ -226,7 +226,7 @@ public class DiscoverFragment extends BaseFragment {
                     public void onSuccess(Object object) {
                         @SuppressWarnings("unchecked")
                         ShareMessageList shareMessageList = (ShareMessageList) object;
-                        formatData(shareMessageList.getShareMessageHzList());
+
 
                         if (isGetMore) {
                             if (shareMessageList.getShareMessageHzList().size() > 0) {
@@ -240,7 +240,6 @@ public class DiscoverFragment extends BaseFragment {
                             dataList = shareMessageList.getShareMessageHzList();
                         }
                         mhandler.sendEmptyMessage(HANDLER_GET_DATA);
-
                     }
 
                     @Override
@@ -259,7 +258,7 @@ public class DiscoverFragment extends BaseFragment {
      *
      * @param shareList
      */
-    private void formatData(final List<ShareMessage_HZ> shareList) {
+    private void saveData(final List<ShareMessage_HZ> shareList) {
 
 
         threadUtils.addTask(new MyRunnable(new MyRunnable.GotoRunnable() {

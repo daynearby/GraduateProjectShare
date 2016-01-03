@@ -114,7 +114,7 @@ public class DiscountFragment extends BaseFragment {
                     } else {
                         isGetMore = true;
 //                                Toast.makeText(context, R.string.no_more_messages, Toast.LENGTH_SHORT).show();
-                        startIndex = dataList.size();
+                        skip = dataList.size();
                         getRemoteData();
                     }
                 } else {
@@ -223,7 +223,7 @@ public class DiscountFragment extends BaseFragment {
 
         }
 
-        discAdapter.setData(dataList.subList(0, endIndex));
+        discAdapter.setData(dataList.subList(startIndex, endIndex));
         //停止刷新动画
         swipeRefreshLayout.setRefreshing(false);
     }
