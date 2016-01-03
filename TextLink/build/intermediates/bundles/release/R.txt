@@ -1,4 +1,0 @@
-int attr defaultLinkColor 0x7f010001
-int attr linkBuilderStyle 0x7f010000
-int[] styleable LinkBuilder { 0x7f010001 }
-int styleable LinkBuilder_defaultLinkColor 0
