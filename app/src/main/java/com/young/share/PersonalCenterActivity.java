@@ -22,17 +22,17 @@ import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.bmob.BmobPro;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.soundcloud.android.crop.ActivityResult;
-import com.young.annotation.InjectView;
-import com.young.base.BaseAppCompatActivity;
-import com.young.config.Contants;
-import com.young.model.User;
-import com.young.myInterface.GoToUploadImages;
-import com.young.network.BmobApi;
-import com.young.utils.DisplayUtils;
-import com.young.utils.ImageHandlerUtils;
-import com.young.utils.LogUtils;
-import com.young.utils.XmlUtils;
-import com.young.views.Dialog4UploadAvatar;
+import com.young.share.annotation.InjectView;
+import com.young.share.base.BaseAppCompatActivity;
+import com.young.share.config.Contants;
+import com.young.share.model.User;
+import com.young.share.myInterface.GoToUploadImages;
+import com.young.share.network.BmobApi;
+import com.young.share.utils.DisplayUtils;
+import com.young.share.utils.ImageHandlerUtils;
+import com.young.share.utils.LogUtils;
+import com.young.share.utils.XmlUtils;
+import com.young.share.views.Dialog4UploadAvatar;
 
 import java.util.List;
 

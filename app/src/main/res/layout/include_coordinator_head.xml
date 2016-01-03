@@ -22,7 +22,7 @@
         android:layout_centerInParent="true"
         android:gravity="center">
 
-        <com.young.views.CircleImageView
+        <com.young.share.views.CircleImageView
             android:id="@+id/id_im_personal_avatar"
             android:layout_width="@dimen/avatar_size_mediu"
             android:layout_height="@dimen/avatar_size_mediu"

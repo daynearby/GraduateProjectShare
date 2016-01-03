@@ -83,7 +83,7 @@
         </LinearLayout>
 
 
-        <com.young.views.WrapHightGridview
+        <com.young.share.views.WrapHightGridview
             android:id="@+id/gv_content_popupwin_share_addimg"
             style="@style/gridViwe"
             android:layout_width="wrap_content"

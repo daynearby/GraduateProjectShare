@@ -15,21 +15,21 @@ import android.widget.LinearLayout;
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.twotoasters.jazzylistview.JazzyListView;
 import com.twotoasters.jazzylistview.effects.SlideInEffect;
-import com.young.adapter.CommentAdapter;
-import com.young.annotation.InjectView;
-import com.young.base.ItemActBarActivity;
-import com.young.config.Contants;
-import com.young.model.CommRemoteModel;
-import com.young.model.CommentList;
-import com.young.model.Comment_HZ;
-import com.young.model.ShareMessage_HZ;
-import com.young.myInterface.GotoAsyncFunction;
-import com.young.network.BmobApi;
-import com.young.thread.MyRunnable;
-import com.young.utils.DataFormateUtils;
-import com.young.utils.EmotionUtils;
-import com.young.utils.LocationUtils;
-import com.young.utils.LogUtils;
+import com.young.share.adapter.CommentAdapter;
+import com.young.share.annotation.InjectView;
+import com.young.share.base.ItemActBarActivity;
+import com.young.share.config.Contants;
+import com.young.share.model.CommRemoteModel;
+import com.young.share.model.CommentList;
+import com.young.share.model.Comment_HZ;
+import com.young.share.model.ShareMessage_HZ;
+import com.young.share.myInterface.GotoAsyncFunction;
+import com.young.share.network.BmobApi;
+import com.young.share.thread.MyRunnable;
+import com.young.share.utils.DataFormateUtils;
+import com.young.share.utils.EmotionUtils;
+import com.young.share.utils.LocationUtils;
+import com.young.share.utils.LogUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -150,7 +150,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
                     case Contants.CLAZZ_RANK_LIST_ACTIVITY://排行榜
 
-                        LogUtils.logD("thread start");
+//                        LogUtils.logD("thread start");
                         CommRemoteModel commRemoteModel = (CommRemoteModel) bundle
                                 .getSerializable(Contants.CLAZZ_DATA_MODEL);
 
@@ -165,7 +165,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
                             LocationUtils.processDialog(mActivity);
 
                         }
-                        LogUtils.logD("thread end");
+//                        LogUtils.logD("thread end");
 
                         break;
 

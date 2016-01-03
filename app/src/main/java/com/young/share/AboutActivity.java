@@ -1,10 +1,9 @@
 package com.young.share;
 
 import android.os.Message;
-import android.view.KeyEvent;
 import android.view.View;
 
-import com.young.base.ItemActBarActivity;
+import com.young.share.base.ItemActBarActivity;
 
 /**
  * 关于

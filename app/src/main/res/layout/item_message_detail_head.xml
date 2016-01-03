@@ -16,7 +16,7 @@
         android:text="@string/defaul_share_text"
         android:textSize="@dimen/abc_text_size_medium_material" />
 
-    <com.young.views.WrapHightGridview
+    <com.young.share.views.WrapHightGridview
         android:id="@+id/gv_message_detailshareimg"
         style="@style/gridViwe"
         android:layout_width="match_parent"

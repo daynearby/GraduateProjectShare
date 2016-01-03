@@ -9,7 +9,7 @@
         android:orientation="horizontal">
 
 
-        <com.young.views.CircleImageView
+        <com.young.share.views.CircleImageView
             android:id="@+id/id_im_userH"
             android:layout_width="@dimen/avatar_size_default"
             android:layout_height="@dimen/avatar_size_default"

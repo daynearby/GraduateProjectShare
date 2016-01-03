@@ -7,8 +7,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.Window;
 
-import com.young.config.Contants;
-import com.young.utils.SharePreferenceUtils;
+import com.young.share.config.Contants;
+import com.young.share.utils.SharePreferenceUtils;
 
 /**
  * Created by Nearby Yang on 2015-08-17.

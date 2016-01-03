@@ -2,19 +2,18 @@ package com.young.share;
 
 import android.os.Message;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.young.annotation.InjectView;
-import com.young.base.ItemActBarActivity;
-import com.young.config.Contants;
-import com.young.utils.LogUtils;
-import com.young.utils.XmlUtils;
-import com.young.views.CitySelectPopupWin;
-import com.young.views.PopupWinListView;
+import com.young.share.annotation.InjectView;
+import com.young.share.base.ItemActBarActivity;
+import com.young.share.config.Contants;
+import com.young.share.utils.LogUtils;
+import com.young.share.utils.XmlUtils;
+import com.young.share.views.CitySelectPopupWin;
+import com.young.share.views.PopupWinListView;
 
 import java.util.HashMap;
 

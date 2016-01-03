@@ -7,16 +7,15 @@ import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
-import android.widget.Toast;
 
-import com.young.adapter.RankAdapter;
-import com.young.base.BaseFragment;
-import com.young.config.Contants;
-import com.young.model.RankBean;
+import com.young.share.adapter.RankAdapter;
+import com.young.share.base.BaseFragment;
+import com.young.share.config.Contants;
+import com.young.share.model.RankBean;
 import com.young.share.R;
 import com.young.share.RankListActivity;
-import com.young.utils.XmlUtils;
-import com.young.views.SpacesItemDecoration;
+import com.young.share.utils.XmlUtils;
+import com.young.share.views.SpacesItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;

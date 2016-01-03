@@ -7,13 +7,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.young.annotation.InjectView;
-import com.young.base.CustomActBarActivity;
-import com.young.config.Contants;
-import com.young.model.MyBmobInstallation;
-import com.young.model.User;
-import com.young.utils.LogUtils;
-import com.young.utils.SharePreferenceUtils;
+import com.young.share.annotation.InjectView;
+import com.young.share.base.CustomActBarActivity;
+import com.young.share.config.Contants;
+import com.young.share.model.MyBmobInstallation;
+import com.young.share.model.User;
+import com.young.share.utils.LogUtils;
+import com.young.share.utils.SharePreferenceUtils;
 
 import java.util.List;
 

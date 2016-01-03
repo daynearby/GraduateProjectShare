@@ -1,4 +1,4 @@
-<com.young.views.ArcMenu xmlns:android="http://schemas.android.com/apk/res/android"
+<com.young.share.views.ArcMenu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:hyman="http://schemas.android.com/apk/res-auto"
     android:id="@+id/id_menu"
     android:layout_width="match_parent"
@@ -31,4 +31,4 @@
         android:src="@drawable/icon_personal_centre"
         android:tag="People" />
 
-</com.young.views.ArcMenu>
+</com.young.share.views.ArcMenu>

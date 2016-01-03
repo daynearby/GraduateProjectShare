@@ -12,23 +12,24 @@ import android.widget.Toast;
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.twotoasters.jazzylistview.JazzyListView;
 import com.twotoasters.jazzylistview.effects.SlideInEffect;
-import com.young.adapter.DiscoverAdapter;
-import com.young.base.BaseFragment;
-import com.young.config.Contants;
-import com.young.model.ShareMessageList;
-import com.young.model.ShareMessage_HZ;
-import com.young.model.dbmodel.ShareMessage;
-import com.young.myInterface.GotoAsyncFunction;
-import com.young.myInterface.ListViewRefreshListener;
-import com.young.network.BmobApi;
+import com.young.share.adapter.DiscoverAdapter;
+import com.young.share.base.BaseFragment;
+import com.young.share.config.Contants;
+import com.young.share.model.ShareMessageList;
+import com.young.share.model.ShareMessage_HZ;
+import com.young.share.model.dbmodel.ShareMessage;
+import com.young.share.myInterface.GotoAsyncFunction;
+import com.young.share.myInterface.ListViewRefreshListener;
+import com.young.share.network.BmobApi;
 import com.young.share.MessageDetail;
 import com.young.share.R;
-import com.young.thread.MyRunnable;
-import com.young.utils.CommonUtils;
-import com.young.utils.DBUtils;
-import com.young.utils.DataFormateUtils;
-import com.young.utils.LocationUtils;
-import com.young.utils.LogUtils;
+import com.young.share.model.dbmodel.User;
+import com.young.share.thread.MyRunnable;
+import com.young.share.utils.CommonUtils;
+import com.young.share.utils.DBUtils;
+import com.young.share.utils.DataFormateUtils;
+import com.young.share.utils.LocationUtils;
+import com.young.share.utils.LogUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -237,13 +238,13 @@ public class DiscoverFragment extends BaseFragment {
             @Override
             public void running() {
 
-                for (com.young.model.ShareMessage_HZ share : shareList) {
+                for (ShareMessage_HZ share : shareList) {
 
                     //分享信息
                     ShareMessage shareMessageHZ = DataFormateUtils.formateShareMessage(share);
 
                     //用户信息
-                    com.young.model.dbmodel.User u = DataFormateUtils.formateUser(share.getUserId());
+                    User u = DataFormateUtils.formateUser(share.getUserId());
 //保存
                     u.save();
 

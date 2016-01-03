@@ -7,10 +7,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.young.annotation.InjectView;
-import com.young.base.ItemActBarActivity;
-import com.young.config.Contants;
-import com.young.utils.LogUtils;
+import com.young.share.annotation.InjectView;
+import com.young.share.base.ItemActBarActivity;
+import com.young.share.config.Contants;
+import com.young.share.utils.LogUtils;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.UpdateListener;

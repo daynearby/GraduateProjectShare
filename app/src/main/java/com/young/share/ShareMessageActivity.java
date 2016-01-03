@@ -16,23 +16,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.young.adapter.myGridViewAdapter;
-import com.young.annotation.InjectView;
-import com.young.base.BaseAppCompatActivity;
-import com.young.base.ItemActBarActivity;
-import com.young.config.Contants;
-import com.young.model.DiscountMessage_HZ;
-import com.young.model.ShareMessage_HZ;
-import com.young.myInterface.GoToUploadImages;
-import com.young.network.BmobApi;
-import com.young.utils.EmotionUtils;
-import com.young.utils.ImageHandlerUtils;
-import com.young.utils.LogUtils;
-import com.young.utils.XmlUtils;
-import com.young.utils.cache.ACache;
-import com.young.utils.cache.DarftUtils;
-import com.young.views.Dialog4Tips;
-import com.young.views.PopupWinListView;
+import com.young.share.adapter.myGridViewAdapter;
+import com.young.share.annotation.InjectView;
+import com.young.share.base.BaseAppCompatActivity;
+import com.young.share.base.ItemActBarActivity;
+import com.young.share.config.Contants;
+import com.young.share.model.DiscountMessage_HZ;
+import com.young.share.model.ShareMessage_HZ;
+import com.young.share.myInterface.GoToUploadImages;
+import com.young.share.network.BmobApi;
+import com.young.share.utils.EmotionUtils;
+import com.young.share.utils.ImageHandlerUtils;
+import com.young.share.utils.LogUtils;
+import com.young.share.utils.XmlUtils;
+import com.young.share.utils.cache.ACache;
+import com.young.share.utils.cache.DarftUtils;
+import com.young.share.views.Dialog4Tips;
+import com.young.share.views.PopupWinListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -323,7 +323,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
                 locationInfo = city + district + street + streetNumber;
 
-                shareLocation_tv.setText(district + street + streetNumber);
+                shareLocation_tv.setText(String.format("%s%s%s", district, street, streetNumber));
 
             }
         }

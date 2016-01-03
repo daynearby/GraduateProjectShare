@@ -2,8 +2,14 @@ package com.young.share;
 
 import android.os.Message;
 
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapView;
-import com.young.base.ItemActBarActivity;
+import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.model.LatLng;
+import com.young.share.base.ItemActBarActivity;
 
 /**
  * 百度地图
@@ -14,6 +20,7 @@ import com.young.base.ItemActBarActivity;
 public class BaiduMapActivity extends ItemActBarActivity {
 
     private MapView mMapView;
+    private BaiduMap mBaiduMap;
 
     @Override
     public int getLayoutId() {
@@ -29,11 +36,22 @@ public class BaiduMapActivity extends ItemActBarActivity {
     @Override
     public void findviewbyid() {
         mMapView = $(R.id.cusview_bmapView_map);
+        mBaiduMap = mMapView.getMap();
     }
 
     @Override
     public void bindData() {
-
+//定义Maker坐标点
+        LatLng point = new LatLng(39.963175, 116.400244);
+//构建Marker图标
+        BitmapDescriptor bitmap = BitmapDescriptorFactory
+                .fromResource(R.drawable.icon_marka);
+//构建MarkerOption，用于在地图上添加Marker
+        OverlayOptions option = new MarkerOptions()
+                .position(point)
+                .icon(bitmap);
+//在地图上添加Marker，并显示
+        mBaiduMap.addOverlay(option);
     }
 
     @Override

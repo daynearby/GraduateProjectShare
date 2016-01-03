@@ -12,7 +12,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.young.adapter.WellcomePagerAdapter;
+import com.young.share.adapter.WellcomePagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
