@@ -17,6 +17,7 @@ public class WellcomePagerAdapter extends PagerAdapter {
     private Context ctx;
     private List<View> views;
     private List<String> urlList = null;
+    private ImageClickListener imageClickListener;
 
     public WellcomePagerAdapter(Context ctx, List<View> views) {
 
@@ -34,6 +35,13 @@ public class WellcomePagerAdapter extends PagerAdapter {
         this.urlList = urlList;
     }
 
+    /**
+     * 图片点击监听
+     * @param imageClickListener
+     */
+    public void setImageClickListener(ImageClickListener imageClickListener) {
+        this.imageClickListener = imageClickListener;
+    }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
@@ -61,6 +69,7 @@ public class WellcomePagerAdapter extends PagerAdapter {
 //                            //动画完成监听
 //                        }
 //                    });
+                    photo0.setOnClickListener(new OnClick());
                     ImageHandlerUtils.loadIamge(ctx, urlList.get(0), photo0, false);
                     break;
                 case 1:
@@ -68,9 +77,8 @@ public class WellcomePagerAdapter extends PagerAdapter {
                     photo1.enable();
                     // 获取图片信息
                     Info info1 = photo1.getInfo();
-// 从一张图片信息变化到现在的图片，用于图片点击后放大浏览，具体使用可以参照demo的使用
                     photo1.animaFrom(info1);
-
+                    photo1.setOnClickListener(new OnClick());
                     ImageHandlerUtils.loadIamge(ctx, urlList.get(1), photo1, false);
                     break;
                 case 2:
@@ -78,10 +86,9 @@ public class WellcomePagerAdapter extends PagerAdapter {
                     photo2.enable();
                     // 获取图片信息
                     Info info = photo2.getInfo();
-// 从一张图片信息变化到现在的图片，用于图片点击后放大浏览，具体使用可以参照demo的使用
                     photo2.animaFrom(info);
 
-
+                    photo2.setOnClickListener(new OnClick());
                     ImageHandlerUtils.loadIamge(ctx, urlList.get(2), photo2, false);
                     break;
                 case 3:
@@ -89,9 +96,8 @@ public class WellcomePagerAdapter extends PagerAdapter {
                     photo3.enable();
                     // 获取图片信息
                     Info info3 = photo3.getInfo();
-// 从一张图片信息变化到现在的图片，用于图片点击后放大浏览，具体使用可以参照demo的使用
                     photo3.animaFrom(info3);
-
+                    photo3.setOnClickListener(new OnClick());
                     ImageHandlerUtils.loadIamge(ctx, urlList.get(3), photo3, false);
                     break;
                 case 4:
@@ -99,9 +105,8 @@ public class WellcomePagerAdapter extends PagerAdapter {
                     photo4.enable();
                     // 获取图片信息
                     Info info4 = photo4.getInfo();
-// 从一张图片信息变化到现在的图片，用于图片点击后放大浏览，具体使用可以参照demo的使用
                     photo4.animaFrom(info4);
-
+                    photo4.setOnClickListener(new OnClick());
                     ImageHandlerUtils.loadIamge(ctx, urlList.get(4), photo4, false);
                     break;
                 case 5:
@@ -109,9 +114,8 @@ public class WellcomePagerAdapter extends PagerAdapter {
                     photo5.enable();
                     // 获取图片信息
                     Info info5 = photo5.getInfo();
-// 从一张图片信息变化到现在的图片，用于图片点击后放大浏览，具体使用可以参照demo的使用
                     photo5.animaFrom(info5);
-
+                    photo5.setOnClickListener(new OnClick());
                     ImageHandlerUtils.loadIamge(ctx, urlList.get(5), photo5, false);
 
                     break;
@@ -133,5 +137,21 @@ public class WellcomePagerAdapter extends PagerAdapter {
         return (arg0 == arg1);
     }
 
+    /**
+     * 图片点击事件
+     */
+    private class OnClick implements View.OnClickListener{
+
+        @Override
+        public void onClick(View view) {
+            if (imageClickListener != null) {
+                imageClickListener.onClick();
+            }
+        }
+    }
+
+    public interface ImageClickListener{
+        void onClick();
+    }
 
 }

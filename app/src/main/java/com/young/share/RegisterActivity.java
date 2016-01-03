@@ -255,7 +255,10 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
     private class locationListener implements BDLBSUtils.LocationInfoListener {
 
         @Override
-        public void LocationInfo(String Province, String City, String District, String Street, String StreetNumber) {
+        public void LocationInfo(double latitude,double longitude ,
+                                 String Province, String City,
+                                 String District, String Street,
+                                 String StreetNumber) {
 
             province = Province;
             city = City;

@@ -5,11 +5,12 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.young.share.R;
 import com.young.share.adapter.WellcomePagerAdapter;
 import com.young.share.base.BasePopupWin;
-import com.young.share.R;
 import com.young.share.utils.DisplayUtils;
 
 import java.util.ArrayList;
@@ -56,22 +57,8 @@ public class PopupWinImageBrowser extends BasePopupWin {
     private void initSize() {
         int width = DisplayUtils.getScreenWidthPixels((Activity) context);
         int height = DisplayUtils.getScreenHeightPixels((Activity) context);
-        setWidth(width + 10);
-        setHeight(height + 10);
-//        RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.layout_content_window_image_brower);
-//        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(width, height);
-//        layoutParams.height = ;
-//        layoutParams.width = ;
-//
-//        relativeLayout.setLayoutParams(layoutParams);
-//        relativeLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dismiss();
-//            }
-//        });
-//        setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-//        setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+        setWidth(ViewGroup.LayoutParams.FILL_PARENT);
+        setHeight(ViewGroup.LayoutParams.FILL_PARENT);
 
     }
 
@@ -91,25 +78,16 @@ public class PopupWinImageBrowser extends BasePopupWin {
 //            im_browser[i].enable();
 
         }
-/**
- * // TODO: 15/10/10 图片查看,以及连续查看多张图片,左右拖动
-
-
- // 获取图片信息
- Info info = holder.imageView.getInfo();
- // 从一张图片信息变化到现在的图片，用于图片点击后放大浏览，具体使用可以参照demo的使用
- holder.imageView.animaFrom(info);
- // 从现在的图片变化到所给定的图片信息，用于图片放大后点击缩小到原来的位置，具体使用可以参照demo的使用
- holder.imageView.animaTo(info, new Runnable() {
-@Override public void run() {
-//动画完成监听
-}
-});
- */
 
 
         WellcomePagerAdapter myPagerAdapter = new WellcomePagerAdapter(context, view_list);
         myPagerAdapter.setData(im_url);
+        myPagerAdapter.setImageClickListener(new WellcomePagerAdapter.ImageClickListener() {
+            @Override
+            public void onClick() {
+                PopupWinImageBrowser.this.dismiss();
+            }
+        });
         viewPager = (ViewPager) view.findViewById(R.id.vp_popupwindow_image_brower);
         viewPager.setAdapter(myPagerAdapter);
         viewPager.addOnPageChangeListener(new pageChangeListener());
@@ -119,10 +97,6 @@ public class PopupWinImageBrowser extends BasePopupWin {
     @Override
     protected void bindData() {
 
-
-//        for (int i = 0; i < im_url.size(); i++) {
-//            ImageHandlerUtils.loadIamge(context,im_url.get(i), im_browser[i]);
-//        }
     }
 
     /**
@@ -152,7 +126,7 @@ public class PopupWinImageBrowser extends BasePopupWin {
      */
     @Override
     public void onShow(View v) {
-        showAtLocation(v, Gravity.CENTER, -10, -10);
+        showAtLocation(getContentView(), Gravity.START, 0, 0);
     }
 
 

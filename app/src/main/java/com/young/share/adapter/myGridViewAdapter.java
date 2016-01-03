@@ -11,8 +11,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout.LayoutParams;
 
-import com.young.share.config.Contants;
 import com.young.share.R;
+import com.young.share.config.Contants;
 import com.young.share.utils.ImageHandlerUtils;
 
 import java.util.ArrayList;
@@ -139,16 +139,10 @@ public class myGridViewAdapter extends BaseAdapter {
         }
 
         if (data != null) {
-            switch (data.size()) {
-                case 1:
-                    gv.setNumColumns(1);
-                    break;
-                case 2:
-                    gv.setNumColumns(2);
-                    break;
-                default:
-                    gv.setNumColumns(3);
-                    break;
+            if (data.size() <= 2) {
+                gv.setNumColumns(2);
+            } else {
+                gv.setNumColumns(3);
             }
         }
 

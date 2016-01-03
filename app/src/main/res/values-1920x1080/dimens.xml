@@ -25,6 +25,7 @@
     <dimen name="text_margin">16dp</dimen>
 
     <dimen name="maginMediu">35dp</dimen>
+    <dimen name="maginSmall">16dp</dimen>
     <dimen name="avatar_size_default">80dp</dimen>
     <dimen name="avatar_size_mediu">110dp</dimen>
     <dimen name="btnSizeDefault">60dp</dimen>

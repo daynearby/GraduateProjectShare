@@ -30,6 +30,8 @@ import com.young.share.views.WrapHightGridview;
 
 import java.util.List;
 
+import cn.bmob.v3.datatype.BmobGeoPoint;
+
 /**
  * 实例化
  * <p/>
@@ -113,9 +115,11 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                 String.valueOf(shareMessage.getShCommNum()) : ctx.getString(R.string.tx_comment));
 
         //地理信息的显示。显示了可以点击查看详细
-//        if (!TextUtils.isEmpty(shareMessage.getShLocation())) {
-            LinkBuilder.on(location).addLink(setLocationInfoLink("位置")).build();
-//        }
+        if (!TextUtils.isEmpty(shareMessage.getShLocation())) {
+            location.setVisibility(View.VISIBLE);
+            location.setText(shareMessage.getShLocation());
+            LinkBuilder.on(location).addLink(setLocationInfoLink(shareMessage.getShLocation(), shareMessage.getGeographic())).build();
+        }
 //        location.setText();
         //图片显示
         gridViewAdapter.setDatas(shareMessage.getShImgs(), false);
@@ -140,14 +144,18 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
      * 地理位置的点击事件
      *
      * @param linkWhat
+     * @param geoPoint 位置信息
      * @return
      */
-    private Link setLocationInfoLink(String linkWhat) {
+    private Link setLocationInfoLink(String linkWhat, final BmobGeoPoint geoPoint) {
         Link link = new Link(linkWhat);
         link.setOnClickListener(new Link.OnClickListener() {
             @Override
             public void onClick(String clickedText) {
-                startActivity(BaiduMapActivity.class, null);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT,geoPoint);
+                startActivity(BaiduMapActivity.class, bundle);
             }
         });
 

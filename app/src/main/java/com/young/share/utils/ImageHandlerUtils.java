@@ -139,6 +139,7 @@ public class ImageHandlerUtils {
      * @param isLocation 是否是本地资源，true --> 本地资源
      */
     public static void loadIamge(Context ctx, String imageUrl, ImageView im, boolean isLocation) {
+
         ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(ctx, imageUrl, isLocation), im, imageloaderOption());
     }
 

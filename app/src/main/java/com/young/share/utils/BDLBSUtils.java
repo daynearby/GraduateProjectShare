@@ -67,11 +67,22 @@ public class BDLBSUtils {
         @Override
         public void onReceiveLocation(BDLocation data) {
 
-            LogUtils.logD("bdlbs", " 省 = " + data.getProvince() + " 城市 = " + data.getCity() + " 地区 = " +
-                    data.getDistrict() + " 街道 = " + data.getStreet() + " 门牌号 = " + data.getStreetNumber());
 
-            locationInfoListener.LocationInfo(data.getProvince(), data.getCity(),
-                    data.getDistrict(), data.getStreet(), data.getStreetNumber());
+            LogUtils.logD("bdlbs", "纬度 = "+data.getLatitude()+" 经度 ="+data.getLongitude()
+                    +"\n 省 = "
+                    + data.getProvince()
+                    + "\n 城市 = " + data.getCity()
+                    + " 地区 = " +data.getDistrict()
+                    + "\n 街道 = " + data.getStreet()
+                    + "\n 门牌号 = " + data.getStreetNumber());
+
+            locationInfoListener.LocationInfo(data.getLatitude(),
+                    data.getLongitude(),
+                    data.getProvince(),
+                    data.getCity(),
+                    data.getDistrict(),
+                    data.getStreet(),
+                    data.getStreetNumber());
         }
 
     }
@@ -109,6 +120,6 @@ public class BDLBSUtils {
      * 监听定位 的回调
      */
     public interface LocationInfoListener {
-         void LocationInfo(String province, String city, String district, String street, String streetNumber);
+         void LocationInfo(double latitude,double longitude ,String province, String city, String district, String street, String streetNumber);
     }
 }

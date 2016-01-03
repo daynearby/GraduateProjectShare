@@ -30,6 +30,7 @@
         <item>约会圣地</item>
         <item>我是吃货</item>
         <item>户外运动</item>
+        <item>购物天堂</item>
     </string-array>
 
     <integer-array name="select_rank_backgound_color">
@@ -38,6 +39,7 @@
         <item>@color/rank_date</item>
         <item>@color/rank_foodacfi</item>
         <item>@color/rank_outdoorsport</item>
+        <item>@color/cherry_red_light</item>
     </integer-array>
     <!--
  <integer-array name="select_rank_backgound_color">
@@ -55,6 +57,7 @@
         <item>@drawable/icon_date_s</item>
         <item>@drawable/icon_food_afico_s</item>
         <item>@drawable/icon_outdoor_sport_s</item>
+        <item>@drawable/icon_shopping</item>
     </integer-array>
 
     <string-array name="select_option_item">

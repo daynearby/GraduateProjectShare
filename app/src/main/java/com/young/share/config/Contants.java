@@ -54,6 +54,8 @@ public class Contants {
     public static final String DOWNLOAD_PATH = "share/images/";
 
     //******************************定位 Keys***********************
+    public static final String LATITUDE = "latitude";
+    public static final String LONGITUDE =  "longitude";
     public static final String PROVINCE = "province";
     public static final String CITY = "city";
     public static final String DISTRICT = "district";
@@ -98,7 +100,8 @@ public class Contants {
     //*************************************上传照片类型***********************************************
     public static final int IMAGE_TYPE_SHARE = 100;
     public static final int IMAGE_TYPE_AVATAR = 101;
-    public static final int IAMGE_MAX_WIDTH = 1000;
+    public static final int IAMGE_MAX_WIDTH = 1500;
+    public static final int IAMGE_MAX_HEIGHT = 1500;
     public static final int IMAGE_MIN_SIZE = 200;
     public static final int MODEL_ID = 1;
 
@@ -127,6 +130,7 @@ public class Contants {
     public static final String CLAZZ_DATA_MESSAGE = "data_message_center";//传输数据
 
     public static final String INTENT_RANK_TYPE = "intent_rank_type";//intent传输数据标志
+    public static final String INTENT_BMOB_GEOPONIT = "intent_bmob_geoponit";//intent传输数据标志,地理信息
 
     //************************** 数据model 类型******************************
     public static final int DATA_MODEL_SHARE_MESSAGES = 1010;//分享信息数据

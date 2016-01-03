@@ -4,6 +4,7 @@ import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.dbmodel.DBModel;
 import com.young.share.model.dbmodel.ShareMessage;
 import com.young.share.model.dbmodel.ShareRecrod;
+import com.young.share.model.dbmodel.User;
 
 import org.litepal.crud.DataSupport;
 

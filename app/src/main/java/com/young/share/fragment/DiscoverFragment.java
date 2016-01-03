@@ -7,23 +7,24 @@ import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.twotoasters.jazzylistview.JazzyListView;
 import com.twotoasters.jazzylistview.effects.SlideInEffect;
+import com.young.share.MessageDetail;
+import com.young.share.R;
 import com.young.share.adapter.DiscoverAdapter;
 import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
 import com.young.share.model.ShareMessageList;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.dbmodel.ShareMessage;
+import com.young.share.model.dbmodel.User;
 import com.young.share.myInterface.GotoAsyncFunction;
 import com.young.share.myInterface.ListViewRefreshListener;
 import com.young.share.network.BmobApi;
-import com.young.share.MessageDetail;
-import com.young.share.R;
-import com.young.share.model.dbmodel.User;
 import com.young.share.thread.MyRunnable;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DBUtils;
@@ -58,13 +59,12 @@ public class DiscoverFragment extends BaseFragment {
     private boolean isGetMore = false;//从远程数据库获取更多数据
 
     private int startRow = 0;//从第一条开始
-
+    private boolean isFirstIn = true;//第一次进入该界面
     private static final String tag = "discover";
 
     public DiscoverFragment(Context context) {
         super(context);
     }
-// TODO: 2015-12-13 修改结构
 
     @Override
     public int getLayoutId() {
@@ -73,15 +73,20 @@ public class DiscoverFragment extends BaseFragment {
 
     @Override
     public void initData() {
+
+
+        getDataFromLocat();//没有网络
         threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
             @Override
             public void running() {
                 if (CommonUtils.isNetworkAvailable(context)) {//有网络
+
                     getDataFromRemote();
+
                 } else {
                     SVProgressHUD.showInfoWithStatus(context,
                             getString(R.string.without_network));
-                    getDataFromLocat();//没有网络
+
                 }
 
             }
@@ -149,10 +154,12 @@ public class DiscoverFragment extends BaseFragment {
 
                     }
                 });
+
+        //item点击事件监听
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                isFirstIn = true;
                 Bundle bundle = new Bundle();
                 bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_DISCOVER_ACTIVITY);
                 bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, dataList.get(position));
@@ -161,10 +168,16 @@ public class DiscoverFragment extends BaseFragment {
             }
         });
 
+
     }
 
     @Override
     public void bindData() {
+
+        if (isFirstIn) {
+            swipeRefreshLayout.setRefreshing(true);
+            isFirstIn = false;
+        }
 
     }
 
@@ -177,19 +190,29 @@ public class DiscoverFragment extends BaseFragment {
 
                 break;
             case FIRST_GETDATA:
-
+                LogUtils.logD("获取数据");
                 break;
             case HANDLER_GET_DATA:
-                refreshUI();
+                if (dataList != null && dataList.size() > 0) {
+
+                    refreshUI();
+                } else {
+                   LinearLayout linearLayout=$(R.id. llayout_disvocer_bg);
+                    linearLayout.setBackgroundResource(R.drawable.icon_conten_empty);
+                }
                 break;
 
         }
     }
 
+    /**
+     *
+     */
     private void getDataFromRemote() {
 
 
         JSONObject params = new JSONObject();
+
         try {
             params.put(Contants.SKIP, String.valueOf(startRow));
         } catch (JSONException e) {
@@ -230,6 +253,12 @@ public class DiscoverFragment extends BaseFragment {
 
     }
 
+    /**
+     * 格式化数据
+     * 存储到本地
+     *
+     * @param shareList
+     */
     private void formatData(final List<ShareMessage_HZ> shareList) {
 
 
@@ -274,10 +303,15 @@ public class DiscoverFragment extends BaseFragment {
         } else {
             endIndex = dataList.size() < Contants.PAGE_SIZE ? dataList.size() : endIndex;
         }
+
         listviewAdapter.setData(dataList.subList(startIndex, endIndex));
+        //停止刷新动画
         swipeRefreshLayout.setRefreshing(false);
     }
 
+    /**
+     * 从本地获取数据
+     */
     private void getDataFromLocat() {
 
         threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
@@ -291,4 +325,6 @@ public class DiscoverFragment extends BaseFragment {
         }));
 
     }
+
+
 }

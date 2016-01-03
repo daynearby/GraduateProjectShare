@@ -11,6 +11,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.young.share.utils.CommonUtils;
 import com.young.share.utils.ThreadUtils;
 
 import org.litepal.LitePalApplication;
@@ -69,13 +70,13 @@ public class ApplicationConfig extends LitePalApplication {
         File cacheFile = StorageUtils.getOwnCacheDirectory(ctx, Contants.DOWNLOAD_PATH);
 
         ImageLoaderConfiguration imConfig = new ImageLoaderConfiguration.Builder(ctx)
-                .memoryCacheExtraOptions(Contants.IAMGE_MAX_WIDTH, Contants.IAMGE_MAX_WIDTH) // max width, max height，即保存的每个缓存文件的最大长宽
+                .memoryCacheExtraOptions(Contants.IAMGE_MAX_WIDTH, Contants.IAMGE_MAX_HEIGHT) // max width, max height，即保存的每个缓存文件的最大长宽
                 .threadPoolSize(3) //线程池内线程的数量
                 .threadPriority(Thread.NORM_PRIORITY - 2)
                 .denyCacheImageMultipleSizesInMemory()
                 .diskCacheFileNameGenerator(new Md5FileNameGenerator()) //将保存的时候的URI名称用MD5 加密
                 .memoryCache(new UsingFreqLimitedMemoryCache(5 * 1024 * 1024))
-                .memoryCacheSize(5 * 1024 * 1024) // 内存缓存的最大值
+                .memoryCacheSize(CommonUtils.getRuntimeRAM() / 8) // 内存缓存的最大值
                 .diskCacheSize(50 * 1024 * 1024)  // SD卡缓存的最大值
                 .tasksProcessingOrder(QueueProcessingType.LIFO)
                         // 由原先的discCache -> diskCache

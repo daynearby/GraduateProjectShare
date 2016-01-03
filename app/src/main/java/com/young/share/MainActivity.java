@@ -12,19 +12,21 @@ import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+
 import com.young.share.adapter.MainPagerAdapter;
 import com.young.share.base.CustomActBarActivity;
 import com.young.share.config.Contants;
-import com.young.share.model.MyBmobInstallation;
-import com.young.share.model.User;
 import com.young.share.fragment.DiscountFragment;
 import com.young.share.fragment.DiscoverFragment;
 import com.young.share.fragment.RankFragment;
+import com.young.share.model.MyBmobInstallation;
+import com.young.share.model.User;
 import com.young.share.utils.BDLBSUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.XmlUtils;
 import com.young.share.views.ArcMenu;
 import com.young.share.views.Dialog4Tips;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +66,7 @@ public class MainActivity extends CustomActBarActivity {
 
         mArcMenu.setOnMenuItemClickListener(new onitmeListener());
 
-        pagerAdapter = new MainPagerAdapter( list,
+        pagerAdapter = new MainPagerAdapter(list,
                 getSupportFragmentManager(), viewPager,
                 new pageChangeListener());
 
@@ -272,7 +274,10 @@ public class MainActivity extends CustomActBarActivity {
     private class locationListener implements BDLBSUtils.LocationInfoListener {
 
         @Override
-        public void LocationInfo(String Province, String City, String District, String Street, String StreetNumber) {
+        public void LocationInfo(double latitude, double longitude,
+                                 String Province, String City,
+                                 String District, String Street,
+                                 String StreetNumber) {
 
 
             times++;
@@ -282,6 +287,8 @@ public class MainActivity extends CustomActBarActivity {
                 getCity_tv().setText(City);
 
                 Bundle bundle = new Bundle();
+                bundle.putDouble(Contants.LATITUDE, latitude);
+                bundle.putDouble(Contants.LONGITUDE, longitude);
                 bundle.putString(Contants.PROVINCE, Province);
                 bundle.putString(Contants.CITY, City);
                 bundle.putString(Contants.DISTRICT, District);
@@ -313,6 +320,7 @@ public class MainActivity extends CustomActBarActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            LogUtils.logD("Intent getAction = " + intent.getAction());
 
             switch (intent.getAction()) {
                 case Contants.BMOB_PUSH_MESSAGES://"Bmob  信息
@@ -331,7 +339,8 @@ public class MainActivity extends CustomActBarActivity {
                 case Contants.BORDCAST_CLEAR_MESSAGES://清空消息
                     initMessagesIcon(false);
                     break;
-                case Contants.BORDCAST_REQUEST_REFRESH:
+
+                case Contants.BORDCAST_REQUEST_REFRESH://需要进行刷新
                     pagerAdapter.refreshUI(intent.getIntExtra(Contants.REFRESH_TYPE, 0));
                     LogUtils.logD("get refresh broadcast code = " + intent.getIntExtra(Contants.REFRESH_TYPE, 0));
                     break;
@@ -457,6 +466,6 @@ public class MainActivity extends CustomActBarActivity {
         if (isRegistBordcast) {
             unregisterReceiver(mBroadcastReceiver);
         }
-       app.getThreadInstance().stopAllTask();
+        app.getThreadInstance().stopAllTask();
     }
 }

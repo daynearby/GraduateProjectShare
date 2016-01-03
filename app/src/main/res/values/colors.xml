@@ -18,12 +18,11 @@
     <color name="cherry_red_light">#befd495a</color>
     <color name="black">#000000</color>
     <color name="trans_back">#80000000</color>
-    <color name="trans_back_bg">#60000000</color>
+    <color name="trans_back_bg">#9c000000</color>
 
     <color name="green_default">#54ca65</color>
     <color name="green_press">#5cc46b</color>
     <color name="background_material_light">#ebebeb</color>
-    <color name="abc_secondary_text_material_light">#000000</color>
 
     <color name="rank_heat">#FE495A</color>
     <color name="rank_heat_light">#c8fe495a</color>
@@ -35,6 +34,7 @@
     <color name="rank_foodacfi_light">#c800a0e9</color>
     <color name="rank_outdoorsport">#22AD38</color>
     <color name="rank_outdoorsport_light">#c822ad38</color>
+    <color name="darker_gray">#eeeeee</color>
 
 
 </resources>

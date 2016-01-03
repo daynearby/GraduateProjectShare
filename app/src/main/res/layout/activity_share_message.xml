@@ -19,12 +19,11 @@
         <EditText
             android:id="@+id/et_contnent_popupwin_content"
             style="@style/text_style_match"
-            android:layout_marginTop="@dimen/paddingMic"
-            android:background="@drawable/bg_rectangle"
+            android:background="@color/white"
             android:gravity="start"
             android:hint="@string/share_what_hint"
             android:inputType="textMultiLine"
-            android:lines="3"
+            android:lines="5"
             android:padding="@dimen/paddingHit" />
 
         <LinearLayout

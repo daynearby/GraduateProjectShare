@@ -1,26 +1,34 @@
 package com.young.share;
 
 import android.os.Message;
+import android.view.View;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.young.share.base.ItemActBarActivity;
+import com.young.share.config.Contants;
+
+import cn.bmob.v3.datatype.BmobGeoPoint;
 
 /**
  * 百度地图
  * 显示地理位置
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2016-01-02.
  */
 public class BaiduMapActivity extends ItemActBarActivity {
 
     private MapView mMapView;
     private BaiduMap mBaiduMap;
+    private BmobGeoPoint geoPoint;
 
     @Override
     public int getLayoutId() {
@@ -30,7 +38,24 @@ public class BaiduMapActivity extends ItemActBarActivity {
     @Override
     public void initData() {
         super.initData();
+        geoPoint = (BmobGeoPoint) getIntent().getExtras().getSerializable(Contants.INTENT_BMOB_GEOPONIT);
+        if (geoPoint == null) {
+            geoPoint = new BmobGeoPoint(116.400244, 39.963175);
+        }
+        setTvTitle(R.string.location);
+        setTvRight(R.string.navigation);
+        setBarItemVisible(true, true);
+        setItemListener(new BarItemOnClick() {//Bar item listener
+            @Override
+            public void leftClick(View v) {
+                mActivity.finish();
+            }
 
+            @Override
+            public void rightClivk(View v) {
+
+            }
+        });
     }
 
     @Override
@@ -41,8 +66,11 @@ public class BaiduMapActivity extends ItemActBarActivity {
 
     @Override
     public void bindData() {
+
+
+
 //定义Maker坐标点
-        LatLng point = new LatLng(39.963175, 116.400244);
+        LatLng point = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
 //构建Marker图标
         BitmapDescriptor bitmap = BitmapDescriptorFactory
                 .fromResource(R.drawable.icon_marka);
@@ -52,6 +80,17 @@ public class BaiduMapActivity extends ItemActBarActivity {
                 .icon(bitmap);
 //在地图上添加Marker，并显示
         mBaiduMap.addOverlay(option);
+
+        //定义地图状态
+
+        MapStatus mMapStatus = new MapStatus.Builder()
+                .target(point)
+                .zoom(16)
+                .build();
+        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+        //改变地图状态
+        mBaiduMap.setMapStatus(mMapStatusUpdate);
+
     }
 
     @Override
@@ -61,7 +100,7 @@ public class BaiduMapActivity extends ItemActBarActivity {
 
     @Override
     public void mBack() {
-
+        this.finish();
     }
 
     @Override

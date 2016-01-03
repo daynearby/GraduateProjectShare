@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.twotoasters.jazzylistview.JazzyListView;
+import com.young.share.DiscoutDetailActivity;
+import com.young.share.R;
 import com.young.share.adapter.DiscountAdapter;
 import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
@@ -20,8 +22,6 @@ import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.myInterface.GotoAsyncFunction;
 import com.young.share.myInterface.ListViewRefreshListener;
 import com.young.share.network.BmobApi;
-import com.young.share.DiscoutDetailActivity;
-import com.young.share.R;
 import com.young.share.thread.MyRunnable;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DataFormateUtils;
@@ -36,7 +36,7 @@ import java.util.List;
 
 /**
  * 商家优惠
- *
+ * <p/>
  * Created by Nearby Yang on 2015-12-09.
  */
 @SuppressLint("ValidFragment")
@@ -55,7 +55,7 @@ public class DiscountFragment extends BaseFragment {
     private List<DiscountMessage_HZ> dataList = new ArrayList<>();
 
     private static final int MESSAGES_NEW_MESSAGE = 101;//最新消息
-
+    private boolean isFirstIn = true;//第一次进入该界面
     private static final String tag = "discount";
 
     public DiscountFragment(Context context) {
@@ -148,9 +148,6 @@ public class DiscountFragment extends BaseFragment {
 
                 refreshUI();
 
-                if (swipeRefreshLayout.isRefreshing()) {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
 
                 break;
         }
@@ -161,7 +158,10 @@ public class DiscountFragment extends BaseFragment {
      * 获取数据
      */
     public void getRemoteData() {
-
+        if (isFirstIn) {
+            swipeRefreshLayout.setRefreshing(true);
+            isFirstIn =false;
+        }
         JSONObject params = new JSONObject();
 
         try {
@@ -219,15 +219,21 @@ public class DiscountFragment extends BaseFragment {
         } else {
             endIndex = dataList.size() < Contants.PAGE_SIZE ? dataList.size() : endIndex;
         }
+
         discAdapter.setData(dataList.subList(startIndex, endIndex));
+        //停止刷新动画
         swipeRefreshLayout.setRefreshing(false);
     }
 
 
+    /**
+     * listview item 点击事件
+     */
     private class itemClick implements AdapterView.OnItemClickListener {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            isFirstIn = true;
             Bundle bundle = new Bundle();
 
             bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, DataFormateUtils.formateDataDiscount(dataList.get(position)));

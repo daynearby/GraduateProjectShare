@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.klinker.android.link_builder.Link;
+import com.klinker.android.link_builder.LinkBuilder;
+import com.young.share.BaiduMapActivity;
 import com.young.share.adapter.CommonAdapter.CommAdapter;
 import com.young.share.adapter.CommonAdapter.ViewHolder;
 import com.young.share.config.Contants;
@@ -25,6 +28,8 @@ import com.young.share.views.PopupWinUserInfo;
 import com.young.share.views.WrapHightGridview;
 
 import java.util.List;
+
+import cn.bmob.v3.datatype.BmobGeoPoint;
 
 /**
  * 商家优惠信息适配器
@@ -46,6 +51,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         TextView nickname_tv = holder.getView(R.id.id_userName);//昵称
         TextView tag_tv = holder.getView(R.id.id_tx_tab);//标签
         TextView content_tv = holder.getView(R.id.id_tx_share_content);//分享的文本内容
+        TextView location = holder.getView(R.id.tv_item_share_main_location);//分享信息的位置
         WrapHightGridview myGridview = holder.getView(R.id.id_gv_shareimg);
         TextView wanto_tv = holder.getView(R.id.id_tx_wantogo);//想去数量
         TextView hadgo_tv = holder.getView(R.id.id_hadgo);//去过数量
@@ -65,7 +71,14 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
                 ctx, content_tv, TextUtils.isEmpty(discountMessage_hz.getDtContent()) ? "" : discountMessage_hz.getDtContent()));
 
         nickname_tv.setText(TextUtils.isEmpty(user.getNickName()) ? ctx.getString(R.string.user_name_defual) : user.getNickName());
+        //地理信息的显示。显示了可以点击查看详细
+        if (!TextUtils.isEmpty(discountMessage_hz.getDtLocation())) {
+            location.setVisibility(View.VISIBLE);
+            location.setText(discountMessage_hz.getDtLocation());
 
+            LinkBuilder.on(location).addLink(setLocationInfoLink(discountMessage_hz.getDtLocation(),
+                    discountMessage_hz.getGeographic())).build();
+        }
         ImageHandlerUtils.loadIamgeThumbnail(ctx,
                 TextUtils.isEmpty(user.getAvatar()) ? Contants.DEFAULT_AVATAR : user.getAvatar(), avatar);
 
@@ -115,7 +128,27 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         return R.layout.item_share_main;
     }
 
+    /**
+     * 地理位置的点击事件
+     *
+     * @param linkWhat
+     * @param geoPoint 位置信息
+     * @return
+     */
+    private Link setLocationInfoLink(String linkWhat, final BmobGeoPoint geoPoint) {
+        Link link = new Link(linkWhat);
+        link.setOnClickListener(new Link.OnClickListener() {
+            @Override
+            public void onClick(String clickedText) {
 
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT,geoPoint);
+                startActivity(BaiduMapActivity.class, bundle);
+            }
+        });
+
+        return link;
+    }
     /**
      * 点击事件
      */

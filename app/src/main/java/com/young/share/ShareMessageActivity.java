@@ -41,12 +41,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import cn.bmob.v3.datatype.BmobGeoPoint;
 import cn.bmob.v3.listener.SaveListener;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * 发送分享信息
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-10-23.
  */
 public class ShareMessageActivity extends ItemActBarActivity implements View.OnClickListener {
@@ -81,6 +82,11 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     private boolean isResgiter = false;
     private String locationInfo;//定位信息
     private String tagInfo = "未分类";//标签信息
+    private double latitude;//纬度
+    private double longitude;//经度
+    private boolean addLocation = false;//是否添加地理信息
+    private boolean isGotLocationInfo = false;//是否已经获取地理信息
+    private String locationInfoString;//位置信息
     private ACache acache;//缓存
     private Dialog4Tips dialog;//保存草稿的提示框
     private DarftUtils darftUtils;//草稿
@@ -151,6 +157,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 //恢复草稿
         resetDraft();
 
+        startLocation();
     }
 
     /**
@@ -282,13 +289,13 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                 break;
 
             case R.id.im_content_popupwin_share_lacation_i://选择位置
+                addLocation = true;
+                if (!isGotLocationInfo) {
+                    startLocation();
+                } else {
+                    shareLocation_tv.setText(locationInfoString);
+                }
 
-                intents.setAction(Contants.BORDCAST_REQUEST_LOCATIONINFO);
-                sendBroadcast(intents);
-
-                //注册广播接收者
-                registerBoradcastReceiver();
-                mToast(R.string.locationing);
 
 //                LogUtils.logI("dialog 定位");
 
@@ -299,6 +306,20 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                 popupWinListView.onShow(tag_im);
 
                 break;
+        }
+    }
+
+    /**
+     * 启动定位
+     */
+    private void startLocation() {
+        intents.setAction(Contants.BORDCAST_REQUEST_LOCATIONINFO);
+        sendBroadcast(intents);
+
+        //注册广播接收者
+        registerBoradcastReceiver();
+        if (addLocation&&!isGotLocationInfo) {
+            mToast(R.string.locationing);
         }
     }
 
@@ -314,17 +335,21 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
             if (intent.getAction().equals(Contants.BORDCAST_LOCATIONINFO)) {
 
                 Bundle bundle = intent.getBundleExtra(BaseAppCompatActivity.BUNDLE_BROADCAST);
-
+                latitude = bundle.getDouble(Contants.LATITUDE, 39.963175);//纬度
+                longitude = bundle.getDouble(Contants.LONGITUDE, 116.400244);//经度
                 String province = bundle.getString(Contants.PROVINCE);
                 String city = bundle.getString(Contants.CITY);
                 String district = bundle.getString(Contants.DISTRICT);
                 String street = bundle.getString(Contants.STREET);
                 String streetNumber = bundle.getString(Contants.STREETNUMBER);
 
-                locationInfo = city + district + street + streetNumber;
+                locationInfo = String.format("%s%s%s%s", city, district, street, streetNumber);
+                locationInfoString = String.format("%s%s%s", district, street, streetNumber);
 
-                shareLocation_tv.setText(String.format("%s%s%s", district, street, streetNumber));
-
+                if (addLocation) {
+                    shareLocation_tv.setText(locationInfoString);
+                }
+                isGotLocationInfo = !TextUtils.isEmpty(locationInfo);
             }
         }
 
@@ -378,6 +403,13 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     @Override
     public void handerMessage(Message msg) {
 //        LogUtils.logI("handler = "+msg);
+
+        if (msg.what != FINISH_ACTIVITY) {
+            intents.setAction(Contants.BORDCAST_REQUEST_REFRESH);
+            intents.putExtra(Contants.REFRESH_TYPE, msg.what);
+            sendBroadcast(intents);
+        }
+
         mActivity.finish();
     }
 
@@ -493,7 +525,10 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
         shareMessage_hz.setShContent(content);
         shareMessage_hz.setShTag(tagInfo);
-        shareMessage_hz.setShLocation(locationInfo);
+        if (!TextUtils.isEmpty(locationInfo)) {
+            shareMessage_hz.setShLocation(locationInfo);
+        }
+        shareMessage_hz.setGeographic(new BmobGeoPoint(longitude, latitude));
         shareMessage_hz.setUserId(mUser);
         shareMessage_hz.setShCommNum(0);
         shareMessage_hz.setShVisitedNum(new ArrayList<String>());
@@ -581,7 +616,6 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                         //保存分享信息到云端
                         shareDiscountMessage(disMessages);
 
-
                     }
 //                            else {
 //
@@ -619,8 +653,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
             @Override
             public void onSuccess() {
                 mToast(R.string.share_messages_success);
-
-                mHandler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Contants.ONE_SECOND);
+                mHandler.sendEmptyMessageDelayed(Contants.REFRESH_TYPE_DISCOUNT, Contants.ONE_SECOND);
             }
 
             @Override
@@ -647,8 +680,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
             public void onSuccess() {
                 mToast(R.string.share_messages_success);
 //                LogUtils.logI("share messages success ");
-                mHandler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Contants.ONE_SECOND);
-
+                mHandler.sendEmptyMessageDelayed(Contants.REFRESH_TYPE_DISCOVER, Contants.ONE_SECOND);
             }
 
             @Override

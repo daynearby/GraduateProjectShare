@@ -8,12 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
+import com.young.share.R;
+import com.young.share.RankListActivity;
 import com.young.share.adapter.RankAdapter;
 import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
 import com.young.share.model.RankBean;
-import com.young.share.R;
-import com.young.share.RankListActivity;
 import com.young.share.utils.XmlUtils;
 import com.young.share.views.SpacesItemDecoration;
 
@@ -22,12 +22,11 @@ import java.util.List;
 
 /**
  * 排行榜
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-12-09.
  */
 @SuppressLint("ValidFragment")
 public class RankFragment extends BaseFragment {
-    // TODO: 2015-12-17 线程完成工作后立即回收
 
     private RankAdapter rankAdapter;
     private List<RankBean> dataList = new ArrayList<>();
@@ -52,7 +51,7 @@ public class RankFragment extends BaseFragment {
     public void initData() {
 
         getDatas();
-  
+
     }
 
     @Override
@@ -104,18 +103,22 @@ public class RankFragment extends BaseFragment {
     public void getDatas() {
 
         RankBean rankBean;
-         tagList = XmlUtils.getSelectTag(context);
+        tagList = XmlUtils.getSelectTag(context);
         List<Integer> colorList = XmlUtils.getSelectRankBackgroundColor(context);
         List<Integer> iconList = XmlUtils.getSelectRankIcon(context);
 
-        for (int i = 0; i < tagList.size(); i++) {
-            rankBean = new RankBean();
+        if (tagList != null && tagList.size() > 0
+                && colorList != null && colorList.size() > 0
+                && iconList != null && iconList.size() > 0) {
+            for (int i = 0; i < tagList.size(); i++) {
+                rankBean = new RankBean();
 
-            rankBean.setImageText(tagList.get(i));
-            rankBean.setBackgroundColor(colorList.get(i));
-            rankBean.setIconId(iconList.get(i));
+                rankBean.setImageText(tagList.get(i));
+                rankBean.setBackgroundColor(colorList.get(i));
+                rankBean.setIconId(iconList.get(i));
 
-            dataList.add(rankBean);
+                dataList.add(rankBean);
+            }
         }
 
         mhandler.sendEmptyMessage(GET_DATA);

@@ -41,9 +41,6 @@
                 style="@style/gridViwe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/size40"
-                android:layout_marginRight="@dimen/size40"
-                android:layout_marginTop="@dimen/paddingMic"
                 android:visibility="visible" />
             <TextView
                 android:id="@+id/tv_item_share_main_location"
@@ -52,7 +49,8 @@
                 android:paddingTop="@dimen/paddingMic"
                 android:paddingLeft="@dimen/paddingMic"
                 android:paddingRight="@dimen/paddingMic"
-                android:text="@string/txt_location_info" />
+                android:text="@string/txt_location_info"
+                android:visibility="gone"/>
             <TextView
                 android:id="@+id/tv_item_share_main_created_at"
                 style="@style/text_style_match"
