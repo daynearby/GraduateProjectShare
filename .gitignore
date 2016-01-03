@@ -29,3 +29,4 @@ proguard/
 .idea/
 /build
 /TextLink/build
+/sMSSDK/build
