@@ -27,6 +27,9 @@ proguard/
 *.ipr
 *.iws
 .idea/
+.navigation/
 /build
+/libs/build
+/gradle
 /TextLink/build
 /sMSSDK/build

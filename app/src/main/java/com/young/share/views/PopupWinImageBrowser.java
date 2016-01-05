@@ -6,12 +6,12 @@ import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.young.share.R;
 import com.young.share.adapter.WellcomePagerAdapter;
 import com.young.share.base.BasePopupWin;
-import com.young.share.utils.DisplayUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +37,11 @@ public class PopupWinImageBrowser extends BasePopupWin {
 
     //    private PhotoView[] im_browser;
     private ImageView[] im_indictor;
+    WindowManager.LayoutParams lp;
 
     public PopupWinImageBrowser(Context context) {
         super(context);
-
+        lp = ((Activity) context).getWindow().getAttributes();
 
     }
 
@@ -55,8 +56,8 @@ public class PopupWinImageBrowser extends BasePopupWin {
     }
 
     private void initSize() {
-        int width = DisplayUtils.getScreenWidthPixels((Activity) context);
-        int height = DisplayUtils.getScreenHeightPixels((Activity) context);
+//        int width = DisplayUtils.getScreenWidthPixels((Activity) context);
+//        int height = DisplayUtils.getScreenHeightPixels((Activity) context);
         setWidth(ViewGroup.LayoutParams.FILL_PARENT);
         setHeight(ViewGroup.LayoutParams.FILL_PARENT);
 
@@ -85,13 +86,21 @@ public class PopupWinImageBrowser extends BasePopupWin {
         myPagerAdapter.setImageClickListener(new WellcomePagerAdapter.ImageClickListener() {
             @Override
             public void onClick() {
-                PopupWinImageBrowser.this.dismiss();
+                dismiss();
             }
         });
         viewPager = (ViewPager) view.findViewById(R.id.vp_popupwindow_image_brower);
         viewPager.setAdapter(myPagerAdapter);
         viewPager.addOnPageChangeListener(new pageChangeListener());
+        setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss() {
 
+                lp.alpha = 1.0f;
+
+                ((Activity) context).getWindow().setAttributes(lp);
+            }
+        });
     }
 
     @Override
@@ -126,10 +135,22 @@ public class PopupWinImageBrowser extends BasePopupWin {
      */
     @Override
     public void onShow(View v) {
-        showAtLocation(getContentView(), Gravity.START, 0, 0);
+
+        lp.alpha = 0.1f;
+        ((Activity) context).getWindow().setAttributes(lp);
+
+        showAtLocation(getContentView(), Gravity.CENTER, 0, 0);
+
         this.update();
     }
 
+
+    /**
+     * 灰色背景效果
+     */
+    private void windowAlpha() {
+
+    }
 
     private class pageChangeListener implements ViewPager.OnPageChangeListener {
 

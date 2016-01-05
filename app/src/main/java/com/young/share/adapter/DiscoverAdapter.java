@@ -10,15 +10,15 @@ import android.widget.TextView;
 
 import com.klinker.android.link_builder.Link;
 import com.klinker.android.link_builder.LinkBuilder;
+import com.young.share.BaiduMapActivity;
+import com.young.share.MessageDetail;
+import com.young.share.R;
+import com.young.share.RankListActivity;
 import com.young.share.adapter.CommonAdapter.CommAdapter;
 import com.young.share.adapter.CommonAdapter.ViewHolder;
 import com.young.share.config.Contants;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.User;
-import com.young.share.BaiduMapActivity;
-import com.young.share.MessageDetail;
-import com.young.share.R;
-import com.young.share.RankListActivity;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LocationUtils;
@@ -111,7 +111,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
             LocationUtils.leftDrawableVisited(hadgo_tv, shareMessage.getShVisitedNum(), cuser.getObjectId());//设置图标
         }
 
-        comment_tv.setText(shareMessage.getShCommNum() > 0 ?
+        comment_tv.setText(shareMessage.getShCommNum() != null && shareMessage.getShCommNum() > 0 ?
                 String.valueOf(shareMessage.getShCommNum()) : ctx.getString(R.string.tx_comment));
 
         //地理信息的显示。显示了可以点击查看详细
@@ -154,7 +154,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
             public void onClick(String clickedText) {
 
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT,geoPoint);
+                bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT, geoPoint);
                 startActivity(BaiduMapActivity.class, bundle);
             }
         });
