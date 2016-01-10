@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/bg_orgin">
 
     <ImageView
         android:layout_width="fill_parent"
@@ -17,7 +18,7 @@
         android:clickable="true"
         android:padding="@dimen/paddingMic"
         android:text="@string/id_enterMain"
-        android:textColor="@drawable/sele_text_color"
-        android:textSize="20sp" />
+        android:textColor="@drawable/sele_text_color_def_purple"
+        android:textSize="@dimen/textSizeLarge" />
 
 </RelativeLayout>

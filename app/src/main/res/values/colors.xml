@@ -35,6 +35,6 @@
     <color name="rank_outdoorsport">#22AD38</color>
     <color name="rank_outdoorsport_light">#c822ad38</color>
     <color name="darker_gray">#eeeeee</color>
-
+    <color name="bg_orgin">#e5d7ca</color>
 
 </resources>

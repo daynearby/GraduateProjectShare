@@ -13,14 +13,6 @@
         android:padding="@dimen/paddingMediu"
         >
 
-        <TextView
-            style="@style/bar_text"
-            android:gravity="center"
-            android:padding="@dimen/paddingMediu"
-            android:text="@string/login_text"
-            android:textColor="@color/white"
-            android:textSize="@dimen/textSizeXLarge" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

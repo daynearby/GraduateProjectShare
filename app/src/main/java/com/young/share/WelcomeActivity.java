@@ -11,6 +11,7 @@ import com.young.share.config.Contants;
 import com.young.share.utils.SharePreferenceUtils;
 
 /**
+ * 应用欢迎界面
  * Created by Nearby Yang on 2015-08-17.
  */
 public class WelcomeActivity extends Activity {

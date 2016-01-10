@@ -28,9 +28,11 @@ proguard/
 *.iws
 .idea/
 .navigation/
+.gradle
 /build
 /libs/build
 /gradle
 /TextLink/build
 /sMSSDK/build
 /JazzyListView/build
+/Crop/build
