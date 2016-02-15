@@ -5,9 +5,9 @@ import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.twotoasters.jazzylistview.JazzyListView;
 import com.young.share.adapter.RecordAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.ItemActBarActivity;
@@ -37,7 +37,7 @@ import java.util.List;
 public class RecordCommActivity extends ItemActBarActivity {
 
     @InjectView(R.id.lv_record_comm)
-    private JazzyListView listview;
+    private ListView listview;
     @InjectView(R.id.sw_record_comm_refresh)
     private SwipeRefreshLayout swipeRefresh;
 

@@ -14,7 +14,9 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/paddingMic"
         android:text="@string/defaul_share_text"
-        android:textSize="@dimen/abc_text_size_medium_material" />
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="@android:color/black"
+        android:visibility="gone"/>
 
     <com.young.share.views.WrapHightGridview
         android:id="@+id/gv_message_detailshareimg"
@@ -23,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/size40"
         android:layout_marginRight="@dimen/size40"
-        android:layout_marginTop="@dimen/paddingMic"
+        android:layout_marginTop="@dimen/maginSmall"
         android:visibility="visible" />
 
     <TextView

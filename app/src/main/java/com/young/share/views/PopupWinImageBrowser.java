@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import com.young.share.R;
 import com.young.share.adapter.WellcomePagerAdapter;
 import com.young.share.base.BasePopupWin;
+import com.young.share.config.Contants;
+import com.young.share.views.photoview.PhotoView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +29,11 @@ public class PopupWinImageBrowser extends BasePopupWin {
     private List<View> view_list = new ArrayList<>();
     private List<String> im_url;
 
-    private int[] pager = new int[]{R.layout.image_pager_one, R.layout.image_pager_two,
-            R.layout.image_pager_three, R.layout.image_pager_four, R.layout.image_pager_five,
-            R.layout.image_pager_six};
-
     private int[] indictor = new int[]{R.id.image_brower_indicator0, R.id.image_brower_indicator1,
             R.id.image_brower_indicator2, R.id.image_brower_indicator3, R.id.image_brower_indicator4,
             R.id.image_brower_indicator5};
+
+
 
     //    private PhotoView[] im_browser;
     private ImageView[] im_indictor;
@@ -56,8 +56,6 @@ public class PopupWinImageBrowser extends BasePopupWin {
     }
 
     private void initSize() {
-//        int width = DisplayUtils.getScreenWidthPixels((Activity) context);
-//        int height = DisplayUtils.getScreenHeightPixels((Activity) context);
         setWidth(ViewGroup.LayoutParams.FILL_PARENT);
         setHeight(ViewGroup.LayoutParams.FILL_PARENT);
 
@@ -72,11 +70,19 @@ public class PopupWinImageBrowser extends BasePopupWin {
 
 
         for (int i = 0; i < im_url.size(); i++) {
-            view_list.add(inflater.inflate(pager[i], null));
+
+            ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+
+            PhotoView photoView = new PhotoView(context);
+            photoView.setLayoutParams(lp);
+            photoView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//            photoView.setImageResource(R.drawable.icon_loading_img);
+            photoView.setId(Contants.photoId[i]);
+
+            view_list.add(photoView);
             im_indictor[i] = (ImageView) view.findViewById(indictor[i]);
             im_indictor[i].setVisibility(View.VISIBLE);
-            // 启用图片缩放功能
-//            im_browser[i].enable();
 
         }
 

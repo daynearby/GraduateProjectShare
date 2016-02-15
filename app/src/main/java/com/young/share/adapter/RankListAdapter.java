@@ -5,9 +5,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.young.share.MessageDetail;
+import com.young.share.R;
 import com.young.share.adapter.CommonAdapter.CommAdapter;
 import com.young.share.adapter.CommonAdapter.ViewHolder;
 import com.young.share.config.Contants;
@@ -15,9 +18,8 @@ import com.young.share.model.CommRemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.User;
-import com.young.share.MessageDetail;
-import com.young.share.R;
 import com.young.share.utils.DateUtils;
+import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LocationUtils;
 import com.young.share.utils.StringUtils;
@@ -55,6 +57,10 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
         ((TextView) holder.getView(R.id.tv_item_share_main_created_at))
                 .setText(DateUtils.convertDate2Str(commRemoteModel.getMcreatedAt()));//创建时间
 
+        ViewGroup.LayoutParams lp = myGridview.getLayoutParams();
+        lp.width = DisplayUtils.getScreenWidthPixels((Activity) ctx) / 3 * 2;//设置宽度
+        myGridview.setLayoutParams(lp);
+
         myGridViewAdapter gridViewAdapter = new myGridViewAdapter((Activity) ctx, myGridview, false);
         myGridview.setAdapter(gridViewAdapter);
 
@@ -62,8 +68,13 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 
 //        StringBuilder sb = new StringBuilder(shareMessage.getShContent());
         // 特殊文字处理,将表情等转换一下
-        content_tv.setText(StringUtils.getEmotionContent(
-                ctx, content_tv, TextUtils.isEmpty(commRemoteModel.getContent()) ? "" : commRemoteModel.getContent()));
+        if (!TextUtils.isEmpty(commRemoteModel.getContent())) {
+            content_tv.setText(StringUtils.getEmotionContent(
+                    ctx, content_tv, commRemoteModel.getContent()));
+        } else {
+            content_tv.setVisibility(View.GONE);
+        }
+
 
         nickname_tv.setText(TextUtils.isEmpty(user.getNickName()) ? "" : user.getNickName());
 
@@ -159,7 +170,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 
                         List<String> wantedNum = commModel.getWanted();
 
-                        if (commModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES){//分享信息
+                        if (commModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES) {//分享信息
 
                             ShareMessage_HZ shareMessage = new ShareMessage_HZ();
                             shareMessage.setObjectId(commModel.getObjectId());
@@ -171,16 +182,15 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 
                         } else {//优惠信息
 
-                            DiscountMessage_HZ discountMessage  = new DiscountMessage_HZ();
+                            DiscountMessage_HZ discountMessage = new DiscountMessage_HZ();
                             discountMessage.setObjectId(commModel.getObjectId());
                             discountMessage.setDtWantedNum(commModel.getWanted());
 
-                            LocationUtils.discountWanto(ctx,cuser,discountMessage,
-                                    UserUtils.isHadCurrentUser(wantedNum,cuser.getObjectId()),
+                            LocationUtils.discountWanto(ctx, cuser, discountMessage,
+                                    UserUtils.isHadCurrentUser(wantedNum, cuser.getObjectId()),
                                     (TextView) v);
 
                         }
-
 
 
                     } else {
@@ -200,7 +210,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
                         commModel = (CommRemoteModel) o;
                         List<String> visitedNum = commModel.getVisited();
 
-                        if (commModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES){//分享信息
+                        if (commModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES) {//分享信息
 
                             ShareMessage_HZ shareMessage = new ShareMessage_HZ();
                             shareMessage.setObjectId(commModel.getObjectId());
@@ -213,7 +223,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 
                         } else {//优惠信息
 
-                            DiscountMessage_HZ discountMessage  = new DiscountMessage_HZ();
+                            DiscountMessage_HZ discountMessage = new DiscountMessage_HZ();
                             discountMessage.setObjectId(commModel.getObjectId());
                             discountMessage.setDtWantedNum(commModel.getWanted());
 
@@ -262,6 +272,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 
     /**
      * 编辑发送评论
+     *
      * @param commModel
      */
     private void comment(CommRemoteModel commModel) {
@@ -271,7 +282,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
         bundle.putInt(Contants.EXPEND_OPTION_ONE, Contants.EXPEND_START_INPUT);
         bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, commModel);
 
-        startActivity(MessageDetail.class,bundle);
+        startActivity(MessageDetail.class, bundle);
 
     }
 

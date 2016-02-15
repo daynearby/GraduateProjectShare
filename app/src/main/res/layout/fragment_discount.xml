@@ -9,7 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.twotoasters.jazzylistview.JazzyListView
+    <ListView
         android:id="@+id/list_discount"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

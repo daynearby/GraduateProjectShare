@@ -157,6 +157,7 @@ public class myGridViewAdapter extends BaseAdapter {
         LayoutParams params = new LayoutParams(itemWidth, itemWidth);
 
         holder.imageView.setLayoutParams(params);
+        holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);//
 
         if (isLocation) {
             ImageHandlerUtils.loadIamge(mactivity, imageUrl, holder.imageView, true);

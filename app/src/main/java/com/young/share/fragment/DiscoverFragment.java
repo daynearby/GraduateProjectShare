@@ -8,11 +8,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.twotoasters.jazzylistview.JazzyListView;
-import com.twotoasters.jazzylistview.effects.SlideInEffect;
 import com.young.share.MessageDetail;
 import com.young.share.R;
 import com.young.share.adapter.DiscoverAdapter;
@@ -98,11 +97,10 @@ public class DiscoverFragment extends BaseFragment {
     public void initView() {
         listviewAdapter = new DiscoverAdapter(context);
 
-        JazzyListView listView = $(R.id.list_discover);
+        ListView listView = $(R.id.list_discover);
         swipeRefreshLayout = $(R.id.sw_refresh_pager_discover);
 
         listView.setAdapter(listviewAdapter);
-        listView.setTransitionEffect(new SlideInEffect());
 
         //ListView的上拉、下拉刷新
         new ListViewRefreshListener(listView, swipeRefreshLayout,

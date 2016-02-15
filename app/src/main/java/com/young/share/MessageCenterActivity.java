@@ -5,9 +5,9 @@ import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.twotoasters.jazzylistview.JazzyListView;
 import com.young.share.adapter.MessageCenterAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.ItemActBarActivity;
@@ -40,7 +40,7 @@ public class MessageCenterActivity extends ItemActBarActivity {
     @InjectView(R.id.sw_message_center_refresh)
     private SwipeRefreshLayout swipeRefresh;
     @InjectView(R.id.lv_message_center)
-    private JazzyListView listView;
+    private ListView listView;
 
     private MessageCenterAdapter messageAdapter;
 

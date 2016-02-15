@@ -5,11 +5,11 @@ import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.twotoasters.jazzylistview.JazzyListView;
-import com.twotoasters.jazzylistview.effects.SlideInEffect;
 import com.young.share.adapter.RankListAdapter;
+import com.young.share.annotation.InjectView;
 import com.young.share.base.ItemActBarActivity;
 import com.young.share.config.Contants;
 import com.young.share.model.CommRemoteModel;
@@ -40,7 +40,8 @@ import java.util.List;
 public class RankListActivity extends ItemActBarActivity {
 
     private SwipeRefreshLayout swipeRefreshLayout;
-    private JazzyListView listview;
+    @InjectView(R.id.list_ranklist)
+    private ListView listview;
     private RankListAdapter rankAdapter;
 
     private String tag;
@@ -153,10 +154,8 @@ public class RankListActivity extends ItemActBarActivity {
     public void findviewbyid() {
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.sw_ranklist_refresh);
-        listview = (JazzyListView) findViewById(R.id.list_ranklist);
         rankAdapter = new RankListAdapter(mActivity);
 
-        listview.setTransitionEffect(new SlideInEffect());
         listview.setAdapter(rankAdapter);
 
         new ListViewRefreshListener(listview, swipeRefreshLayout, new ListViewRefreshListener.RefreshListener() {

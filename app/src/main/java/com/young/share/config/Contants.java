@@ -67,6 +67,10 @@ public class Contants {
 
     public static final int IMAGENUMBER = 6;//选择照片的数量
 
+    public static final int[] photoId = new int[]{0x1000,0x1001,0x1002,0x1003,0x1004,0x1005,
+            0x1006,0x1007,0x1008,0x1009
+    };
+
     //****************************广播接收者 标识**************************************
     public static final String BMOB_PUSH_MESSAGES = "Bmob_Push_Messages";
     public static final String BORDCAST_SELECTIMAGES = "bordcast_select_images";

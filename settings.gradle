@@ -1,2 +1,2 @@
-include ':app', ':Crop', ':JazzyListView', ':PhotoView', ':sMSSDK', ':multiImageSelector', ':svprogresshud', ':TextLink'
+include ':app', ':Crop', ':sMSSDK', ':multiImageSelector', ':svprogresshud', ':TextLink'
 

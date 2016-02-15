@@ -11,10 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.twotoasters.jazzylistview.JazzyListView;
-import com.twotoasters.jazzylistview.effects.SlideInEffect;
 import com.young.share.adapter.CommentAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.ItemActBarActivity;
@@ -45,7 +44,7 @@ import java.util.List;
 public class MessageDetail extends ItemActBarActivity implements View.OnClickListener {
 
     @InjectView(R.id.listview_discover)
-    private JazzyListView listView;
+    private ListView listView;
     @InjectView(R.id.edt_message_detail_comment)
     private EditText sendComment_edt;
     @InjectView(R.id.btn_message_detail_tosend)
@@ -194,7 +193,6 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
         });
 
         listView.setAdapter(commAdapter);
-        listView.setTransitionEffect(new SlideInEffect());
 
         //表情
         new EmotionUtils(mActivity, vp_emotion_dashboard, sendComment_edt);

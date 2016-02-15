@@ -24,4 +24,6 @@
 
 12.使用多套图标，适配主流屏幕，使用一些视觉效果、动画效果，提高用户体验
 
+13.删除ListView，准备全部改成recycleview
+
 gson，volley，litepal（sqlite3），UIL（通用图片加载），百度定位

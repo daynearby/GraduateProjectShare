@@ -1,6 +1,7 @@
 package com.young.share.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
@@ -8,10 +9,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.twotoasters.jazzylistview.JazzyListView;
 import com.young.share.DiscoutDetailActivity;
 import com.young.share.R;
 import com.young.share.adapter.DiscountAdapter;
@@ -19,6 +20,7 @@ import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
 import com.young.share.model.DiscountMessageList;
 import com.young.share.model.DiscountMessage_HZ;
+import com.young.share.model.User;
 import com.young.share.myInterface.GotoAsyncFunction;
 import com.young.share.myInterface.ListViewRefreshListener;
 import com.young.share.network.BmobApi;
@@ -27,12 +29,15 @@ import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.LocationUtils;
 import com.young.share.utils.LogUtils;
+import com.young.share.views.Dialog4Tips;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.bmob.v3.BmobUser;
 
 /**
  * 商家优惠
@@ -44,7 +49,7 @@ public class DiscountFragment extends BaseFragment {
 
 
     private SwipeRefreshLayout swipeRefreshLayout;
-    private JazzyListView listview;
+    private ListView listview;
     private DiscountAdapter discAdapter;
 
     private int startIndex = 0;
@@ -159,7 +164,7 @@ public class DiscountFragment extends BaseFragment {
     public void getRemoteData() {
         if (isFirstIn) {
             swipeRefreshLayout.setRefreshing(true);
-            isFirstIn =false;
+            isFirstIn = false;
         }
         JSONObject params = new JSONObject();
 
@@ -234,13 +239,24 @@ public class DiscountFragment extends BaseFragment {
      */
     private class itemClick implements AdapterView.OnItemClickListener {
 
+        private User cu = BmobUser.getCurrentUser(context, User.class);
+
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            isFirstIn = true;
-            Bundle bundle = new Bundle();
 
-            bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, DataFormateUtils.formateDataDiscount(dataList.get(position)));
-            LocationUtils.startActivity(context, bundle, DiscoutDetailActivity.class);
+            if (cu == null) {//用户没有登录
+
+                Dialog4Tips.loginFunction((Activity) context);
+
+            } else {//用户已经登录
+
+                isFirstIn = true;
+                Bundle bundle = new Bundle();
+
+                bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, DataFormateUtils.formateDataDiscount(dataList.get(position)));
+                LocationUtils.startActivity(context, bundle, DiscoutDetailActivity.class);
+
+            }
         }
     }
 }

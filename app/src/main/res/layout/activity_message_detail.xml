@@ -21,7 +21,7 @@
             app:cardCornerRadius="@dimen/radius_mic">
 
 
-            <com.young.share.views.EffectListView
+            <com.young.share.views.WrapHeightListView
                 android:id="@+id/listview_discover"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

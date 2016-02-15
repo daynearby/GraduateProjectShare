@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.young.share.model.User;
 import com.young.share.R;
 import com.young.share.RankListActivity;
 import com.young.share.utils.DateUtils;
+import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LocationUtils;
 import com.young.share.utils.StringUtils;
@@ -56,6 +58,10 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         TextView wanto_tv = holder.getView(R.id.id_tx_wantogo);//想去数量
         TextView hadgo_tv = holder.getView(R.id.id_hadgo);//去过数量
 
+        ViewGroup.LayoutParams lp = myGridview.getLayoutParams();
+        lp.width = DisplayUtils.getScreenWidthPixels((Activity) ctx) / 3 * 2;//设置宽度
+        myGridview.setLayoutParams(lp);
+
         holder.getView(R.id.id_tx_comment).setVisibility(View.GONE);//评论数量
 
         ((TextView) holder.getView(R.id.tv_item_share_main_created_at)).setText(DateUtils.convertDate2Str(discountMessage_hz.getCreatedAt()));//创建时间
@@ -67,9 +73,12 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
 //        StringBuilder sb = new StringBuilder(discountMessage_hz.getShContent());
         // 特殊文字处理,将表情等转换一下
-        content_tv.setText(StringUtils.getEmotionContent(
-                ctx, content_tv, TextUtils.isEmpty(discountMessage_hz.getDtContent()) ? "" : discountMessage_hz.getDtContent()));
-
+        if (! TextUtils.isEmpty(discountMessage_hz.getDtContent())) {
+            content_tv.setText(StringUtils.getEmotionContent(
+                    ctx, content_tv, discountMessage_hz.getDtContent()));
+        } else {
+            content_tv.setVisibility(View.GONE);
+        }
         nickname_tv.setText(TextUtils.isEmpty(user.getNickName()) ? ctx.getString(R.string.user_name_defual) : user.getNickName());
         //地理信息的显示。显示了可以点击查看详细
         if (!TextUtils.isEmpty(discountMessage_hz.getDtLocation())) {

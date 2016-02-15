@@ -5,10 +5,10 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bm.library.Info;
-import com.bm.library.PhotoView;
-import com.young.share.R;
+import com.young.share.config.Contants;
 import com.young.share.utils.ImageHandlerUtils;
+import com.young.share.views.photoview.Info;
+import com.young.share.views.photoview.PhotoView;
 
 import java.util.List;
 
@@ -54,9 +54,8 @@ public class WellcomePagerAdapter extends PagerAdapter {
         container.addView(view);
 
         if (urlList != null) {
-            switch (position) {
-                case 0:
-                    PhotoView photo0 = (PhotoView) view.findViewById(R.id.im_image_pager_one);
+
+                    PhotoView photo0 = (PhotoView) view.findViewById(Contants.photoId[position]);
                     photo0.enable();
                     // 获取图片信息
                     Info info0 = photo0.getInfo();
@@ -70,56 +69,8 @@ public class WellcomePagerAdapter extends PagerAdapter {
 //                        }
 //                    });
                     photo0.setOnClickListener(new OnClick());
-                    ImageHandlerUtils.loadIamge(ctx, urlList.get(0), photo0, false);
-                    break;
-                case 1:
-                    PhotoView photo1 = (PhotoView) view.findViewById(R.id.im_image_pager_two);
-                    photo1.enable();
-                    // 获取图片信息
-                    Info info1 = photo1.getInfo();
-                    photo1.animaFrom(info1);
-                    photo1.setOnClickListener(new OnClick());
-                    ImageHandlerUtils.loadIamge(ctx, urlList.get(1), photo1, false);
-                    break;
-                case 2:
-                    PhotoView photo2 = (PhotoView) view.findViewById(R.id.im_image_pager_three);
-                    photo2.enable();
-                    // 获取图片信息
-                    Info info = photo2.getInfo();
-                    photo2.animaFrom(info);
+                    ImageHandlerUtils.loadIamge(ctx, urlList.get(position), photo0, false);
 
-                    photo2.setOnClickListener(new OnClick());
-                    ImageHandlerUtils.loadIamge(ctx, urlList.get(2), photo2, false);
-                    break;
-                case 3:
-                    PhotoView photo3 = (PhotoView) view.findViewById(R.id.im_image_pager_four);
-                    photo3.enable();
-                    // 获取图片信息
-                    Info info3 = photo3.getInfo();
-                    photo3.animaFrom(info3);
-                    photo3.setOnClickListener(new OnClick());
-                    ImageHandlerUtils.loadIamge(ctx, urlList.get(3), photo3, false);
-                    break;
-                case 4:
-                    PhotoView photo4 = (PhotoView) view.findViewById(R.id.im_image_pager_five);
-                    photo4.enable();
-                    // 获取图片信息
-                    Info info4 = photo4.getInfo();
-                    photo4.animaFrom(info4);
-                    photo4.setOnClickListener(new OnClick());
-                    ImageHandlerUtils.loadIamge(ctx, urlList.get(4), photo4, false);
-                    break;
-                case 5:
-                    PhotoView photo5 = (PhotoView) view.findViewById(R.id.im_image_pager_six);
-                    photo5.enable();
-                    // 获取图片信息
-                    Info info5 = photo5.getInfo();
-                    photo5.animaFrom(info5);
-                    photo5.setOnClickListener(new OnClick());
-                    ImageHandlerUtils.loadIamge(ctx, urlList.get(5), photo5, false);
-
-                    break;
-            }
         }
         return view;
 

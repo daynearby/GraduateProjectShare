@@ -34,13 +34,17 @@
                 android:maxLines="3"
                 android:padding="@dimen/paddingMic"
                 android:text="@string/defaul_share_text"
-                android:textSize="@dimen/abc_text_size_medium_material" />
+                style="@android:style/TextAppearance.Medium"
+                android:textColor="@android:color/black"/>
 
             <com.young.share.views.WrapHightGridview
                 android:id="@+id/id_gv_shareimg"
                 style="@style/gridViwe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/paddingMic"
+                android:paddingRight="@dimen/paddingMic"
+                android:layout_marginTop="@dimen/paddingMic"
                 android:visibility="visible" />
             <TextView
                 android:id="@+id/tv_item_share_main_location"
