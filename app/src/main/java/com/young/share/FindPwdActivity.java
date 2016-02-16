@@ -11,6 +11,7 @@ import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.CustomActBarActivity;
 import com.young.share.config.Contants;
+import com.young.share.model.BaseModel;
 import com.young.share.model.User;
 import com.young.share.myInterface.GotoAsyncFunction;
 import com.young.share.network.BmobApi;
@@ -65,7 +66,7 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
         super.initData();
         setBarVisibility(false, false);
         settitle(R.string.find_pwd_text);
-                SMSSDK.initSDK(this, Contants.SMS_APP_KEY, Contants.SMS_APP_SECRET);
+        SMSSDK.initSDK(this, Contants.SMS_APP_KEY, Contants.SMS_APP_SECRET);
     }
 
     @Override
@@ -111,9 +112,9 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
 
                             if (!TextUtils.isEmpty(object.get(0).getMobilePhoneNumber())) {
 
-                                smsVerfied(object.get(0).getMobilePhoneNumber() );
+                                smsVerfied(object.get(0).getMobilePhoneNumber());
 
-                            }else {
+                            } else {
 
                                 SVProgressHUD.showErrorWithStatus(FindPwdActivity.this, getString(R.string.user_non_verif_monilePhome), SVProgressHUD.SVProgressHUDMaskType.Gradient);
 
@@ -147,6 +148,7 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
 
     /**
      * 短信验证
+     *
      * @param mobilePhoneNumber
      */
     private void smsVerfied(final String mobilePhoneNumber) {
@@ -163,13 +165,14 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
                     String country = (String) phoneMap.get("country");
                     phone = (String) phoneMap.get("phone");
 
-                    if (mobilePhoneNumber.equals(phone)){//手机验证与预留手机号不相同
+                    if (mobilePhoneNumber.equals(phone)) {//手机验证与预留手机号不相同
 
                         // 提交用户信息
                         hadVerfi = true;
                         findPwdLayout.setVisibility(View.VISIBLE);
+                        et_user_name.setEnabled(false);
 
-                    }else {//手机验证与预留手机号不相同
+                    } else {//手机验证与预留手机号不相同
 
                         SVProgressHUD.showErrorWithStatus(FindPwdActivity.this, getString(R.string.mobilePhone_not_equals), SVProgressHUD.SVProgressHUDMaskType.GradientCancel);
 
@@ -220,12 +223,13 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
             public void onSuccess(Object object) {
 
                 if (object != null) {
-
-                    if (object.toString().equals("1")) {
+                    BaseModel result = (BaseModel) object;
+//LogUtils.logE(object + " -- " + (result.getCode() == 0));
+                    if (result.getCode()==0) {
                         SVProgressHUD.showSuccessWithStatus(FindPwdActivity.this, getString(R.string.find_pwd_success));
                         mHandler.sendEmptyMessageDelayed(103, Contants.ONE_SECOND);
                     } else {
-
+                        SVProgressHUD.showErrorWithStatus(FindPwdActivity.this, getString(R.string.find_pwd_failure));
                     }
 
                 } else {
@@ -235,7 +239,7 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
 
             @Override
             public void onFailure(int code, String msg) {
-
+                SVProgressHUD.showErrorWithStatus(FindPwdActivity.this, getString(R.string.find_pwd_failure));
             }
         });
 

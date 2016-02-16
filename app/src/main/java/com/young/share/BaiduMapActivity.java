@@ -1,5 +1,7 @@
 package com.young.share;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Message;
 import android.view.View;
 
@@ -10,6 +12,7 @@ import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
@@ -20,15 +23,22 @@ import cn.bmob.v3.datatype.BmobGeoPoint;
 
 /**
  * 百度地图
- * 显示地理位置
- * <p/>
+ * 显示地理位置，拾取坐标
+ * 都需要传入初始坐标
+ *
+ * <p>
  * Created by Nearby Yang on 2016-01-02.
  */
 public class BaiduMapActivity extends ItemActBarActivity {
 
     private MapView mMapView;
     private BaiduMap mBaiduMap;
+
+    private Marker marker;//进行拖拽的对象
+    private LatLng resultPoint;//拖拽之后确定的坐标
     private BmobGeoPoint geoPoint;
+    private boolean isPosition ;//是准备定位状态还是直接显示定位信息
+    private String geoStr = "geo:%s,%s";//经纬度
 
     @Override
     public int getLayoutId() {
@@ -38,7 +48,10 @@ public class BaiduMapActivity extends ItemActBarActivity {
     @Override
     public void initData() {
         super.initData();
+
         geoPoint = (BmobGeoPoint) getIntent().getExtras().getSerializable(Contants.INTENT_BMOB_GEOPONIT);
+        isPosition = getIntent().getBooleanExtra(Contants.INTENT_BMOB_IS_POSITION,false);
+
         if (geoPoint == null) {
             geoPoint = new BmobGeoPoint(116.400244, 39.963175);
         }
@@ -53,7 +66,11 @@ public class BaiduMapActivity extends ItemActBarActivity {
 
             @Override
             public void rightClivk(View v) {
+//调用外部地图显示位置
+                Uri uri = Uri.parse(String.format(geoStr,geoPoint.getLatitude(),geoPoint.getLongitude()));
 
+                Intent it = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(it);
             }
         });
     }
@@ -66,7 +83,6 @@ public class BaiduMapActivity extends ItemActBarActivity {
 
     @Override
     public void bindData() {
-
 
 
 //定义Maker坐标点
@@ -90,7 +106,33 @@ public class BaiduMapActivity extends ItemActBarActivity {
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
         //改变地图状态
         mBaiduMap.setMapStatus(mMapStatusUpdate);
+//debug
+        if (isPosition){
 
+            OverlayOptions options = new MarkerOptions()
+                    .position(point)  //设置marker的位置
+                    .icon(bitmap)  //设置marker图标
+                    .zIndex(9)  //设置marker所在层级
+                    .draggable(true);  //设置手势拖拽
+//将marker添加到地图上
+            marker = (Marker) (mBaiduMap.addOverlay(options));
+
+
+            //调用BaiduMap对象的setOnMarkerDragListener方法设置marker拖拽的监听
+            mBaiduMap.setOnMarkerDragListener(new BaiduMap.OnMarkerDragListener() {
+                public void onMarkerDrag(Marker marker) {
+                    //拖拽中
+                }
+                public void onMarkerDragEnd(Marker marker) {
+                    //拖拽结束
+                    resultPoint = marker.getPosition();
+                }
+                public void onMarkerDragStart(Marker marker) {
+                    //开始拖拽
+                }
+            });
+        }
+        // TODO: 2016-02-16 拖拽结束之后，获取拖拽之后的坐标，点击完成，获取准确的坐标
     }
 
     @Override

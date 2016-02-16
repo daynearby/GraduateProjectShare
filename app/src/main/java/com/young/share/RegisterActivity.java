@@ -29,6 +29,8 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.SaveListener;
 
 /**
+ * 用户注册界面
+ *
  * Created by Nearby Yang on 2015-10-20.
  */
 public class RegisterActivity extends CustomActBarActivity implements View.OnClickListener {

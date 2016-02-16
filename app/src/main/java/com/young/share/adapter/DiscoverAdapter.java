@@ -74,6 +74,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                 .setText(DateUtils.convertDate2Str(shareMessage.getCreatedAt()));//创建时间
         ViewGroup.LayoutParams lp = myGridview.getLayoutParams();
         lp.width = DisplayUtils.getScreenWidthPixels((Activity) ctx) / 3 * 2;//设置宽度
+
         myGridview.setLayoutParams(lp);
         myGridViewAdapter gridViewAdapter = new myGridViewAdapter((Activity) ctx, myGridview, false);
         myGridview.setAdapter(gridViewAdapter);

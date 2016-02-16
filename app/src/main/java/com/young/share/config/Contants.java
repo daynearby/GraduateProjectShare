@@ -135,6 +135,7 @@ public class Contants {
 
     public static final String INTENT_RANK_TYPE = "intent_rank_type";//intent传输数据标志
     public static final String INTENT_BMOB_GEOPONIT = "intent_bmob_geoponit";//intent传输数据标志,地理信息
+    public static final String INTENT_BMOB_IS_POSITION = "intent_bmob_is_position";//intent传输数据标志,是显示定位信息还是拖拽进行准确定位
 
     //************************** 数据model 类型******************************
     public static final int DATA_MODEL_SHARE_MESSAGES = 1010;//分享信息数据

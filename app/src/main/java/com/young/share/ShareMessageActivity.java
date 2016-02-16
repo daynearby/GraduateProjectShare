@@ -297,7 +297,6 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                 }
 
 
-//                LogUtils.logI("dialog 定位");
 
                 break;
 
@@ -713,7 +712,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
      * 清理工作
      */
     private void clean() {
-        content_et.setText("");
+        content_et.getText().clear();
         shareLocation_tv.setText("");
         tag_tv.setText("");
         gridViewAdapter.setDatas(null, true);

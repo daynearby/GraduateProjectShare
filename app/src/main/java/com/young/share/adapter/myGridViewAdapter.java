@@ -28,7 +28,6 @@ public class myGridViewAdapter extends BaseAdapter {
     private List<String> data;
     private Activity mactivity;
     private LayoutInflater myinflater;
-    private int num = 0;
     private String imageUrl;
     private boolean isUpload = false;
     private GridView gv;
@@ -39,13 +38,13 @@ public class myGridViewAdapter extends BaseAdapter {
      * true -> 显示红色的叉叉
      * false -> 不显示红色叉叉
      *
-     * @param gv_img
+     * @param gv
      * @param isUpload
      */
-    public myGridViewAdapter(Activity mactivity, GridView gv_img, boolean isUpload) {
+    public myGridViewAdapter(Activity mactivity, GridView gv, boolean isUpload) {
         this.mactivity = mactivity;
         this.isUpload = isUpload;
-        gv = gv_img;
+        this.gv = gv;
         data = new ArrayList<>();
 
         myinflater = LayoutInflater.from(mactivity);
@@ -73,21 +72,12 @@ public class myGridViewAdapter extends BaseAdapter {
     @Override
     public int getCount() {
 
-        if (null != data) {
-            num = data.size();
-        }
-
-        return num;
+       return data!=null&&data.size()>0?data.size():0;
     }
 
     @Override
     public String getItem(int position) {
-        if (data != null) {
-            return data.get(position);
-
-        }
-
-        return null;
+        return data!=null&&data.size()>0?data.get(position):null;
     }
 
     @Override
@@ -139,9 +129,11 @@ public class myGridViewAdapter extends BaseAdapter {
         }
 
         if (data != null) {
-            if (data.size() <= 2) {
+            if (data.size() == 1) {
                 gv.setNumColumns(2);
-            } else {
+            }else if (data.size() == 4){
+                gv.setNumColumns(2);
+            }else {
                 gv.setNumColumns(3);
             }
         }

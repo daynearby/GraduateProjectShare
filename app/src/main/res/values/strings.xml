@@ -20,7 +20,7 @@
     <string name="pwd">密码</string>
     <string name="login_text">登录</string>
     <string name="forget_pwd">忘记密码？</string>
-    <string name="find_pwd_text">找回密码</string>
+    <string name="find_pwd_text">重置密码</string>
     <string name="regist">注册</string>
     <string name="config">确定</string>
     <string name="cancel">取消</string>
@@ -104,7 +104,7 @@
     <string name="update_user_info_faile">更新信息失败\n请稍后再试</string>
     <string name="update_user_info_success">更新信息成功</string>
     <string name="verify_mobilePhone_faile">验证手机号码失败\\n请稍候再试！</string>
-    <string name="updating">更新中&#8230;</string>
+    <string name="updating">更新中...</string>
     <string name="without_network">网络不通畅\n稍后有网络才能获取最新数据</string>
     <string name="created_at">2015&#8211;11&#8211;19 11:16</string>
     <string name="personal_signature">个性签名</string>
@@ -135,5 +135,6 @@
     <string name="txt_location_info">位置信息</string>
     <string name="location">位置</string>
     <string name="navigation">导航</string>
+    <string name="find_pwd_failure">重置密码失败</string>
 
 </resources>

@@ -36,7 +36,9 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/light_gray"
-                android:textSize="@dimen/textSizeLarge" />
+                android:textSize="@dimen/textSizeLarge" >
+                <requestFocus/>
+            </EditText>
 
         </LinearLayout>
 
