@@ -1,4 +1,4 @@
-package com.young.share.views.photoview;
+package com.young.share.views.guesPhotoview;
 
 import android.graphics.RectF;
 import android.widget.ImageView;

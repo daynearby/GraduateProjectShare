@@ -13,7 +13,7 @@ import com.young.share.R;
 import com.young.share.adapter.WellcomePagerAdapter;
 import com.young.share.base.BasePopupWin;
 import com.young.share.config.Contants;
-import com.young.share.views.photoview.PhotoView;
+import com.young.share.views.guesPhotoview.PhotoView;
 
 import java.util.ArrayList;
 import java.util.List;

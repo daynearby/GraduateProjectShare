@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 
 import com.young.share.config.Contants;
 import com.young.share.utils.ImageHandlerUtils;
-import com.young.share.views.photoview.Info;
-import com.young.share.views.photoview.PhotoView;
+import com.young.share.views.guesPhotoview.Info;
+import com.young.share.views.guesPhotoview.PhotoView;
 
 import java.util.List;
 

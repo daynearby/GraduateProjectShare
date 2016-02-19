@@ -40,6 +40,8 @@ public class BaiduMapActivity extends ItemActBarActivity {
     private boolean isPosition ;//是准备定位状态还是直接显示定位信息
     private String geoStr = "geo:%s,%s";//经纬度
 
+    // TODO: 2016-02-19 分享信息，拖拽实现定位
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_baidu_map;
