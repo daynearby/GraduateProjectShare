@@ -3,8 +3,8 @@ package com.young.share.adapter;
 import android.content.Context;
 import android.widget.TextView;
 
-import com.young.share.adapter.CommonAdapter.CommAdapter;
-import com.young.share.adapter.CommonAdapter.ViewHolder;
+import com.young.share.adapter.baseAdapter.CommAdapter;
+import com.young.share.adapter.baseAdapter.ViewHolder;
 import com.young.share.model.CommRemoteModel;
 import com.young.share.R;
 import com.young.share.utils.StringUtils;

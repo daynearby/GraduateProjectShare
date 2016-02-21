@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.klinker.android.link_builder.Link;
 import com.klinker.android.link_builder.LinkBuilder;
-import com.young.share.adapter.CommonAdapter.CommAdapter;
-import com.young.share.adapter.CommonAdapter.ViewHolder;
+import com.young.share.adapter.baseAdapter.CommAdapter;
+import com.young.share.adapter.baseAdapter.ViewHolder;
 import com.young.share.config.Contants;
 import com.young.share.model.BaseModel;
 import com.young.share.model.CommRemoteModel;
@@ -206,7 +206,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         TextView comment_tv = holder.getView(R.id.id_tx_comment);//评论数量
         ((TextView) holder.getView(R.id.tv_item_message_detail_createdat)).setText(commRemoteModel.getMcreatedAt());//创建时间
 
-        myGridViewAdapter gridViewAdapter = new myGridViewAdapter((Activity) ctx, myGridview, false);
+        ThumGridViewAdapter gridViewAdapter = new ThumGridViewAdapter((Activity) ctx, myGridview, false);
         myGridview.setAdapter(gridViewAdapter);
 
 //        StringBuilder sb = new StringBuilder(shareMessage.getShContent());

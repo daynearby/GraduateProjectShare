@@ -21,6 +21,14 @@ public class ImageInfo implements Serializable {
     //        缩略图
     public String smallImageUrl;
 
+    public ImageInfo() {
+    }
+
+    public ImageInfo(String imageUrl, String smallImageUrl) {
+        this.imageUrl = imageUrl;
+        this.smallImageUrl = smallImageUrl;
+    }
+
     public int getHeight() {
         return height;
     }

@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.young.share.adapter.myGridViewAdapter;
+import com.young.share.adapter.ThumGridViewAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.ItemActBarActivity;
 import com.young.share.config.Contants;
@@ -154,7 +154,7 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
         createdAt.setText(commModel.getMcreatedAt());
         initBottomBar(commModel);
 
-        myGridViewAdapter gridViewAdapter = new myGridViewAdapter(mActivity, myGridview, false);
+        ThumGridViewAdapter gridViewAdapter = new ThumGridViewAdapter(mActivity, myGridview, false);
         gridViewAdapter.setDatas(commModel.getImages(), false);
 
         myGridview.setAdapter(gridViewAdapter);

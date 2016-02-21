@@ -140,6 +140,9 @@
         <!--百度地图 -->
         <activity android:name=".BaiduMapActivity"/>
 
+        <activity android:name=".BigPicActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
         <!-- 百度定位 services -->
         <service
             android:name="com.baidu.location.f"

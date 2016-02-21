@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.klinker.android.link_builder.Link;
 import com.klinker.android.link_builder.LinkBuilder;
 import com.young.share.BaiduMapActivity;
-import com.young.share.adapter.CommonAdapter.CommAdapter;
-import com.young.share.adapter.CommonAdapter.ViewHolder;
+import com.young.share.adapter.baseAdapter.CommAdapter;
+import com.young.share.adapter.baseAdapter.ViewHolder;
 import com.young.share.config.Contants;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.User;
@@ -66,7 +66,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
         ((TextView) holder.getView(R.id.tv_item_share_main_created_at)).setText(DateUtils.convertDate2Str(discountMessage_hz.getCreatedAt()));//创建时间
 
-        myGridViewAdapter gridViewAdapter = new myGridViewAdapter((Activity) ctx, myGridview, false);
+        ThumGridViewAdapter gridViewAdapter = new ThumGridViewAdapter((Activity) ctx, myGridview, false);
         myGridview.setAdapter(gridViewAdapter);
 
 //************************************************初始化数据********************************************

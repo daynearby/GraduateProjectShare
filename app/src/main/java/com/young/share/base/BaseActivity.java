@@ -18,15 +18,15 @@ public abstract class BaseActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
         Injector.inject(this);
-        findView();
+        initData();
         setupEvent();
 
     }
 
+    protected abstract void initData();
 
     protected abstract int getLayout();
 
-    protected abstract void findView();
 
     protected abstract void setupEvent();
 }

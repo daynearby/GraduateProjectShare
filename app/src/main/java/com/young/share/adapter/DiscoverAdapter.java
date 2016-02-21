@@ -15,21 +15,24 @@ import com.young.share.BaiduMapActivity;
 import com.young.share.MessageDetail;
 import com.young.share.R;
 import com.young.share.RankListActivity;
-import com.young.share.adapter.CommonAdapter.CommAdapter;
-import com.young.share.adapter.CommonAdapter.ViewHolder;
+import com.young.share.adapter.baseAdapter.CommAdapter;
+import com.young.share.adapter.baseAdapter.ViewHolder;
 import com.young.share.config.Contants;
+import com.young.share.model.ImageInfo;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.User;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LocationUtils;
+import com.young.share.utils.NetworkUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.utils.UserUtils;
 import com.young.share.views.Dialog4Tips;
 import com.young.share.views.PopupWinUserInfo;
 import com.young.share.views.WrapHightGridview;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.datatype.BmobGeoPoint;
@@ -76,14 +79,19 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         lp.width = DisplayUtils.getScreenWidthPixels((Activity) ctx) / 3 * 2;//设置宽度
 
         myGridview.setLayoutParams(lp);
-        myGridViewAdapter gridViewAdapter = new myGridViewAdapter((Activity) ctx, myGridview, false);
-        myGridview.setAdapter(gridViewAdapter);
+
+//        ThumGridViewAdapter gridViewAdapter = new ThumGridViewAdapter((Activity) ctx, myGridview, false);
+
+        GridviewAdapter adapter = new GridviewAdapter((Activity) ctx, myGridview, false);
+        adapter.setDatas(getImageInfoList(shareMessage),false);
+
+        myGridview.setAdapter(adapter);
 
 //************************************************初始化数据********************************************
 
 //        StringBuilder sb = new StringBuilder(shareMessage.getShContent());
         // 特殊文字处理,将表情等转换一下
-        if ( !TextUtils.isEmpty(shareMessage.getShContent()) ) {
+        if (!TextUtils.isEmpty(shareMessage.getShContent())) {
             content_tv.setText(StringUtils.getEmotionContent(
                     ctx, content_tv, shareMessage.getShContent()));
         } else {
@@ -130,8 +138,12 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         }
 //        location.setText();
         //图片显示
-        gridViewAdapter.setDatas(shareMessage.getShImgs(), false);
-        myGridview.setOnItemClickListener(new LocationUtils.itemClick(ctx, shareMessage.getShImgs()));
+        /**
+         *
+         *
+         */
+//        gridViewAdapter.setDatas(shareMessage.getShImgs(), false);
+//        myGridview.setOnItemClickListener(new LocationUtils.itemClick(ctx, shareMessage.getShImgs()));
 
 //添加监听事件
         nickname_tv.setOnClickListener(new click(user));
@@ -146,6 +158,29 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
     @Override
     public int getlayoutid(int position) {
         return R.layout.item_share_main;
+    }
+
+    /**
+     * 格式化数据
+     *
+     * @param shareMessage
+     * @return
+     */
+    private List<ImageInfo> getImageInfoList(ShareMessage_HZ shareMessage) {
+
+        List<ImageInfo> imageInfoList = new ArrayList<>();
+
+        if (shareMessage.getShImgs() != null && shareMessage.getShImgs().size() > 0) {
+
+            for (String uri : shareMessage.getShImgs()) {
+
+                //大图uri、小图uri
+                ImageInfo imageInfo = new ImageInfo(NetworkUtils.getRealUrl(ctx, uri, false), NetworkUtils.getRealUrl(ctx, uri));
+                imageInfoList.add(imageInfo);
+            }
+
+        }
+        return imageInfoList;
     }
 
     /**

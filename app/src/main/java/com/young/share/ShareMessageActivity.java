@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.young.share.adapter.myGridViewAdapter;
+import com.young.share.adapter.ThumGridViewAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.base.ItemActBarActivity;
@@ -75,7 +75,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     @InjectView(R.id.tv_share_message_tips)
     private TextView tips_tv;
 
-    private myGridViewAdapter gridViewAdapter;
+    private ThumGridViewAdapter gridViewAdapter;
     private InputMethodManager imm;
 
     private PopupWinListView popupWinListView;
@@ -130,7 +130,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         tagList.remove(0);
 
         popupWinListView = new PopupWinListView(this, tagList, false);
-        gridViewAdapter = new myGridViewAdapter(this, gv_img, true);
+        gridViewAdapter = new ThumGridViewAdapter(this, gv_img, true);
         gridViewAdapter.setDatas(null, true);
 
         gv_img.setAdapter(gridViewAdapter);

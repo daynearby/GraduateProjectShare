@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.young.share.MessageDetail;
 import com.young.share.R;
-import com.young.share.adapter.CommonAdapter.CommAdapter;
-import com.young.share.adapter.CommonAdapter.ViewHolder;
+import com.young.share.adapter.baseAdapter.CommAdapter;
+import com.young.share.adapter.baseAdapter.ViewHolder;
 import com.young.share.config.Contants;
 import com.young.share.model.CommRemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
@@ -61,7 +61,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
         lp.width = DisplayUtils.getScreenWidthPixels((Activity) ctx) / 3 * 2;//设置宽度
         myGridview.setLayoutParams(lp);
 
-        myGridViewAdapter gridViewAdapter = new myGridViewAdapter((Activity) ctx, myGridview, false);
+        ThumGridViewAdapter gridViewAdapter = new ThumGridViewAdapter((Activity) ctx, myGridview, false);
         myGridview.setAdapter(gridViewAdapter);
 
 //************************************************初始化数据********************************************

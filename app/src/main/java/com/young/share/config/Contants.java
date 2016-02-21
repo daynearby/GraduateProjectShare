@@ -55,7 +55,7 @@ public class Contants {
 
     //******************************定位 Keys***********************
     public static final String LATITUDE = "latitude";
-    public static final String LONGITUDE =  "longitude";
+    public static final String LONGITUDE = "longitude";
     public static final String PROVINCE = "province";
     public static final String CITY = "city";
     public static final String DISTRICT = "district";
@@ -67,8 +67,8 @@ public class Contants {
 
     public static final int IMAGENUMBER = 6;//选择照片的数量
 
-    public static final int[] photoId = new int[]{0x1000,0x1001,0x1002,0x1003,0x1004,0x1005,
-            0x1006,0x1007,0x1008,0x1009
+    public static final int[] photoId = new int[]{0x1000, 0x1001, 0x1002, 0x1003, 0x1004, 0x1005,
+            0x1006, 0x1007, 0x1008, 0x1009
     };
 
     //****************************广播接收者 标识**************************************
@@ -78,9 +78,9 @@ public class Contants {
     public static final String BORDCAST_REQUEST_LOCATIONINFO = "bordcast_request_location_info";
     public static final String BORDCAST_REQUEST_REFRESH = "bordcast_request_refresh";
 
-    public static final String REFRESH_TYPE="refresh_type";
-    public static final int REFRESH_TYPE_DISCOUNT=10;
-    public static final int REFRESH_TYPE_DISCOVER=11;
+    public static final String REFRESH_TYPE = "refresh_type";
+    public static final int REFRESH_TYPE_DISCOUNT = 10;
+    public static final int REFRESH_TYPE_DISCOVER = 11;
     //广播数据的标志
 
     public static final String BORDCAST_IMAGEPATH_LIST = "bordcast_imagrpath_list";
@@ -136,6 +136,8 @@ public class Contants {
     public static final String INTENT_RANK_TYPE = "intent_rank_type";//intent传输数据标志
     public static final String INTENT_BMOB_GEOPONIT = "intent_bmob_geoponit";//intent传输数据标志,地理信息
     public static final String INTENT_BMOB_IS_POSITION = "intent_bmob_is_position";//intent传输数据标志,是显示定位信息还是拖拽进行准确定位
+    public static final String INTENT_IMAGE_INFO_LIST = "intent_image_info_list";//intent传输数据标志,传递图片的信息，位置、大小
+    public static final String INTENT_CURRENT_ITEM = "intent_current_item";//intent传输数据标志,点击的图片的position，那么就是当前显示的图片
 
     //************************** 数据model 类型******************************
     public static final int DATA_MODEL_SHARE_MESSAGES = 1010;//分享信息数据
