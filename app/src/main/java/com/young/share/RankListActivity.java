@@ -39,6 +39,7 @@ import java.util.List;
  */
 public class RankListActivity extends ItemActBarActivity {
 
+    @InjectView(R.id.sw_ranklist_refresh)
     private SwipeRefreshLayout swipeRefreshLayout;
     @InjectView(R.id.list_ranklist)
     private ListView listview;
@@ -153,7 +154,6 @@ public class RankListActivity extends ItemActBarActivity {
     @Override
     public void findviewbyid() {
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.sw_ranklist_refresh);
         rankAdapter = new RankListAdapter(mActivity);
 
         listview.setAdapter(rankAdapter);

@@ -1,14 +1,19 @@
 package com.young.share.utils;
 
+import android.content.Context;
+
 import com.young.share.config.Contants;
 import com.young.share.model.CommRemoteModel;
 import com.young.share.model.Comment_HZ;
 import com.young.share.model.DiscountMessage_HZ;
+import com.young.share.model.ImageInfo;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.dbmodel.ShareMessage;
 import com.young.share.model.dbmodel.User;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 格式化公用类
@@ -176,5 +181,56 @@ public class DataFormateUtils {
         u.setUsername(user.getUsername());
 
         return u;
+    }
+
+
+    /**
+     * 格式化数据
+     *
+     * @param shareMessage
+     * @param context
+     * @return
+     */
+    public static List<ImageInfo> formateImageInfoList(Context context,ShareMessage_HZ shareMessage) {
+
+        List<ImageInfo> imageInfoList = new ArrayList<>();
+
+        if (shareMessage.getShImgs() != null && shareMessage.getShImgs().size() > 0) {
+
+            for (String uri : shareMessage.getShImgs()) {
+
+                //大图uri、小图uri
+                ImageInfo imageInfo = new ImageInfo(NetworkUtils.getRealUrl(context, uri, false),
+                        NetworkUtils.getRealUrl(context, uri));
+                imageInfoList.add(imageInfo);
+            }
+
+        }
+        return imageInfoList;
+    }
+
+    /**
+     * 格式化数据
+     *
+     * @param uriList
+     * @param context
+     * @return
+     */
+    public static List<ImageInfo> formateStringInfoList(Context context,List<String> uriList) {
+
+        List<ImageInfo> imageInfoList = new ArrayList<>();
+
+        if (uriList!= null && uriList.size() > 0) {
+
+            for (String uri : uriList) {
+
+                //大图uri、小图uri
+                ImageInfo imageInfo = new ImageInfo(NetworkUtils.getRealUrl(context, uri, false),
+                        NetworkUtils.getRealUrl(context, uri));
+                imageInfoList.add(imageInfo);
+            }
+
+        }
+        return imageInfoList;
     }
 }

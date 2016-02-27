@@ -26,4 +26,6 @@
 
 13.删除ListView，准备全部改成recycleview
 
+14.添加小图放大动画效果，大图缩小的效果
+
 gson，volley，litepal（sqlite3），UIL（通用图片加载），百度定位

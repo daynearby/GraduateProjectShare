@@ -21,6 +21,7 @@ import com.young.share.model.User;
 import com.young.share.myInterface.GotoAsyncFunction;
 import com.young.share.network.BmobApi;
 import com.young.share.R;
+import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LocationUtils;
@@ -206,7 +207,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         TextView comment_tv = holder.getView(R.id.id_tx_comment);//评论数量
         ((TextView) holder.getView(R.id.tv_item_message_detail_createdat)).setText(commRemoteModel.getMcreatedAt());//创建时间
 
-        ThumGridViewAdapter gridViewAdapter = new ThumGridViewAdapter((Activity) ctx, myGridview, false);
+        GridviewAdapter gridViewAdapter = new GridviewAdapter((Activity) ctx, myGridview, false);
         myGridview.setAdapter(gridViewAdapter);
 
 //        StringBuilder sb = new StringBuilder(shareMessage.getShContent());
@@ -232,7 +233,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         }
 
         comment_tv.setText(String.valueOf(commRemoteModel.getComment()));
-        gridViewAdapter.setDatas(commRemoteModel.getImages(), false);
+        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx,commRemoteModel.getImages()), false);
         myGridview.setOnItemClickListener(new itemClick(commRemoteModel.getImages()));
 
         nickname_tv.setOnClickListener(new click());

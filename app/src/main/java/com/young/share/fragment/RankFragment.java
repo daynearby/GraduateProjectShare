@@ -124,4 +124,7 @@ public class RankFragment extends BaseFragment {
         mhandler.sendEmptyMessage(GET_DATA);
 
     }
+
+
+
 }

@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.young.share.adapter.ThumGridViewAdapter;
+import com.young.share.adapter.GridviewAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.ItemActBarActivity;
 import com.young.share.config.Contants;
@@ -13,6 +13,7 @@ import com.young.share.model.CommRemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.User;
 import com.young.share.thread.MyRunnable;
+import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LocationUtils;
 import com.young.share.utils.LogUtils;
@@ -154,8 +155,8 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
         createdAt.setText(commModel.getMcreatedAt());
         initBottomBar(commModel);
 
-        ThumGridViewAdapter gridViewAdapter = new ThumGridViewAdapter(mActivity, myGridview, false);
-        gridViewAdapter.setDatas(commModel.getImages(), false);
+        GridviewAdapter gridViewAdapter = new GridviewAdapter(mActivity, myGridview, false);
+        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(this,commModel.getImages()), false);
 
         myGridview.setAdapter(gridViewAdapter);
         myGridview.setOnItemClickListener(new LocationUtils.itemClick(mActivity, commModel.getImages()));

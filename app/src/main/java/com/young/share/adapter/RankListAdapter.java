@@ -18,6 +18,7 @@ import com.young.share.model.CommRemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.User;
+import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.ImageHandlerUtils;
@@ -61,7 +62,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
         lp.width = DisplayUtils.getScreenWidthPixels((Activity) ctx) / 3 * 2;//设置宽度
         myGridview.setLayoutParams(lp);
 
-        ThumGridViewAdapter gridViewAdapter = new ThumGridViewAdapter((Activity) ctx, myGridview, false);
+        GridviewAdapter gridViewAdapter = new GridviewAdapter((Activity) ctx, myGridview, false);
         myGridview.setAdapter(gridViewAdapter);
 
 //************************************************初始化数据********************************************
@@ -110,7 +111,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
                 String.valueOf(commRemoteModel.getComment()) : ctx.getString(R.string.tx_comment));
 
         //图片显示
-        gridViewAdapter.setDatas(commRemoteModel.getImages(), false);
+        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx, commRemoteModel.getImages()), false);
         myGridview.setOnItemClickListener(new LocationUtils.itemClick(ctx, commRemoteModel.getImages()));
 
 //添加监听事件

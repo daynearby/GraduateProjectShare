@@ -16,15 +16,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.young.share.adapter.ThumGridViewAdapter;
+import com.young.share.adapter.GridviewAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.base.ItemActBarActivity;
 import com.young.share.config.Contants;
 import com.young.share.model.DiscountMessage_HZ;
+import com.young.share.model.ImageInfo;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.myInterface.GoToUploadImages;
 import com.young.share.network.BmobApi;
+import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.EmotionUtils;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LogUtils;
@@ -75,7 +77,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     @InjectView(R.id.tv_share_message_tips)
     private TextView tips_tv;
 
-    private ThumGridViewAdapter gridViewAdapter;
+    private GridviewAdapter gridViewAdapter;
     private InputMethodManager imm;
 
     private PopupWinListView popupWinListView;
@@ -130,7 +132,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         tagList.remove(0);
 
         popupWinListView = new PopupWinListView(this, tagList, false);
-        gridViewAdapter = new ThumGridViewAdapter(this, gv_img, true);
+        gridViewAdapter = new GridviewAdapter(this, gv_img, true);
         gridViewAdapter.setDatas(null, true);
 
         gv_img.setAdapter(gridViewAdapter);
@@ -215,7 +217,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
                         }
 
-                        gridViewAdapter.setDatas(list, true);
+                        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(mActivity,list), true);
                     }
 
                     //删除草稿
@@ -282,8 +284,13 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
             case R.id.im_activity_share_message_addimg://添加照片
 
-                ArrayList<String> l = gridViewAdapter.getData();
+               List<ImageInfo> imageInfoList= gridViewAdapter.getData();
 
+                ArrayList<String> l = new ArrayList<>();
+                for (ImageInfo imageInfo :imageInfoList){
+
+                    l.add(imageInfo.getImageUrl());
+                }
                 ImageHandlerUtils.starSelectImages(mActivity, l);
 
                 break;
@@ -381,7 +388,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                     }
 
                     //图片路径
-                    gridViewAdapter.setDatas(mSelectPath, true);
+                    gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(mActivity,mSelectPath), true);
                 }
 
 
@@ -432,11 +439,18 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                 @Override
                 public void btnOkListenter() {
 
+                    List<ImageInfo> imageInfoList= gridViewAdapter.getData();
+
+                    ArrayList<String> l = new ArrayList<>();
+                    for (ImageInfo imageInfo :imageInfoList){
+
+                        l.add(imageInfo.getImageUrl());
+                    }
 
                     darftUtils.saveDraft(draftType, content_et.getText().toString(),
                             shareLocation_tv.getText().toString(),
                             tag_tv.getText().toString(),
-                            gridViewAdapter.getData()
+                           l
                     );
                     back2MainActivity();
 
@@ -490,7 +504,15 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         public void rightClivk(View v) {//发送按钮
 
             String content = content_et.getText().toString();
-            List<String> lists = gridViewAdapter.getData();
+
+            List<ImageInfo> imageInfoList= gridViewAdapter.getData();
+
+            ArrayList<String> lists = new ArrayList<>();
+            for (ImageInfo imageInfo :imageInfoList){
+
+                lists.add(imageInfo.getImageUrl());
+            }
+
 
             if (!TextUtils.isEmpty(content) || lists != null) {//信息或者图片不为空
 
@@ -699,11 +721,18 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
      */
     private void saveDarft() {
 
+        List<ImageInfo> imageInfoList= gridViewAdapter.getData();
+
+        ArrayList<String> l = new ArrayList<>();
+        for (ImageInfo imageInfo :imageInfoList){
+
+            l.add(imageInfo.getImageUrl());
+        }
         darftUtils.saveDraft(draftType,
                 content_et.getText().toString(),
                 shareLocation_tv.getText().toString(),
                 tag_tv.getText().toString(),
-                gridViewAdapter.getData()
+                l
         );
 
     }

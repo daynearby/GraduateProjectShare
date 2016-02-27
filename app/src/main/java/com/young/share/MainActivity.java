@@ -10,6 +10,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -129,6 +130,18 @@ public class MainActivity extends CustomActBarActivity {
     @Override
     public void mBack() {
 
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        try {
+            return super.onTouchEvent(event);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+
+        return true;
     }
 
     private class pageChangeListener implements MainPagerAdapter.OnPageSelected {

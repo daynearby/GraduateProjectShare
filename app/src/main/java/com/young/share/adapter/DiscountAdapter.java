@@ -19,6 +19,7 @@ import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.User;
 import com.young.share.R;
 import com.young.share.RankListActivity;
+import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.ImageHandlerUtils;
@@ -66,7 +67,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
         ((TextView) holder.getView(R.id.tv_item_share_main_created_at)).setText(DateUtils.convertDate2Str(discountMessage_hz.getCreatedAt()));//创建时间
 
-        ThumGridViewAdapter gridViewAdapter = new ThumGridViewAdapter((Activity) ctx, myGridview, false);
+        GridviewAdapter gridViewAdapter = new GridviewAdapter((Activity) ctx, myGridview, false);
         myGridview.setAdapter(gridViewAdapter);
 
 //************************************************初始化数据********************************************
@@ -119,7 +120,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
 
         //图片显示
-        gridViewAdapter.setDatas(discountMessage_hz.getDtImgs(), false);
+        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx,discountMessage_hz.getDtImgs()), false);
         myGridview.setOnItemClickListener(new LocationUtils.itemClick(ctx, discountMessage_hz.getDtImgs()));
 
 //添加监听事件
