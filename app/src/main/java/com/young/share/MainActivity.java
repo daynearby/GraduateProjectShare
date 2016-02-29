@@ -36,7 +36,7 @@ import cn.bmob.push.PushConstants;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 
-
+// TODO: 2016-02-27 做缓存
 public class MainActivity extends CustomActBarActivity {
 
     private ArcMenu mArcMenu;
@@ -132,12 +132,20 @@ public class MainActivity extends CustomActBarActivity {
 
     }
 
+    /**
+     * recycleview 多次点击出错，点击事件未处理完，再一次新的点击事件
+     *
+     * @param event
+     * @return
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
         try {
             return super.onTouchEvent(event);
         } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        } catch (IndexOutOfBoundsException e){
             e.printStackTrace();
         }
 

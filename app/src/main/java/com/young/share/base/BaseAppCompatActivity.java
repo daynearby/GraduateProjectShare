@@ -212,23 +212,23 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
 
     //主界面layout的id
-    public abstract int getLayoutId();
+    protected abstract int getLayoutId();
 
     //获取控件实例
-    public abstract void findviewbyid();
+    protected abstract void findviewbyid();
 
     //初始化数据
-    public abstract void initData();
+    protected abstract void initData();
 
     //绑定数据到空间中
-    public abstract void bindData();
+    protected abstract void bindData();
 
     //初始化actionBar
 //    public abstract void initActionBar();
 
-    public abstract void handerMessage(Message msg);
+    protected abstract void handerMessage(Message msg);
 
-    public abstract void mBack();
+    protected abstract void mBack();
     /**
      * 简化findviewbyid
      *
@@ -236,7 +236,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * @param <T>
      * @return
      */
-    public <T> T $(int viewID) {
+    protected  <T> T $(int viewID) {
         return (T) findViewById(viewID);
     }
 

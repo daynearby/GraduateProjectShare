@@ -159,7 +159,6 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
         gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(this,commModel.getImages()), false);
 
         myGridview.setAdapter(gridViewAdapter);
-        myGridview.setOnItemClickListener(new LocationUtils.itemClick(mActivity, commModel.getImages()));
 
     }
 

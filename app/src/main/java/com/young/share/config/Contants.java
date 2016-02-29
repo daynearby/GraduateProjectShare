@@ -138,6 +138,13 @@ public class Contants {
     public static final String INTENT_BMOB_IS_POSITION = "intent_bmob_is_position";//intent传输数据标志,是显示定位信息还是拖拽进行准确定位
     public static final String INTENT_IMAGE_INFO_LIST = "intent_image_info_list";//intent传输数据标志,传递图片的信息，位置、大小
     public static final String INTENT_CURRENT_ITEM = "intent_current_item";//intent传输数据标志,点击的图片的position，那么就是当前显示的图片
+    public static final String INTENT_IMAGE_LIST = "intent_image_list";//intent传输的照片列表
+
+
+    public static final int REQUSET_CODE_IMAGE_LIST = 0x1000;//图片编辑请求码
+
+    public static final int RESULT_CODE_IMAGE_LIST = 0x0001;//图片编辑返回码
+
 
     //************************** 数据model 类型******************************
     public static final int DATA_MODEL_SHARE_MESSAGES = 1010;//分享信息数据

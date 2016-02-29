@@ -4,13 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.klinker.android.link_builder.Link;
 import com.klinker.android.link_builder.LinkBuilder;
+import com.young.share.R;
 import com.young.share.adapter.baseAdapter.CommAdapter;
 import com.young.share.adapter.baseAdapter.ViewHolder;
 import com.young.share.config.Contants;
@@ -20,7 +20,6 @@ import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.User;
 import com.young.share.myInterface.GotoAsyncFunction;
 import com.young.share.network.BmobApi;
-import com.young.share.R;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.ImageHandlerUtils;
@@ -29,7 +28,6 @@ import com.young.share.utils.LogUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.utils.UserUtils;
 import com.young.share.views.Dialog4Tips;
-import com.young.share.views.PopupWinImageBrowser;
 import com.young.share.views.PopupWinUserInfo;
 
 import org.json.JSONException;
@@ -208,6 +206,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         ((TextView) holder.getView(R.id.tv_item_message_detail_createdat)).setText(commRemoteModel.getMcreatedAt());//创建时间
 
         GridviewAdapter gridViewAdapter = new GridviewAdapter((Activity) ctx, myGridview, false);
+        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx, commRemoteModel.getImages()), false);
         myGridview.setAdapter(gridViewAdapter);
 
 //        StringBuilder sb = new StringBuilder(shareMessage.getShContent());
@@ -233,8 +232,8 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         }
 
         comment_tv.setText(String.valueOf(commRemoteModel.getComment()));
-        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx,commRemoteModel.getImages()), false);
-        myGridview.setOnItemClickListener(new itemClick(commRemoteModel.getImages()));
+        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx, commRemoteModel.getImages()), false);
+//        myGridview.setOnItemClickListener(new itemClick(commRemoteModel.getImages()));
 
         nickname_tv.setOnClickListener(new click());
         avatar.setOnClickListener(new click());
@@ -335,27 +334,6 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         userInfo.onShow(v);
     }
 
-    /**
-     * item click listener
-     */
-    private class itemClick implements AdapterView.OnItemClickListener {
-
-        private PopupWinImageBrowser popupView = new PopupWinImageBrowser(ctx);
-
-        public itemClick(List<String> list) {
-            if (list != null) {
-                popupView.setData(list);
-            }
-
-        }
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            popupView.setCurrentPager(position);
-            popupView.onShow(view);
-        }
-    }
 
     /**
      * 超链接 点击事件监听

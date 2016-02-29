@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
+import com.young.share.R;
 import com.young.share.config.Contants;
 import com.young.share.model.BaseModel;
 import com.young.share.model.DiscountMessage_HZ;
@@ -16,8 +16,6 @@ import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.User;
 import com.young.share.myInterface.GotoAsyncFunction;
 import com.young.share.network.BmobApi;
-import com.young.share.R;
-import com.young.share.views.PopupWinImageBrowser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -344,30 +342,6 @@ public class LocationUtils {
                 R.animator.activity_slid_left_out);
     }
 
-    /**
-     * 查看照片
-     * item click listener
-     */
-    public static class itemClick implements AdapterView.OnItemClickListener {
-
-        private PopupWinImageBrowser popupView;
-
-        public itemClick(Context ctx,List<String> list) {
-            popupView = new PopupWinImageBrowser(ctx);
-
-            if (list != null) {
-                popupView.setData(list);
-            }
-
-        }
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            popupView.setCurrentPager(position);
-            popupView.onShow(view);
-        }
-    }
 
 
     /**

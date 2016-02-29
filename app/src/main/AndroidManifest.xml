@@ -140,9 +140,12 @@
         <!--百度地图 -->
         <activity android:name=".BaiduMapActivity"/>
 
+        <!--高清大图浏览-->
         <activity android:name=".BigPicActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+            android:theme="@style/AppTheme.Translucent2"/>
 
+        <activity android:name=".ImageEditorActivity"
+            android:theme="@style/AppTheme.Translucent2"/>
         <!-- 百度定位 services -->
         <service
             android:name="com.baidu.location.f"

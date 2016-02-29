@@ -13,7 +13,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.young.share.BigPicActivity;
 import com.young.share.R;
 import com.young.share.adapter.baseAdapter.BasePagerAdapter;
-import com.young.share.model.ImageInfo;
+import com.young.share.model.PictureInfo;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.views.photoview.PhotoView;
 import com.young.share.views.photoview.PhotoViewAttacher;
@@ -23,7 +23,7 @@ import com.young.share.views.photoview.PhotoViewAttacher;
  * <p/>
  * Created by Nearby Yang on 2016-02-20.
  */
-public class BigpicturePagerAdapter extends BasePagerAdapter<ImageInfo> implements PhotoViewAttacher.OnPhotoTapListener {
+public class BigpicturePagerAdapter extends BasePagerAdapter<PictureInfo> implements PhotoViewAttacher.OnPhotoTapListener {
 
     private ImageLoader mImageLoader = ImageLoader.getInstance();
     private View mCurrentView;
@@ -50,14 +50,14 @@ public class BigpicturePagerAdapter extends BasePagerAdapter<ImageInfo> implemen
     }
 
     @Override
-    protected void instanceItem(View v, ImageInfo imageInfo, int position) {
+    protected void instanceItem(View v, PictureInfo pictureInfo, int position) {
 
         PhotoView photoView = (PhotoView) v.findViewById(R.id.pv_item_photoview);
         ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.pb_item_photoview);
         photoView.setOnPhotoTapListener(this);
 
-        if (imageInfo != null && !TextUtils.isEmpty(imageInfo.getImageUrl())) {
-            setNetImage(photoView, progressBar, imageInfo);
+        if (pictureInfo != null && !TextUtils.isEmpty(pictureInfo.getImageUrl())) {
+            setNetImage(photoView, progressBar, pictureInfo);
         } else {//图片不存在
             photoView.setImageResource(R.drawable.icon_iamge_uri_empty);
         }
@@ -70,15 +70,15 @@ public class BigpicturePagerAdapter extends BasePagerAdapter<ImageInfo> implemen
      *
      * @param photoView
      * @param progressBar
-     * @param imageInfo
+     * @param pictureInfo
      */
-    private void setNetImage(final PhotoView photoView, final ProgressBar progressBar, final ImageInfo imageInfo) {
+    private void setNetImage(final PhotoView photoView, final ProgressBar progressBar, final PictureInfo pictureInfo) {
 
-        mImageLoader.displayImage(imageInfo.getImageUrl(), photoView, ImageHandlerUtils.imageloaderOption2(), new ImageLoadingListener() {
+        mImageLoader.displayImage(pictureInfo.getImageUrl(), photoView, ImageHandlerUtils.imageloaderOption2(), new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String s, View view) {
                 startLoad(progressBar);
-                loadImageFromCache(photoView, imageInfo.getSmallImageUrl());
+                loadImageFromCache(photoView, pictureInfo.getSmallImageUrl());
             }
 
             @Override

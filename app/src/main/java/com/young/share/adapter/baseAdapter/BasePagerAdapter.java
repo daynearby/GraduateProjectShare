@@ -17,7 +17,7 @@ public abstract class BasePagerAdapter<T> extends PagerAdapter {
 
     public Context context;
     public List<T> dataList;
-
+    private View mCurrentView;
 
     public BasePagerAdapter(Context context) {
         this.context = context;
@@ -28,6 +28,19 @@ public abstract class BasePagerAdapter<T> extends PagerAdapter {
         notifyDataSetChanged();
     }
 
+    public List<T> getDataList(){
+        return dataList;
+    }
+
+    @Override
+    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+        super.setPrimaryItem(container, position, object);
+        mCurrentView = (View) object;
+    }
+
+    public View getPrimaryItem() {
+        return mCurrentView;
+    }
 
     @Override
     public int getCount() {

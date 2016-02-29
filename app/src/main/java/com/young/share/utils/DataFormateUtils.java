@@ -6,7 +6,7 @@ import com.young.share.config.Contants;
 import com.young.share.model.CommRemoteModel;
 import com.young.share.model.Comment_HZ;
 import com.young.share.model.DiscountMessage_HZ;
-import com.young.share.model.ImageInfo;
+import com.young.share.model.PictureInfo;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.dbmodel.ShareMessage;
 import com.young.share.model.dbmodel.User;
@@ -191,22 +191,22 @@ public class DataFormateUtils {
      * @param context
      * @return
      */
-    public static List<ImageInfo> formateImageInfoList(Context context,ShareMessage_HZ shareMessage) {
+    public static List<PictureInfo> formateImageInfoList(Context context,ShareMessage_HZ shareMessage) {
 
-        List<ImageInfo> imageInfoList = new ArrayList<>();
+        List<PictureInfo> pictureInfoList = new ArrayList<>();
 
         if (shareMessage.getShImgs() != null && shareMessage.getShImgs().size() > 0) {
 
             for (String uri : shareMessage.getShImgs()) {
 
                 //大图uri、小图uri
-                ImageInfo imageInfo = new ImageInfo(NetworkUtils.getRealUrl(context, uri, false),
+                PictureInfo pictureInfo = new PictureInfo(NetworkUtils.getRealUrl(context, uri, false),
                         NetworkUtils.getRealUrl(context, uri));
-                imageInfoList.add(imageInfo);
+                pictureInfoList.add(pictureInfo);
             }
 
         }
-        return imageInfoList;
+        return pictureInfoList;
     }
 
     /**
@@ -216,21 +216,21 @@ public class DataFormateUtils {
      * @param context
      * @return
      */
-    public static List<ImageInfo> formateStringInfoList(Context context,List<String> uriList) {
+    public static List<PictureInfo> formateStringInfoList(Context context,List<String> uriList) {
 
-        List<ImageInfo> imageInfoList = new ArrayList<>();
+        List<PictureInfo> pictureInfoList = new ArrayList<>();
 
         if (uriList!= null && uriList.size() > 0) {
 
             for (String uri : uriList) {
 
                 //大图uri、小图uri
-                ImageInfo imageInfo = new ImageInfo(NetworkUtils.getRealUrl(context, uri, false),
+                PictureInfo pictureInfo = new PictureInfo(NetworkUtils.getRealUrl(context, uri, false),
                         NetworkUtils.getRealUrl(context, uri));
-                imageInfoList.add(imageInfo);
+                pictureInfoList.add(pictureInfo);
             }
 
         }
-        return imageInfoList;
+        return pictureInfoList;
     }
 }

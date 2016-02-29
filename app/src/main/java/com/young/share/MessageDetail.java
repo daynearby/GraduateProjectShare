@@ -180,7 +180,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
     @Override
     public void findviewbyid() {
-        LogUtils.logD("findview start");
+
         commAdapter = new CommentAdapter(mActivity);
 //回复评论
         commAdapter.setToReply(new CommentAdapter.ToReply() {
@@ -200,7 +200,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
         sendComment_edt.setOnClickListener(this);
         tosend_btn.setOnClickListener(this);
         emotion_im.setOnClickListener(this);
-        LogUtils.logD("findview end");
+
     }
 
     @Override
@@ -232,7 +232,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
         switch (msg.what) {
 
             case GET_MESSAGE:
-                LogUtils.logD("handler ");
+
                 commAdapter.setData(dataList);
 
                 break;
@@ -380,12 +380,14 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.im_message_detail_emotion://表情输入
                 imm.hideSoftInputFromWindow(sendComment_edt.getWindowToken(), 0);
-                vp_emotion_dashboard.setVisibility(vp_emotion_dashboard.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+                vp_emotion_dashboard.setVisibility(vp_emotion_dashboard.getVisibility() == View.GONE ?
+                        View.VISIBLE : View.GONE);
 
                 break;
 
             case R.id.edt_message_detail_comment://输入框监听输入
-                vp_emotion_dashboard.setVisibility(vp_emotion_dashboard.getVisibility() == View.VISIBLE ? View.GONE : View.GONE);
+                vp_emotion_dashboard.setVisibility(vp_emotion_dashboard.getVisibility() == View.VISIBLE ?
+                        View.GONE : View.GONE);
 
                 break;
 

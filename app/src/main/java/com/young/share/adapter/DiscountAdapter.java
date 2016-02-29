@@ -121,7 +121,6 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
         //图片显示
         gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx,discountMessage_hz.getDtImgs()), false);
-        myGridview.setOnItemClickListener(new LocationUtils.itemClick(ctx, discountMessage_hz.getDtImgs()));
 
 //添加监听事件
         nickname_tv.setOnClickListener(new click(user));

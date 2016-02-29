@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 import com.young.share.BigPicActivity;
 import com.young.share.R;
 import com.young.share.config.Contants;
-import com.young.share.model.ImageInfo;
+import com.young.share.model.PictureInfo;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.ImageHandlerUtils;
 
@@ -31,10 +31,10 @@ import java.util.List;
  */
 public class GridviewAdapter extends BaseAdapter {
 
-    private List<ImageInfo> data;
+    private List<PictureInfo> data;
     private Activity mActivity;
     private LayoutInflater myinflater;
-    private ImageInfo imageUrl;
+    private PictureInfo imageUrl;
     private boolean isUpload = false;
     private GridView gv;
     private boolean isLocation = true;
@@ -62,7 +62,7 @@ public class GridviewAdapter extends BaseAdapter {
      *
      * @param datas
      */
-    public void setDatas(List<ImageInfo> datas, boolean isLocation) {
+    public void setDatas(List<PictureInfo> datas, boolean isLocation) {
 
         this.data = datas;
         this.isLocation = isLocation;
@@ -70,8 +70,8 @@ public class GridviewAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public ArrayList<ImageInfo> getData() {
-        return (ArrayList<ImageInfo>) data;
+    public ArrayList<PictureInfo> getData() {
+        return (ArrayList<PictureInfo>) data;
 
     }
 
@@ -82,7 +82,7 @@ public class GridviewAdapter extends BaseAdapter {
     }
 
     @Override
-    public ImageInfo getItem(int position) {
+    public PictureInfo getItem(int position) {
         return data != null && data.size() > 0 ? data.get(position) : null;
     }
 
@@ -181,10 +181,10 @@ public class GridviewAdapter extends BaseAdapter {
      * 计算每个item的坐标
      *
      * @param iv_image
-     * @param imageInfoList
+     * @param pictureInfoList
      * @param position
      */
-    private void setupCoords(ImageView iv_image, List<ImageInfo> imageInfoList, int position) {
+    private void setupCoords(ImageView iv_image, List<PictureInfo> pictureInfoList, int position) {
 //        x方向的第几个
         int xn = position % 3 + 1;
 //        y方向的第几个
@@ -203,8 +203,8 @@ public class GridviewAdapter extends BaseAdapter {
         int x0 = points[0] - (width + h) * (xn - 1);
         int y0 = points[1] - (height + v) * (yn - 1);
 //        给所有图片添加坐标信息
-        for (int i = 0; i < imageInfoList.size(); i++) {
-            ImageInfo iamgeInfo = imageInfoList.get(i);
+        for (int i = 0; i < pictureInfoList.size(); i++) {
+            PictureInfo iamgeInfo = pictureInfoList.get(i);
             iamgeInfo.width = width;
             iamgeInfo.height = height;
             iamgeInfo.x = x0 + (i % 3) * (width + h);

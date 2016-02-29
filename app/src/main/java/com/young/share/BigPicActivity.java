@@ -3,6 +3,7 @@ package com.young.share;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.graphics.drawable.Drawable;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,9 @@ import android.widget.RelativeLayout;
 
 import com.young.share.adapter.BigpicturePagerAdapter;
 import com.young.share.annotation.InjectView;
-import com.young.share.base.BaseActivity;
+import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
-import com.young.share.model.ImageInfo;
+import com.young.share.model.PictureInfo;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.EvaluateUtil;
 import com.young.share.views.CustomViewPager;
@@ -29,7 +30,7 @@ import java.util.List;
  * <p/>
  * Created by Nearby Yang on 2016-02-20.
  */
-public class BigPicActivity extends BaseActivity implements ViewTreeObserver.OnPreDrawListener {
+public class BigPicActivity extends BaseAppCompatActivity implements ViewTreeObserver.OnPreDrawListener {
 
     @InjectView(R.id.vp_big_picture)
     private CustomViewPager viewPager;
@@ -39,36 +40,50 @@ public class BigPicActivity extends BaseActivity implements ViewTreeObserver.OnP
     private LinearLayout indexLayout;
 
     private List<View> dotList = new ArrayList<>();
-    private List<ImageInfo> imageInfoList;
+    private List<PictureInfo> pictureInfoList;
     private int currentItem;
     private  BigpicturePagerAdapter viewpagerAdapter;
     private int height;
     private int width;
 
     @Override
+    protected int getLayoutId() {
+        return  R.layout.activity_bigpic;
+    }
+
+    @Override
+    protected void findviewbyid() {
+
+    }
+
+    @Override
     protected void initData() {
-        imageInfoList = (List<ImageInfo>) getIntent().getSerializableExtra(Contants.INTENT_IMAGE_INFO_LIST);
+        pictureInfoList = (List<PictureInfo>) getIntent().getSerializableExtra(Contants.INTENT_IMAGE_INFO_LIST);
         currentItem = getIntent().getIntExtra(Contants.INTENT_CURRENT_ITEM, 0);
 
 
     }
 
     @Override
-    protected int getLayout() {
-        return R.layout.activity_bigpic;
-    }
-
-
-    @Override
-    protected void setupEvent() {
-
-         viewpagerAdapter = new BigpicturePagerAdapter(this);
-        viewpagerAdapter.setData(imageInfoList);
+    protected void bindData() {
+        viewpagerAdapter = new BigpicturePagerAdapter(this);
+        viewpagerAdapter.setData(pictureInfoList);
         viewPager.setAdapter(viewpagerAdapter);
         viewPager.setCurrentItem(currentItem);
         setPagerChangeListener(viewPager);
         viewPager.getViewTreeObserver().addOnPreDrawListener(this);
     }
+
+    @Override
+    protected void handerMessage(Message msg) {
+
+    }
+
+    @Override
+    protected void mBack() {
+
+    }
+
 
     /**
      * 绘制前开始动画
@@ -83,9 +98,9 @@ public class BigPicActivity extends BaseActivity implements ViewTreeObserver.OnP
 
         computeImageWidthAndHeight(imageView);
 
-        final ImageInfo imageInfo = imageInfoList.get(currentItem);
-        final float vx = imageInfo.width * 1.0f / width;
-        final float vy = imageInfo.height * 1.0f / height;
+        final PictureInfo pictureInfo = pictureInfoList.get(currentItem);
+        final float vx = pictureInfo.width * 1.0f / width;
+        final float vy = pictureInfo.height * 1.0f / height;
 
         final ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1.0f);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -94,8 +109,8 @@ public class BigPicActivity extends BaseActivity implements ViewTreeObserver.OnP
 
                 float animatedFraction = animation.getAnimatedFraction();
 
-                view.setTranslationX(EvaluateUtil.evaluateInt(animatedFraction, imageInfo.x + imageInfo.width / 2 - imageView.getWidth() / 2, 0));
-                view.setTranslationY(EvaluateUtil.evaluateInt(animatedFraction, imageInfo.y + imageInfo.height / 2 - imageView.getHeight() / 2, 0));
+                view.setTranslationX(EvaluateUtil.evaluateInt(animatedFraction, pictureInfo.x + pictureInfo.width / 2 - imageView.getWidth() / 2, 0));
+                view.setTranslationY(EvaluateUtil.evaluateInt(animatedFraction, pictureInfo.y + pictureInfo.height / 2 - imageView.getHeight() / 2, 0));
                 view.setScaleX(EvaluateUtil.evaluateFloat(animatedFraction, vx, 1));
                 view.setScaleY(EvaluateUtil.evaluateFloat(animatedFraction, vy, 1));
 
@@ -213,9 +228,9 @@ public class BigPicActivity extends BaseActivity implements ViewTreeObserver.OnP
         imageView.setZoomable(false);
         computeImageWidthAndHeight(imageView);
 
-        final ImageInfo imageInfo = imageInfoList.get(currentItem);
-        final float vx = imageInfo.width * 1.0f / width;
-        final float vy = imageInfo.height * 1.0f / height;
+        final PictureInfo pictureInfo = pictureInfoList.get(currentItem);
+        final float vx = pictureInfo.width * 1.0f / width;
+        final float vy = pictureInfo.height * 1.0f / height;
 
         final ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1.0f);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -224,8 +239,8 @@ public class BigPicActivity extends BaseActivity implements ViewTreeObserver.OnP
 
                 float animatedFraction = animation.getAnimatedFraction();
 
-                view.setTranslationX(EvaluateUtil.evaluateInt(animatedFraction, 0, imageInfo.x + imageInfo.width / 2 - imageView.getWidth() / 2));
-                view.setTranslationY(EvaluateUtil.evaluateInt(animatedFraction, 0, imageInfo.y + imageInfo.height / 2 - imageView.getHeight() / 2));
+                view.setTranslationX(EvaluateUtil.evaluateInt(animatedFraction, 0, pictureInfo.x + pictureInfo.width / 2 - imageView.getWidth() / 2));
+                view.setTranslationY(EvaluateUtil.evaluateInt(animatedFraction, 0, pictureInfo.y + pictureInfo.height / 2 - imageView.getHeight() / 2));
                 view.setScaleX(EvaluateUtil.evaluateFloat(animatedFraction, 1, vx));
                 view.setScaleY(EvaluateUtil.evaluateFloat(animatedFraction, 1, vy));
 
@@ -270,9 +285,9 @@ public class BigPicActivity extends BaseActivity implements ViewTreeObserver.OnP
         // 清空点所在集合
         dotList.clear();
         indexLayout.removeAllViews();
-        for (int i = 0; i < imageInfoList.size(); i++) {
+        for (int i = 0; i < pictureInfoList.size(); i++) {
             ImageView view = new ImageView(this);
-            if (i == index || imageInfoList.size() == 1) {
+            if (i == index || pictureInfoList.size() == 1) {
                 view.setBackgroundResource(R.drawable.icon_type_selected);
             } else {
                 view.setBackgroundResource(R.drawable.icon_type_normal);

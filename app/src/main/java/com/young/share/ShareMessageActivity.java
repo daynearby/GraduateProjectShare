@@ -22,7 +22,7 @@ import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.base.ItemActBarActivity;
 import com.young.share.config.Contants;
 import com.young.share.model.DiscountMessage_HZ;
-import com.young.share.model.ImageInfo;
+import com.young.share.model.PictureInfo;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.myInterface.GoToUploadImages;
 import com.young.share.network.BmobApi;
@@ -97,6 +97,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     private String draftType;//草稿类型
 
     // TODO: 2015-12-05 移除item而不需要刷新整个ListView
+    // TODO: 2016-02-27 删除图片的操作
     @Override
     public int getLayoutId() {
         return R.layout.activity_share_message;
@@ -284,12 +285,12 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
             case R.id.im_activity_share_message_addimg://添加照片
 
-               List<ImageInfo> imageInfoList= gridViewAdapter.getData();
+               List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
 
                 ArrayList<String> l = new ArrayList<>();
-                for (ImageInfo imageInfo :imageInfoList){
+                for (PictureInfo pictureInfo : pictureInfoList){
 
-                    l.add(imageInfo.getImageUrl());
+                    l.add(pictureInfo.getImageUrl());
                 }
                 ImageHandlerUtils.starSelectImages(mActivity, l);
 
@@ -439,12 +440,12 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                 @Override
                 public void btnOkListenter() {
 
-                    List<ImageInfo> imageInfoList= gridViewAdapter.getData();
+                    List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
 
                     ArrayList<String> l = new ArrayList<>();
-                    for (ImageInfo imageInfo :imageInfoList){
+                    for (PictureInfo pictureInfo : pictureInfoList){
 
-                        l.add(imageInfo.getImageUrl());
+                        l.add(pictureInfo.getImageUrl());
                     }
 
                     darftUtils.saveDraft(draftType, content_et.getText().toString(),
@@ -505,12 +506,12 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
             String content = content_et.getText().toString();
 
-            List<ImageInfo> imageInfoList= gridViewAdapter.getData();
+            List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
 
             ArrayList<String> lists = new ArrayList<>();
-            for (ImageInfo imageInfo :imageInfoList){
+            for (PictureInfo pictureInfo : pictureInfoList){
 
-                lists.add(imageInfo.getImageUrl());
+                lists.add(pictureInfo.getImageUrl());
             }
 
 
@@ -721,12 +722,12 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
      */
     private void saveDarft() {
 
-        List<ImageInfo> imageInfoList= gridViewAdapter.getData();
+        List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
 
         ArrayList<String> l = new ArrayList<>();
-        for (ImageInfo imageInfo :imageInfoList){
+        for (PictureInfo pictureInfo : pictureInfoList){
 
-            l.add(imageInfo.getImageUrl());
+            l.add(pictureInfo.getImageUrl());
         }
         darftUtils.saveDraft(draftType,
                 content_et.getText().toString(),

@@ -7,8 +7,7 @@ import android.view.ViewGroup;
 
 import com.young.share.config.Contants;
 import com.young.share.utils.ImageHandlerUtils;
-import com.young.share.views.guesPhotoview.Info;
-import com.young.share.views.guesPhotoview.PhotoView;
+import com.young.share.views.photoview.PhotoView;
 
 import java.util.List;
 
@@ -56,11 +55,8 @@ public class WellcomePagerAdapter extends PagerAdapter {
         if (urlList != null) {
 
                     PhotoView photo0 = (PhotoView) view.findViewById(Contants.photoId[position]);
-                    photo0.enable();
                     // 获取图片信息
-                    Info info0 = photo0.getInfo();
 // 从一张图片信息变化到现在的图片，用于图片点击后放大浏览，具体使用可以参照demo的使用
-                    photo0.animaFrom(info0);
 // 从现在的图片变化到所给定的图片信息，用于图片放大后点击缩小到原来的位置，具体使用可以参照demo的使用
 //                    photo.animaTo(info, new Runnable() {
 //                        @Override

@@ -112,7 +112,6 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 
         //图片显示
         gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx, commRemoteModel.getImages()), false);
-        myGridview.setOnItemClickListener(new LocationUtils.itemClick(ctx, commRemoteModel.getImages()));
 
 //添加监听事件
         nickname_tv.setOnClickListener(new click(user));
