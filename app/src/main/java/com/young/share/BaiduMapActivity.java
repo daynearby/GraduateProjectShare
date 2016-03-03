@@ -18,6 +18,9 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.young.share.base.ItemActBarActivity;
 import com.young.share.config.Contants;
+import com.young.share.model.gson.Longitude2Location;
+import com.young.share.network.NetworkReuqest;
+import com.young.share.utils.LogUtils;
 
 import cn.bmob.v3.datatype.BmobGeoPoint;
 
@@ -108,6 +111,7 @@ public class BaiduMapActivity extends ItemActBarActivity {
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
         //改变地图状态
         mBaiduMap.setMapStatus(mMapStatusUpdate);
+        isPosition=true;
 //debug
         if (isPosition){
 
@@ -128,6 +132,19 @@ public class BaiduMapActivity extends ItemActBarActivity {
                 public void onMarkerDragEnd(Marker marker) {
                     //拖拽结束
                     resultPoint = marker.getPosition();
+                    NetworkReuqest.convertLongitude2Location(mActivity,
+                            String.format(geoStr,resultPoint.longitude,resultPoint.latitude),
+                            new NetworkReuqest.JSonRequstCallback(){
+
+                        @Override
+                        public void callback(Longitude2Location.ResultEntity resultEntity) {
+//                            Toast.makeText(mActivity,
+//                                    resultEntity.getFormattedAddress()+"--"+resultEntity.toString(),
+//                                    Toast.LENGTH_SHORT).show();
+                            LogUtils.logE(resultEntity.toString());
+                        }
+                    });
+
                 }
                 public void onMarkerDragStart(Marker marker) {
                     //开始拖拽

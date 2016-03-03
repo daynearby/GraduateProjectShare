@@ -35,6 +35,8 @@ public class RankFragment extends BaseFragment {
     private static final String tag = "tank";
     private static final int GET_DATA = 101;
 
+    public RankFragment() {
+    }
 
     public RankFragment(Context context) {
         super(context);

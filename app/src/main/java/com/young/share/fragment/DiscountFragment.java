@@ -63,6 +63,9 @@ public class DiscountFragment extends BaseFragment {
     private boolean isFirstIn = true;//第一次进入该界面
     private static final String tag = "discount";
 
+    public DiscountFragment() {
+    }
+
     public DiscountFragment(Context context) {
         super(context);
     }

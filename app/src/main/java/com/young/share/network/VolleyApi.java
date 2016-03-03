@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class VolleyApi {
 
-    private RequestQueue requestQueue;
+    private static RequestQueue requestQueue;
 
 
     //请求类型
@@ -28,21 +28,20 @@ public class VolleyApi {
         GET, POST
     }
 
-    public RequestQueue getInstence(Context context) {
+    public static RequestQueue getInstence(Context context) {
         if (requestQueue == null) {
             synchronized (VolleyApi.class) {
                 if (requestQueue == null) {
                     requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+                    requestQueue.start();
                 }
             }
         }
-
 
         return requestQueue;
     }
 
     /**
-     *
      * @param context
      * @param requestMethod
      * @param url
@@ -83,7 +82,7 @@ public class VolleyApi {
         }
 
         @SuppressWarnings("unchecked")
-        JSONRequest jr = new JSONRequest(method, url, tagClazz,params, new Response.Listener<JSONObject>() {
+        BmobJSONRequest jr = new BmobJSONRequest(method, url, tagClazz, params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
 

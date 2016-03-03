@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.young.share.R;
 import com.young.share.config.ApplicationConfig;
-import com.young.share.utils.LogUtils;
 import com.young.share.utils.ThreadUtils;
 
 /**
@@ -47,11 +47,12 @@ public abstract class BaseFragment extends Fragment {
 
         view = inflater.inflate(getLayoutId(), null);
         ViewGroup vg = (ViewGroup) view.getParent();
+        view.findViewById(R.id.pb_item_photoview);
         if (vg != null) {
             vg.removeAllViewsInLayout();
         }
         threadUtils = ApplicationConfig.getInstance().getThreadInstance();
-        LogUtils.logD("context = " + context);
+
         return view;
     }
 

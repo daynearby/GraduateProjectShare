@@ -58,12 +58,15 @@ public class DiscoverFragment extends BaseFragment {
     private boolean isGetMore = false;//从远程数据库获取更多数据
 
     private int startRow = 0;//从第一条开始
-    private boolean isFirstIn = true;//第一次进入该界面
-    private static final String tag = "discover";
 
     public DiscoverFragment(Context context) {
         super(context);
     }
+    private boolean isFirstIn = true;//第一次进入该界面
+
+
+
+    private static final String tag = "discover";
 
     @Override
     public int getLayoutId() {
