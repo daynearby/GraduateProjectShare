@@ -19,8 +19,10 @@ import com.baidu.mapapi.model.LatLng;
 import com.young.share.base.ItemActBarActivity;
 import com.young.share.config.Contants;
 import com.young.share.model.gson.Longitude2Location;
+import com.young.share.model.gson.PlaceSuggestion;
 import com.young.share.network.NetworkReuqest;
-import com.young.share.utils.LogUtils;
+
+import java.util.List;
 
 import cn.bmob.v3.datatype.BmobGeoPoint;
 
@@ -28,8 +30,8 @@ import cn.bmob.v3.datatype.BmobGeoPoint;
  * 百度地图
  * 显示地理位置，拾取坐标
  * 都需要传入初始坐标
- *
- * <p>
+ * <p/>
+ * <p/>
  * Created by Nearby Yang on 2016-01-02.
  */
 public class BaiduMapActivity extends ItemActBarActivity {
@@ -40,8 +42,10 @@ public class BaiduMapActivity extends ItemActBarActivity {
     private Marker marker;//进行拖拽的对象
     private LatLng resultPoint;//拖拽之后确定的坐标
     private BmobGeoPoint geoPoint;
-    private boolean isPosition ;//是准备定位状态还是直接显示定位信息
+    private boolean isPosition;//是准备定位状态还是直接显示定位信息
     private String geoStr = "geo:%s,%s";//经纬度
+    private String location = "%s,%s";//经纬度
+    private int cityCode = 0;//城市代码，用作城市搜索
 
     // TODO: 2016-02-19 分享信息，拖拽实现定位
 
@@ -55,7 +59,7 @@ public class BaiduMapActivity extends ItemActBarActivity {
         super.initData();
 
         geoPoint = (BmobGeoPoint) getIntent().getExtras().getSerializable(Contants.INTENT_BMOB_GEOPONIT);
-        isPosition = getIntent().getBooleanExtra(Contants.INTENT_BMOB_IS_POSITION,false);
+        isPosition = getIntent().getBooleanExtra(Contants.INTENT_BMOB_IS_POSITION, false);
 
         if (geoPoint == null) {
             geoPoint = new BmobGeoPoint(116.400244, 39.963175);
@@ -72,7 +76,7 @@ public class BaiduMapActivity extends ItemActBarActivity {
             @Override
             public void rightClivk(View v) {
 //调用外部地图显示位置
-                Uri uri = Uri.parse(String.format(geoStr,geoPoint.getLatitude(),geoPoint.getLongitude()));
+                Uri uri = Uri.parse(String.format(geoStr, geoPoint.getLatitude(), geoPoint.getLongitude()));
 
                 Intent it = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(it);
@@ -94,7 +98,7 @@ public class BaiduMapActivity extends ItemActBarActivity {
         LatLng point = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
 //构建Marker图标
         BitmapDescriptor bitmap = BitmapDescriptorFactory
-                .fromResource(R.drawable.icon_marka);
+                .fromResource(R.drawable.icon_mark);
 //构建MarkerOption，用于在地图上添加Marker
         OverlayOptions option = new MarkerOptions()
                 .position(point)
@@ -111,9 +115,11 @@ public class BaiduMapActivity extends ItemActBarActivity {
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
         //改变地图状态
         mBaiduMap.setMapStatus(mMapStatusUpdate);
-        isPosition=true;
-//debug
-        if (isPosition){
+
+//debug，只有在发送信息的时候，进入该状态
+        if (isPosition) {
+
+            //// TODO: 2016-03-04 需要先定位，获取citycode，存储起来，等下需要用到搜索，那么就使用该citycode
 
             OverlayOptions options = new MarkerOptions()
                     .position(point)  //设置marker的位置
@@ -129,29 +135,36 @@ public class BaiduMapActivity extends ItemActBarActivity {
                 public void onMarkerDrag(Marker marker) {
                     //拖拽中
                 }
+
                 public void onMarkerDragEnd(Marker marker) {
-                    //拖拽结束
+                    //拖拽结束,通过网络请求，获取正确的位置信息
                     resultPoint = marker.getPosition();
                     NetworkReuqest.convertLongitude2Location(mActivity,
-                            String.format(geoStr,resultPoint.longitude,resultPoint.latitude),
-                            new NetworkReuqest.JSonRequstCallback(){
+                            String.format(location, resultPoint.latitude, resultPoint.longitude),
+                            new NetworkReuqest.SimpleRequestCallback<Longitude2Location.ResultEntity>() {
 
-                        @Override
-                        public void callback(Longitude2Location.ResultEntity resultEntity) {
-//                            Toast.makeText(mActivity,
+                                @Override
+                                public void response(Longitude2Location.ResultEntity resultEntity) {
+//                                    Toast.makeText(mActivity,
 //                                    resultEntity.getFormattedAddress()+"--"+resultEntity.toString(),
 //                                    Toast.LENGTH_SHORT).show();
-                            LogUtils.logE(resultEntity.toString());
-                        }
-                    });
+// TODO: 2016-02-16 拖拽结束之后，获取拖拽之后的坐标，点击完成，获取准确的坐标
+                                    resultEntity.getFormattedAddress();//完整的地址
+                                }
+
+                            });
 
                 }
+
                 public void onMarkerDragStart(Marker marker) {
                     //开始拖拽
                 }
             });
+
         }
-        // TODO: 2016-02-16 拖拽结束之后，获取拖拽之后的坐标，点击完成，获取准确的坐标
+
+
+
     }
 
     @Override
@@ -159,10 +172,34 @@ public class BaiduMapActivity extends ItemActBarActivity {
 
     }
 
+
+    private void queryPlace(){
+        String query = "获取输入框文字";
+        NetworkReuqest.baiduPlaceSuggestion(mActivity, query, cityCode, new NetworkReuqest.SimpleRequestCallback<List<PlaceSuggestion.ResultEntity>>() {
+            @Override
+            public void response(List<PlaceSuggestion.ResultEntity> resultEntities) {
+                // TODO: 2016-03-04 一个listview显示地点信息，ListView后面有单选按钮
+
+
+
+            }
+        });
+    }
+
+
+
+
     @Override
     public void mBack() {
         this.finish();
     }
+
+
+
+
+
+
+
 
     @Override
     protected void onDestroy() {

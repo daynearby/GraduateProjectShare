@@ -177,6 +177,8 @@ public class Contants {
     public static final String PARAM_LOCATION = "location";//参数名
     public static final String PARAM_MCODE = "mcode";//参数名
     public static final String PARAM_AK = "ak";//参数名
+    public static final String PARAM_REGION = "region";//参数名
+    public static final String PARAM_QUERY = "q";//参数名
 
 
     public static final String MCODE = "19:C4:5F:A4:13:B9:82:7D:F0:8C:3C:B2:7C:D8:02:78:18:DB:65:86;com.young.share";

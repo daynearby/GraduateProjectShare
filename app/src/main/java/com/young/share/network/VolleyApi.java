@@ -49,8 +49,8 @@ public class VolleyApi {
      * @param requestTag
      * @param tagClazz
      */
-    public void netWorkRequest(Context context, Method requestMethod, String url, HashMap<String, String> params,
-                               String requestTag, Class tagClazz) {
+    public void bmobNetWorkRequest(Context context, Method requestMethod, String url, HashMap<String, String> params,
+                                   String requestTag, Class tagClazz) {
 
         int method = Request.Method.GET;
 
@@ -98,6 +98,7 @@ public class VolleyApi {
         getInstence(context).add(jr);
 
     }
+
 
 
 }
