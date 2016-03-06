@@ -56,6 +56,7 @@ public class RankFragment extends BaseFragment {
 
     }
 
+    // TODO: 2016-03-06 修复拖动多次出现崩溃
     @Override
     public void initView() {
         RecyclerView recyclerView = $(R.id.recv_rank);

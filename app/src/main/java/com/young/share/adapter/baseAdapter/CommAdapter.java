@@ -7,10 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Toast;
 
-import com.young.share.model.User;
 import com.young.share.R;
+import com.young.share.model.User;
 
 import java.util.List;
 
@@ -26,6 +25,7 @@ public abstract class CommAdapter<T> extends BaseAdapter {
     public List<T> beanList;
     public Context ctx;
     public User cuser;
+    public ViewHolder holder;
 
     public CommAdapter(Context context) {
         ctx = context;
@@ -63,21 +63,12 @@ public abstract class CommAdapter<T> extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ViewHolder holder = ViewHolder.get(ctx, position, getlayoutid(position), convertView, parent);
+         holder = ViewHolder.get(ctx, position, getlayoutid(position), convertView, parent);
 
 
         convert(holder, getItem(position), position);
 
         return holder.getConvertView();
-    }
-
-    /**
-     * toast 提示
-     *
-     * @param strResId 提示文字 - 资源
-     */
-    public void mToast(int strResId) {
-        Toast.makeText(ctx, strResId, Toast.LENGTH_LONG).show();
     }
 
 

@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <com.baidu.mapapi.map.MapView
         android:id="@+id/cusview_bmapView_map"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:clickable="true" />
-</LinearLayout>
+
+    <!--搜索结果-->
+    <ListView
+        android:id="@+id/ls_baidumap_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollingCache="false"
+        android:background="@android:color/white"
+        android:visibility="gone"/>
+
+
+
+</RelativeLayout>

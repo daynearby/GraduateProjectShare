@@ -3,7 +3,12 @@ package com.young.share;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Message;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
 import android.view.View;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -30,14 +35,15 @@ import cn.bmob.v3.datatype.BmobGeoPoint;
  * 百度地图
  * 显示地理位置，拾取坐标
  * 都需要传入初始坐标
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * Created by Nearby Yang on 2016-01-02.
  */
 public class BaiduMapActivity extends ItemActBarActivity {
 
     private MapView mMapView;
     private BaiduMap mBaiduMap;
+    private ListView searchResultLs;
 
     private Marker marker;//进行拖拽的对象
     private LatLng resultPoint;//拖拽之后确定的坐标
@@ -87,7 +93,10 @@ public class BaiduMapActivity extends ItemActBarActivity {
     @Override
     public void findviewbyid() {
         mMapView = $(R.id.cusview_bmapView_map);
+        searchResultLs = $(R.id.ls_baidumap_search);
+
         mBaiduMap = mMapView.getMap();
+
     }
 
     @Override
@@ -98,7 +107,7 @@ public class BaiduMapActivity extends ItemActBarActivity {
         LatLng point = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
 //构建Marker图标
         BitmapDescriptor bitmap = BitmapDescriptorFactory
-                .fromResource(R.drawable.icon_mark);
+                .fromResource(R.drawable.icon_marka);
 //构建MarkerOption，用于在地图上添加Marker
         OverlayOptions option = new MarkerOptions()
                 .position(point)
@@ -164,7 +173,6 @@ public class BaiduMapActivity extends ItemActBarActivity {
         }
 
 
-
     }
 
     @Override
@@ -172,8 +180,35 @@ public class BaiduMapActivity extends ItemActBarActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_baidumap, menu);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.menu_search));
+        searchView.setQueryHint(getString(R.string.hint_search_places));
+        searchView.setSubmitButtonEnabled(true);
+        final String query = String.valueOf(searchView.getQuery());
 
-    private void queryPlace(){
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mActivity, query, Toast.LENGTH_SHORT).show();
+            }
+        });
+        searchView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                Toast.makeText(mActivity, "long click ", Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    private void queryPlace() {
         String query = "获取输入框文字";
         NetworkReuqest.baiduPlaceSuggestion(mActivity, query, cityCode, new NetworkReuqest.SimpleRequestCallback<List<PlaceSuggestion.ResultEntity>>() {
             @Override
@@ -181,24 +216,15 @@ public class BaiduMapActivity extends ItemActBarActivity {
                 // TODO: 2016-03-04 一个listview显示地点信息，ListView后面有单选按钮
 
 
-
             }
         });
     }
-
-
 
 
     @Override
     public void mBack() {
         this.finish();
     }
-
-
-
-
-
-
 
 
     @Override
