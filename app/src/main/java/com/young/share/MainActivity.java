@@ -5,8 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Message;
+import android.os.*;
+import android.os.Process;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
@@ -248,18 +248,18 @@ public class MainActivity extends CustomActBarActivity {
             AlertDialog.Builder alertbBuilder = new AlertDialog.Builder(this);
 
             alertbBuilder
-                    .setTitle("真的要退出？")
-                    .setMessage("你确定要离开吗?")
-                    .setPositiveButton("确定",
+                    .setTitle(R.string.txt_exit_title)
+                    .setMessage(R.string.txt_exit_message)
+                    .setPositiveButton(R.string.config,
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,
                                                     int which) {
-                                    int nPid = android.os.Process.myPid();
-                                    android.os.Process.killProcess(nPid);
+                                    int nPid = Process.myPid();
+                                    Process.killProcess(nPid);
                                     System.exit(0);
                                 }
                             })
-                    .setNegativeButton("取消",
+                    .setNegativeButton(R.string.cancel,
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,
                                                     int which) {

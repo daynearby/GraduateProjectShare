@@ -12,9 +12,9 @@
         <TextView
             android:id="@+id/tv_share_message_tips"
             style="@style/text_style_match"
-            android:text="@string/tips_discount_hint"
             android:padding="@dimen/paddingHit"
-            android:visibility="invisible"/>
+            android:text="@string/tips_discount_hint"
+            android:visibility="invisible" />
 
         <EditText
             android:id="@+id/et_contnent_popupwin_content"
@@ -33,34 +33,6 @@
             android:orientation="horizontal"
             android:padding="@dimen/paddingMediu">
 
-            <ImageView
-                android:id="@+id/im_content_popupwin_share_seletag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="centerInside"
-                android:src="@drawable/icon_tag" />
-
-            <TextView
-                android:id="@+id/tv_content_popupwin_share_seletag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:textColor="@color/lake_blue" />
-
-            <ImageView
-                android:id="@+id/im_content_popupwin_share_lacation_i"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/paddingMic"
-                android:scaleType="centerInside"
-                android:src="@drawable/icon_location_info" />
-
-            <TextView
-                android:id="@+id/tv_content_popupwin_share_lacation_i"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:textColor="@color/lake_blue" />
 
             <ImageView
                 android:id="@+id/im_activity_share_message_addimg"
@@ -81,6 +53,63 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/paddingHit"
+            android:paddingLeft="@dimen/paddingMic"
+            android:paddingRight="@dimen/paddingMic"
+            android:paddingTop="@dimen/paddingHit">
+
+            <ImageView
+                android:id="@+id/im_content_popupwin_share_seletag"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_tag" />
+
+            <TextView
+                android:id="@+id/tv_content_popupwin_share_seletag"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:padding="@dimen/paddingMic"
+                android:text="@string/tag"
+                android:textColor="@color/lake_blue" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/maginNornal"
+            android:background="@android:color/white"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/paddingHit"
+            android:paddingLeft="@dimen/paddingMic"
+            android:paddingRight="@dimen/paddingMic"
+            android:paddingTop="@dimen/paddingHit">
+
+
+            <ImageView
+                android:id="@+id/im_content_popupwin_share_lacation_i"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_location_info" />
+
+            <TextView
+                android:id="@+id/tv_content_popupwin_share_lacation_i"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:padding="@dimen/paddingMic"
+                android:text="@string/txt_loaction_info"
+                android:textColor="@color/lake_blue" />
+
+        </LinearLayout>
 
         <com.young.share.views.WrapHightGridview
             android:id="@+id/gv_content_popupwin_share_addimg"

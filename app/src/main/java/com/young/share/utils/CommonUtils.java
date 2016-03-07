@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,13 +41,6 @@ public class CommonUtils {
         return cm.getActiveNetworkInfo();
     }
 
-    /**
-     * 检查SD卡是否存在
-     */
-    public static boolean checkSdCard() {
-        return android.os.Environment.getExternalStorageState().equals(
-                android.os.Environment.MEDIA_MOUNTED);
-    }
 
     //    private void beginCrop(Uri source) {
 //
@@ -71,37 +63,6 @@ public class CommonUtils {
 //
 //        }
 
-    /**
-     * 存放图片对应的文件夹
-     *
-     * @param context 上下文对象
-     * @return file对象
-     */
-    public static File CreateImageFile(Context context) {
-        String path;
-        File imageFilePath;
-
-        if (checkSdCard()) {//存在
-
-            path = context.getExternalCacheDir().getAbsolutePath() + "/image";
-            imageFilePath = new File(path);
-
-            if (!imageFilePath.exists()) {
-                imageFilePath.mkdir();
-            }
-
-        } else {
-
-            path = context.getCacheDir().getAbsolutePath() + "/image";
-
-            imageFilePath = new File(path);
-            if (!imageFilePath.exists()) {
-                imageFilePath.mkdir();
-            }
-        }
-
-        return imageFilePath;
-    }
 
 
     /**

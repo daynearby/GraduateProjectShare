@@ -138,7 +138,8 @@
             android:launchMode="singleTask" />
 
         <!--百度地图 -->
-        <activity android:name=".BaiduMapActivity"/>
+        <activity android:name=".BaiduMapActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!--高清大图浏览-->
         <activity android:name=".BigPicActivity"

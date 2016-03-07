@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_navigation"
+        android:icon="@drawable/icon_action_search"
+        android:title="@string/navigation"
+        app:showAsAction="always|withText"/>
+
+</menu>

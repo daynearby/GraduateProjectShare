@@ -3,6 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_baidu_map"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/theme_puple" />
+
     <com.baidu.mapapi.map.MapView
         android:id="@+id/cusview_bmapView_map"
         android:layout_width="fill_parent"
@@ -14,11 +20,10 @@
         android:id="@+id/ls_baidumap_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         android:overScrollMode="never"
         android:scrollingCache="false"
-        android:background="@android:color/white"
-        android:visibility="gone"/>
-
+        android:visibility="gone" />
 
 
 </RelativeLayout>

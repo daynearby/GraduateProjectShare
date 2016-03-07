@@ -6,6 +6,8 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.young.share.config.ApplicationConfig;
+import com.young.share.config.Contants;
 
 /**
  * 百度定位
@@ -66,15 +68,19 @@ public class BDLBSUtils {
 
         @Override
         public void onReceiveLocation(BDLocation data) {
-
-
-            LogUtils.logD("bdlbs", "纬度 = "+data.getLatitude()+" 经度 ="+data.getLongitude()
-                    +"\n 省 = "
+            LogUtils.logD("bdlbs", "纬度 = " + data.getLatitude() + " 经度 =" + data.getLongitude()
+                    + "\n 省 = "
                     + data.getProvince()
                     + "\n 城市 = " + data.getCity()
-                    + " 地区 = " +data.getDistrict()
+                    + " 地区 = " + data.getDistrict()
                     + "\n 街道 = " + data.getStreet()
                     + "\n 门牌号 = " + data.getStreetNumber());
+//保存经纬度
+
+
+            ApplicationConfig.getInstance().getCacheInstance().put(Contants.ACAHE_KEY_LONGITUDE,
+                    data.getLongitude() + "," + data.getLatitude());
+
 
             locationInfoListener.LocationInfo(data.getLatitude(),
                     data.getLongitude(),
@@ -120,6 +126,6 @@ public class BDLBSUtils {
      * 监听定位 的回调
      */
     public interface LocationInfoListener {
-         void LocationInfo(double latitude,double longitude ,String province, String city, String district, String street, String streetNumber);
+        void LocationInfo(double latitude, double longitude, String province, String city, String district, String street, String streetNumber);
     }
 }

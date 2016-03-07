@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.ThreadUtils;
+import com.young.share.utils.cache.ACache;
 
 import org.litepal.LitePalApplication;
 
@@ -31,6 +32,7 @@ public class ApplicationConfig extends LitePalApplication {
 
     //单例模式
     private volatile static ApplicationConfig instance;
+    private ACache aCache;
 
     public ThreadUtils threadUtils;
 
@@ -105,5 +107,14 @@ public class ApplicationConfig extends LitePalApplication {
         return instance;
     }
 
+    /**
+     * 获取缓存操作对象
+     *
+     * @return
+     */
+    public ACache getCacheInstance(){
+
+      return aCache = ACache.get(com.young.share.utils.StorageUtils.CreateCacheFile(getApplicationContext()));
+    }
 
 }

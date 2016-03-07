@@ -218,7 +218,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
                         }
 
-                        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(mActivity,list), true);
+                        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(mActivity, list), true);
                     }
 
                     //删除草稿
@@ -285,10 +285,10 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
             case R.id.im_activity_share_message_addimg://添加照片
 
-               List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
+                List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
 
                 ArrayList<String> l = new ArrayList<>();
-                for (PictureInfo pictureInfo : pictureInfoList){
+                for (PictureInfo pictureInfo : pictureInfoList) {
 
                     l.add(pictureInfo.getImageUrl());
                 }
@@ -297,13 +297,16 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                 break;
 
             case R.id.im_content_popupwin_share_lacation_i://选择位置
-                addLocation = true;
-                if (!isGotLocationInfo) {
-                    startLocation();
-                } else {
-                    shareLocation_tv.setText(locationInfoString);
-                }
 
+//                addLocation = true;
+//                if (!isGotLocationInfo) {
+//                    startLocation();
+//                } else {
+//                    shareLocation_tv.setText(locationInfoString);
+//                }
+                intents = new Intent(mActivity, BaiduMapActivity.class);
+                intents.putExtra(Contants.INTENT_BMOB_IS_POSITION,true);
+                startActivity(intents);
 
 
                 break;
@@ -325,7 +328,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
         //注册广播接收者
         registerBoradcastReceiver();
-        if (addLocation&&!isGotLocationInfo) {
+        if (addLocation && !isGotLocationInfo) {
             mToast(R.string.locationing);
         }
     }
@@ -389,7 +392,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                     }
 
                     //图片路径
-                    gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(mActivity,mSelectPath), true);
+                    gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(mActivity, mSelectPath), true);
                 }
 
 
@@ -443,7 +446,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                     List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
 
                     ArrayList<String> l = new ArrayList<>();
-                    for (PictureInfo pictureInfo : pictureInfoList){
+                    for (PictureInfo pictureInfo : pictureInfoList) {
 
                         l.add(pictureInfo.getImageUrl());
                     }
@@ -451,7 +454,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                     darftUtils.saveDraft(draftType, content_et.getText().toString(),
                             shareLocation_tv.getText().toString(),
                             tag_tv.getText().toString(),
-                           l
+                            l
                     );
                     back2MainActivity();
 
@@ -509,7 +512,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
             List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
 
             ArrayList<String> lists = new ArrayList<>();
-            for (PictureInfo pictureInfo : pictureInfoList){
+            for (PictureInfo pictureInfo : pictureInfoList) {
 
                 lists.add(pictureInfo.getImageUrl());
             }
@@ -725,7 +728,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
 
         ArrayList<String> l = new ArrayList<>();
-        for (PictureInfo pictureInfo : pictureInfoList){
+        for (PictureInfo pictureInfo : pictureInfoList) {
 
             l.add(pictureInfo.getImageUrl());
         }
