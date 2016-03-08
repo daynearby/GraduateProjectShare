@@ -68,10 +68,14 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     private ViewPager vp_emotion_dashboard;
     @InjectView(R.id.ll_popip_window_emotion_panel)
     private LinearLayout emotionPanel_bg;
-    @InjectView(R.id.im_content_popupwin_share_lacation_i)
-    private ImageView shareLocation_im;
-    @InjectView(R.id.im_content_popupwin_share_seletag)
-    private ImageView tag_im;
+//    @InjectView(R.id.im_content_popupwin_share_lacation_i)
+//    private ImageView shareLocation_im;
+//    @InjectView(R.id.im_content_popupwin_share_seletag)
+//    private ImageView tag_im;
+    @InjectView(R.id.ll_share_select_tag)
+    private LinearLayout tagLl;//标签
+    @InjectView(R.id.ll_share_loaction_info)
+    private LinearLayout lactionInfoLl;//分享位置
     @InjectView(R.id.tv_content_popupwin_share_seletag)
     private TextView tag_tv;
     @InjectView(R.id.tv_share_message_tips)
@@ -247,8 +251,8 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         shareLocation_tv.setOnClickListener(this);
         emotion_im.setOnClickListener(this);
         addimg_im.setOnClickListener(this);
-        shareLocation_im.setOnClickListener(this);
-        tag_im.setOnClickListener(this);
+        tagLl.setOnClickListener(this);
+        lactionInfoLl.setOnClickListener(this);
 
         content_et.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -296,7 +300,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
                 break;
 
-            case R.id.im_content_popupwin_share_lacation_i://选择位置
+            case R.id.ll_share_loaction_info://选择位置
 
 //                addLocation = true;
 //                if (!isGotLocationInfo) {
@@ -311,9 +315,9 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
                 break;
 
-            case R.id.im_content_popupwin_share_seletag://标签选择
+            case R.id.ll_share_select_tag://标签选择
 
-                popupWinListView.onShow(tag_im);
+                popupWinListView.onShow(tagLl);
 
                 break;
         }

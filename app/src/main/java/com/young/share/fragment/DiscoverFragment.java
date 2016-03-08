@@ -46,7 +46,7 @@ public class DiscoverFragment extends BaseFragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private DiscoverAdapter listviewAdapter;
-    private  List<ShareMessage_HZ> dataList = new ArrayList<>();
+    private List<ShareMessage_HZ> dataList = new ArrayList<>();
 
     private static final int FIRST_GETDATA = 0x1001;
     private static final int GET_LOACTIOPN_DATA = 0x1002;
@@ -62,8 +62,8 @@ public class DiscoverFragment extends BaseFragment {
     public DiscoverFragment(Context context) {
         super(context);
     }
-    private boolean isFirstIn = true;//第一次进入该界面
 
+    private boolean isFirstIn = true;//第一次进入该界面
 
 
     private static final String tag = "discover";
@@ -90,7 +90,6 @@ public class DiscoverFragment extends BaseFragment {
                             getString(R.string.without_network));
 
                 }
-
             }
         }));
 
@@ -198,7 +197,7 @@ public class DiscoverFragment extends BaseFragment {
 
                     refreshUI();
                 } else {
-                   LinearLayout linearLayout=$(R.id. llayout_disvocer_bg);
+                    LinearLayout linearLayout = $(R.id.llayout_disvocer_bg);
                     linearLayout.setBackgroundResource(R.drawable.icon_conten_empty);
                 }
                 break;

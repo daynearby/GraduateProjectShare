@@ -1,11 +1,13 @@
 package com.young.share;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Message;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -93,7 +95,8 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
     private void initializeToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tb_baidu_map);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_menu_back);
+        toolbar.setNavigationIcon(R.drawable.icon_menu_back);
+        toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,8 +152,8 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
 // 设置定位数据
             mBaiduMap.setMyLocationData(locData);
 // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
-            MyLocationConfiguration config = new MyLocationConfiguration( MyLocationConfiguration.LocationMode.FOLLOWING ,
-                    true,null);
+            MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.FOLLOWING,
+                    true, null);
             mBaiduMap.setMyLocationConfigeration(config);
 
             MapStatus mMapStatus = new MapStatus.Builder()
@@ -184,7 +187,6 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
                                 }
 
                             });
-
                 }
 
                 public void onMarkerDragStart(Marker marker) {
@@ -216,28 +218,33 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!isPosition) {
+        if (isPosition) {
             getMenuInflater().inflate(R.menu.menu_baidumap, menu);
             SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.menu_search));
             searchView.setQueryHint(getString(R.string.hint_search_places));
             searchView.setSubmitButtonEnabled(true);
-            final String query = String.valueOf(searchView.getQuery());
+            searchView.setIconifiedByDefault(false);
+//            final String query = String.valueOf(searchView.getQuery());
 
-            searchView.setOnSearchClickListener(new View.OnClickListener() {
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
-                public void onClick(View view) {
-                    Toast.makeText(mActivity, query, Toast.LENGTH_SHORT).show();
+                public boolean onQueryTextSubmit(String query) {
+                    if (!TextUtils.isEmpty(query)){
+                        Toast.makeText(mActivity,query +"---",Toast.LENGTH_SHORT).show();
+                    }
+
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+
+                    Toast.makeText(mActivity,newText +"---",Toast.LENGTH_SHORT).show();
+                    return false;
                 }
             });
-            searchView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
 
-                    Toast.makeText(mActivity, "long click ", Toast.LENGTH_SHORT).show();
 
-                    return true;
-                }
-            });
         } else {
             getMenuInflater().inflate(R.menu.menu_baidumap2, menu);
         }
@@ -246,7 +253,7 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_navigation) {//导航
+        if (!isPosition && item.getItemId() == R.id.menu_navigation) {//导航
             //调用外部地图显示位置
             Uri uri = Uri.parse(String.format(geoStr, geoPoint.getLatitude(), geoPoint.getLongitude()));
 

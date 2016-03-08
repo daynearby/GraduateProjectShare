@@ -13,6 +13,7 @@
         android:id="@+id/cusview_bmapView_map"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@+id/tb_baidu_map"
         android:clickable="true" />
 
     <!--搜索结果-->

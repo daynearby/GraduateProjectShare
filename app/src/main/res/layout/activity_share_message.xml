@@ -54,10 +54,12 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_share_select_tag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
+            android:background="@drawable/sele_layout_click"
             android:orientation="horizontal"
+            android:clickable="true"
             android:paddingBottom="@dimen/paddingHit"
             android:paddingLeft="@dimen/paddingMic"
             android:paddingRight="@dimen/paddingMic"
@@ -81,11 +83,13 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_share_loaction_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/maginNornal"
-            android:background="@android:color/white"
+            android:background="@drawable/sele_layout_click"
             android:orientation="horizontal"
+            android:clickable="true"
             android:paddingBottom="@dimen/paddingHit"
             android:paddingLeft="@dimen/paddingMic"
             android:paddingRight="@dimen/paddingMic"
