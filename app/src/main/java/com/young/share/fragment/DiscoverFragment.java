@@ -59,6 +59,10 @@ public class DiscoverFragment extends BaseFragment {
 
     private int startRow = 0;//从第一条开始
 
+    public DiscoverFragment() {
+        super();
+    }
+
     public DiscoverFragment(Context context) {
         super(context);
     }

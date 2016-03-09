@@ -21,6 +21,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionMenuTextColor">@color/white</item>
+        <item name="android:actionMenuTextColor">@color/white</item>
     </style>
     <!--透明背景 主题 在兼容性主题中实现透明效果-->
     <style name="AppTheme.Translucent2" parent="Theme.AppCompat.Light.NoActionBar">
@@ -70,11 +72,13 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:orientation">vertical</item>
     </style>
+
     <style name="linearLayout_h">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:orientation">horizontal</item>
     </style>
+
     <style name="text_style_match">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
@@ -108,7 +112,7 @@
         <item name="android:paddingRight">@dimen/paddingMediu</item>
     </style>
 
-    <style name="AnimationActivity" parent="@android:style/Animation.Activity"  mce_bogus="1">
+    <style name="AnimationActivity" mce_bogus="1" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@animator/activity_slid_left_in</item>
         <item name="android:activityOpenExitAnimation">@animator/activity_slid_left_out</item>
         <item name="android:activityCloseEnterAnimation">@animator/activity_slid_right_in</item>
@@ -121,10 +125,11 @@
     </style>
 
     <style name="arcButton">
-        <item name="android:layout_width">@android:dimen/notification_large_icon_width</item>
-        <item name="android:layout_height">@android:dimen/notification_large_icon_width</item>
+        <item name="android:layout_width">@dimen/arcButton</item>
+        <item name="android:layout_height">@dimen/arcButton</item>
         <item name="android:padding">@dimen/paddingMic</item>
     </style>
+
     <style name="arcButtonChild">
         <item name="android:layout_width">@dimen/arcButtonChild</item>
         <item name="android:layout_height">@dimen/arcButtonChild</item>

@@ -29,5 +29,6 @@
     <dimen name="btnSizeDefault">60dp</dimen>
 
     <dimen name="stroke_width">1dp</dimen>
-    <dimen name="arcButtonChild">56dp</dimen>
+    <dimen name="arcButtonChild">58dp</dimen>
+    <dimen name="arcButton">68dp</dimen>
 </resources>

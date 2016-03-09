@@ -4,15 +4,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Message;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.SearchView;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -58,6 +55,7 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
     private String geoStr = "geo:%s,%s";//经纬度
     private String LOCATION = "%s,%s";//经纬度
     private int cityCode = 0;//城市代码，用作城市搜索
+    private PopupMenu searchResultMenu;
 
     // TODO: 2016-02-19 分享信息，拖拽实现定位
 
@@ -126,6 +124,9 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
         OverlayOptions option = new MarkerOptions()
                 .position(point)
                 .icon(bitmap);
+        mMapView.showZoomControls(false);
+
+        mBaiduMap.showMapPoi(true);
 
 
 //debug，只有在发送信息的时候，进入该状态
@@ -133,7 +134,7 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
 
             //// TODO: 2016-03-04 需要先定位，获取citycode，存储起来，等下需要用到搜索，那么就使用该citycode
 // 当不需要定位图层时关闭定位图层
-            mBaiduMap.setMyLocationEnabled(false);
+
             OverlayOptions options = new MarkerOptions()
                     .position(point)  //设置marker的位置
                     .icon(bitmap)  //设置marker图标
@@ -141,6 +142,7 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
                     .draggable(true);  //设置手势拖拽
 //将marker添加到地图上
             marker = (Marker) (mBaiduMap.addOverlay(options));
+
 // 开启定位图层
             mBaiduMap.setMyLocationEnabled(true);
 // 构造定位数据
@@ -193,6 +195,7 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
                     //开始拖拽
                 }
             });
+            mBaiduMap.setMyLocationEnabled(false);
 
         } else {//这里是直接显示定位
             //在地图上添加Marker，并显示
@@ -218,41 +221,49 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+
         if (isPosition) {
             getMenuInflater().inflate(R.menu.menu_baidumap, menu);
-            SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.menu_search));
-            searchView.setQueryHint(getString(R.string.hint_search_places));
-            searchView.setSubmitButtonEnabled(true);
-            searchView.setIconifiedByDefault(false);
-//            final String query = String.valueOf(searchView.getQuery());
-
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    if (!TextUtils.isEmpty(query)){
-                        Toast.makeText(mActivity,query +"---",Toast.LENGTH_SHORT).show();
-                    }
-
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-
-                    Toast.makeText(mActivity,newText +"---",Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-            });
+//            SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.menu_search));
+//            searchView.setQueryHint(getString(R.string.hint_search_places));
+//            searchView.setSubmitButtonEnabled(true);
+//            searchView.setIconifiedByDefault(false);
+////            final String query = String.valueOf(searchView.getQuery());
+//            searchResultMenu = new PopupMenu(this,searchView);
+//
+//            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//                @Override
+//                public boolean onQueryTextSubmit(String query) {
+//                    if (!TextUtils.isEmpty(query)){
+//                        Toast.makeText(mActivity,query +"---",Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                    return false;
+//                }
+//
+//                @Override
+//                public boolean onQueryTextChange(String newText) {
+//
+//                    Toast.makeText(mActivity,newText +"---",Toast.LENGTH_SHORT).show();
+//
+//
+//                    return false;
+//                }
+//            });
 
 
         } else {
             getMenuInflater().inflate(R.menu.menu_baidumap2, menu);
+
+
         }
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         if (!isPosition && item.getItemId() == R.id.menu_navigation) {//导航
             //调用外部地图显示位置
             Uri uri = Uri.parse(String.format(geoStr, geoPoint.getLatitude(), geoPoint.getLongitude()));
@@ -260,6 +271,8 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
             Intent it = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(it);
         }
+
+
         return super.onOptionsItemSelected(item);
     }
 
