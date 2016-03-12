@@ -179,6 +179,9 @@ public class Contants {
     public static final String PARAM_AK = "ak";//参数名
     public static final String PARAM_REGION = "region";//参数名
     public static final String PARAM_QUERY = "q";//参数名
+    public static final String PARAM_SCOPE = "scope";//参数名
+    public static final String PARAM_PAGE_NUM = "page_num";//参数名
+    public static final String PARAM_PAGE_SIZE = "page_size";//参数名
 
 
     public static final String MCODE = "19:C4:5F:A4:13:B9:82:7D:F0:8C:3C:B2:7C:D8:02:78:18:DB:65:86;com.young.share";
@@ -186,4 +189,6 @@ public class Contants {
 
     //**********************cache key*************************
     public static final String ACAHE_KEY_LONGITUDE  = "acahe_key_longitude";//经纬度,存储的格式是：经度,纬度
+    public static final String ACAHE_KEY_CITY_CODE  = "acahe_key_city_code";//城市代码
+    public static final String ACAHE_KEY_CITY  = "acahe_key_city";//城市
 }

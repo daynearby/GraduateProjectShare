@@ -7,16 +7,16 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/paddingMic"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/paddingMic">
 
         <TextView
             android:id="@+id/id_tx_search_item_name"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@android:style/TextAppearance.DeviceDefault.Medium"
-            android:textColor="@android:color/black"
-            android:text="@string/huizhou" />
+            android:text="@string/huizhou"
+            android:textColor="@android:color/black" />
 
         <TextView
             android:id="@+id/id_tx_search_item_detail"
@@ -25,13 +25,30 @@
             android:text="@string/huizhou" />
     </LinearLayout>
 
-
-    <ImageView
-        android:id="@+id/im_search_item_checked"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:scaleType="centerInside"
-        android:src="@drawable/icon_checked"
-        />
+        android:layout_centerVertical="true"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:id="@+id/pb_search_item_loading"
+            style="@android:style/Widget.ProgressBar.Small"
+            android:layout_width="@dimen/size_progress_small"
+            android:layout_height="@dimen/size_progress_small"
+            android:layout_gravity="center"
+            android:indeterminateDrawable="@drawable/progress_ring_small"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/im_search_item_checked"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_checked"
+
+            />
+    </LinearLayout>
 </RelativeLayout>

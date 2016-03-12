@@ -24,7 +24,6 @@ import com.young.share.model.dbmodel.User;
 import com.young.share.myInterface.GotoAsyncFunction;
 import com.young.share.myInterface.ListViewRefreshListener;
 import com.young.share.network.BmobApi;
-import com.young.share.thread.MyRunnable;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DBUtils;
 import com.young.share.utils.DataFormateUtils;
@@ -80,22 +79,13 @@ public class DiscoverFragment extends BaseFragment {
     @Override
     public void initData() {
 
-
-//        getDataFromLocat();//没有网络
-        threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
-            @Override
-            public void running() {
-                if (CommonUtils.isNetworkAvailable(context)) {//有网络
-
-                    getDataFromRemote();
-
-                } else {
-                    SVProgressHUD.showInfoWithStatus(context,
-                            getString(R.string.without_network));
-
-                }
-            }
-        }));
+//        getDataFromLocat();//先从本地加载数据
+        if (CommonUtils.isNetworkAvailable(context)) {//有网络
+            getDataFromRemote();
+        } else {
+            SVProgressHUD.showInfoWithStatus(context,
+                    getString(R.string.without_network));
+        }
 
     }
 
@@ -113,28 +103,23 @@ public class DiscoverFragment extends BaseFragment {
                 new ListViewRefreshListener.RefreshListener() {
                     @Override
                     public void pushToRefresh() {//上拉刷新
-                        if (CommonUtils.isNetworkAvailable(context)) {//有网络
 //                            startRow += Contants.PAGER_NUMBER;
 
-                            if (dataList.size() > Contants.PAGE_SIZE * PUSH_TIMES) {
+                        if (dataList.size() > Contants.PAGE_SIZE * PUSH_TIMES) {
 
-                                endIndex = dataList.size() < Contants.PAGE_SIZE +
-                                        Contants.PAGE_SIZE * PUSH_TIMES ? dataList.size() :
-                                        Contants.PAGE_SIZE + Contants.PAGE_SIZE * PUSH_TIMES;
+                            endIndex = dataList.size() < Contants.PAGE_SIZE +
+                                    Contants.PAGE_SIZE * PUSH_TIMES ? dataList.size() :
+                                    Contants.PAGE_SIZE + Contants.PAGE_SIZE * PUSH_TIMES;
 
-                                listviewAdapter.setData(dataList.subList(startIndex, endIndex));
+                            listviewAdapter.setData(dataList.subList(startIndex, endIndex));
 
-                                PUSH_TIMES++;
+                            PUSH_TIMES++;
 
-                            } else {
-                                isGetMore = true;
-//                                Toast.makeText(ctx, R.string.no_more_messages, Toast.LENGTH_SHORT).show();
-                                startRow = dataList.size();
-                                getDataFromRemote();
-                            }
                         } else {
-                            SVProgressHUD.showInfoWithStatus(context, getString(R.string.without_network));
-                            getDataFromLocat();//没有网络
+                            isGetMore = true;
+//                                Toast.makeText(ctx, R.string.no_more_messages, Toast.LENGTH_SHORT).show();
+                            startRow = dataList.size();
+                            getDataFromRemote();
                         }
 
                         swipeRefreshLayout.setRefreshing(false);
@@ -148,13 +133,8 @@ public class DiscoverFragment extends BaseFragment {
                         startRow = 0;
                         isGetMore = false;
 
-                        if (CommonUtils.isNetworkAvailable(context)) {//有网络
+                        getDataFromRemote();
 
-                            getDataFromRemote();
-                        } else {
-                            SVProgressHUD.showInfoWithStatus(context, getString(R.string.without_network));
-                            getDataFromLocat();//没有网络
-                        }
 
                     }
                 });
@@ -193,9 +173,9 @@ public class DiscoverFragment extends BaseFragment {
                 refreshUI();
 
                 break;
-            case FIRST_GETDATA:
-                LogUtils.logD("获取数据");
-                break;
+//            case FIRST_GETDATA:
+//                LogUtils.logD("获取数据");
+//                break;
             case HANDLER_GET_DATA:
                 if (dataList != null && dataList.size() > 0) {
 
@@ -242,6 +222,8 @@ public class DiscoverFragment extends BaseFragment {
                         } else {
                             dataList.clear();
                             dataList = shareMessageList.getShareMessageHzList();
+                            //保存数据到本地数据库
+//                            saveData(dataList);
                         }
                         mhandler.sendEmptyMessage(HANDLER_GET_DATA);
                     }
@@ -265,33 +247,24 @@ public class DiscoverFragment extends BaseFragment {
     private void saveData(final List<ShareMessage_HZ> shareList) {
 
 
-        threadUtils.addTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+        for (ShareMessage_HZ share : shareList) {
 
-            @Override
-            public void running() {
+            //分享信息
+            ShareMessage shareMessageHZ = DataFormateUtils.formateShareMessage(share);
 
-                for (ShareMessage_HZ share : shareList) {
-
-                    //分享信息
-                    ShareMessage shareMessageHZ = DataFormateUtils.formateShareMessage(share);
-
-                    //用户信息
-                    User u = DataFormateUtils.formateUser(share.getUserId());
+            //用户信息
+            User u = DataFormateUtils.formateUser(share.getUserId());
 //保存
-                    u.save();
+            u.save();
 
-                    shareMessageHZ.setUserId(u);
+            shareMessageHZ.setUserId(u);
 
-                    DBUtils.saveShMessages(shareMessageHZ);
+            DBUtils.saveShMessages(shareMessageHZ);
 
 
-                }
+        }
 
-                mhandler.sendEmptyMessage(FIRST_GETDATA);
-
-            }
-        }));
-
+//                mhandler.sendEmptyMessage(FIRST_GETDATA);
 
     }
 
@@ -317,15 +290,10 @@ public class DiscoverFragment extends BaseFragment {
      */
     private void getDataFromLocat() {
 
-        threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+        dataList = DBUtils.getShareMessages();
+        if (dataList != null && dataList.size() > 0)
+            mhandler.sendEmptyMessage(GET_LOACTIOPN_DATA);
 
-            @Override
-            public void running() {
-                dataList = DBUtils.getShareMessages();
-                mhandler.sendEmptyMessage(GET_LOACTIOPN_DATA);
-
-            }
-        }));
 
     }
 

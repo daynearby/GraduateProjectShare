@@ -78,6 +78,13 @@ public class PlaceSuggestion {
         @SerializedName("cityid")
         private String cityid;
 
+        public ResultEntity() {
+        }
+
+        public ResultEntity(String name) {
+            this.name = name;
+        }
+
         public void setName(String name) {
             this.name = name;
         }

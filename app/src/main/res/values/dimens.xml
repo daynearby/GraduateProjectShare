@@ -35,4 +35,5 @@
 
     <dimen name="arcButtonChild">52dp</dimen>
     <dimen name="arcButton">62dp</dimen>
+    <dimen name="size_progress_small">32dp</dimen>
 </resources>

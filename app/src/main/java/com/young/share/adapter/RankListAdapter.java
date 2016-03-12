@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.young.share.MessageDetail;
@@ -14,7 +15,7 @@ import com.young.share.R;
 import com.young.share.adapter.baseAdapter.CommAdapter;
 import com.young.share.adapter.baseAdapter.ViewHolder;
 import com.young.share.config.Contants;
-import com.young.share.model.CommRemoteModel;
+import com.young.share.model.dbmodel.CommRemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.User;
@@ -57,7 +58,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
         TextView comment_tv = holder.getView(R.id.id_tx_comment);//评论数量
         ((TextView) holder.getView(R.id.tv_item_share_main_created_at))
                 .setText(DateUtils.convertDate2Str(commRemoteModel.getMcreatedAt()));//创建时间
-
+        RelativeLayout tagLayout = holder.getView(R.id.rl_head_tag_layout);
         ViewGroup.LayoutParams lp = myGridview.getLayoutParams();
         lp.width = DisplayUtils.getScreenWidthPixels((Activity) ctx) / 3 * 2;//设置宽度
         myGridview.setLayoutParams(lp);
@@ -81,6 +82,12 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 
         ImageHandlerUtils.loadIamgeThumbnail(ctx,
                 TextUtils.isEmpty(user.getAvatar()) ? Contants.DEFAULT_AVATAR : user.getAvatar(), avatar);
+        if (TextUtils.isEmpty(commRemoteModel.getTag())) {
+            tagLayout.setVisibility(View.INVISIBLE);
+        } else {
+            tagLayout.setVisibility(View.VISIBLE);
+            tag_tv.setText(commRemoteModel.getTag());
+        }
 
         tag_tv.setText(commRemoteModel.getTag());
 

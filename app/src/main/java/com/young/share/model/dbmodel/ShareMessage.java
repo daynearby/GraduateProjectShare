@@ -1,14 +1,23 @@
 package com.young.share.model.dbmodel;
 
 
+import org.litepal.annotation.Column;
+import org.litepal.crud.DataSupport;
+
+import java.io.Serializable;
+
 /**
  * 分享信息，本地数据库的表
  * <p>
  * Created by Nearby Yang on 2015-10-16.
  */
-public class ShareMessage extends DBModel{
+public class ShareMessage extends DataSupport implements Serializable {
 
-
+    private int id;
+    @Column(unique = true)
+    private String objectId;
+    private String createdAt;//createdAt
+    private String updatedAt;
     private User userId;
     private String shContent;
     private String shImgs;
@@ -17,6 +26,38 @@ public class ShareMessage extends DBModel{
     private String shWantedNum;
     private String shVisitedNum;
     private int shCommNum;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
     public User getUserId() {
         return userId;

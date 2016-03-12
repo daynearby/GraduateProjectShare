@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.klinker.android.link_builder.Link;
@@ -37,10 +38,10 @@ import cn.bmob.v3.datatype.BmobGeoPoint;
 
 /**
  * 实例化
- * <p>
+ * <p/>
  * 父类中setdata并且刷新
- * <p>
- * <p>
+ * <p/>
+ * <p/>
  * Created by yangfujing on 15/10/10.
  */
 public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
@@ -70,9 +71,11 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         TextView wanto_tv = holder.getView(R.id.id_tx_wantogo);//想去数量
         TextView hadgo_tv = holder.getView(R.id.id_hadgo);//去过数量
         TextView comment_tv = holder.getView(R.id.id_tx_comment);//评论数量
+        RelativeLayout tagLayout = holder.getView(R.id.rl_head_tag_layout);
 
         ((TextView) holder.getView(R.id.tv_item_share_main_created_at))
                 .setText(DateUtils.convertDate2Str(shareMessage.getCreatedAt()));//创建时间
+
         ViewGroup.LayoutParams lp = myGridview.getLayoutParams();
         lp.width = DisplayUtils.getScreenWidthPixels((Activity) ctx) / 3 * 2;//设置宽度
 
@@ -101,7 +104,13 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         ImageHandlerUtils.loadIamgeThumbnail(ctx,
                 TextUtils.isEmpty(user.getAvatar()) ? Contants.DEFAULT_AVATAR : user.getAvatar(), avatar);
 
-        tag_tv.setText(shareMessage.getShTag());
+        if (TextUtils.isEmpty(shareMessage.getShTag())) {
+            tagLayout.setVisibility(View.INVISIBLE);
+        } else {
+            tagLayout.setVisibility(View.VISIBLE);
+            tag_tv.setText(shareMessage.getShTag());
+        }
+
 
         String wanto;
         if (shareMessage.getShWantedNum() != null && shareMessage.getShWantedNum().size() > 0) {

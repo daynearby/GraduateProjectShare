@@ -208,7 +208,10 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
                         LogUtils.logE(getClass().getName(), "登陆失败  code = " + i + " message = " + s);
                         switch (i) {
                             case 101:
-                                SVProgressHUD.showInfoWithStatus(LoginActivity.this, getString(R.string.account_pwd_incorrect), SVProgressHUD.SVProgressHUDMaskType.Gradient);
+                                SVProgressHUD.showInfoWithStatus(LoginActivity.this, getString(R.string.account_pwd_incorrect));
+                                break;
+                            case 9016:
+                                SVProgressHUD.showInfoWithStatus(LoginActivity.this, getString(R.string.network_erro));
                                 break;
                         }
 

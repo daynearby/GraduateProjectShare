@@ -31,4 +31,5 @@
     <dimen name="stroke_width">1dp</dimen>
     <dimen name="arcButtonChild">58dp</dimen>
     <dimen name="arcButton">68dp</dimen>
+    <dimen name="size_progress_small">32dp</dimen>
 </resources>

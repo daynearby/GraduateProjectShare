@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Message;
-import android.support.v7.widget.PopupMenu;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.baidu.mapapi.map.BaiduMap;
@@ -24,12 +27,17 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.young.share.adapter.MapSearchListAdapter;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
 import com.young.share.model.gson.Longitude2Location;
+import com.young.share.model.gson.PlaceSearch;
 import com.young.share.model.gson.PlaceSuggestion;
 import com.young.share.network.NetworkReuqest;
+import com.young.share.utils.DisplayUtils;
+import com.young.share.utils.LogUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.datatype.BmobGeoPoint;
@@ -46,7 +54,9 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
 
     private MapView mMapView;
     private BaiduMap mBaiduMap;
-    private ListView searchResultLs;
+    private ListView searchList;
+    private List<PlaceSearch.ResultsEntity> placeList;
+    private MapSearchListAdapter adapter;
 
     private Marker marker;//进行拖拽的对象
     private LatLng resultPoint;//拖拽之后确定的坐标
@@ -55,7 +65,10 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
     private String geoStr = "geo:%s,%s";//经纬度
     private String LOCATION = "%s,%s";//经纬度
     private int cityCode = 0;//城市代码，用作城市搜索
-    private PopupMenu searchResultMenu;
+    private String city;//城市
+    private int viewHeight = 0;//ListView
+
+    private static final int HANDLER_PLACE_SUGGEST = 0x01;
 
     // TODO: 2016-02-19 分享信息，拖拽实现定位
 
@@ -70,6 +83,9 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
         setTitle(R.string.location);
         geoPoint = (BmobGeoPoint) getIntent().getExtras().getSerializable(Contants.INTENT_BMOB_GEOPONIT);
         isPosition = getIntent().getBooleanExtra(Contants.INTENT_BMOB_IS_POSITION, false);
+
+        cityCode = Integer.valueOf(app.getCacheInstance().getAsString(Contants.ACAHE_KEY_CITY_CODE));
+        city = app.getCacheInstance().getAsString(Contants.ACAHE_KEY_CITY_CODE);
 
         if (geoPoint == null) {
             String LONGITUDE = app.getCacheInstance().getAsString(Contants.ACAHE_KEY_LONGITUDE);
@@ -107,15 +123,53 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
     @Override
     public void findviewbyid() {
         mMapView = $(R.id.cusview_bmapView_map);
-        searchResultLs = $(R.id.ls_baidumap_search);
+        searchList = $(R.id.ls_baidumap_search);
 
         mBaiduMap = mMapView.getMap();
+        viewHeight = DisplayUtils.getScreenHeightPixels(mActivity) - DisplayUtils.getStatusBarHeight(searchList);
 
     }
 
     @Override
     public void bindData() {
-//定义Maker坐标点
+        if (isPosition) {
+/*附近地点搜索*/
+            nearbyPlaceSuggestion();
+        } else {
+        /*百度地图初始化*/
+            baidu();
+        }
+// TODO: 2016-03-12 在你需要重新设置菜单的时候，调用这个方法：invalidateOptionsMenu();
+
+    }
+
+    /**
+     * 搜索地点
+     */
+    private void nearbyPlaceSuggestion() {
+        mMapView.setVisibility(View.GONE);
+        searchList.setVisibility(View.VISIBLE);
+        placeList = new ArrayList<>();
+        adapter = new MapSearchListAdapter(this);
+        searchList.setAdapter(adapter);
+
+        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                LogUtils.logE("条目 " + placeList.get(position));
+            }
+        });
+
+        queryPlace(city);
+    }
+
+
+    /**
+     * 百度地图初始化
+     */
+    private void baidu() {
+
+        //定义Maker坐标点
         LatLng point = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
 //构建Marker图标
         BitmapDescriptor bitmap = BitmapDescriptorFactory
@@ -211,12 +265,20 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
             mBaiduMap.setMapStatus(mMapStatusUpdate);
         }
 
-
     }
 
     @Override
     public void handerMessage(Message msg) {
 
+        switch (msg.what) {
+            case HANDLER_PLACE_SUGGEST:
+                if (placeList != null && placeList.size() >= 1) {
+                    adapter.setVisible(false);
+                    adapter.setData(placeList);
+                }
+
+                break;
+        }
     }
 
     @Override
@@ -225,32 +287,29 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
 
         if (isPosition) {
             getMenuInflater().inflate(R.menu.menu_baidumap, menu);
-//            SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.menu_search));
-//            searchView.setQueryHint(getString(R.string.hint_search_places));
+
+            SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.menu_search));
+            searchView.setQueryHint(getString(R.string.hint_search_places));
 //            searchView.setSubmitButtonEnabled(true);
-//            searchView.setIconifiedByDefault(false);
-////            final String query = String.valueOf(searchView.getQuery());
-//            searchResultMenu = new PopupMenu(this,searchView);
-//
-//            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//                @Override
-//                public boolean onQueryTextSubmit(String query) {
-//                    if (!TextUtils.isEmpty(query)){
-//                        Toast.makeText(mActivity,query +"---",Toast.LENGTH_SHORT).show();
-//                    }
-//
-//                    return false;
-//                }
-//
-//                @Override
-//                public boolean onQueryTextChange(String newText) {
-//
-//                    Toast.makeText(mActivity,newText +"---",Toast.LENGTH_SHORT).show();
-//
-//
-//                    return false;
-//                }
-//            });
+            searchView.setIconifiedByDefault(false);
+//            final String query = String.valueOf(searchView.getQuery());
+
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    queryPlace(query);
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String query) {
+
+//                    Toast.makeText(mActivity, query + "", Toast.LENGTH_SHORT).show();
+                    queryPlace(query);
+
+                    return false;
+                }
+            });
 
 
         } else {
@@ -259,6 +318,57 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
 
         }
         return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * 查询位置
+     *
+     * @param query
+     */
+    private void queryPlace(String query) {
+        if (!TextUtils.isEmpty(query)) {
+//            Toast.makeText(mActivity, query + "---", Toast.LENGTH_SHORT).show();
+
+//            NetworkReuqest.baiduPlaceSuggestion(mActivity, query, cityCode, new NetworkReuqest.SimpleRequestCallback<List<PlaceSuggestion.ResultEntity>>() {
+//                @Override
+//                public void response(List<PlaceSuggestion.ResultEntity> resultEntities) {
+//                    placeList = resultEntities;
+//                    if (placeList ==null){
+//                        placeList = new ArrayList<PlaceSuggestion.ResultEntity>();
+//                    }
+//                    placeList.add(0, new PlaceSuggestion.ResultEntity("不显示"));
+//                    mHandler.sendEmptyMessage(HANDLER_PLACE_SUGGEST);
+//                }
+//            });
+
+            NetworkReuqest.baiduPlaceSearch(mActivity, query, cityCode, new NetworkReuqest.SimpleRequestCallback<List<PlaceSearch.ResultsEntity>>() {
+                @Override
+                public void response(List<PlaceSearch.ResultsEntity> resultsEntities) {
+                    placeList = resultsEntities;
+                    if (placeList == null) {
+                        placeList = new ArrayList<PlaceSearch.ResultsEntity>();
+                    }
+                    placeList.add(0, new PlaceSearch.ResultsEntity("不显示"));
+                    mHandler.sendEmptyMessage(HANDLER_PLACE_SUGGEST);
+                }
+            });
+        }
+
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        if (isPosition) {
+
+
+            View view = MenuItemCompat.getActionView(menu.findItem(R.id.menu_search_btn));
+
+            LogUtils.logE(" view = " + view);
+
+        }
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

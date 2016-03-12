@@ -12,7 +12,7 @@ import com.young.share.adapter.RankListAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.ItemActBarActivity;
 import com.young.share.config.Contants;
-import com.young.share.model.CommRemoteModel;
+import com.young.share.model.dbmodel.CommRemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.RankList;
 import com.young.share.model.ShareMessage_HZ;

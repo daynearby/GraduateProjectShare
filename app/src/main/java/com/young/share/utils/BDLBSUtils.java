@@ -8,6 +8,7 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.young.share.config.ApplicationConfig;
 import com.young.share.config.Contants;
+import com.young.share.utils.cache.ACache;
 
 /**
  * 百度定位
@@ -18,6 +19,7 @@ public class BDLBSUtils {
 
     private Context ctx;
     private LocationInfoListener locationInfoListener;
+    private ACache aCache = ApplicationConfig.getInstance().getCacheInstance();
 
     //百度定位
     private LocationClient mLocationClient = null;
@@ -68,19 +70,20 @@ public class BDLBSUtils {
 
         @Override
         public void onReceiveLocation(BDLocation data) {
-            LogUtils.logD("bdlbs", "纬度 = " + data.getLatitude() + " 经度 =" + data.getLongitude()
-                    + "\n 省 = "
-                    + data.getProvince()
+            LogUtils.logD("bdlbs", "纬度 = " + data.getLatitude()
+                    + " 经度 =" + data.getLongitude()
+                    + "\n 省 = " + data.getProvince()
                     + "\n 城市 = " + data.getCity()
                     + " 地区 = " + data.getDistrict()
                     + "\n 街道 = " + data.getStreet()
                     + "\n 门牌号 = " + data.getStreetNumber());
 //保存经纬度
-
-
-            ApplicationConfig.getInstance().getCacheInstance().put(Contants.ACAHE_KEY_LONGITUDE,
+            aCache.put(Contants.ACAHE_KEY_LONGITUDE,
                     data.getLongitude() + "," + data.getLatitude());
-
+            aCache.put(Contants.ACAHE_KEY_CITY_CODE,
+                    data.getCityCode());
+            aCache.put(Contants.ACAHE_KEY_CITY,
+                    data.getCity());
 
             locationInfoListener.LocationInfo(data.getLatitude(),
                     data.getLongitude(),

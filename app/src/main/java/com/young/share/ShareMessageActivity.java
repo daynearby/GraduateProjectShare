@@ -87,7 +87,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     private PopupWinListView popupWinListView;
     private boolean isResgiter = false;
     private String locationInfo;//定位信息
-    private String tagInfo = "未分类";//标签信息
+    private String tagInfo = null;//标签信息
     private double latitude;//纬度
     private double longitude;//经度
     private boolean addLocation = false;//是否添加地理信息

@@ -1,7 +1,6 @@
 package com.young.share.utils;
 
 import com.young.share.model.ShareMessage_HZ;
-import com.young.share.model.dbmodel.DBModel;
 import com.young.share.model.dbmodel.ShareMessage;
 import com.young.share.model.dbmodel.ShareRecrod;
 import com.young.share.model.dbmodel.User;
@@ -21,57 +20,34 @@ public class DBUtils {
     //一分钟之后要更新一下本地数据库
     private static final int HOUR_5 = 1;
 
+
     /**
-     * 检查时间
-     * 时间超过
-     *
-     * @param clazz
+     * 将记录保存到本地
      */
-    private static void DBManage(Object clazz) {
-        Class temclazz = clazz.getClass();
-        DBModel objFind = (DBModel) DataSupport.findFirst(clazz.getClass());
-        if (objFind == null) {
-            objFind = new DBModel();
-            objFind.setCreatedAt(DateUtils.getCurrentLongDate());
-
-            //*********************保存。需要得到对应的实例，并且有db litepal的操作方法****************************
-        } else {
-            int durn = DateUtils.minuBetween(DateUtils.getCurrentLongDate(), objFind.getCreatedAt());
-            DBModel comp = (DBModel) clazz;
-            if (!objFind.getUpdatedAt().equals(comp.getUpdatedAt())) {
-                DataSupport.deleteAll(clazz.getClass());
-            } else {
-                if (durn > 1) {
-                    DataSupport.deleteAll(temclazz, "updatedAt < ?", String.valueOf(objFind.getId()));
-                    LogUtils.logE("drop table " + temclazz);
-                }
-            }
-
-
-        }
-
-    }
-
-
     public static boolean saveShMessages(ShareMessage shMsg) {
-
-        List<ShareMessage> shMsgList = DataSupport.where("shContent = ?", shMsg.getShContent())
-                .find(ShareMessage.class);
-        if (shMsgList == null) {//直接保存
-
-            return shMsg.save();
-
-        } else {//不保存
-
-            int result = shMsg.updateAll("shContent = ?", shMsg.getShContent());
-            LogUtils.logI("返回码 " + result);
-            //++++++++++++++++++返回码++++++++++++++++++++++
-            return true;
-        }
+        User userId = shMsg.getUserId();
+        userId.save();
+        shMsg.setUserId(userId);
+        return shMsg.save();
+//
+//        List<ShareMessage> shMsgList = DataSupport.where("objectId = ?", shMsg.getObjectId())
+//                .find(ShareMessage.class);
+//        if (shMsgList == null) {//直接保存
+//
+//            return shMsg.save();
+//
+//        } else {//不保存
+//
+//            int result = shMsg.updateAll("shContent = ?", shMsg.getShContent());
+//            LogUtils.logI("返回码 " + result);
+//            //++++++++++++++++++返回码++++++++++++++++++++++
+//            return true;
+//        }
     }
 
     /**
      * 获取前面50条信息
+     *
      * @return
      */
     public static List<ShareMessage_HZ> getShareMessages() {
@@ -95,6 +71,8 @@ public class DBUtils {
 
             user = new com.young.share.model.User();
             User userId = share.getUserId();
+
+//            DataSupport.where("objectid", )
             user.setAddress(userId.getAddress());
             user.setQq(userId.getAvatar());
             user.setEmail(userId.getEmail());
@@ -144,7 +122,7 @@ public class DBUtils {
      *
      * @return
      */
-    public static List<ShareMessage_HZ> getShareRecord(){
+    public static List<ShareMessage_HZ> getShareRecord() {
 
         List<ShareMessage_HZ> dataList = new ArrayList<>();
         List<ShareRecrod> shMsgList = DataSupport.limit(50).order("createdAt")

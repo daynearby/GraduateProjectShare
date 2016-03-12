@@ -33,7 +33,7 @@ public abstract class BaseFragment extends Fragment {
 
 
 
-    public Handler mhandler = new Handler() {
+    public  Handler mhandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);

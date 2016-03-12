@@ -30,6 +30,7 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_head_tag_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

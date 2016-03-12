@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.klinker.android.link_builder.Link;
@@ -58,7 +59,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         WrapHightGridview myGridview = holder.getView(R.id.id_gv_shareimg);
         TextView wanto_tv = holder.getView(R.id.id_tx_wantogo);//想去数量
         TextView hadgo_tv = holder.getView(R.id.id_hadgo);//去过数量
-
+        RelativeLayout tagLayout = holder.getView(R.id.rl_head_tag_layout);
         ViewGroup.LayoutParams lp = myGridview.getLayoutParams();
         lp.width = DisplayUtils.getScreenWidthPixels((Activity) ctx) / 3 * 2;//设置宽度
         myGridview.setLayoutParams(lp);
@@ -91,8 +92,12 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         }
         ImageHandlerUtils.loadIamgeThumbnail(ctx,
                 TextUtils.isEmpty(user.getAvatar()) ? Contants.DEFAULT_AVATAR : user.getAvatar(), avatar);
-
-        tag_tv.setText(discountMessage_hz.getDtTag());
+        if (TextUtils.isEmpty(discountMessage_hz.getDtTag())) {
+            tagLayout.setVisibility(View.INVISIBLE);
+        } else {
+            tagLayout.setVisibility(View.VISIBLE);
+            tag_tv.setText(discountMessage_hz.getDtTag());
+        }
 
 
         String wanto;
