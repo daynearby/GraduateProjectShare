@@ -23,7 +23,7 @@
     <color name="green_default">#54ca65</color>
     <color name="green_press">#5cc46b</color>
     <color name="background_material_light">#ebebeb</color>
-
+    <color name="dark_blue">#0052a9</color>
     <color name="rank_heat">#FE495A</color>
     <color name="rank_heat_light">#c8fe495a</color>
     <color name="rank_photography">#005751</color>
@@ -31,9 +31,11 @@
     <color name="rank_date">#8956A1</color>
     <color name="rank_date_light">#c88956a1</color>
     <color name="rank_foodacfi">#00A0E9</color>
+
     <color name="rank_foodacfi_light">#c800a0e9</color>
     <color name="rank_outdoorsport">#22AD38</color>
     <color name="rank_outdoorsport_light">#c822ad38</color>
+    <color name="dark_green">#009317</color>
     <color name="darker_gray">#eeeeee</color>
     <color name="bg_orgin">#e5d7ca</color>
 

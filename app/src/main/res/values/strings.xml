@@ -141,5 +141,6 @@
     <string name="txt_exit_title">真的要退出？</string>
     <string name="txt_exit_message">你确定要离开吗?</string>
     <string name="txt_search">搜索</string>
+    <string name="txt_search_nearby_place">搜索附近位置</string>
 
 </resources>

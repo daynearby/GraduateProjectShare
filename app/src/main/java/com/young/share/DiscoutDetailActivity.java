@@ -156,7 +156,7 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
         initBottomBar(commModel);
 
         GridviewAdapter gridViewAdapter = new GridviewAdapter(mActivity, myGridview, false);
-        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(this,commModel.getImages()), false);
+        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(this,commModel.getImages()));
 
         myGridview.setAdapter(gridViewAdapter);
 

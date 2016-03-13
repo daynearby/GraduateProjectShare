@@ -34,21 +34,19 @@
 
         <ProgressBar
             android:id="@+id/pb_search_item_loading"
-            style="@android:style/Widget.ProgressBar.Small"
+            style="@android:style/Widget.Holo.ProgressBar"
             android:layout_width="@dimen/size_progress_small"
             android:layout_height="@dimen/size_progress_small"
             android:layout_gravity="center"
-            android:indeterminateDrawable="@drawable/progress_ring_small"
+            android:progressDrawable="@drawable/pb_process_bar"
             android:visibility="visible" />
 
         <ImageView
             android:id="@+id/im_search_item_checked"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-
             android:scaleType="centerInside"
             android:src="@drawable/icon_checked"
-
-            />
+            android:visibility="invisible" />
     </LinearLayout>
 </RelativeLayout>

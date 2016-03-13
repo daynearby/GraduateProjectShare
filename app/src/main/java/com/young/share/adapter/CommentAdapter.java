@@ -79,7 +79,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
     @Override
     public int getItemViewType(int position) {
 
-        switch (beanList.get(position).getType()) {
+        switch (dataList.get(position).getType()) {
 
             case Contants.DATA_MODEL_HEAD:
                 return ITEM_TYPE_HEAD;
@@ -206,7 +206,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         ((TextView) holder.getView(R.id.tv_item_message_detail_createdat)).setText(commRemoteModel.getMcreatedAt());//创建时间
 
         GridviewAdapter gridViewAdapter = new GridviewAdapter((Activity) ctx, myGridview, false);
-        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx, commRemoteModel.getImages()), false);
+        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx, commRemoteModel.getImages()));
         myGridview.setAdapter(gridViewAdapter);
 
 //        StringBuilder sb = new StringBuilder(shareMessage.getShContent());
@@ -232,7 +232,7 @@ public class CommentAdapter extends CommAdapter<CommRemoteModel> {
         }
 
         comment_tv.setText(String.valueOf(commRemoteModel.getComment()));
-        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx, commRemoteModel.getImages()), false);
+        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx, commRemoteModel.getImages()));
 //        myGridview.setOnItemClickListener(new itemClick(commRemoteModel.getImages()));
 
         nickname_tv.setOnClickListener(new click());

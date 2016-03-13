@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -18,9 +17,9 @@ import com.young.share.R;
 import com.young.share.adapter.DiscountAdapter;
 import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
-import com.young.share.model.DiscountMessageList;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.User;
+import com.young.share.model.gson.DiscountMessageList;
 import com.young.share.myInterface.GotoAsyncFunction;
 import com.young.share.myInterface.ListViewRefreshListener;
 import com.young.share.network.BmobApi;
@@ -64,6 +63,7 @@ public class DiscountFragment extends BaseFragment {
     private static final String tag = "discount";
 
     public DiscountFragment() {
+        super();
     }
 
     public DiscountFragment(Context context) {
@@ -78,7 +78,7 @@ public class DiscountFragment extends BaseFragment {
 
     @Override
     public void initData() {
-
+        dataList = (List<DiscountMessage_HZ>) app.getCacheInstance().getAsObject(Contants.ACAHE_KEY_DISCOUNT);
         threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
             @Override
             public void running() {
@@ -146,7 +146,11 @@ public class DiscountFragment extends BaseFragment {
 
     @Override
     public void bindData() {
-        Log.d(tag, "bindData");
+//        Log.d(tag, "bindData");
+        swipeRefreshLayout.setRefreshing(true);
+        if (dataList != null && dataList.size() > 0) {
+            mhandler.sendEmptyMessage(MESSAGES_NEW_MESSAGE);
+        }
     }
 
     @Override

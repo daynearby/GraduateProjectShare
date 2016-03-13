@@ -2,13 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_search"
+        android:id="@+id/menu_search_provider"
         android:icon="@drawable/icon_menu_search"
         android:title="@string/txt_search"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="collapseActionView|ifRoom" />
-    <item
-        android:id="@+id/menu_search_btn"
-        android:title="@string/txt_search"
-        app:showAsAction="always" />
+        app:actionProviderClass="com.young.share.views.MapSearchProvider"
+        app:showAsAction="ifRoom" />
 </menu>

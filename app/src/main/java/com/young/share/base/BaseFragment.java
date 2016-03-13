@@ -23,12 +23,14 @@ public abstract class BaseFragment extends Fragment {
     private View view;
     public ThreadUtils threadUtils;
     public Context context;
+    public ApplicationConfig app;
 
     public BaseFragment() {
-
+        app = ApplicationConfig.getInstance();
     }
     public BaseFragment(Context context) {
         this.context = context;
+        app = ApplicationConfig.getInstance();
     }
 
 

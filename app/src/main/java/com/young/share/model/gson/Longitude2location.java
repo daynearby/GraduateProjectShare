@@ -2,13 +2,14 @@ package com.young.share.model.gson;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * 坐标转换成位置信息
  * Created by Nearby Yang on 2016-03-03.
  */
-public class Longitude2Location {
+public class Longitude2Location implements Serializable{
 
     /**
      * status : 0
@@ -46,7 +47,7 @@ public class Longitude2Location {
         return result;
     }
 
-    public static class ResultEntity {
+    public static class ResultEntity implements Serializable {
         /**
          * lng : 116.43212998566
          * lat : 38.766230070088
@@ -136,7 +137,7 @@ public class Longitude2Location {
             return poiRegions;
         }
 
-        public static class LocationEntity {
+        public static class LocationEntity  implements Serializable{
             @SerializedName("lng")
             private double lng;
             @SerializedName("lat")
@@ -159,7 +160,7 @@ public class Longitude2Location {
             }
         }
 
-        public static class AddressComponentEntity {
+        public static class AddressComponentEntity  implements Serializable {
             @SerializedName("adcode")
             private String adcode;
             @SerializedName("city")

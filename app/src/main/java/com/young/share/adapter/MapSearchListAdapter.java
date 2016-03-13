@@ -18,7 +18,8 @@ import com.young.share.model.gson.PlaceSearch;
  */
 public class MapSearchListAdapter extends CommAdapter<PlaceSearch.ResultsEntity> {
 
-    private boolean visible = true;//默认。可见，有数据刷新完之后不可见
+    private boolean visible = true;//默认。可见，有数据刷新完之后不可见,转菊花
+    private int selectItem = 0;
 
     public MapSearchListAdapter(Context context) {
         super(context);
@@ -34,6 +35,17 @@ public class MapSearchListAdapter extends CommAdapter<PlaceSearch.ResultsEntity>
         this.visible = visible;
     }
 
+    /**
+     * 表示选择的条目item
+     *
+     * @param selectItem
+     */
+    public void setSelectItem(int selectItem) {
+        this.selectItem = selectItem;
+        notifyDataSetChanged();
+    }
+
+
     @Override
     public void convert(ViewHolder holder, PlaceSearch.ResultsEntity resultEntity, int position) {
 /**
@@ -46,7 +58,9 @@ public class MapSearchListAdapter extends CommAdapter<PlaceSearch.ResultsEntity>
         ImageView checkedIm = holder.getView(R.id.im_search_item_checked);
         ProgressBar pb = holder.getView(R.id.pb_search_item_loading);
 
-        pb.setVisibility(position == 0 && visible? View.VISIBLE : View.INVISIBLE);
+        checkedIm.setVisibility(selectItem == position ? View.VISIBLE : View.INVISIBLE);
+        pb.setVisibility(position == 0 && visible ? View.VISIBLE : View.INVISIBLE);
+        nameTx.setTextColor(ctx.getResources().getColor(position != 0 ? android.R.color.black : R.color.dark_blue));
 
         nameTx.setText(resultEntity.getName());
         detailTx.setText(resultEntity.getAddress());
@@ -58,4 +72,6 @@ public class MapSearchListAdapter extends CommAdapter<PlaceSearch.ResultsEntity>
     public int getlayoutid(int position) {
         return R.layout.item_baidumap_search_item;
     }
+
+
 }

@@ -37,7 +37,7 @@ public class GridviewAdapter extends BaseAdapter {
     private PictureInfo imageUrl;
     private boolean isUpload = false;
     private GridView gv;
-    private boolean isLocation = true;
+//    private boolean isLocation = true;
 
     /**
      * 设置是否是上传图片,
@@ -62,11 +62,9 @@ public class GridviewAdapter extends BaseAdapter {
      *
      * @param datas
      */
-    public void setDatas(List<PictureInfo> datas, boolean isLocation) {
+    public void setDatas(List<PictureInfo> datas) {
 
         this.data = datas;
-        this.isLocation = isLocation;
-
         notifyDataSetChanged();
     }
 
@@ -137,8 +135,8 @@ public class GridviewAdapter extends BaseAdapter {
         if (data != null) {
             if (data.size() == 1) {
                 gv.setNumColumns(2);
-            } else if (data.size() == 4) {
-                gv.setNumColumns(2);
+//            } else if (data.size() == 4) {
+//                gv.setNumColumns(2);
             } else {
                 gv.setNumColumns(3);
             }
@@ -158,7 +156,7 @@ public class GridviewAdapter extends BaseAdapter {
         holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);//
         holder.imageView.setOnClickListener(new ImageClickListener(position));
 
-        if (isLocation) {
+        if (isUpload) {
             ImageHandlerUtils.loadIamge2(mActivity, imageUrl.getImageUrl(), holder.imageView, true);
         } else {
             ImageHandlerUtils.loadIamgeThumbnail2(mActivity, imageUrl.getSmallImageUrl(), holder.imageView);

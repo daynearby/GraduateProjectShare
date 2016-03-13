@@ -118,7 +118,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
                 String.valueOf(commRemoteModel.getComment()) : ctx.getString(R.string.tx_comment));
 
         //图片显示
-        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx, commRemoteModel.getImages()), false);
+        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx, commRemoteModel.getImages()));
 
 //添加监听事件
         nickname_tv.setOnClickListener(new click(user));

@@ -4,9 +4,16 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_share_message"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/theme_puple"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tb_share_message"
         android:orientation="vertical">
 
         <TextView
@@ -24,7 +31,9 @@
             android:hint="@string/share_what_hint"
             android:inputType="textMultiLine"
             android:lines="5"
-            android:padding="@dimen/paddingHit" />
+            android:padding="@dimen/paddingHit" >
+            <requestFocus/>
+        </EditText>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -79,7 +88,7 @@
                 android:layout_gravity="bottom"
                 android:padding="@dimen/paddingMic"
                 android:text="@string/tag"
-                android:textColor="@color/lake_blue" />
+                android:textColor="@android:color/black" />
         </LinearLayout>
 
         <LinearLayout
@@ -111,7 +120,7 @@
                 android:layout_gravity="bottom"
                 android:padding="@dimen/paddingMic"
                 android:text="@string/txt_loaction_info"
-                android:textColor="@color/lake_blue" />
+                android:textColor="@android:color/black"/>
 
         </LinearLayout>
 
@@ -120,6 +129,7 @@
             style="@style/gridViwe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/maginSmall"
             android:paddingLeft="@dimen/paddingMic"
             android:paddingRight="@dimen/paddingMic"
             android:visibility="visible" />

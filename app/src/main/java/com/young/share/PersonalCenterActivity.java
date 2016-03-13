@@ -75,7 +75,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
     public void findviewbyid() {
         initToolbar();
         ViewGroup.LayoutParams params = relativeLayout.getLayoutParams();
-        params.height = displayHeightDp / 2 + 44;
+        params.height = displayHeightDp / 2;
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         relativeLayout.setLayoutParams(params);
         ViewGroup.LayoutParams layoutParams = select_ls.getLayoutParams();
@@ -124,10 +124,23 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+        ViewGroup.LayoutParams lp = appBarLayout.getLayoutParams();
+        lp.height = displayHeightDp / 3;
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolBarLayout.setTitle(getString(R.string.personal_center));
         toolBarLayout.setExpandedTitleColor(Color.argb(0, 0, 0, 0));
+        toolbar.setNavigationIcon(R.drawable.icon_menu_back);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mActivity.finish();
+
+
+            }
+        });
 
     }
 

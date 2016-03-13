@@ -99,6 +99,8 @@ public class Contants {
     public static final String DRAFT_LOCATION_INFO = "draft_location_info";
     public static final String DRAFT_IMAGES_LIST = "draft_images_list";
 
+    public static final String ACACHE_PLACE_SERVE = "acache_place_serve";//搜索的地点
+
     public static final int DARFT_LIVE_TIME = 60 * 60;//一个小时
 
     //*************************************上传照片类型***********************************************
@@ -139,11 +141,16 @@ public class Contants {
     public static final String INTENT_IMAGE_INFO_LIST = "intent_image_info_list";//intent传输数据标志,传递图片的信息，位置、大小
     public static final String INTENT_CURRENT_ITEM = "intent_current_item";//intent传输数据标志,点击的图片的position，那么就是当前显示的图片
     public static final String INTENT_IMAGE_LIST = "intent_image_list";//intent传输的照片列表
+    public static final String INTENT_PLACE = "intent_place";//intent传输的选择de地点信息
+    public static final String INTENT_SELECTOR_POSITION = "intent_selector_position";//intent传输的已经选择postion
 
-
-    public static final int REQUSET_CODE_IMAGE_LIST = 0x1000;//图片编辑请求码
+    //***********************请求码与结果码*********************
+    public static final int REQUSET_CODE_IMAGE_LIST = 0x100;//图片编辑请求码
+    public static final int REQUSET_CODE_PLACE = 0x100;//定位
 
     public static final int RESULT_CODE_IMAGE_LIST = 0x0001;//图片编辑返回码
+    public static final int RESULT_CODE_PLACE = 0x0002;//图片编辑返回码
+
 
 
     //************************** 数据model 类型******************************
@@ -188,7 +195,9 @@ public class Contants {
     public static final String AK = "e5U9Be7dwzr3ElKMWkGdrXri";
 
     //**********************cache key*************************
-    public static final String ACAHE_KEY_LONGITUDE  = "acahe_key_longitude";//经纬度,存储的格式是：经度,纬度
-    public static final String ACAHE_KEY_CITY_CODE  = "acahe_key_city_code";//城市代码
-    public static final String ACAHE_KEY_CITY  = "acahe_key_city";//城市
+    public static final String ACAHE_KEY_LONGITUDE = "acahe_key_longitude";//经纬度,存储的格式是：经度,纬度
+    public static final String ACAHE_KEY_CITY_CODE = "acahe_key_city_code";//城市代码
+    public static final String ACAHE_KEY_CITY = "acahe_key_city";//城市
+    public static final String ACAHE_KEY_DISCOVER = "acahe_key_discover";//发现前面那部分
+    public static final String ACAHE_KEY_DISCOUNT = "acahe_key_discount";//商家优惠前面那部分
 }

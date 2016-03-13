@@ -2,13 +2,14 @@ package com.young.share.model.gson;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * 百度地图 查找地点
  * Created by Nearby Yang on 2016-03-04.
  */
-public class PlaceSuggestion {
+public class PlaceSuggestion implements Serializable {
 
     /**
      * status : 0
@@ -57,7 +58,7 @@ public class PlaceSuggestion {
         return result;
     }
 
-    public static class ResultEntity {
+    public static class ResultEntity implements Serializable{
         @SerializedName("name")
         private String name;
         /**
@@ -141,7 +142,7 @@ public class PlaceSuggestion {
             return cityid;
         }
 
-        public static class LocationEntity {
+        public static class LocationEntity  implements Serializable {
             @SerializedName("lat")
             private double lat;
             @SerializedName("lng")

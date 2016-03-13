@@ -36,6 +36,7 @@ public class RankFragment extends BaseFragment {
     private static final int GET_DATA = 101;
 
     public RankFragment() {
+        super();
     }
 
     public RankFragment(Context context) {

@@ -84,7 +84,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 //        ThumGridViewAdapter gridViewAdapter = new ThumGridViewAdapter((Activity) ctx, myGridview, false);
 
         GridviewAdapter adapter = new GridviewAdapter((Activity) ctx, myGridview, false);
-        adapter.setDatas(DataFormateUtils.formateImageInfoList(ctx, shareMessage), false);
+        adapter.setDatas(DataFormateUtils.formateImageInfoList(ctx, shareMessage));
 
         myGridview.setAdapter(adapter);
 

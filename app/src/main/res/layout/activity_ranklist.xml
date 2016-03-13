@@ -4,7 +4,11 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
-
+<android.support.v7.widget.Toolbar
+    android:id="@+id/tb_rank"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/actionBarSize"
+    android:background="@color/theme_puple"/>
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/sw_ranklist_refresh"
         android:layout_width="match_parent"

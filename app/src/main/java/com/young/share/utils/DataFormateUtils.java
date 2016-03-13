@@ -233,4 +233,27 @@ public class DataFormateUtils {
         }
         return pictureInfoList;
     }
+
+    /**
+     * 格式化数据
+     *
+     * @param uriList
+     * @return
+     */
+    public static List<PictureInfo> formateLocalImage(List<String> uriList) {
+
+        List<PictureInfo> pictureInfoList = new ArrayList<>();
+
+        if (uriList!= null && uriList.size() > 0) {
+
+            for (String uri : uriList) {
+
+                //大图uri、小图uri
+                PictureInfo pictureInfo = new PictureInfo(uri);
+                pictureInfoList.add(pictureInfo);
+            }
+
+        }
+        return pictureInfoList;
+    }
 }

@@ -1,8 +1,10 @@
 package com.young.share;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -10,12 +12,12 @@ import android.widget.ListView;
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.share.adapter.RankListAdapter;
 import com.young.share.annotation.InjectView;
-import com.young.share.base.ItemActBarActivity;
+import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
-import com.young.share.model.dbmodel.CommRemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
-import com.young.share.model.RankList;
+import com.young.share.model.gson.RankList;
 import com.young.share.model.ShareMessage_HZ;
+import com.young.share.model.dbmodel.CommRemoteModel;
 import com.young.share.myInterface.ComparatorImpl;
 import com.young.share.myInterface.GotoAsyncFunction;
 import com.young.share.myInterface.ListViewRefreshListener;
@@ -37,7 +39,7 @@ import java.util.List;
  * <p/>
  * Created by Nearby Yang on 2015-12-26.
  */
-public class RankListActivity extends ItemActBarActivity {
+public class RankListActivity extends BaseAppCompatActivity {
 
     @InjectView(R.id.sw_ranklist_refresh)
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -64,24 +66,15 @@ public class RankListActivity extends ItemActBarActivity {
 
     @Override
     public void initData() {
-        super.initData();
-        setBarItemVisible(true, false);
-        setItemListener(new BarItemOnClick() {
-            @Override
-            public void leftClick(View v) {
-                mBackStartActivity(MainActivity.class);
-            }
+        initializeToolbar();
+        setTitle(tag);
 
-            @Override
-            public void rightClivk(View v) {
 
-            }
-        });
         //标志
         tag = getIntent().getStringExtra(Contants.INTENT_RANK_TYPE);
         key = getString(R.string.tag_manywanttogo).equals(tag) ? ComparatorImpl.COMPREHENSIVE : ComparatorImpl.COMPREHENSIVE_OTHERS;
 
-        setTvTitle(tag);
+
         remoteList = new ArrayList<>();
 
         threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
@@ -93,7 +86,23 @@ public class RankListActivity extends ItemActBarActivity {
         }));
 
     }
+    /**
+     * 初始化toolbar
+     */
+    private void initializeToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_rank);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.icon_menu_back);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBackStartActivity(MainActivity.class);
 
+            }
+        });
+
+    }
     /**
      * 从远程数据库获取数据
      * 解析并且转换成remoteModel

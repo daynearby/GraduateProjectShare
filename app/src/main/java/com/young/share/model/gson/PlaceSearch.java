@@ -2,6 +2,7 @@ package com.young.share.model.gson;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  *
  * Created by Nearby Yang on 2016-03-12.
  */
-public class PlaceSearch {
+public class PlaceSearch implements Serializable {
 
 
     /**
@@ -71,7 +72,7 @@ public class PlaceSearch {
         return results;
     }
 
-    public static class ResultsEntity {
+    public static class ResultsEntity implements Serializable {
         @SerializedName("name")
         private String name;
         /**
@@ -155,7 +156,7 @@ public class PlaceSearch {
             return uid;
         }
 
-        public static class LocationEntity {
+        public static class LocationEntity implements Serializable {
             @SerializedName("lat")
             private double lat;
             @SerializedName("lng")

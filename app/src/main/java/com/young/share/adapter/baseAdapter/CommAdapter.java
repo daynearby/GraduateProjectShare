@@ -22,7 +22,7 @@ import cn.bmob.v3.BmobUser;
  */
 public abstract class CommAdapter<T> extends BaseAdapter {
 
-    public List<T> beanList;
+    public List<T> dataList;
     public Context ctx;
     public User cuser;
     public ViewHolder holder;
@@ -32,19 +32,19 @@ public abstract class CommAdapter<T> extends BaseAdapter {
         cuser = BmobUser.getCurrentUser(ctx, User.class);
     }
 
-    public void setData(List<T> beanList) {
-        this.beanList = beanList;
+    public void setData(List<T> dataList) {
+        this.dataList = dataList;
         notifyDataSetChanged();
     }
 
     public List<T> getData() {
-        return beanList;
+        return dataList;
     }
 
     @Override
     public int getCount() {
 
-        return null == beanList ? 0 : beanList.size();
+        return null == dataList ? 0 : dataList.size();
 
     }
 
@@ -52,7 +52,7 @@ public abstract class CommAdapter<T> extends BaseAdapter {
     public T getItem(int position) {
 
 
-        return null != beanList && beanList.size() > 0 ? beanList.get(position) : null;
+        return null != dataList && dataList.size() > 0 ? dataList.get(position) : null;
     }
 
     @Override

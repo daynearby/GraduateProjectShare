@@ -84,7 +84,8 @@
         <!-- 分享信息 -->
         <activity
             android:name=".ShareMessageActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <!-- 短信验证 -->
         <activity
             android:name="com.mob.tools.MobUIShell"
@@ -135,7 +136,8 @@
         <!--排行榜的列表-->
         <activity
             android:name=".RankListActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!--百度地图 -->
         <activity android:name=".BaiduMapActivity"

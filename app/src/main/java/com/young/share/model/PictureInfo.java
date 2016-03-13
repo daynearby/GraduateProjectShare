@@ -24,6 +24,10 @@ public class PictureInfo implements Serializable {
     public PictureInfo() {
     }
 
+    public PictureInfo(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public PictureInfo(String imageUrl, String smallImageUrl) {
         this.imageUrl = imageUrl;
         this.smallImageUrl = smallImageUrl;

@@ -1,13 +1,17 @@
 package com.young.share;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -19,14 +23,15 @@ import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.share.adapter.GridviewAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
-import com.young.share.base.ItemActBarActivity;
 import com.young.share.config.Contants;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.PictureInfo;
 import com.young.share.model.ShareMessage_HZ;
+import com.young.share.model.gson.PlaceSearch;
 import com.young.share.myInterface.GoToUploadImages;
 import com.young.share.network.BmobApi;
 import com.young.share.utils.DataFormateUtils;
+import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.EmotionUtils;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LogUtils;
@@ -52,7 +57,7 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
  * <p/>
  * Created by Nearby Yang on 2015-10-23.
  */
-public class ShareMessageActivity extends ItemActBarActivity implements View.OnClickListener {
+public class ShareMessageActivity extends BaseAppCompatActivity implements View.OnClickListener {
 
     @InjectView(R.id.et_contnent_popupwin_content)
     private EditText content_et;
@@ -68,10 +73,6 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     private ViewPager vp_emotion_dashboard;
     @InjectView(R.id.ll_popip_window_emotion_panel)
     private LinearLayout emotionPanel_bg;
-//    @InjectView(R.id.im_content_popupwin_share_lacation_i)
-//    private ImageView shareLocation_im;
-//    @InjectView(R.id.im_content_popupwin_share_seletag)
-//    private ImageView tag_im;
     @InjectView(R.id.ll_share_select_tag)
     private LinearLayout tagLl;//标签
     @InjectView(R.id.ll_share_loaction_info)
@@ -85,20 +86,23 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     private InputMethodManager imm;
 
     private PopupWinListView popupWinListView;
-    private boolean isResgiter = false;
+    //    private boolean isResgiter = false;
     private String locationInfo;//定位信息
     private String tagInfo = null;//标签信息
     private double latitude;//纬度
     private double longitude;//经度
-    private boolean addLocation = false;//是否添加地理信息
-    private boolean isGotLocationInfo = false;//是否已经获取地理信息
-    private String locationInfoString;//位置信息
+    //    private boolean addLocation = false;//是否添加地理信息
+//    private boolean isGotLocationInfo = false;//是否已经获取地理信息
+//    private String locationInfoString;//位置信息
     private ACache acache;//缓存
     private Dialog4Tips dialog;//保存草稿的提示框
     private DarftUtils darftUtils;//草稿
     private static final int FINISH_ACTIVITY = 0;
     private boolean currentIsDiscount;//当前页面是否为商家优惠
     private String draftType;//草稿类型
+
+    private int placeSelect = 0;//选择的地点的position
+    private PlaceSearch.ResultsEntity placeResult;
 
     // TODO: 2015-12-05 移除item而不需要刷新整个ListView
     // TODO: 2016-02-27 删除图片的操作
@@ -109,9 +113,16 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
     @Override
     public void initData() {
-        super.initData();
+        initializeToolbar();
+        setTitle(R.string.let_me_share);
+
         Bundle bundle = getIntent().getExtras();
         currentIsDiscount = bundle.getBoolean(Contants.BUNDLE_CURRENT_IS_DISCOUNT, false);
+
+        String LONGITUDE = app.getCacheInstance().getAsString(Contants.ACAHE_KEY_LONGITUDE);
+        String[] strs = LONGITUDE.split(",");
+        longitude = Double.valueOf(strs[0]);
+        latitude = Double.valueOf(strs[1]);
 
 
         if (currentIsDiscount) {
@@ -121,9 +132,6 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
             tips_tv.setVisibility(View.INVISIBLE);
             draftType = Contants.DRAFT_TYPE_DICOVER;
         }
-
-        setTvTitle(R.string.let_me_share);
-        setTvRight(R.string.send);
 
 
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -138,8 +146,9 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
         popupWinListView = new PopupWinListView(this, tagList, false);
         gridViewAdapter = new GridviewAdapter(this, gv_img, true);
-        gridViewAdapter.setDatas(null, true);
-
+        gridViewAdapter.setDatas(null);
+        ViewGroup.LayoutParams lp = gv_img.getLayoutParams();
+        lp.width = DisplayUtils.getScreenWidthPixels(mActivity) / 2;
         gv_img.setAdapter(gridViewAdapter);
 
         popupWinListView.setItemClick(new PopupWinListView.onItemClick() {
@@ -155,7 +164,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         });
 
         //监听
-        setItemListener(new itemClick());
+//        setItemListener(new itemClick());
         //表情
         new EmotionUtils(mActivity, vp_emotion_dashboard, content_et);
         acache = ACache.get(mActivity);
@@ -164,7 +173,28 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 //恢复草稿
         resetDraft();
 
-        startLocation();
+//        startLocation();
+    }
+
+    /**
+     * 初始化toolbar
+     */
+    private void initializeToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_share_message);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.icon_menu_back);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                /**
+                 * 返回上一级前，先询问是否保存草稿
+                 */
+                goback();
+            }
+        });
+
     }
 
     /**
@@ -222,7 +252,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
                         }
 
-                        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(mActivity, list), true);
+                        gridViewAdapter.setDatas(DataFormateUtils.formateLocalImage(list));
                     }
 
                     //删除草稿
@@ -265,16 +295,32 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
     }
 
 
-    //注册广播接收者。地理信息
-    public void registerBoradcastReceiver() {
+//    //注册广播接收者。地理信息
+//    public void registerBoradcastReceiver() {
+//
+//        myIntentFilter.addAction(Contants.BORDCAST_LOCATIONINFO);
+//        //注册广播
+//        registerReceiver(broadcastReceiver, myIntentFilter);
+//        isResgiter = true;
+//
+//    }
 
-        myIntentFilter.addAction(Contants.BORDCAST_LOCATIONINFO);
-        //注册广播
-        registerReceiver(broadcastReceiver, myIntentFilter);
-        isResgiter = true;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_share_send, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.menu_send) {
+            /*发送*/
+            send();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onClick(View v) {
@@ -292,9 +338,11 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                 List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
 
                 ArrayList<String> l = new ArrayList<>();
-                for (PictureInfo pictureInfo : pictureInfoList) {
+                if (pictureInfoList != null && pictureInfoList.size() > 0) {
+                    for (PictureInfo pictureInfo : pictureInfoList) {
 
-                    l.add(pictureInfo.getImageUrl());
+                        l.add(pictureInfo.getImageUrl());
+                    }
                 }
                 ImageHandlerUtils.starSelectImages(mActivity, l);
 
@@ -308,9 +356,13 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 //                } else {
 //                    shareLocation_tv.setText(locationInfoString);
 //                }
+
+
                 intents = new Intent(mActivity, BaiduMapActivity.class);
-                intents.putExtra(Contants.INTENT_BMOB_IS_POSITION,true);
-                startActivity(intents);
+                intents.putExtra(Contants.INTENT_BMOB_IS_POSITION, true);
+                intents.putExtra(Contants.INTENT_SELECTOR_POSITION, placeSelect);
+
+                startActivityForResult(intents, Contants.REQUSET_CODE_PLACE);
 
 
                 break;
@@ -323,51 +375,51 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         }
     }
 
-    /**
-     * 启动定位
-     */
-    private void startLocation() {
-        intents.setAction(Contants.BORDCAST_REQUEST_LOCATIONINFO);
-        sendBroadcast(intents);
+//    /**
+//     * 启动定位
+//     */
+//    private void startLocation() {
+//        intents.setAction(Contants.BORDCAST_REQUEST_LOCATIONINFO);
+//        sendBroadcast(intents);
+//
+//        //注册广播接收者
+//        registerBoradcastReceiver();
+//        if (addLocation && !isGotLocationInfo) {
+//            mToast(R.string.locationing);
+//        }
+//    }
 
-        //注册广播接收者
-        registerBoradcastReceiver();
-        if (addLocation && !isGotLocationInfo) {
-            mToast(R.string.locationing);
-        }
-    }
-
-    /**
-     * 位置广播接收者
-     */
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            if (intent.getAction().equals(Contants.BORDCAST_LOCATIONINFO)) {
-
-                Bundle bundle = intent.getBundleExtra(BaseAppCompatActivity.BUNDLE_BROADCAST);
-                latitude = bundle.getDouble(Contants.LATITUDE, 39.963175);//纬度
-                longitude = bundle.getDouble(Contants.LONGITUDE, 116.400244);//经度
-                String province = bundle.getString(Contants.PROVINCE);
-                String city = bundle.getString(Contants.CITY);
-                String district = bundle.getString(Contants.DISTRICT);
-                String street = bundle.getString(Contants.STREET);
-                String streetNumber = bundle.getString(Contants.STREETNUMBER);
-
-                locationInfo = String.format("%s%s%s%s", city, district, street, streetNumber);
-                locationInfoString = String.format("%s%s%s", district, street, streetNumber);
-
-                if (addLocation) {
-                    shareLocation_tv.setText(locationInfoString);
-                }
-                isGotLocationInfo = !TextUtils.isEmpty(locationInfo);
-            }
-        }
-
-    };
+//    /**
+//     * 位置广播接收者
+//     */
+//    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+//
+//
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//
+//            if (intent.getAction().equals(Contants.BORDCAST_LOCATIONINFO)) {
+//
+//                Bundle bundle = intent.getBundleExtra(BaseAppCompatActivity.BUNDLE_BROADCAST);
+//                latitude = bundle.getDouble(Contants.LATITUDE, 39.963175);//纬度
+//                longitude = bundle.getDouble(Contants.LONGITUDE, 116.400244);//经度
+//                String province = bundle.getString(Contants.PROVINCE);
+//                String city = bundle.getString(Contants.CITY);
+//                String district = bundle.getString(Contants.DISTRICT);
+//                String street = bundle.getString(Contants.STREET);
+//                String streetNumber = bundle.getString(Contants.STREETNUMBER);
+//
+//                locationInfo = String.format("%s%s%s%s", city, district, street, streetNumber);
+//                locationInfoString = String.format("%s%s%s", district, street, streetNumber);
+//
+//                if (addLocation) {
+//                    shareLocation_tv.setText(locationInfoString);
+//                }
+//                isGotLocationInfo = !TextUtils.isEmpty(locationInfo);
+//            }
+//        }
+//
+//    };
 
     /**
      * 获取图片返回结果
@@ -396,22 +448,37 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
                     }
 
                     //图片路径
-                    gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(mActivity, mSelectPath), true);
+                    gridViewAdapter.setDatas(DataFormateUtils.formateLocalImage(mSelectPath));
                 }
-
 
             }
         }
-    }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (isResgiter) {
-            unregisterReceiver(broadcastReceiver);
+        if (resultCode == Contants.RESULT_CODE_PLACE) {//地点选择了
+            //判断是否是第一个，第一个意思是不显示地点
+            placeResult = (PlaceSearch.ResultsEntity) data.getExtras().getSerializable(Contants.INTENT_PLACE);
+            placeSelect = data.getIntExtra(Contants.INTENT_SELECTOR_POSITION, 0);
+            if (placeSelect != 0) {
+                shareLocation_tv.setText(placeResult.getName());
+                locationInfo = placeResult.getName();
+                longitude = placeResult.getLocation().getLng();
+                latitude = placeResult.getLocation().getLat();
+            }
+
+
         }
 
+
     }
+
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        if (isResgiter) {
+//            unregisterReceiver(broadcastReceiver);
+//        }
+//
+//    }
 
 
     @Override
@@ -486,62 +553,47 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         }
 
         mBackStartActivity(MainActivity.class);
+        //删除搜索的记录 Contants.ACACHE_PLACE_SERVE
+        boolean removed = acache.remove(Contants.ACACHE_PLACE_SERVE);
+        LogUtils.logE("removed = " + removed);
         mActivity.finish();
     }
 
     /**
-     * 点击事件监听
+     * 发送
+     * 分享信息或者是商家优惠
      */
-    private class itemClick implements BarItemOnClick {
+    private void send() {
+        String content = content_et.getText().toString();
 
-        @Override
-        public void leftClick(View v) {
-            /**
-             * 返回上一级前，先询问是否保存草稿
-             */
-            goback();
+        List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
 
-        }
-
-        /**
-         * 分享信息
-         *
-         * @param v
-         */
-        @Override
-        public void rightClivk(View v) {//发送按钮
-
-            String content = content_et.getText().toString();
-
-            List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
-
-            ArrayList<String> lists = new ArrayList<>();
+        ArrayList<String> lists = new ArrayList<>();
+        if (pictureInfoList != null && pictureInfoList.size() > 0) {
             for (PictureInfo pictureInfo : pictureInfoList) {
-
                 lists.add(pictureInfo.getImageUrl());
             }
+        }
 
+        if (!TextUtils.isEmpty(content) || lists.size() > 0) {//信息或者图片不为空
 
-            if (!TextUtils.isEmpty(content) || lists != null) {//信息或者图片不为空
+            mToast(R.string.sending);
+            mBackStartActivity(MainActivity.class);
 
-                mToast(R.string.sending);
-                mBackStartActivity(MainActivity.class);
-
-                //发送信息
-                if (currentIsDiscount) {//商家优惠
-                    shareDiscount(lists, content);
-                } else {
-                    shareDicover(lists, content);
-                }
-
-            } else {//信息或者图片为空
-
-                SVProgressHUD.showErrorWithStatus(mActivity, getString(R.string.share_messages_empty));
-
+            //发送信息
+            if (currentIsDiscount) {//商家优惠
+                shareDiscount(lists, content);
+            } else {
+                shareDicover(lists, content);
             }
 
+        } else {//信息或者图片为空
+
+            SVProgressHUD.showErrorWithStatus(mActivity, getString(R.string.share_messages_empty));
 
         }
+
+
     }
 
     /**
@@ -554,9 +606,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
         shareMessage_hz.setShContent(content);
         shareMessage_hz.setShTag(tagInfo);
-        if (!TextUtils.isEmpty(locationInfo)) {
-            shareMessage_hz.setShLocation(locationInfo);
-        }
+        shareMessage_hz.setShLocation(!TextUtils.isEmpty(locationInfo) ? locationInfo : null);
         shareMessage_hz.setGeographic(new BmobGeoPoint(longitude, latitude));
         shareMessage_hz.setUserId(mUser);
         shareMessage_hz.setShCommNum(0);
@@ -622,7 +672,8 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
 
         disMessages.setDtTag(tagInfo);
         disMessages.setDtContent(content);
-        disMessages.setDtLocation(locationInfo);
+
+        disMessages.setDtLocation(!TextUtils.isEmpty(locationInfo) ? locationInfo : null);
         disMessages.setUserId(mUser);
 
 
@@ -752,7 +803,7 @@ public class ShareMessageActivity extends ItemActBarActivity implements View.OnC
         content_et.getText().clear();
         shareLocation_tv.setText("");
         tag_tv.setText("");
-        gridViewAdapter.setDatas(null, true);
+        gridViewAdapter.setDatas(null);
 
     }
 

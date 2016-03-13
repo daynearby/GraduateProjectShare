@@ -17,10 +17,10 @@ import com.young.share.R;
 import com.young.share.adapter.DiscoverAdapter;
 import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
-import com.young.share.model.ShareMessageList;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.dbmodel.ShareMessage;
 import com.young.share.model.dbmodel.User;
+import com.young.share.model.gson.ShareMessageList;
 import com.young.share.myInterface.GotoAsyncFunction;
 import com.young.share.myInterface.ListViewRefreshListener;
 import com.young.share.network.BmobApi;
@@ -33,6 +33,7 @@ import com.young.share.utils.LogUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class DiscoverFragment extends BaseFragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private DiscoverAdapter listviewAdapter;
     private List<ShareMessage_HZ> dataList = new ArrayList<>();
+
 
     private static final int FIRST_GETDATA = 0x1001;
     private static final int GET_LOACTIOPN_DATA = 0x1002;
@@ -80,6 +82,8 @@ public class DiscoverFragment extends BaseFragment {
     public void initData() {
 
 //        getDataFromLocat();//先从本地加载数据
+        dataList = (List<ShareMessage_HZ>) app.getCacheInstance().getAsObject(Contants.ACAHE_KEY_DISCOVER);
+
         if (CommonUtils.isNetworkAvailable(context)) {//有网络
             getDataFromRemote();
         } else {
@@ -157,10 +161,14 @@ public class DiscoverFragment extends BaseFragment {
 
     @Override
     public void bindData() {
-
+        swipeRefreshLayout.setRefreshing(true);
         if (isFirstIn) {
             swipeRefreshLayout.setRefreshing(true);
             isFirstIn = false;
+        }
+
+        if (dataList !=null && dataList.size() >0){
+            mhandler.sendEmptyMessage(HANDLER_GET_DATA);
         }
 
     }
@@ -208,7 +216,6 @@ public class DiscoverFragment extends BaseFragment {
                 ShareMessageList.class, new GotoAsyncFunction() {
                     @Override
                     public void onSuccess(Object object) {
-                        @SuppressWarnings("unchecked")
                         ShareMessageList shareMessageList = (ShareMessageList) object;
 
 
@@ -224,6 +231,7 @@ public class DiscoverFragment extends BaseFragment {
                             dataList = shareMessageList.getShareMessageHzList();
                             //保存数据到本地数据库
 //                            saveData(dataList);
+                            app.getCacheInstance().put(Contants.ACAHE_KEY_DISCOVER, (Serializable) dataList);
                         }
                         mhandler.sendEmptyMessage(HANDLER_GET_DATA);
                     }
