@@ -134,7 +134,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
             LocationUtils.leftDrawableVisited(hadgo_tv, shareMessage.getShVisitedNum(), cuser.getObjectId());//设置图标
         }
 
-        comment_tv.setText(shareMessage.getShCommNum() != null && shareMessage.getShCommNum() > 0 ?
+        comment_tv.setText(shareMessage.getShCommNum() > 0 ?
                 String.valueOf(shareMessage.getShCommNum()) : ctx.getString(R.string.tx_comment));
 
         //地理信息的显示。显示了可以点击查看详细

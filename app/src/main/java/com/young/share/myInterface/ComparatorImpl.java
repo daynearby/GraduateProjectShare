@@ -1,6 +1,6 @@
 package com.young.share.myInterface;
 
-import com.young.share.model.dbmodel.CommRemoteModel;
+import com.young.share.model.CommRemoteModel;
 
 import java.util.Comparator;
 

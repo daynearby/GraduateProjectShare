@@ -7,6 +7,7 @@ import com.bmob.BmobProFile;
 import com.bmob.btp.callback.ThumbnailListener;
 import com.bmob.btp.callback.UploadBatchListener;
 import com.google.gson.Gson;
+import com.young.share.R;
 import com.young.share.config.Contants;
 import com.young.share.model.BaseModel;
 import com.young.share.model.Collection_HZ;
@@ -17,7 +18,6 @@ import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.User;
 import com.young.share.myInterface.GoToUploadImages;
 import com.young.share.myInterface.GotoAsyncFunction;
-import com.young.share.R;
 import com.young.share.utils.LogUtils;
 
 import org.json.JSONException;
@@ -73,7 +73,7 @@ public class BmobApi {
                     @Override
                     public void onSuccess(Object object) {
 
-                        LogUtils.logI("返回JSON数据:" + object.toString());
+                        LogUtils.logI("clazz " + clazz + "返回JSON数据:" + object.toString());
                         gotoListener.onSuccess(gson.fromJson(object.toString(), clazz));
 
                     }

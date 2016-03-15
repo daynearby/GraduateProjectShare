@@ -15,7 +15,7 @@ import com.young.share.R;
 import com.young.share.adapter.baseAdapter.CommAdapter;
 import com.young.share.adapter.baseAdapter.ViewHolder;
 import com.young.share.config.Contants;
-import com.young.share.model.dbmodel.CommRemoteModel;
+import com.young.share.model.CommRemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.User;

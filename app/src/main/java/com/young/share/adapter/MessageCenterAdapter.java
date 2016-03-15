@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import com.young.share.adapter.baseAdapter.CommAdapter;
 import com.young.share.adapter.baseAdapter.ViewHolder;
-import com.young.share.model.dbmodel.CommRemoteModel;
+import com.young.share.model.CommRemoteModel;
 import com.young.share.R;
 import com.young.share.utils.StringUtils;
 

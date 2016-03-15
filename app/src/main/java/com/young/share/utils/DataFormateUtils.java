@@ -3,7 +3,7 @@ package com.young.share.utils;
 import android.content.Context;
 
 import com.young.share.config.Contants;
-import com.young.share.model.dbmodel.CommRemoteModel;
+import com.young.share.model.CommRemoteModel;
 import com.young.share.model.Comment_HZ;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.PictureInfo;

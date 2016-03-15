@@ -12,7 +12,7 @@ import com.young.share.adapter.MessageCenterAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.ItemActBarActivity;
 import com.young.share.config.Contants;
-import com.young.share.model.dbmodel.CommRemoteModel;
+import com.young.share.model.CommRemoteModel;
 import com.young.share.model.CommentList;
 import com.young.share.model.Comment_HZ;
 import com.young.share.model.Message_HZ;

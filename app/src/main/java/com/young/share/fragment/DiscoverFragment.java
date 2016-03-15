@@ -20,7 +20,8 @@ import com.young.share.config.Contants;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.dbmodel.ShareMessage;
 import com.young.share.model.dbmodel.User;
-import com.young.share.model.gson.ShareMessageList;
+import com.young.share.model.ShareMessageList;
+import com.young.share.model.gson.tes;
 import com.young.share.myInterface.GotoAsyncFunction;
 import com.young.share.myInterface.ListViewRefreshListener;
 import com.young.share.network.BmobApi;
@@ -213,7 +214,7 @@ public class DiscoverFragment extends BaseFragment {
         }
 
         BmobApi.AsyncFunction(context, params, BmobApi.GET_RECENTLY_SHAREMESSAGES,
-                ShareMessageList.class, new GotoAsyncFunction() {
+                tes.class, new GotoAsyncFunction() {
                     @Override
                     public void onSuccess(Object object) {
                         ShareMessageList shareMessageList = (ShareMessageList) object;

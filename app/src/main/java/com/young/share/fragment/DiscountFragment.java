@@ -19,7 +19,7 @@ import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.User;
-import com.young.share.model.gson.DiscountMessageList;
+import com.young.share.model.DiscountMessageList;
 import com.young.share.myInterface.GotoAsyncFunction;
 import com.young.share.myInterface.ListViewRefreshListener;
 import com.young.share.network.BmobApi;
