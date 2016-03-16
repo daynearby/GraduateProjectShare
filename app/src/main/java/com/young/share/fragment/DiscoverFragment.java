@@ -17,14 +17,15 @@ import com.young.share.R;
 import com.young.share.adapter.DiscoverAdapter;
 import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
+import com.young.share.model.DiscountMessageList;
+import com.young.share.model.ShareMessageList;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.dbmodel.ShareMessage;
 import com.young.share.model.dbmodel.User;
-import com.young.share.model.ShareMessageList;
-import com.young.share.model.gson.tes;
 import com.young.share.myInterface.GotoAsyncFunction;
 import com.young.share.myInterface.ListViewRefreshListener;
 import com.young.share.network.BmobApi;
+import com.young.share.thread.MyRunnable;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DBUtils;
 import com.young.share.utils.DataFormateUtils;
@@ -86,7 +87,14 @@ public class DiscoverFragment extends BaseFragment {
         dataList = (List<ShareMessage_HZ>) app.getCacheInstance().getAsObject(Contants.ACAHE_KEY_DISCOVER);
 
         if (CommonUtils.isNetworkAvailable(context)) {//有网络
-            getDataFromRemote();
+            threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+                @Override
+                public void running() {
+                    getDataFromRemote();
+                }
+            }));
+
+
         } else {
             SVProgressHUD.showInfoWithStatus(context,
                     getString(R.string.without_network));
@@ -214,7 +222,7 @@ public class DiscoverFragment extends BaseFragment {
         }
 
         BmobApi.AsyncFunction(context, params, BmobApi.GET_RECENTLY_SHAREMESSAGES,
-                tes.class, new GotoAsyncFunction() {
+                DiscountMessageList.class, new GotoAsyncFunction() {
                     @Override
                     public void onSuccess(Object object) {
                         ShareMessageList shareMessageList = (ShareMessageList) object;

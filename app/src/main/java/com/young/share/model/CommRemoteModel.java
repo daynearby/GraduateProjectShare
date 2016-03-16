@@ -27,16 +27,16 @@ public class CommRemoteModel implements Serializable {
     private List<String> wanted;
     private List<String> visited;
     private String mcreatedAt;
-    private int comment;
-    private int type;
-    private boolean read;
+    private Integer comment;
+    private Integer type;
+    private Boolean read;
     private ShareMessage_HZ shareMessage;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -152,27 +152,27 @@ public class CommRemoteModel implements Serializable {
         this.mcreatedAt = mcreatedAt;
     }
 
-    public int getComment() {
+    public Integer getComment() {
         return comment;
     }
 
-    public void setComment(int comment) {
+    public void setComment(Integer comment) {
         this.comment = comment;
     }
 
-    public int getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
-    public boolean isRead() {
+    public Boolean isRead() {
         return read;
     }
 
-    public void setRead(boolean read) {
+    public void setRead(Boolean read) {
         this.read = read;
     }
 

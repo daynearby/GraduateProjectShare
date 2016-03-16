@@ -9,7 +9,7 @@ import cn.bmob.v3.BmobObject;
 public class Message_HZ extends BmobObject {
 
     private String commContent;
-    private boolean read;
+    private Boolean read;
 
     public String getCommContent() {
         return commContent;
@@ -19,11 +19,11 @@ public class Message_HZ extends BmobObject {
         this.commContent = commContent;
     }
 
-    public boolean isRead() {
+    public Boolean isRead() {
         return read;
     }
 
-    public void setRead(boolean read) {
+    public void setRead(Boolean read) {
         this.read = read;
     }
 }
