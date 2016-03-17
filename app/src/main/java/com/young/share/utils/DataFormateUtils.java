@@ -52,9 +52,11 @@ public class DataFormateUtils {
      */
     public static List<String> thumbnailList(Context context, List<String> list) {
         List<String> urlList = new ArrayList<>();
-        for (String thumbnailUrl : list) {
-            urlList.add(NetworkUtils.getRealUrl(context, thumbnailUrl));
-            LogUtils.d(" 真实的url = " + NetworkUtils.getRealUrl(context, thumbnailUrl));
+        if (list != null) {
+            for (String thumbnailUrl : list) {
+                urlList.add(NetworkUtils.getRealUrl(context, thumbnailUrl));
+//            LogUtils.d(" 真实的url = " + NetworkUtils.getRealUrl(context, thumbnailUrl));
+            }
         }
         return urlList;
     }
@@ -67,8 +69,8 @@ public class DataFormateUtils {
      *
      * @param serializableExtra
      */
-    public static CommRemoteModel formateDataDiscover(Serializable serializableExtra,int type) {
-        CommRemoteModel commModel =new CommRemoteModel();
+    public static CommRemoteModel formateDataDiscover(Serializable serializableExtra, int type) {
+        CommRemoteModel commModel = new CommRemoteModel();
 
         ShareMessage_HZ shareMessage = (ShareMessage_HZ) serializableExtra;
 
@@ -94,7 +96,7 @@ public class DataFormateUtils {
      * @param discountMessage
      * @return
      */
-    public static ShareMessage_HZ formateDiscover(DiscountMessage_HZ discountMessage){
+    public static ShareMessage_HZ formateDiscover(DiscountMessage_HZ discountMessage) {
         ShareMessage_HZ shareMessage = new ShareMessage_HZ();
 
 //        shareMessage.setObjectId();
@@ -107,11 +109,12 @@ public class DataFormateUtils {
 
     /**
      * 格式化商家优惠
+     *
      * @param serializableExtra
      * @return
      */
     public static CommRemoteModel formateDataDiscount(Serializable serializableExtra) {
-        CommRemoteModel commModel =new CommRemoteModel();
+        CommRemoteModel commModel = new CommRemoteModel();
 
         DiscountMessage_HZ discountMessage = (DiscountMessage_HZ) serializableExtra;
 
@@ -130,7 +133,7 @@ public class DataFormateUtils {
         return commModel;
     }
 
-    public ShareMessage_HZ formateDataCommremoteModel(CommRemoteModel commModel){
+    public ShareMessage_HZ formateDataCommremoteModel(CommRemoteModel commModel) {
 
         ShareMessage_HZ shareMessageHz = new ShareMessage_HZ();
         shareMessageHz.setShContent(commModel.getContent());
@@ -172,10 +175,11 @@ public class DataFormateUtils {
 
     /**
      * 将远程数据库的数据格式化本地数据库格式
+     *
      * @param share
      * @return
      */
-    public static ShareMessage formateShareMessage(ShareMessage_HZ share){
+    public static ShareMessage formateShareMessage(ShareMessage_HZ share) {
         ShareMessage shareMessage = new ShareMessage();
         shareMessage.setObjectId(share.getObjectId());
         shareMessage.setShImgs(String.valueOf(share.getShImgs()));
@@ -193,10 +197,11 @@ public class DataFormateUtils {
 
     /**
      * 将远程数据库的数据格式化本地数据库格式
+     *
      * @param myUser
      * @return
      */
-    public static User formateUser(MyUser myUser){
+    public static User formateUser(MyUser myUser) {
         User u = new User();
 
         u.setCreatedAt(myUser.getCreatedAt());
@@ -227,7 +232,7 @@ public class DataFormateUtils {
      * @param context
      * @return
      */
-    public static List<PictureInfo> formateImageInfoList(Context context,ShareMessage_HZ shareMessage) {
+    public static List<PictureInfo> formateImageInfoList(Context context, ShareMessage_HZ shareMessage) {
 
         List<PictureInfo> pictureInfoList = new ArrayList<>();
 
@@ -252,11 +257,11 @@ public class DataFormateUtils {
      * @param context
      * @return
      */
-    public static List<PictureInfo> formateStringInfoList(Context context,List<String> uriList) {
+    public static List<PictureInfo> formateStringInfoList(Context context, List<String> uriList) {
 
         List<PictureInfo> pictureInfoList = new ArrayList<>();
 
-        if (uriList!= null && uriList.size() > 0) {
+        if (uriList != null && uriList.size() > 0) {
 
             for (String uri : uriList) {
 
@@ -280,7 +285,7 @@ public class DataFormateUtils {
 
         List<PictureInfo> pictureInfoList = new ArrayList<>();
 
-        if (uriList!= null && uriList.size() > 0) {
+        if (uriList != null && uriList.size() > 0) {
 
             for (String uri : uriList) {
 

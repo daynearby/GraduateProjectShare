@@ -36,7 +36,7 @@ import cn.bmob.push.PushConstants;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 
-// TODO: 2016-02-27 做缓存
+// TODO: 2016-02-27 做缓存,百度地图的循环调用，添加一个时间延迟，连续定位没用
 public class MainActivity extends CustomActBarActivity {
 
     private ArcMenu mArcMenu;
@@ -324,7 +324,11 @@ public class MainActivity extends CustomActBarActivity {
 
                 bdlbsUtils.stopLocation();
             }
-
+            try {
+                wait(60000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             if (times >= callbackTimes) {
                 bdlbsUtils.stopLocation();
             }

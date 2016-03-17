@@ -2,6 +2,7 @@ package com.young.share.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.young.share.BigPicActivity;
 import com.young.share.MessageDetail;
 import com.young.share.R;
 import com.young.share.adapter.baseAdapter.CommAdapter;
@@ -18,18 +20,21 @@ import com.young.share.config.Contants;
 import com.young.share.model.CommRemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.MyUser;
+import com.young.share.model.PictureInfo;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.DisplayUtils;
+import com.young.share.utils.EvaluateUtil;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LocationUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.utils.UserUtils;
 import com.young.share.views.Dialog4Tips;
+import com.young.share.views.MultiImageView.MultiImageView;
 import com.young.share.views.PopupWinUserInfo;
-import com.young.share.views.WrapHightGridview;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -44,7 +49,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
     }
 
     @Override
-    public void convert(ViewHolder holder, CommRemoteModel commRemoteModel, int position) {
+    public void convert(ViewHolder holder, final CommRemoteModel commRemoteModel, int position) {
 
         MyUser myUser = commRemoteModel.getMyUser();
 
@@ -52,19 +57,17 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
         TextView nickname_tv = holder.getView(R.id.id_userName);//昵称
         TextView tag_tv = holder.getView(R.id.id_tx_tab);//标签
         TextView content_tv = holder.getView(R.id.id_tx_share_content);//分享的文本内容
-        WrapHightGridview myGridview = holder.getView(R.id.id_gv_shareimg);//分享的照片
+//        WrapHightGridview myGridview = holder.getView(R.id.id_gv_shareimg);//分享的照片
+        MultiImageView multiImageView = holder.getView(R.id.miv_share_iamges);
         TextView wanto_tv = holder.getView(R.id.id_tx_wantogo);//想去数量
         TextView hadgo_tv = holder.getView(R.id.id_hadgo);//去过数量
         TextView comment_tv = holder.getView(R.id.id_tx_comment);//评论数量
         ((TextView) holder.getView(R.id.tv_item_share_main_created_at))
                 .setText(DateUtils.convertDate2Str(commRemoteModel.getMcreatedAt()));//创建时间
         RelativeLayout tagLayout = holder.getView(R.id.rl_head_tag_layout);
-        ViewGroup.LayoutParams lp = myGridview.getLayoutParams();
+        ViewGroup.LayoutParams lp = multiImageView.getLayoutParams();
         lp.width = DisplayUtils.getScreenWidthPixels((Activity) ctx) / 3 * 2;//设置宽度
-        myGridview.setLayoutParams(lp);
-
-        GridviewAdapter gridViewAdapter = new GridviewAdapter((Activity) ctx, myGridview, false);
-        myGridview.setAdapter(gridViewAdapter);
+//
 
 //************************************************初始化数据********************************************
 
@@ -118,8 +121,25 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
                 String.valueOf(commRemoteModel.getComment()) : ctx.getString(R.string.tx_comment));
 
         //图片显示
-        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx, commRemoteModel.getImages()));
+//        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx, commRemoteModel.getImages()));
+        multiImageView.setList(DataFormateUtils.thumbnailList(ctx, commRemoteModel.getImages()));
+        multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(ctx, commRemoteModel.getImages());
 
+                EvaluateUtil.setupCoords(ctx, (ImageView) view, pictureInfoList, position);
+                Intent intent = new Intent(ctx, BigPicActivity.class);
+                Bundle bundle = new Bundle();
+
+                bundle.putSerializable(Contants.INTENT_IMAGE_INFO_LIST, (Serializable) pictureInfoList);
+                intent.putExtras(bundle);
+                intent.putExtra(Contants.INTENT_CURRENT_ITEM, position);
+
+                ctx.startActivity(intent);
+                ((Activity) ctx).overridePendingTransition(0, 0);
+            }
+        });
 //添加监听事件
         nickname_tv.setOnClickListener(new click(myUser));
         avatar.setOnClickListener(new click(myUser));

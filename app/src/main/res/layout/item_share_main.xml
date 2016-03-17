@@ -9,9 +9,9 @@
     android:layout_marginRight="@dimen/paddingMic"
     android:layout_marginTop="@dimen/paddingHit"
     android:descendantFocusability="blocksDescendants"
+    android:fitsSystemWindows="true"
     app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="@dimen/radius_mic"
-    android:fitsSystemWindows="true">
+    app:cardCornerRadius="@dimen/radius_mic">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,40 +28,48 @@
 
             <TextView
                 android:id="@+id/id_tx_share_content"
+                style="@android:style/TextAppearance.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:padding="@dimen/paddingMic"
                 android:text="@string/defaul_share_text"
-                style="@android:style/TextAppearance.Medium"
-                android:textColor="@android:color/black"/>
+                android:textColor="@android:color/black" />
 
             <com.young.share.views.WrapHightGridview
                 android:id="@+id/id_gv_shareimg"
                 style="@style/gridViwe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/paddingMic"
                 android:paddingLeft="@dimen/paddingMic"
                 android:paddingRight="@dimen/paddingMic"
-                android:layout_marginTop="@dimen/paddingMic"
                 android:visibility="visible" />
+
+            <com.young.share.views.MultiImageView.MultiImageView
+                android:id="@+id/miv_share_iamges"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/paddingMic"/>
+
             <TextView
                 android:id="@+id/tv_item_share_main_location"
                 style="@style/text_style_match"
                 android:gravity="right"
-                android:paddingTop="@dimen/paddingMic"
                 android:paddingLeft="@dimen/paddingMic"
                 android:paddingRight="@dimen/paddingMic"
+                android:paddingTop="@dimen/paddingMic"
                 android:text="@string/txt_location_info"
-                android:visibility="gone"/>
+                android:visibility="gone" />
+
             <TextView
                 android:id="@+id/tv_item_share_main_created_at"
                 style="@style/text_style_match"
                 android:gravity="right"
-                android:paddingTop="@dimen/paddingMic"
                 android:paddingLeft="@dimen/paddingMic"
                 android:paddingRight="@dimen/paddingMic"
+                android:paddingTop="@dimen/paddingMic"
                 android:text="@string/created_at" />
 
 

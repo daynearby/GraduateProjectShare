@@ -225,6 +225,14 @@ public class MultiImageView extends LinearLayout {
 		return imageViewList;
 	}
 
+	/**
+	 * 获取其中的url
+	 * @return
+	 */
+	public List<String> getImagesList() {
+		return imagesList;
+	}
+
 	public interface OnItemClickListener{
 		public void onItemClick(View view, int position);
 	}

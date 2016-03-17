@@ -2,6 +2,7 @@ package com.young.share.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.klinker.android.link_builder.Link;
 import com.klinker.android.link_builder.LinkBuilder;
 import com.young.share.BaiduMapActivity;
+import com.young.share.BigPicActivity;
 import com.young.share.MessageDetail;
 import com.young.share.R;
 import com.young.share.RankListActivity;
@@ -20,18 +22,21 @@ import com.young.share.adapter.baseAdapter.CommAdapter;
 import com.young.share.adapter.baseAdapter.ViewHolder;
 import com.young.share.config.Contants;
 import com.young.share.model.MyUser;
+import com.young.share.model.PictureInfo;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.DisplayUtils;
+import com.young.share.utils.EvaluateUtil;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LocationUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.utils.UserUtils;
 import com.young.share.views.Dialog4Tips;
+import com.young.share.views.MultiImageView.MultiImageView;
 import com.young.share.views.PopupWinUserInfo;
-import com.young.share.views.WrapHightGridview;
 
+import java.io.Serializable;
 import java.util.List;
 
 import cn.bmob.v3.datatype.BmobGeoPoint;
@@ -58,7 +63,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 
 
     @Override
-    public void convert(ViewHolder holder, ShareMessage_HZ shareMessage, int position) {
+    public void convert(ViewHolder holder, final ShareMessage_HZ shareMessage, int position) {
 //        this.shareMessage = shareMessage;
         MyUser myUser = shareMessage.getMyUserId();
 
@@ -67,7 +72,8 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         TextView tag_tv = holder.getView(R.id.id_tx_tab);//标签
         TextView content_tv = holder.getView(R.id.id_tx_share_content);//分享的文本内容
         TextView location = holder.getView(R.id.tv_item_share_main_location);//分享信息的位置
-        WrapHightGridview myGridview = holder.getView(R.id.id_gv_shareimg);//图片
+//        WrapHightGridview myGridview = holder.getView(R.id.id_gv_shareimg);//图片
+        MultiImageView multiImageView = holder.getView(R.id.miv_share_iamges);
         TextView wanto_tv = holder.getView(R.id.id_tx_wantogo);//想去数量
         TextView hadgo_tv = holder.getView(R.id.id_hadgo);//去过数量
         TextView comment_tv = holder.getView(R.id.id_tx_comment);//评论数量
@@ -76,18 +82,9 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         ((TextView) holder.getView(R.id.tv_item_share_main_created_at))
                 .setText(DateUtils.convertDate2Str(shareMessage.getCreatedAt()));//创建时间
 
-        ViewGroup.LayoutParams lp = myGridview.getLayoutParams();
+        ViewGroup.LayoutParams lp = multiImageView.getLayoutParams();
         lp.width = DisplayUtils.getScreenWidthPixels((Activity) ctx) / 3 * 2;//设置宽度
-
-        myGridview.setLayoutParams(lp);
-
-//        ThumGridViewAdapter gridViewAdapter = new ThumGridViewAdapter((Activity) ctx, myGridview, false);
-
-        GridviewAdapter adapter = new GridviewAdapter((Activity) ctx, myGridview, false);
-        adapter.setDatas(DataFormateUtils.formateImageInfoList(ctx, shareMessage));
-
-        myGridview.setAdapter(adapter);
-
+//
 //************************************************初始化数据********************************************
 
 //        StringBuilder sb = new StringBuilder(shareMessage.getShContent());
@@ -145,12 +142,26 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         }
 //        location.setText();
         //图片显示
-        /**
-         *
-         *
-         */
 //        gridViewAdapter.setDatas(shareMessage.getShImgs(), false);
 //        myGridview.setOnItemClickListener(new LocationUtils.itemClick(ctx, shareMessage.getShImgs()));
+        multiImageView.setList(DataFormateUtils.thumbnailList(ctx, shareMessage.getShImgs()));
+        multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(ctx, shareMessage.getShImgs());
+
+                EvaluateUtil.setupCoords(ctx, (ImageView) view, pictureInfoList, position);
+                Intent intent = new Intent(ctx, BigPicActivity.class);
+                Bundle bundle = new Bundle();
+
+                bundle.putSerializable(Contants.INTENT_IMAGE_INFO_LIST, (Serializable) pictureInfoList);
+                intent.putExtras(bundle);
+                intent.putExtra(Contants.INTENT_CURRENT_ITEM, position);
+
+                ctx.startActivity(intent);
+                ((Activity) ctx).overridePendingTransition(0, 0);
+            }
+        });
 
 //添加监听事件
         nickname_tv.setOnClickListener(new click(myUser));

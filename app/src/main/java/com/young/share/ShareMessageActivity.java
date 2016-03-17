@@ -11,39 +11,38 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.young.share.adapter.GridviewAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
+import com.young.share.interfaces.GoToUploadImages;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.PictureInfo;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.gson.PlaceSearch;
-import com.young.share.interfaces.GoToUploadImages;
 import com.young.share.network.BmobApi;
 import com.young.share.utils.DataFormateUtils;
-import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.EmotionUtils;
+import com.young.share.utils.EvaluateUtil;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.XmlUtils;
 import com.young.share.utils.cache.ACache;
 import com.young.share.utils.cache.DarftUtils;
 import com.young.share.views.Dialog4Tips;
+import com.young.share.views.MultiImageView.MultiImageView;
 import com.young.share.views.PopupWinListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -67,8 +66,10 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     private ImageView emotion_im;
     @InjectView(R.id.im_activity_share_message_addimg)
     private ImageView addimg_im;
-    @InjectView(R.id.gv_content_popupwin_share_addimg)
-    private GridView gv_img;
+//    @InjectView(R.id.gv_content_popupwin_share_addimg)
+//    private GridView gv_img;
+    @InjectView(R.id.miv_share_message_image)
+    private MultiImageView multiImageView;
     @InjectView(R.id.vp_popupwindow_emotion_dashboard)
     private ViewPager vp_emotion_dashboard;
     @InjectView(R.id.ll_popip_window_emotion_panel)
@@ -82,7 +83,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     @InjectView(R.id.tv_share_message_tips)
     private TextView tips_tv;
 
-    private GridviewAdapter gridViewAdapter;
+//    private GridviewAdapter gridViewAdapter;
     private InputMethodManager imm;
 
     private PopupWinListView popupWinListView;
@@ -145,11 +146,30 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         tagList.remove(0);
 
         popupWinListView = new PopupWinListView(this, tagList, false);
-        gridViewAdapter = new GridviewAdapter(this, gv_img, true);
-        gridViewAdapter.setDatas(null);
-        ViewGroup.LayoutParams lp = gv_img.getLayoutParams();
-        lp.width = DisplayUtils.getScreenWidthPixels(mActivity) / 2;
-        gv_img.setAdapter(gridViewAdapter);
+//        gridViewAdapter = new GridviewAdapter(this, gv_img, true);
+//        gridViewAdapter.setDatas(null);
+//        ViewGroup.LayoutParams lp = gv_img.getLayoutParams();
+//        lp.width = DisplayUtils.getScreenWidthPixels(mActivity) / 2;
+//        gv_img.setAdapter(gridViewAdapter);
+
+
+        multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(mActivity, urlAddHead(multiImageView.getImagesList()));
+
+                EvaluateUtil.setupCoords(mActivity, (ImageView) view, pictureInfoList, position);
+                Intent intent = new Intent(mActivity, BigPicActivity.class);
+                Bundle bundle = new Bundle();
+
+                bundle.putSerializable(Contants.INTENT_IMAGE_INFO_LIST, (Serializable) pictureInfoList);
+                intent.putExtras(bundle);
+                intent.putExtra(Contants.INTENT_CURRENT_ITEM, position);
+
+                startActivity(intent);
+               overridePendingTransition(0, 0);
+            }
+        });
 
         popupWinListView.setItemClick(new PopupWinListView.onItemClick() {
             @Override
@@ -251,8 +271,8 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                             }
 
                         }
-
-                        gridViewAdapter.setDatas(DataFormateUtils.formateLocalImage(list));
+                        multiImageView.setList(list);
+//                        gridViewAdapter.setDatas(DataFormateUtils.formateLocalImage(list));
                     }
 
                     //删除草稿
@@ -295,17 +315,6 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     }
 
 
-//    //注册广播接收者。地理信息
-//    public void registerBoradcastReceiver() {
-//
-//        myIntentFilter.addAction(Contants.BORDCAST_LOCATIONINFO);
-//        //注册广播
-//        registerReceiver(broadcastReceiver, myIntentFilter);
-//        isResgiter = true;
-//
-//    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_share_send, menu);
@@ -335,7 +344,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
             case R.id.im_activity_share_message_addimg://添加照片
 
-                List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
+                List<PictureInfo> pictureInfoList =DataFormateUtils.formate2PictureInfo(this, multiImageView.getImagesList());
 
                 ArrayList<String> l = new ArrayList<>();
                 if (pictureInfoList != null && pictureInfoList.size() > 0) {
@@ -375,51 +384,6 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         }
     }
 
-//    /**
-//     * 启动定位
-//     */
-//    private void startLocation() {
-//        intents.setAction(Contants.BORDCAST_REQUEST_LOCATIONINFO);
-//        sendBroadcast(intents);
-//
-//        //注册广播接收者
-//        registerBoradcastReceiver();
-//        if (addLocation && !isGotLocationInfo) {
-//            mToast(R.string.locationing);
-//        }
-//    }
-
-//    /**
-//     * 位置广播接收者
-//     */
-//    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-//
-//
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//
-//            if (intent.getAction().equals(Contants.BORDCAST_LOCATIONINFO)) {
-//
-//                Bundle bundle = intent.getBundleExtra(BaseAppCompatActivity.BUNDLE_BROADCAST);
-//                latitude = bundle.getDouble(Contants.LATITUDE, 39.963175);//纬度
-//                longitude = bundle.getDouble(Contants.LONGITUDE, 116.400244);//经度
-//                String province = bundle.getString(Contants.PROVINCE);
-//                String city = bundle.getString(Contants.CITY);
-//                String district = bundle.getString(Contants.DISTRICT);
-//                String street = bundle.getString(Contants.STREET);
-//                String streetNumber = bundle.getString(Contants.STREETNUMBER);
-//
-//                locationInfo = String.format("%s%s%s%s", city, district, street, streetNumber);
-//                locationInfoString = String.format("%s%s%s", district, street, streetNumber);
-//
-//                if (addLocation) {
-//                    shareLocation_tv.setText(locationInfoString);
-//                }
-//                isGotLocationInfo = !TextUtils.isEmpty(locationInfo);
-//            }
-//        }
-//
-//    };
 
     /**
      * 获取图片返回结果
@@ -439,16 +403,8 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
                     List<String> pathList = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
 
-                    ArrayList<String> mSelectPath = new ArrayList<>();
-
-                    for (String path : pathList) {
-                        path = Contants.FILE_HEAD + path;
-                        mSelectPath.add(path);
-
-                    }
-
                     //图片路径
-                    gridViewAdapter.setDatas(DataFormateUtils.formateLocalImage(mSelectPath));
+                 multiImageView.setList(urlAddHead(pathList));
                 }
 
             }
@@ -471,14 +427,21 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
     }
 
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        if (isResgiter) {
-//            unregisterReceiver(broadcastReceiver);
-//        }
-//
-//    }
+    /**
+     * 将图片路径添加file://，为了实现universal image loader 加载本地图片
+     * @param pathList
+     * @return
+     */
+private List<String> urlAddHead(  List<String> pathList){
+    ArrayList<String> mSelectPath = new ArrayList<>();
+    for (String path : pathList) {
+        path = Contants.FILE_HEAD + path;
+        mSelectPath.add(path);
+
+    }
+
+    return mSelectPath;
+}
 
 
     @Override
@@ -505,7 +468,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
      */
     private void goback() {
 
-        if (!TextUtils.isEmpty(content_et.getText().toString()) | gridViewAdapter.getData() != null) {
+        if (!TextUtils.isEmpty(content_et.getText().toString()) |  multiImageView.getImagesList() != null) {
 
             dialog.setContent(getString(R.string.need_to_save_draft));
             dialog.setBtnOkText(getString(R.string.save));
@@ -514,7 +477,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                 @Override
                 public void btnOkListenter() {
 
-                    List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
+                    List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(mActivity, multiImageView.getImagesList());
 
                     ArrayList<String> l = new ArrayList<>();
                     for (PictureInfo pictureInfo : pictureInfoList) {
@@ -566,7 +529,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     private void send() {
         String content = content_et.getText().toString();
 
-        List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
+        List<PictureInfo> pictureInfoList =DataFormateUtils.formate2PictureInfo(this, multiImageView.getImagesList());
 
         ArrayList<String> lists = new ArrayList<>();
         if (pictureInfoList != null && pictureInfoList.size() > 0) {
@@ -635,11 +598,6 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
 
                     }
-//                            else {
-//
-//                                LogUtils.e("回调第一次，isfinish = " + isFinish);
-//                                SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.some_images_maybe_miss));
-//                            }
                 }
 
                 @Override
@@ -780,7 +738,8 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
      */
     private void saveDarft() {
 
-        List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
+//        List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
+        List<PictureInfo> pictureInfoList =DataFormateUtils.formate2PictureInfo(this, multiImageView.getImagesList());
 
         ArrayList<String> l = new ArrayList<>();
         for (PictureInfo pictureInfo : pictureInfoList) {
@@ -803,8 +762,8 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         content_et.getText().clear();
         shareLocation_tv.setText("");
         tag_tv.setText("");
-        gridViewAdapter.setDatas(null);
-
+//        gridViewAdapter.setDatas(null);
+        multiImageView.setList(null);
     }
 
 

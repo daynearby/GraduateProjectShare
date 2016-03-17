@@ -234,14 +234,8 @@ public class GridviewAdapter extends BaseAdapter {
 
                 case R.id.im_gridview_item_dele://删除按钮
 
-//                    LogUtils.logE("点击删除图片按钮 position = " + _postion);
                     data.remove(pos);
 
-//                    if (data.size() == Contants.IMAGENUMBER-1) {
-//                        if (!data.get(Contants.IMAGENUMBER - 2).equals(Contants.LAST_ADD_IMG)) {
-//                            data.add(Contants.LAST_ADD_IMG);
-//                        }
-//                    }
                     notifyDataSetChanged();
 
                     break;
