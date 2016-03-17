@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.young.share.annotation.Injector;
 import com.young.share.config.ApplicationConfig;
 import com.young.share.config.Contants;
-import com.young.share.model.User;
+import com.young.share.model.MyUser;
 import com.young.share.MainActivity;
 import com.young.share.MessageCenterActivity;
 import com.young.share.R;
@@ -41,7 +41,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public Intent intents = new Intent();
     public IntentFilter myIntentFilter = new IntentFilter();
     public ApplicationConfig app;
-    public User mUser;
+    public MyUser mMyUser;
     public ThreadUtils threadUtils;
 
 
@@ -57,7 +57,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(getLayoutId());
         Injector.inject(this);
-        mUser = BmobUser.getCurrentUser(this, User.class);
+        mMyUser = BmobUser.getCurrentUser(this, MyUser.class);
         mActivity = this;
         app = ApplicationConfig.getInstance();
         threadUtils = app.getThreadInstance();

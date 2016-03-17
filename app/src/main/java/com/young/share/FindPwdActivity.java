@@ -12,8 +12,8 @@ import com.young.share.annotation.InjectView;
 import com.young.share.base.CustomActBarActivity;
 import com.young.share.config.Contants;
 import com.young.share.model.BaseModel;
-import com.young.share.model.User;
-import com.young.share.myInterface.GotoAsyncFunction;
+import com.young.share.model.MyUser;
+import com.young.share.interfaces.AsyncListener;
 import com.young.share.network.BmobApi;
 import com.young.share.utils.LogUtils;
 
@@ -103,11 +103,11 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
 
             } else {
 
-                BmobQuery<User> query = new BmobQuery<>();
+                BmobQuery<MyUser> query = new BmobQuery<>();
                 query.addWhereEqualTo("username", userName);
-                query.findObjects(this, new FindListener<User>() {
+                query.findObjects(this, new FindListener<MyUser>() {
                     @Override
-                    public void onSuccess(List<User> object) {
+                    public void onSuccess(List<MyUser> object) {
                         if (object.size() > 0) {
 
                             if (!TextUtils.isEmpty(object.get(0).getMobilePhoneNumber())) {
@@ -133,7 +133,7 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
 
                     @Override
                     public void onError(int code, String msg) {
-                        LogUtils.logE(getClass().getName(), "查询用户失败：" + msg);
+                        LogUtils.e(getClass().getName(), "查询用户失败：" + msg);
                     }
                 });
 
@@ -199,7 +199,7 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
             params.put("phone", phone);
 
         } catch (JSONException e) {
-            LogUtils.logE(e.toString());
+            LogUtils.e(e.toString());
 
         }
 
@@ -218,13 +218,13 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
         }
 
 //云端代码 更新密码
-        BmobApi.AsyncFunction(this, params, BmobApi.FINDPWD, new GotoAsyncFunction() {
+        BmobApi.AsyncFunction(this, params, BmobApi.FINDPWD, new AsyncListener() {
             @Override
             public void onSuccess(Object object) {
 
                 if (object != null) {
                     BaseModel result = (BaseModel) object;
-//LogUtils.logE(object + " -- " + (result.getCode() == 0));
+//LogUtils.e(object + " -- " + (result.getCode() == 0));
                     if (result.getCode()==0) {
                         SVProgressHUD.showSuccessWithStatus(FindPwdActivity.this, getString(R.string.find_pwd_success));
                         mHandler.sendEmptyMessageDelayed(103, Contants.ONE_SECOND);

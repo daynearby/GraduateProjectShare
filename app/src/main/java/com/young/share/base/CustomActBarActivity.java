@@ -220,7 +220,7 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
                             getCity_tv().setText(s);
                             break;
                         default:
-                            LogUtils.logI(getClass().getName(), "actionbar 点击未设置");
+                            LogUtils.i(getClass().getName(), "actionbar 点击未设置");
                             break;
                     }
                     itemResult.result(view, s,position);

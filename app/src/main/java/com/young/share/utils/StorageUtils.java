@@ -2,6 +2,8 @@ package com.young.share.utils;
 
 import android.content.Context;
 
+import com.young.share.config.Contants;
+
 import java.io.File;
 
 /**
@@ -24,29 +26,8 @@ public class StorageUtils {
      * @return file对象
      */
     public static File CreateImageFile(Context context) {
-        String path;
-        File imageFilePath;
 
-        if (checkSdCard()) {//存在
-
-            path = context.getExternalCacheDir().getAbsolutePath() + "/share/image";
-            imageFilePath = new File(path);
-
-            if (!imageFilePath.exists()) {
-                imageFilePath.mkdir();
-            }
-
-        } else {
-
-            path = context.getCacheDir().getAbsolutePath() + "/share/image";
-
-            imageFilePath = new File(path);
-            if (!imageFilePath.exists()) {
-                imageFilePath.mkdir();
-            }
-        }
-
-        return imageFilePath;
+        return new File(createdDir(context, Contants.FILE_IMAGE_PATH));
     }
 
     /**
@@ -56,28 +37,28 @@ public class StorageUtils {
      * @return file对象
      */
     public static File CreateCacheFile(Context context) {
-        String path;
-        File imageFilePath;
 
-        if (checkSdCard()) {//存在
+        return new File(createdDir(context,Contants.FILE_CACHE_PATH));
+    }
 
-            path = context.getExternalCacheDir().getAbsolutePath() + "/share/cache";
-            imageFilePath = new File(path);
+    /**
+     * 创建或者是获取文件夹
+     *
+     * @param context
+     * @param dirName
+     * @return
+     */
+    private static String createdDir(Context context, String dirName) {
 
-            if (!imageFilePath.exists()) {
-                imageFilePath.mkdir();
-            }
+        String path = checkSdCard() ? context.getExternalCacheDir().getAbsolutePath() + dirName :
+                context.getCacheDir().getAbsolutePath() + dirName;
+        File filePath = new File(path);
 
-        } else {
-
-            path = context.getCacheDir().getAbsolutePath() + "/share/cache";
-
-            imageFilePath = new File(path);
-            if (!imageFilePath.exists()) {
-                imageFilePath.mkdir();
-            }
+        if (!filePath.exists()) {
+            filePath.mkdir();
         }
 
-        return imageFilePath;
+
+        return path;
     }
 }

@@ -12,9 +12,9 @@ import com.young.share.R;
 import com.young.share.config.Contants;
 import com.young.share.model.BaseModel;
 import com.young.share.model.DiscountMessage_HZ;
+import com.young.share.model.MyUser;
 import com.young.share.model.ShareMessage_HZ;
-import com.young.share.model.User;
-import com.young.share.myInterface.GotoAsyncFunction;
+import com.young.share.interfaces.AsyncListener;
 import com.young.share.network.BmobApi;
 
 import org.json.JSONException;
@@ -84,7 +84,7 @@ public class LocationUtils {
      * @param shareMessage
      * @param v
      */
-    public static void visit(Context ctx, User cuser, boolean hadGo, ShareMessage_HZ shareMessage, final View v) {
+    public static void visit(Context ctx, MyUser cuser, boolean hadGo, ShareMessage_HZ shareMessage, final View v) {
         if (hadGo) {
             shareMessage.getShVisitedNum().remove(cuser.getObjectId());
         } else {
@@ -108,7 +108,7 @@ public class LocationUtils {
             @Override
             public void onFailure(int i, String s) {
                 v.setClickable(true);
-                LogUtils.logD(" wantToGo faile  erro code = " + i + " erro message = " + s);
+                LogUtils.d(" wantToGo faile  erro code = " + i + " erro message = " + s);
             }
         });
 
@@ -123,7 +123,7 @@ public class LocationUtils {
      * @param shareMessage
      * @param v
      */
-    public static void wantToGo(Context ctx, User cuser, boolean hadWant, ShareMessage_HZ shareMessage, final TextView v) {
+    public static void wantToGo(Context ctx, MyUser cuser, boolean hadWant, ShareMessage_HZ shareMessage, final TextView v) {
 
         JSONObject jsonObject = new JSONObject();//参数
         try {
@@ -133,7 +133,7 @@ public class LocationUtils {
 
         } catch (JSONException e) {
 //            e.printStackTrace();
-            LogUtils.logD("云端代码 添加参数失败 " + e.toString());
+            LogUtils.d("云端代码 添加参数失败 " + e.toString());
         }
 
         if (hadWant) {
@@ -141,7 +141,7 @@ public class LocationUtils {
             shareMessage.getShWantedNum().remove(cuser.getObjectId());
 
 //操作收藏表
-            BmobApi.AsyncFunction(ctx, jsonObject, BmobApi.REMOVE_COLLECTION, new GotoAsyncFunction() {
+            BmobApi.AsyncFunction(ctx, jsonObject, BmobApi.REMOVE_COLLECTION, new AsyncListener() {
                 @Override
                 public void onSuccess(Object object) {
 
@@ -149,10 +149,10 @@ public class LocationUtils {
 
                     if (baseModel.getCode() == BaseModel.SUCCESS) {
 //                        mToast(R.string.operation_success);
-                        LogUtils.logD("删除收藏记录 成功  data = " + baseModel.getData());
+                        LogUtils.d("删除收藏记录 成功  data = " + baseModel.getData());
                     } else {
 
-                        LogUtils.logD("删除收藏记录 失败  data = " + baseModel.getData());
+                        LogUtils.d("删除收藏记录 失败  data = " + baseModel.getData());
                     }
                 }
 
@@ -183,7 +183,7 @@ public class LocationUtils {
             @Override
             public void onFailure(int i, String s) {
                 v.setClickable(true);
-                LogUtils.logD(" wantToGo faile  erro code = " + i + " erro message = " + s);
+                LogUtils.d(" wantToGo faile  erro code = " + i + " erro message = " + s);
             }
         });
 
@@ -207,7 +207,7 @@ public class LocationUtils {
      * @param hadWant
      * @param v
      */
-    public static void discountWanto(Context ctx,User cuser,DiscountMessage_HZ discountMessage,
+    public static void discountWanto(Context ctx,MyUser cuser,DiscountMessage_HZ discountMessage,
                                      boolean hadWant, final TextView v) {
 
         JSONObject jsonObject = new JSONObject();//参数
@@ -219,7 +219,7 @@ public class LocationUtils {
 
         } catch (JSONException e) {
 //            e.printStackTrace();
-            LogUtils.logD("云端代码 添加参数失败 " + e.toString());
+            LogUtils.d("云端代码 添加参数失败 " + e.toString());
         }
 
         if (hadWant) {
@@ -227,7 +227,7 @@ public class LocationUtils {
             discountMessage.getDtWantedNum().remove(cuser.getObjectId());
 
 //操作收藏表
-            BmobApi.AsyncFunction(ctx, jsonObject, BmobApi.REMOVE_COLLECTION, new GotoAsyncFunction() {
+            BmobApi.AsyncFunction(ctx, jsonObject, BmobApi.REMOVE_COLLECTION, new AsyncListener() {
                 @Override
                 public void onSuccess(Object object) {
 
@@ -235,18 +235,18 @@ public class LocationUtils {
 
                     if (baseModel.getCode() == BaseModel.SUCCESS) {
 //                        mToast(R.string.operation_success);
-                        LogUtils.logD("删除收藏记录 成功  data = " + baseModel.getData());
+                        LogUtils.d("删除收藏记录 成功  data = " + baseModel.getData());
 
                     } else {
 
-                        LogUtils.logD("删除收藏记录 失败  data = " + baseModel.getData());
+                        LogUtils.d("删除收藏记录 失败  data = " + baseModel.getData());
                     }
                 }
 
                 @Override
                 public void onFailure(int code, String msg) {
 
-                    LogUtils.logD("删除收藏记录 请求 失败  code = " + code+" message = "+msg);
+                    LogUtils.d("删除收藏记录 请求 失败  code = " + code+" message = "+msg);
 
                 }
             });
@@ -279,7 +279,7 @@ public class LocationUtils {
 
                 v.setClickable(true);
 
-                LogUtils.logD(" wantToGo faile  erro code = " + i + " erro message = " + s);
+                LogUtils.d(" wantToGo faile  erro code = " + i + " erro message = " + s);
             }
         });
     }
@@ -292,7 +292,7 @@ public class LocationUtils {
      * @param hadGo
      * @param v
      */
-    public static void discountVisit(Context ctx,User cuser,DiscountMessage_HZ discountMessage,
+    public static void discountVisit(Context ctx,MyUser cuser,DiscountMessage_HZ discountMessage,
                                      boolean hadGo,final TextView v){
 
         if (hadGo) {
@@ -321,7 +321,7 @@ public class LocationUtils {
             public void onFailure(int i, String s) {
                 v.setClickable(true);
 
-                LogUtils.logD(" wantToGo faile  erro code = " + i + " erro message = " + s);
+                LogUtils.d(" wantToGo faile  erro code = " + i + " erro message = " + s);
             }
         });
     }

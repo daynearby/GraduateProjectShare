@@ -22,7 +22,7 @@ import com.young.share.model.CommRemoteModel;
 import com.young.share.model.CommentList;
 import com.young.share.model.Comment_HZ;
 import com.young.share.model.ShareMessage_HZ;
-import com.young.share.myInterface.GotoAsyncFunction;
+import com.young.share.interfaces.AsyncListener;
 import com.young.share.network.BmobApi;
 import com.young.share.thread.MyRunnable;
 import com.young.share.utils.DataFormateUtils;
@@ -334,10 +334,10 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
         try {
             params.put("messageID", messageId);
         } catch (JSONException e) {
-            LogUtils.logD("get comment add params failure" + e.toString());
+            LogUtils.d("get comment add params failure" + e.toString());
         }
 
-        BmobApi.AsyncFunction(mActivity, params, BmobApi.GET_MESSAGE_COMMENTS, CommentList.class, new GotoAsyncFunction() {
+        BmobApi.AsyncFunction(mActivity, params, BmobApi.GET_MESSAGE_COMMENTS, CommentList.class, new AsyncListener() {
             @Override
             public void onSuccess(Object object) {
                 CommentList commentList = (CommentList) object;
@@ -368,7 +368,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
                 processDialogDismisson();
 
                 mToast(R.string.tips_loading_faile);
-                LogUtils.logD("get comment add params failure.  code = " + code + " message =  " + msg);
+                LogUtils.d("get comment add params failure.  code = " + code + " message =  " + msg);
             }
         });
     }
@@ -393,7 +393,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
             case R.id.btn_message_detail_tosend://发送消息
                 finishPrepare();
-                receiverId = commModel.getUser().getObjectId();
+                receiverId = commModel.getMyUser().getObjectId();
                 sendComment();
                 isClick = true;
                 break;
@@ -412,7 +412,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
 
         if (!TextUtils.isEmpty(sendComment_edt.getText().toString())) {
 
-            BmobApi.sendMessage(mActivity, mUser.getObjectId(), receiverId, sendComment_edt.getText().toString(),
+            BmobApi.sendMessage(mActivity, mMyUser.getObjectId(), receiverId, sendComment_edt.getText().toString(),
                     commModel.getObjectId(), new BmobApi.SendMessageCallback() {
                         @Override
                         public void onSuccessReflesh() {
@@ -455,7 +455,7 @@ public class MessageDetail extends ItemActBarActivity implements View.OnClickLis
      * 关闭进度条提示
      */
     private void processDialogDismisson() {
-//        LogUtils.logD(" isshow" + SVProgressHUD.isShowing(mActivity));
+//        LogUtils.d(" isshow" + SVProgressHUD.isShowing(mActivity));
         if (SVProgressHUD.isShowing(mActivity)) {
 
             //提示

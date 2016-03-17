@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * json解析类
+ * results
  * Created by Nearby Yang on 2015-11-18.
  */
 public class ShareMessageList {

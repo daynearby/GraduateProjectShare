@@ -408,7 +408,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 				if (null != displayRect) {
 					final float x = e.getX(), y = e.getY();
 
-					// Check to see if the user tapped on the photo
+					// Check to see if the myUser tapped on the photo
 					if (displayRect.contains(x, y)) {
 
 						float xResult = (x - displayRect.left) / displayRect.width();
@@ -438,14 +438,14 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 				// event
 				v.getParent().requestDisallowInterceptTouchEvent(true);
 
-				// If we're flinging, and the user presses down, cancel
+				// If we're flinging, and the myUser presses down, cancel
 				// fling
 				cancelFling();
 				break;
 
 			case MotionEvent.ACTION_CANCEL:
 			case MotionEvent.ACTION_UP:
-				// If the user has zoomed less than min scale, zoom back
+				// If the myUser has zoomed less than min scale, zoom back
 				// to min scale
 				if (getScale() < mMinScale) {
 					RectF rect = getDisplayRect();
@@ -457,7 +457,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 				break;
 			}
 
-			// Check to see if the user double tapped
+			// Check to see if the myUser double tapped
 			if (null != mGestureDetector && mGestureDetector.onTouchEvent(ev)) {
 				handled = true;
 			}
@@ -791,7 +791,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 	public static interface OnMatrixChangedListener {
 		/**
 		 * Callback for when the Matrix displaying the Drawable has changed.
-		 * This could be because the View's bounds have changed, or the user has
+		 * This could be because the View's bounds have changed, or the myUser has
 		 * zoomed.
 		 * 
 		 * @param rect
@@ -809,17 +809,17 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 	public static interface OnPhotoTapListener {
 
 		/**
-		 * A callback to receive where the user taps on a photo. You will only
-		 * receive a callback if the user taps on the actual photo, tapping on
+		 * A callback to receive where the myUser taps on a photo. You will only
+		 * receive a callback if the myUser taps on the actual photo, tapping on
 		 * 'whitespace' will be ignored.
 		 * 
 		 * @param view
-		 *            - View the user tapped.
+		 *            - View the myUser tapped.
 		 * @param x
-		 *            - where the user tapped from the of the Drawable, as
+		 *            - where the myUser tapped from the of the Drawable, as
 		 *            percentage of the Drawable width.
 		 * @param y
-		 *            - where the user tapped from the top of the Drawable, as
+		 *            - where the myUser tapped from the top of the Drawable, as
 		 *            percentage of the Drawable height.
 		 */
 		void onPhotoTap(View view, float x, float y);
@@ -834,16 +834,16 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 	public static interface OnViewTapListener {
 
 		/**
-		 * A callback to receive where the user taps on a ImageView. You will
-		 * receive a callback if the user taps anywhere on the view, tapping on
+		 * A callback to receive where the myUser taps on a ImageView. You will
+		 * receive a callback if the myUser taps anywhere on the view, tapping on
 		 * 'whitespace' will not be ignored.
 		 * 
 		 * @param view
-		 *            - View the user tapped.
+		 *            - View the myUser tapped.
 		 * @param x
-		 *            - where the user tapped from the left of the View.
+		 *            - where the myUser tapped from the left of the View.
 		 * @param y
-		 *            - where the user tapped from the top of the View.
+		 *            - where the myUser tapped from the top of the View.
 		 */
 		void onViewTap(View view, float x, float y);
 	}

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.young.share.R;
-import com.young.share.model.User;
+import com.young.share.model.MyUser;
 
 import java.util.List;
 
@@ -24,12 +24,12 @@ public abstract class CommAdapter<T> extends BaseAdapter {
 
     public List<T> dataList;
     public Context ctx;
-    public User cuser;
+    public MyUser cuser;
     public ViewHolder holder;
 
     public CommAdapter(Context context) {
         ctx = context;
-        cuser = BmobUser.getCurrentUser(ctx, User.class);
+        cuser = BmobUser.getCurrentUser(ctx, MyUser.class);
     }
 
     public void setData(List<T> dataList) {
@@ -77,7 +77,7 @@ public abstract class CommAdapter<T> extends BaseAdapter {
      */
     public void getUser() {
         if (cuser == null) {
-            cuser = BmobUser.getCurrentUser(ctx, User.class);
+            cuser = BmobUser.getCurrentUser(ctx, MyUser.class);
         }
     }
 

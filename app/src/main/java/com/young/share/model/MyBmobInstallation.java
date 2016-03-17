@@ -10,18 +10,18 @@ import cn.bmob.v3.BmobInstallation;
  */
 public class MyBmobInstallation extends BmobInstallation {
 
-    private User user;
+    private MyUser user;
 
     public MyBmobInstallation(Context context) {
         super(context);
     }
 
 
-    public User getUser() {
+    public MyUser getMyUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setMyUser(MyUser user) {
         this.user = user;
     }
 }

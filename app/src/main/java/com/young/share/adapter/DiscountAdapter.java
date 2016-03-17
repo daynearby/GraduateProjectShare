@@ -17,7 +17,7 @@ import com.young.share.adapter.baseAdapter.CommAdapter;
 import com.young.share.adapter.baseAdapter.ViewHolder;
 import com.young.share.config.Contants;
 import com.young.share.model.DiscountMessage_HZ;
-import com.young.share.model.User;
+import com.young.share.model.MyUser;
 import com.young.share.R;
 import com.young.share.RankListActivity;
 import com.young.share.utils.DataFormateUtils;
@@ -49,7 +49,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
     @Override
     public void convert(ViewHolder holder, DiscountMessage_HZ discountMessage_hz, int position) {
-        User user = discountMessage_hz.getUserId();
+        MyUser myUser = discountMessage_hz.getMyUserId();
 
         ImageView avatar = holder.getView(R.id.id_im_userH);//用户头像
         TextView nickname_tv = holder.getView(R.id.id_userName);//昵称
@@ -81,7 +81,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         } else {
             content_tv.setVisibility(View.GONE);
         }
-        nickname_tv.setText(TextUtils.isEmpty(user.getNickName()) ? ctx.getString(R.string.user_name_defual) : user.getNickName());
+        nickname_tv.setText(TextUtils.isEmpty(myUser.getNickName()) ? ctx.getString(R.string.user_name_defual) : myUser.getNickName());
         //地理信息的显示。显示了可以点击查看详细
         if (!TextUtils.isEmpty(discountMessage_hz.getDtLocation())) {
             location.setVisibility(View.VISIBLE);
@@ -91,7 +91,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
                     discountMessage_hz.getGeographic())).build();
         }
         ImageHandlerUtils.loadIamgeThumbnail(ctx,
-                TextUtils.isEmpty(user.getAvatar()) ? Contants.DEFAULT_AVATAR : user.getAvatar(), avatar);
+                TextUtils.isEmpty(myUser.getAvatar()) ? Contants.DEFAULT_AVATAR : myUser.getAvatar(), avatar);
         if (TextUtils.isEmpty(discountMessage_hz.getDtTag())) {
             tagLayout.setVisibility(View.INVISIBLE);
         } else {
@@ -128,8 +128,8 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx,discountMessage_hz.getDtImgs()));
 
 //添加监听事件
-        nickname_tv.setOnClickListener(new click(user));
-        avatar.setOnClickListener(new click(user));
+        nickname_tv.setOnClickListener(new click(myUser));
+        avatar.setOnClickListener(new click(myUser));
         wanto_tv.setOnClickListener(new click(discountMessage_hz));
         hadgo_tv.setOnClickListener(new click(discountMessage_hz));
         tag_tv.setOnClickListener(new click(discountMessage_hz.getDtTag()));
@@ -183,7 +183,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
             switch (v.getId()) {
 
                 case R.id.id_im_userH://用户资料
-                    User u = (User) o;
+                    MyUser u = (MyUser) o;
                     userInfo = new PopupWinUserInfo(ctx, u);
                     userInfo.onShow(v);
 //                    LogUtils.logD("用户资料 = " + u.toString());
@@ -191,7 +191,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
                 case R.id.id_userName:
 
-                    u = (User) o;
+                    u = (MyUser) o;
                     userInfo = new PopupWinUserInfo(ctx, u);
                     userInfo.onShow(v);
                     break;

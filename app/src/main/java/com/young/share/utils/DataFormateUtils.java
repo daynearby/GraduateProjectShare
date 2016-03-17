@@ -6,6 +6,7 @@ import com.young.share.config.Contants;
 import com.young.share.model.CommRemoteModel;
 import com.young.share.model.Comment_HZ;
 import com.young.share.model.DiscountMessage_HZ;
+import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.dbmodel.ShareMessage;
@@ -40,7 +41,7 @@ public class DataFormateUtils {
         commModel.setImages(shareMessage.getShImgs());
         commModel.setLocationInfo(shareMessage.getShLocation());
         commModel.setTag(shareMessage.getShTag());
-        commModel.setUser(shareMessage.getUserId());
+        commModel.setMyUser(shareMessage.getMyUserId());
         commModel.setVisited(shareMessage.getShVisitedNum());
         commModel.setWanted(shareMessage.getShWantedNum());
         commModel.setObjectId(shareMessage.getObjectId());
@@ -62,7 +63,7 @@ public class DataFormateUtils {
         ShareMessage_HZ shareMessage = new ShareMessage_HZ();
 
 //        shareMessage.setObjectId();
-        shareMessage.setUserId(discountMessage.getUserId());
+        shareMessage.setMyUserId(discountMessage.getMyUserId());
         shareMessage.setShVisitedNum(discountMessage.getDtVisitedNum());
 //        shareMessage.set
 
@@ -83,7 +84,7 @@ public class DataFormateUtils {
         commModel.setImages(discountMessage.getDtImgs());
         commModel.setLocationInfo(discountMessage.getDtLocation());
         commModel.setTag(discountMessage.getDtTag());
-        commModel.setUser(discountMessage.getUserId());
+        commModel.setMyUser(discountMessage.getMyUserId());
         commModel.setVisited(discountMessage.getDtVisitedNum());
         commModel.setWanted(discountMessage.getDtWantedNum());
         commModel.setObjectId(discountMessage.getObjectId());
@@ -101,7 +102,7 @@ public class DataFormateUtils {
         shareMessageHz.setShImgs(commModel.getImages());
         shareMessageHz.setShLocation(commModel.getLocationInfo());
         shareMessageHz.setShTag(commModel.getTag());
-        shareMessageHz.setUserId(commModel.getUser());
+        shareMessageHz.setMyUserId(commModel.getMyUser());
         shareMessageHz.setShVisitedNum(commModel.getVisited());
         shareMessageHz.setShWantedNum(commModel.getWanted());
         shareMessageHz.setObjectId(commModel.getObjectId());
@@ -157,28 +158,28 @@ public class DataFormateUtils {
 
     /**
      * 将远程数据库的数据格式化本地数据库格式
-     * @param user
+     * @param myUser
      * @return
      */
-    public static User formateUser(com.young.share.model.User user){
+    public static User formateUser(MyUser myUser){
         User u = new User();
 
-        u.setCreatedAt(user.getCreatedAt());
-        u.setUpdatedAt(user.getUpdatedAt());
-        u.setAddress(user.getAddress());
-        u.setGender(user.isGender());
-        u.setAge(user.getAge());
-        u.setQq(user.getQq());
-        u.setAvatar(user.getAvatar());
-        u.setSignture(user.getSignture());
-        u.setEmail(user.getEmail());
-        u.setMobilePhoneNumber(user.getMobilePhoneNumber());
-        u.setNickName(user.getNickName());
-        u.setMobilePhoneNumberVerified(user.getMobilePhoneNumberVerified());
-        u.setEmailVerified(user.getEmailVerified());
-        u.setObjectId(user.getObjectId());
-        u.setAccessToken(user.getSessionToken());
-        u.setUsername(user.getUsername());
+        u.setCreatedAt(myUser.getCreatedAt());
+        u.setUpdatedAt(myUser.getUpdatedAt());
+        u.setAddress(myUser.getAddress());
+        u.setGender(myUser.isGender());
+        u.setAge(myUser.getAge());
+        u.setQq(myUser.getQq());
+        u.setAvatar(myUser.getAvatar());
+        u.setSignture(myUser.getSignture());
+        u.setEmail(myUser.getEmail());
+        u.setMobilePhoneNumber(myUser.getMobilePhoneNumber());
+        u.setNickName(myUser.getNickName());
+        u.setMobilePhoneNumberVerified(myUser.getMobilePhoneNumberVerified());
+        u.setEmailVerified(myUser.getEmailVerified());
+        u.setObjectId(myUser.getObjectId());
+        u.setAccessToken(myUser.getSessionToken());
+        u.setUsername(myUser.getUsername());
 
         return u;
     }

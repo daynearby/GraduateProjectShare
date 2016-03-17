@@ -16,9 +16,9 @@ public class CommRemoteModel implements Serializable {
     private String objectId;
     private String createdAt;//createdAt
     private String updatedAt;
-    private User user;
-    private User sender;
-    private User receiver;
+    private MyUser myUser;
+    private MyUser sender;
+    private MyUser receiver;
     private String content;
     private List<String> images;
     private String locationInfo;
@@ -64,27 +64,27 @@ public class CommRemoteModel implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public com.young.share.model.User getUser() {
-        return user;
+    public MyUser getMyUser() {
+        return myUser;
     }
 
-    public void setUser(com.young.share.model.User user) {
-        this.user = user;
+    public void setMyUser(MyUser myUser) {
+        this.myUser = myUser;
     }
 
-    public com.young.share.model.User getSender() {
+    public MyUser getSender() {
         return sender;
     }
 
-    public void setSender(com.young.share.model.User sender) {
+    public void setSender(MyUser sender) {
         this.sender = sender;
     }
 
-    public com.young.share.model.User getReceiver() {
+    public MyUser getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(com.young.share.model.User receiver) {
+    public void setReceiver(MyUser receiver) {
         this.receiver = receiver;
     }
 

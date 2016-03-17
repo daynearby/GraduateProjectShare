@@ -86,7 +86,7 @@ public class ThreadUtils {
             public void run() {
                 if (isRuning) {
 
-                    LogUtils.logD("thread star task");
+                    LogUtils.d("thread star task");
 
                     MyRunnable myRunnable = null;
 
@@ -154,7 +154,7 @@ public class ThreadUtils {
 
                 // taskQueue.add(mr);
                 notifyWork();
-                LogUtils.logD("thread add task ");
+                LogUtils.d("thread add task ");
             }
         });
 

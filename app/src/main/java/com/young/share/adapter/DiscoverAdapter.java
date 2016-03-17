@@ -19,8 +19,8 @@ import com.young.share.RankListActivity;
 import com.young.share.adapter.baseAdapter.CommAdapter;
 import com.young.share.adapter.baseAdapter.ViewHolder;
 import com.young.share.config.Contants;
+import com.young.share.model.MyUser;
 import com.young.share.model.ShareMessage_HZ;
-import com.young.share.model.User;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.DisplayUtils;
@@ -60,7 +60,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
     @Override
     public void convert(ViewHolder holder, ShareMessage_HZ shareMessage, int position) {
 //        this.shareMessage = shareMessage;
-        User user = shareMessage.getUserId();
+        MyUser myUser = shareMessage.getMyUserId();
 
         ImageView avatar = holder.getView(R.id.id_im_userH);//用户头像
         TextView nickname_tv = holder.getView(R.id.id_userName);//昵称
@@ -99,10 +99,10 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
             content_tv.setVisibility(View.GONE);
         }
 
-        nickname_tv.setText(TextUtils.isEmpty(user.getNickName()) ? "" : user.getNickName());
+        nickname_tv.setText(TextUtils.isEmpty(myUser.getNickName()) ? "" : myUser.getNickName());
 
         ImageHandlerUtils.loadIamgeThumbnail(ctx,
-                TextUtils.isEmpty(user.getAvatar()) ? Contants.DEFAULT_AVATAR : user.getAvatar(), avatar);
+                TextUtils.isEmpty(myUser.getAvatar()) ? Contants.DEFAULT_AVATAR : myUser.getAvatar(), avatar);
 
         if (TextUtils.isEmpty(shareMessage.getShTag())) {
             tagLayout.setVisibility(View.INVISIBLE);
@@ -153,8 +153,8 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 //        myGridview.setOnItemClickListener(new LocationUtils.itemClick(ctx, shareMessage.getShImgs()));
 
 //添加监听事件
-        nickname_tv.setOnClickListener(new click(user));
-        avatar.setOnClickListener(new click(user));
+        nickname_tv.setOnClickListener(new click(myUser));
+        avatar.setOnClickListener(new click(myUser));
         wanto_tv.setOnClickListener(new click(shareMessage));
         hadgo_tv.setOnClickListener(new click(shareMessage));
         comment_tv.setOnClickListener(new click(shareMessage));
@@ -210,7 +210,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 
             switch (v.getId()) {
                 case R.id.id_im_userH://用户资料
-                    User u = (User) o;
+                    MyUser u = (MyUser) o;
                     PopupWinUserInfo userInfo = new PopupWinUserInfo(ctx, u);
                     userInfo.onShow(v);
 //                    LogUtils.logD("用户资料 = " + u.toString());

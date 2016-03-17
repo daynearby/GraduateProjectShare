@@ -57,7 +57,7 @@ public class DarftUtils {
 
         Toast.makeText(activity, R.string.save_draft_success, Toast.LENGTH_SHORT).show();
 
-        LogUtils.logI("保存草稿");
+        LogUtils.i("保存草稿");
     }
 
     /**

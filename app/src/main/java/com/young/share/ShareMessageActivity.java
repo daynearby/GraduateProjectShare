@@ -28,7 +28,7 @@ import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.PictureInfo;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.gson.PlaceSearch;
-import com.young.share.myInterface.GoToUploadImages;
+import com.young.share.interfaces.GoToUploadImages;
 import com.young.share.network.BmobApi;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DisplayUtils;
@@ -247,7 +247,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                             try {
                                 list.add(imgJsArray.getString(i));
                             } catch (JSONException e) {
-                                LogUtils.logE("读取jsonArray数据出错" + e.toString());
+                                LogUtils.e("读取jsonArray数据出错" + e.toString());
                             }
 
                         }
@@ -270,7 +270,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                 }
             });
             dialog.show();
-            LogUtils.logI("有草稿 存在");
+            LogUtils.i("有草稿 存在");
         }
 
     }
@@ -555,7 +555,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         mBackStartActivity(MainActivity.class);
         //删除搜索的记录 Contants.ACACHE_PLACE_SERVE
         boolean removed = acache.remove(Contants.ACACHE_PLACE_SERVE);
-        LogUtils.logE("removed = " + removed);
+        LogUtils.e("removed = " + removed);
         mActivity.finish();
     }
 
@@ -608,7 +608,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         shareMessage_hz.setShTag(tagInfo);
         shareMessage_hz.setShLocation(!TextUtils.isEmpty(locationInfo) ? locationInfo : null);
         shareMessage_hz.setGeographic(new BmobGeoPoint(longitude, latitude));
-        shareMessage_hz.setUserId(mUser);
+        shareMessage_hz.setMyUserId(mMyUser);
         shareMessage_hz.setShCommNum(0);
         shareMessage_hz.setShVisitedNum(new ArrayList<String>());
         shareMessage_hz.setShWantedNum(new ArrayList<String>());
@@ -637,7 +637,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                     }
 //                            else {
 //
-//                                LogUtils.logE("回调第一次，isfinish = " + isFinish);
+//                                LogUtils.e("回调第一次，isfinish = " + isFinish);
 //                                SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.some_images_maybe_miss));
 //                            }
                 }
@@ -656,7 +656,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         //在没有销毁该Activity的时候，需要清空该Activity中的数据
 
 //shareMessage_hz.setShImgs();
-//                LogUtils.logE("右边点击");
+//                LogUtils.e("右边点击");
 
 
     }
@@ -674,7 +674,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         disMessages.setDtContent(content);
 
         disMessages.setDtLocation(!TextUtils.isEmpty(locationInfo) ? locationInfo : null);
-        disMessages.setUserId(mUser);
+        disMessages.setMyUserId(mMyUser);
 
 
         if (lists != null && !lists.isEmpty()) {//有上传图片的
@@ -699,7 +699,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                     }
 //                            else {
 //
-//                                LogUtils.logE("回调第一次，isfinish = " + isFinish);
+//                                LogUtils.e("回调第一次，isfinish = " + isFinish);
 //                                SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.some_images_maybe_miss));
 //                            }
                 }

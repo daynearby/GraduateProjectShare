@@ -72,7 +72,7 @@ public class NetworkReuqest {
         try {
             query = URLEncoder.encode(query,"UTF-8");
         } catch (UnsupportedEncodingException e) {
-            LogUtils.logE("网址中文编码失败 " + e.toString());
+            LogUtils.e("网址中文编码失败 " + e.toString());
         }
         HashMap<String, String> params = new HashMap<>();
         params.put(Contants.PARAM_QUERY, query);
@@ -111,7 +111,7 @@ public class NetworkReuqest {
         try {
             query = URLEncoder.encode(query,"UTF-8");
         } catch (UnsupportedEncodingException e) {
-            LogUtils.logE("网址中文编码失败 " + e.toString());
+            LogUtils.e("网址中文编码失败 " + e.toString());
         }
         HashMap<String, String> params = new HashMap<>();
         params.put(Contants.PARAM_QUERY, query);
@@ -182,7 +182,7 @@ public class NetworkReuqest {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                LogUtils.logE(error.toString());
+                LogUtils.e(error.toString());
                 if (jsonRequstCallback != null) {
                     jsonRequstCallback.onFaile(error);
                 }

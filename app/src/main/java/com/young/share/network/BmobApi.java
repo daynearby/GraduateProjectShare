@@ -9,15 +9,15 @@ import com.bmob.btp.callback.UploadBatchListener;
 import com.google.gson.Gson;
 import com.young.share.R;
 import com.young.share.config.Contants;
+import com.young.share.interfaces.AsyncListener;
+import com.young.share.interfaces.GoToUploadImages;
 import com.young.share.model.BaseModel;
 import com.young.share.model.Collection_HZ;
 import com.young.share.model.Comment_HZ;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.Message_HZ;
+import com.young.share.model.MyUser;
 import com.young.share.model.ShareMessage_HZ;
-import com.young.share.model.User;
-import com.young.share.myInterface.GoToUploadImages;
-import com.young.share.myInterface.GotoAsyncFunction;
 import com.young.share.utils.LogUtils;
 
 import org.json.JSONException;
@@ -60,7 +60,7 @@ public class BmobApi {
      * @param funcationName 方法名
      */
     public static void AsyncFunction(final Context ctx, JSONObject params, String funcationName,
-                                     final Class clazz, final GotoAsyncFunction gotoListener) {
+                                     final Class clazz, final AsyncListener listener) {
 
         AsyncCustomEndpoints ace = new AsyncCustomEndpoints();
 
@@ -72,19 +72,21 @@ public class BmobApi {
                 new CloudCodeListener() {
                     @Override
                     public void onSuccess(Object object) {
-
-                        LogUtils.logI("clazz " + clazz + "返回JSON数据:" + object.toString());
-                        gotoListener.onSuccess(gson.fromJson(object.toString(), clazz));
+/*在json解析出现错误的时候，这里会显示两次*/
+                        LogUtils.i("clazz " + clazz + "返回JSON数据:" + object.toString());
+                        Object obj =gson.fromJson(object.toString(), clazz);
+//                        LogUtils.i("返回JSON数据:" + obj.toString());
+                        listener.onSuccess(obj);
 
                     }
 
                     @Override
                     public void onFailure(int code, String msg) {
 
-                        gotoListener.onFailure(code, msg);
+                        listener.onFailure(code, msg);
                         mToast(ctx, R.string.network_erro);
 
-                        LogUtils.logI("访问云端方法失败:" + msg);
+                        LogUtils.i("访问云端方法失败:" + msg);
                     }
                 });
     }
@@ -98,9 +100,9 @@ public class BmobApi {
      * @param funcationName 方法名
      */
     public static void AsyncFunction(Context ctx, JSONObject params, String funcationName,
-                                     final GotoAsyncFunction gotoListener) {
+                                     final AsyncListener listener) {
         AsyncFunction(ctx, params, funcationName, BaseModel.class
-                , gotoListener);
+                , listener);
 
 //第一个参数是上下文对象，
 // 第二个参数是云端代码的方法名称，
@@ -151,7 +153,7 @@ public class BmobApi {
                 // urls        : url：文件地址数组
                 // files     : BmobFile文件数组，`V3.4.1版本`开始提供，用于兼容新旧文件服务。
 //                注：若上传的是图片，url(s)并不能直接在浏览器查看（会出现404错误），需要经过`URL签名`得到真正的可访问的URL地址,当然，`V3.4.1`版本可直接从BmobFile中获得可访问的文件地址。
-                LogUtils.logI("uploadBatch isFinish = " + isFinish + " imgUrl = " + urls.toString());
+                LogUtils.i("uploadBatch isFinish = " + isFinish + " imgUrl = " + urls.toString());
 
             }
 
@@ -161,7 +163,7 @@ public class BmobApi {
                 // curPercent  :表示当前上传文件的进度值（百分比）
                 // total       :表示总的上传文件数
                 // totalPercent:表示总的上传进度（百分比）
-                LogUtils.logI("uploadBatch", "onProgress :" + curIndex + "---" + curPercent + "---" + total + "----" + totalPercent);
+                LogUtils.i("uploadBatch", "onProgress :" + curIndex + "---" + curPercent + "---" + total + "----" + totalPercent);
             }
 
             @Override
@@ -169,7 +171,7 @@ public class BmobApi {
                 if (listener != null) {
                     listener.onError(statuscode, errormsg);
                 }
-                LogUtils.logI("uploadBatch", "批量上传出错：" + statuscode + "--" + errormsg);
+                LogUtils.i("uploadBatch", "批量上传出错：" + statuscode + "--" + errormsg);
             }
         });
     }
@@ -181,12 +183,12 @@ public class BmobApi {
             @Override
             public void onSuccess(String thumbnailName, String thumbnailUrl) {
                 //此处得到的缩略图地址（thumbnailUrl）不一定能够请求的到，此方法为异步方法
-                LogUtils.logD("thumbnailName = " + thumbnailName + " thumbnailUrl = " + thumbnailUrl);
+                LogUtils.i("thumbnailName = " + thumbnailName + " thumbnailUrl = " + thumbnailUrl);
             }
 
             @Override
             public void onError(int statuscode, String errormsg) {
-                LogUtils.logE("setThumbnail faile  code = " + statuscode + "  errormsg = " + errormsg);
+                LogUtils.e("setThumbnail faile  code = " + statuscode + "  errormsg = " + errormsg);
             }
         });
     }
@@ -195,25 +197,25 @@ public class BmobApi {
      * 收藏分享信息
      *
      * @param ctx
-     * @param user
+     * @param myUser
      * @param bmobObject
      * @param messageType Contants.MESSAGE_TYPE_SHAREMESSAGE://分享信息  Contants.MESSAGE_TYPE_DISCOUNT://商家优惠
      */
-    public static void saveCollectionShareMessage(Context ctx, User user, BmobObject bmobObject, int messageType) {
+    public static void saveCollectionShareMessage(Context ctx, MyUser myUser, BmobObject bmobObject, int messageType) {
 
         Collection_HZ collection = new Collection_HZ();
-        collection.setCollUserId(user);//current user
+        collection.setCollUserId(myUser);//current myUser
 
         switch (messageType) {
             case Contants.MESSAGE_TYPE_SHAREMESSAGE://分享信息
                 ShareMessage_HZ shareMessage = (ShareMessage_HZ) bmobObject;
-                collection.setShUserId(shareMessage.getUserId());
+                collection.setShUserId(shareMessage.getMyUserId());
                 collection.setShMsgId(shareMessage);
                 break;
 
             case Contants.MESSAGE_TYPE_DISCOUNT://商家优惠
                 DiscountMessage_HZ discountMessage = (DiscountMessage_HZ) bmobObject;
-                collection.setShUserId(discountMessage.getUserId());
+                collection.setShUserId(discountMessage.getMyUserId());
                 collection.setDtMsgId(discountMessage);
                 break;
         }
@@ -237,8 +239,8 @@ public class BmobApi {
      */
     public static void sendMessage(final Context context, String senderId, final String receiverId,
                                    final String content, String shareId, final SendMessageCallback sendMessageCall) {
-        User sender = new User();
-        User receiver = new User();
+        MyUser sender = new MyUser();
+        MyUser receiver = new MyUser();
         ShareMessage_HZ shareMessage = new ShareMessage_HZ();
         final Message_HZ message = new Message_HZ();
         final Comment_HZ comment = new Comment_HZ();
@@ -302,11 +304,11 @@ public class BmobApi {
             params.put("uid", receiverId);
             params.put("content", content);
         } catch (JSONException e) {
-            LogUtils.logD("send messa add params fail " + e.toString());
+            LogUtils.i("send messa add params fail " + e.toString());
         }
 
 
-        AsyncFunction(ctx, params, PUSH_MESSAGE_BY_UID, new GotoAsyncFunction() {
+        AsyncFunction(ctx, params, PUSH_MESSAGE_BY_UID, new AsyncListener() {
             @Override
             public void onSuccess(Object object) {
                 BaseModel baseModel = (BaseModel) object;
@@ -323,7 +325,7 @@ public class BmobApi {
 
             @Override
             public void onFailure(int code, String msg) {
-                LogUtils.logD("send message faile code = " + code + " message = " + msg);
+                LogUtils.i("send message faile code = " + code + " message = " + msg);
             }
         });
 

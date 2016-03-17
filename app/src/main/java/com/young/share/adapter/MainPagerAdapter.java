@@ -92,7 +92,7 @@ public class MainPagerAdapter extends PagerAdapter {
      *
      */
     public void refreshUI(int requestCode) {
-        LogUtils.logD("pageAdapter refresh UI .code = " + requestCode);
+        LogUtils.d("pageAdapter refresh UI .code = " + requestCode);
 
         DiscountFragment discountFragment;
         if (requestCode == Contants.REFRESH_TYPE_DISCOUNT) {

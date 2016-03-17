@@ -27,9 +27,6 @@ import java.io.File;
  */
 public class ApplicationConfig extends LitePalApplication {
 
-    //是否使用调试
-    public final static boolean isDebug = true;
-
     //单例模式
     private volatile static ApplicationConfig instance;
     private ACache aCache;

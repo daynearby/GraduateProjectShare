@@ -25,8 +25,8 @@ import com.soundcloud.android.crop.ActivityResult;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
-import com.young.share.model.User;
-import com.young.share.myInterface.GoToUploadImages;
+import com.young.share.model.MyUser;
+import com.young.share.interfaces.GoToUploadImages;
 import com.young.share.network.BmobApi;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.ImageHandlerUtils;
@@ -103,8 +103,8 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
         select_ls.setAdapter(arrayAdapter);
         select_ls.setOnItemClickListener(new onitemClick());
 
-        nickname_tv.setText(TextUtils.isEmpty(mUser.getNickName()) ? getString(R.string.user_name_defual) : mUser.getNickName());
-        signture_tv.setText(TextUtils.isEmpty(mUser.getSignture()) ? getString(R.string.user_info_hint_enjoy_life) : mUser.getSignture());
+        nickname_tv.setText(TextUtils.isEmpty(mMyUser.getNickName()) ? getString(R.string.user_name_defual) : mMyUser.getNickName());
+        signture_tv.setText(TextUtils.isEmpty(mMyUser.getSignture()) ? getString(R.string.user_info_hint_enjoy_life) : mMyUser.getSignture());
         loadingAvatar();
     }
 
@@ -184,8 +184,8 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
         String url;
         boolean isLocation;
 
-        if (!TextUtils.isEmpty(mUser.getAvatar())) {
-            url = mUser.getAvatar();
+        if (!TextUtils.isEmpty(mMyUser.getAvatar())) {
+            url = mMyUser.getAvatar();
             isLocation = false;
         } else {
             url = Contants.DEFAULT_AVATAR;
@@ -263,7 +263,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
             if (mActivity.getExternalCacheDir() != null) {
                 croppath = mActivity.getExternalCacheDir().getAbsolutePath() + Contants.IMAGE_PATH_AND_NAME;
             }
-            LogUtils.logI(croppath);
+            LogUtils.i(croppath);
 
             String[] files = {croppath};
 
@@ -273,13 +273,13 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
                     //上传文件成功
                     if (isFinish) {
 
-                        mUser = BmobUser.getCurrentUser(mActivity, User.class);
+                        mMyUser = BmobUser.getCurrentUser(mActivity, MyUser.class);
                         String avatar_url = urls[0];
 
                         if (!TextUtils.isEmpty(avatar_url)) {
-                            mUser.setAvatar(avatar_url);
+                            mMyUser.setAvatar(avatar_url);
 
-                            mUser.update(mActivity, new UpdateListener() {
+                            mMyUser.update(mActivity, new UpdateListener() {
                                 @Override
                                 public void onSuccess() {
                                     mToast(R.string.reset_avatar_success);
@@ -296,7 +296,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
 
                 @Override
                 public void onError(int statuscode, String errormsg) {
-                    LogUtils.logE("上传头像文件失败 状态信息 = " + statuscode + " 错误信息 = " + errormsg);
+                    LogUtils.e("上传头像文件失败 状态信息 = " + statuscode + " 错误信息 = " + errormsg);
                 }
             });
         }

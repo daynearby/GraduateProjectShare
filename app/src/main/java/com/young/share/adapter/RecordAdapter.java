@@ -26,7 +26,7 @@ public class RecordAdapter extends CommAdapter<ShareMessage_HZ> {
     @Override
     public void convert(ViewHolder holder, ShareMessage_HZ shareMessage, int position) {
 
-        ((TextView) holder.getView(R.id.tv_record_comm_nickname)).setText(shareMessage.getUserId().getNickName());
+        ((TextView) holder.getView(R.id.tv_record_comm_nickname)).setText(shareMessage.getMyUserId().getNickName());
         TextView content =  holder.getView(R.id.tv_record_comm_content);
         content.setText(StringUtils.getEmotionContent(ctx,content,shareMessage.getShContent()));
         ((TextView) holder.getView(R.id.tv_record_comm_created))

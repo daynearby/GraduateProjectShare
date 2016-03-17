@@ -18,9 +18,9 @@ import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.RankList;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.CommRemoteModel;
-import com.young.share.myInterface.ComparatorImpl;
-import com.young.share.myInterface.GotoAsyncFunction;
-import com.young.share.myInterface.ListViewRefreshListener;
+import com.young.share.interfaces.ComparatorImpl;
+import com.young.share.interfaces.AsyncListener;
+import com.young.share.interfaces.ListViewRefreshListener;
 import com.young.share.network.BmobApi;
 import com.young.share.thread.MyRunnable;
 import com.young.share.utils.CommonUtils;
@@ -119,7 +119,7 @@ public class RankListActivity extends BaseAppCompatActivity {
             try {
                 parameters.put(Contants.PARAM_TAG, tag);
             } catch (JSONException e) {
-                LogUtils.logD("添加参数失败 " + e.toString());
+                LogUtils.d("添加参数失败 " + e.toString());
             }
         }
 
@@ -127,11 +127,11 @@ public class RankListActivity extends BaseAppCompatActivity {
             parameters.put(Contants.PARAM_SKIP, skip);
 
         } catch (JSONException e) {
-            LogUtils.logD("添加参数失败 " + e.toString());
+            LogUtils.d("添加参数失败 " + e.toString());
         }
 
 
-        BmobApi.AsyncFunction(mActivity, parameters, funcationName, RankList.class, new GotoAsyncFunction() {
+        BmobApi.AsyncFunction(mActivity, parameters, funcationName, RankList.class, new AsyncListener() {
             @Override
             public void onSuccess(Object object) {
                 RankList rankLists = (RankList) object;
@@ -154,7 +154,7 @@ public class RankListActivity extends BaseAppCompatActivity {
 
             @Override
             public void onFailure(int code, String msg) {
-                LogUtils.logD("get rank data failure. code = " + code + " message = " + msg);
+                LogUtils.d("get rank data failure. code = " + code + " message = " + msg);
             }
         });
 

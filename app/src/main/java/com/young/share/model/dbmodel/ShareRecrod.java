@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  *
  * 分享消息的记录
- * user 为当前用户
+ * myUser 为当前用户
  *
  * Created by Nearby Yang on 2015-12-04.
  */

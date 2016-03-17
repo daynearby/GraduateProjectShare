@@ -11,7 +11,7 @@ import com.young.share.base.ItemActBarActivity;
 import com.young.share.config.Contants;
 import com.young.share.model.CommRemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
-import com.young.share.model.User;
+import com.young.share.model.MyUser;
 import com.young.share.thread.MyRunnable;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.ImageHandlerUtils;
@@ -117,7 +117,7 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
 
             @Override
             public void onFailure(int i, String s) {
-                LogUtils.logD("get new message failure. code = " + i + " message = " + s);
+                LogUtils.d("get new message failure. code = " + i + " message = " + s);
             }
         });
     }
@@ -135,20 +135,20 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
     public void bindData() {
         String url;
         boolean isLocation;
-        User user = commModel.getUser();
+        MyUser myUser = commModel.getMyUser();
 
-        if (user.getAvatar() == null) {
+        if (myUser.getAvatar() == null) {
             url = Contants.DEFAULT_AVATAR;
             isLocation = true;
         } else {
-            url = user.getAvatar();
+            url = myUser.getAvatar();
             isLocation = false;
         }
 
         ImageHandlerUtils.loadIamge(mActivity, url, avatar, isLocation);
 
-        nickname_tv.setText(user.getNickName() == null ?
-                getString(R.string.user_name_defual) : user.getNickName());
+        nickname_tv.setText(myUser.getNickName() == null ?
+                getString(R.string.user_name_defual) : myUser.getNickName());
 
         tag_tv.setText(commModel.getTag());
         content_tv.setText(commModel.getContent());
@@ -173,8 +173,8 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
         hadgo_tv.setText(comm.getVisited() == null ?
                 getString(R.string.hadgo) : String.valueOf(comm.getVisited().size()));
 
-        LocationUtils.leftDrawableWantoGO(wanto_tv, comm.getWanted(), mUser.getObjectId());
-        LocationUtils.leftDrawableVisited(hadgo_tv, comm.getVisited(), mUser.getObjectId());
+        LocationUtils.leftDrawableWantoGO(wanto_tv, comm.getWanted(), mMyUser.getObjectId());
+        LocationUtils.leftDrawableVisited(hadgo_tv, comm.getVisited(), mMyUser.getObjectId());
 
     }
 
@@ -207,9 +207,9 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
             case R.id.id_tx_wantogo://想去
 
                 getUser();
-                if (mUser != null) {
-                    LocationUtils.discountWanto(mActivity, mUser, discountMessage,
-                            UserUtils.isHadCurrentUser(commModel.getWanted(), mUser.getObjectId()),
+                if (mMyUser != null) {
+                    LocationUtils.discountWanto(mActivity, mMyUser, discountMessage,
+                            UserUtils.isHadCurrentUser(commModel.getWanted(), mMyUser.getObjectId()),
                             (TextView) v);
                     isClick = true;
                 } else {
@@ -221,10 +221,10 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
 
             case R.id.id_hadgo://去过
                 getUser();
-                if (mUser != null) {
+                if (mMyUser != null) {
 
-                    LocationUtils.discountVisit(mActivity, mUser, discountMessage,
-                            UserUtils.isHadCurrentUser(commModel.getVisited(), mUser.getObjectId()),
+                    LocationUtils.discountVisit(mActivity, mMyUser, discountMessage,
+                            UserUtils.isHadCurrentUser(commModel.getVisited(), mMyUser.getObjectId()),
                             (TextView) v);
                     isClick = true;
 
@@ -245,7 +245,7 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
      */
     private void userInfo(View v) {
 
-        PopupWinUserInfo userWindow = new PopupWinUserInfo(mActivity, commModel.getUser());
+        PopupWinUserInfo userWindow = new PopupWinUserInfo(mActivity, commModel.getMyUser());
         userWindow.onShow(v);
 
     }
@@ -254,8 +254,8 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
      * 获取当前用户
      */
     public void getUser() {
-        if (mUser == null) {
-            mUser = BmobUser.getCurrentUser(mActivity, User.class);
+        if (mMyUser == null) {
+            mMyUser = BmobUser.getCurrentUser(mActivity, MyUser.class);
         }
     }
 
