@@ -324,11 +324,11 @@ public class MainActivity extends CustomActBarActivity {
 
                 bdlbsUtils.stopLocation();
             }
-            try {
-                wait(60000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                wait(60000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
             if (times >= callbackTimes) {
                 bdlbsUtils.stopLocation();
             }
