@@ -39,6 +39,7 @@ import java.util.List;
 
 /**
  * 查看分享信息的详细信息
+ * 修改成scrollView
  * Created by Nearby Yang on 2015-11-26.
  */
 public class MessageDetail extends ItemActBarActivity implements View.OnClickListener {

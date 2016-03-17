@@ -235,13 +235,10 @@ public class DiscoverFragment extends BaseFragment {
                             }
 
                         } else {
-                            LogUtils.e("data --  --- --- " + dataList);
                             if (dataList != null && dataList.size() > 0) {
                                 dataList.clear();
                             }
-                            LogUtils.e("data --  --- --- "+dataList);
                             dataList = shareMessageList.getShareMessageHzList();
-                            LogUtils.e("data --  --- --- "+dataList);
                             //保存数据到本地数据库
 //                            saveData(dataList);
                             app.getCacheInstance().put(Contants.ACAHE_KEY_DISCOVER, (Serializable) dataList);

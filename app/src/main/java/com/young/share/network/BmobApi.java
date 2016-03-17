@@ -73,7 +73,7 @@ public class BmobApi {
                     @Override
                     public void onSuccess(Object object) {
 /*在json解析出现错误的时候，这里会显示两次*/
-                        LogUtils.i("clazz " + clazz + "返回JSON数据:" + object.toString());
+//                        LogUtils.i("clazz " + clazz + "返回JSON数据:" + object.toString());
 //                        Object obj =gson.fromJson(object.toString(), clazz);
 //                        LogUtils.i("返回JSON数据:" + obj.toString());
                         listener.onSuccess(gson.fromJson(object.toString(), clazz));
