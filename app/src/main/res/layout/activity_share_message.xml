@@ -134,6 +134,11 @@
             android:paddingRight="@dimen/paddingMic"
             android:visibility="visible" />
 
+        <com.young.share.views.MultiImageView.MultiImageView
+            android:id="@+id/miv_share_message_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/paddingMic"/>
     </LinearLayout>
 
     <include layout="@layout/content_popup_window_emotion_panel" />

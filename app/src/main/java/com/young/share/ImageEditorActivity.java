@@ -314,8 +314,8 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
 //        int intrinsicHeight = drawable.getIntrinsicHeight();
 //        int intrinsicWidth = drawable.getIntrinsicWidth();
         //通过上面的方式获取不行，获取的drawable是null
-        int intrinsicHeight = DisplayUtils.px2dp(this, imageView.getHeight());
-        int intrinsicWidth = DisplayUtils.px2dp(this, imageView.getWidth());
+        int intrinsicHeight = DisplayUtils.px2dip(this, imageView.getHeight());
+        int intrinsicWidth = DisplayUtils.px2dip(this, imageView.getWidth());
 //        计算出与屏幕的比例，用于比较以宽的比例为准还是高的比例为准，因为很多时候不是高度没充满，就是宽度没充满
         float h = DisplayUtils.getScreenHeightPixels(this) * 1.0f / intrinsicHeight;
         float w = DisplayUtils.getScreenWidthPixels(this) * 1.0f / intrinsicWidth;
@@ -346,9 +346,9 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
             }
             // 指定点的大小
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    DisplayUtils.dp2px(this, 5), DisplayUtils.dp2px(this, 5));
+                    DisplayUtils.dip2px(this, 5), DisplayUtils.dip2px(this, 5));
             // 指定点的间距
-            layoutParams.setMargins(DisplayUtils.dp2px(this, 2), 0, DisplayUtils.dp2px(this, 2), 0);
+            layoutParams.setMargins(DisplayUtils.dip2px(this, 2), 0, DisplayUtils.dip2px(this, 2), 0);
             // 添加到线性布局中
             indexLayout.addView(view, layoutParams);
             // 添加到集合中去

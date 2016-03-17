@@ -10,8 +10,8 @@ public class Comment_HZ extends BmobObject {
 
     private ShareMessage_HZ shMsgId;
     private Message_HZ messageId;
-    private User senderId;
-    private User reveicerId;
+    private MyUser senderId;
+    private MyUser reveicerId;
 
     public ShareMessage_HZ getShMsgId() {
         return shMsgId;
@@ -29,19 +29,19 @@ public class Comment_HZ extends BmobObject {
         this.messageId = messageId;
     }
 
-    public User getSenderId() {
+    public MyUser getSenderId() {
         return senderId;
     }
 
-    public void setSenderId(User senderId) {
+    public void setSenderId(MyUser senderId) {
         this.senderId = senderId;
     }
 
-    public User getReveicerId() {
+    public MyUser getReveicerId() {
         return reveicerId;
     }
 
-    public void setReveicerId(User reveicerId) {
+    public void setReveicerId(MyUser reveicerId) {
         this.reveicerId = reveicerId;
     }
 }

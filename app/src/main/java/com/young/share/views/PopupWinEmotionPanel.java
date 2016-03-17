@@ -105,7 +105,7 @@ public class PopupWinEmotionPanel extends PopupWindow implements AdapterView.OnI
         // 获取屏幕宽度
         int gvWidth = DisplayUtils.getScreenWidthPixels((Activity) ctx);
         // 表情边距
-        int spacing = DisplayUtils.dp2px(ctx, 8);
+        int spacing = DisplayUtils.dip2px(ctx, 8);
         // GridView中item的宽度
         int itemWidth = (gvWidth - spacing * 8) / 7;
         int gvHeight = itemWidth * 3 + spacing * 4;

@@ -11,7 +11,7 @@ import com.young.share.annotation.InjectView;
 import com.young.share.base.CustomActBarActivity;
 import com.young.share.config.Contants;
 import com.young.share.model.MyBmobInstallation;
-import com.young.share.model.User;
+import com.young.share.model.MyUser;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.SharePreferenceUtils;
 
@@ -90,11 +90,11 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
     /**
      * 保存当前用户在installtion表中
      *
-     * @param user
+     * @param myUser
      */
-    private void saveCurrentUser2InstalltionTable(User user) {
+    private void saveCurrentUser2InstalltionTable(MyUser myUser) {
         MyBmobInstallation installation = new MyBmobInstallation(this);
-        installation.setUser(user);
+        installation.setMyUser(myUser);
         installation.setInstallationId(BmobInstallation.getInstallationId(this));
         installation.save();
     }
@@ -102,9 +102,9 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
     /**
      * 保存当前用户与installid相关联
      *
-     * @param user
+     * @param myUser
      */
-    private void savaUserWithInstallId(final User user) {
+    private void savaUserWithInstallId(final MyUser myUser) {
         BmobQuery<MyBmobInstallation> query = new BmobQuery<>();
         query.addWhereEqualTo("installationId", BmobInstallation.getInstallationId(this));
 
@@ -116,30 +116,30 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
                 if (object.size() > 0) {//installtionid存在，进行更新
 
                     MyBmobInstallation mbi = object.get(0);
-                    mbi.setUser(user);
+                    mbi.setMyUser(myUser);
                     mbi.update(mActivity, new UpdateListener() {
 
                         @Override
                         public void onSuccess() {
-                            LogUtils.logD("bmob", "设备信息更新成功");
+                            LogUtils.d("bmob", "设备信息更新成功");
                         }
 
                         @Override
                         public void onFailure(int code, String msg) {
-                            LogUtils.logD("bmob", "设备信息更新失败:" + msg);
+                            LogUtils.d("bmob", "设备信息更新失败:" + msg);
                         }
                     });
 
                 } else {//installtionid不存在，进行保存
 
-                    saveCurrentUser2InstalltionTable(user);
+                    saveCurrentUser2InstalltionTable(myUser);
 
                 }
             }
 
             @Override
             public void onError(int code, String msg) {
-                LogUtils.logD("bmob", "查找设备信息 code = " +code +" msg = "+ msg);
+                LogUtils.d("bmob", "查找设备信息 code = " + code + " msg = " + msg);
 
             }
         });
@@ -175,7 +175,7 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
      */
     private void login() {
 
-        final User userLogin = new User();
+        final MyUser myUserLogin = new MyUser();
 
         final String userName = et_loginEmail.getText().toString();
         final String pwd = et_loginPwd.getText().toString();
@@ -183,10 +183,10 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
         if (!TextUtils.isEmpty(userName)) {
             if (!TextUtils.isEmpty(pwd)) {
 
-                userLogin.setUsername(userName);
-                userLogin.setPassword(pwd);
+                myUserLogin.setUsername(userName);
+                myUserLogin.setPassword(pwd);
 
-                userLogin.login(this, new SaveListener() {
+                myUserLogin.login(this, new SaveListener() {
                     @Override
                     public void onSuccess() {
 
@@ -195,7 +195,7 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
 
                         SVProgressHUD.showSuccessWithStatus(LoginActivity.this, getString(R.string.login_success));
 
-                        savaUserWithInstallId(userLogin);
+                        savaUserWithInstallId(myUserLogin);
 
                         mHandler.sendEmptyMessageDelayed(102, Contants.ONE_SECOND);
 
@@ -205,7 +205,7 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
                     @Override
                     public void onFailure(int i, String s) {
 
-                        LogUtils.logE(getClass().getName(), "登陆失败  code = " + i + " message = " + s);
+                        LogUtils.e(getClass().getName(), "登陆失败  code = " + i + " message = " + s);
                         switch (i) {
                             case 101:
                                 SVProgressHUD.showInfoWithStatus(LoginActivity.this, getString(R.string.account_pwd_incorrect));
@@ -230,7 +230,7 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
     }
 
 //    private void autoLogin(){
-//        userLogin = new User();
+//        userLogin = new MyUser();
 //
 //        String userName = sharePreferenceUtils.getString(Contants.SH_ACCOUNT.hashCode()+"", ACCOUNT);
 //        String pwd = sharePreferenceUtils.getString(Contants.SH_PWD.hashCode()+"", PWD);

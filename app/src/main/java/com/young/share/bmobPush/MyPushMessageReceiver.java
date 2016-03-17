@@ -18,12 +18,12 @@ public class MyPushMessageReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        LogUtils.logE("bmob", "onreceive ++++++++++++++   ");
+        LogUtils.e("bmob", "onreceive ++++++++++++++   ");
 
         if (intent.getAction().equals(PushConstants.ACTION_MESSAGE)) {
 
-            LogUtils.logE("bmob", "客户端收到推送内容：" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
-            LogUtils.ta("接受到消息了" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
+            LogUtils.e("bmob", "客户端收到推送内容：" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
+            LogUtils.ts("接受到消息了" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
 
             intent.setAction(Contants.BMOB_PUSH_MESSAGES);
             context.sendBroadcast(intent);

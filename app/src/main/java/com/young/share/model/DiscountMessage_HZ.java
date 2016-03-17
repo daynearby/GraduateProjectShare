@@ -11,7 +11,7 @@ import cn.bmob.v3.datatype.BmobGeoPoint;
  */
 public class DiscountMessage_HZ extends BmobObject {
 
-    private User userId;
+    private MyUser userId;
     private String dtContent;
     private List<String> dtImgs;
     private String dtLocation;
@@ -23,11 +23,11 @@ public class DiscountMessage_HZ extends BmobObject {
 
 
 
-    public User getUserId() {
+    public MyUser getMyUserId() {
         return userId;
     }
 
-    public void setUserId(User userId) {
+    public void setMyUserId(MyUser userId) {
         this.userId = userId;
     }
 

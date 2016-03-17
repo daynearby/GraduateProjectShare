@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
+ * listview 的通用viewholder
  * Created by yangfujing on 15/10/10.
  */
 public class ViewHolder {

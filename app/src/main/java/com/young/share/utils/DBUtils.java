@@ -1,5 +1,6 @@
 package com.young.share.utils;
 
+import com.young.share.model.MyUser;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.dbmodel.ShareMessage;
 import com.young.share.model.dbmodel.ShareRecrod;
@@ -52,7 +53,7 @@ public class DBUtils {
      */
     public static List<ShareMessage_HZ> getShareMessages() {
         ShareMessage_HZ shareMessage;
-        com.young.share.model.User user;
+        MyUser myUser;
         List<ShareMessage_HZ> dataList = new ArrayList<>();
 
         List<ShareMessage> shMsgList = DataSupport.limit(50).order("createdAt")
@@ -69,26 +70,26 @@ public class DBUtils {
             shareMessage.setShVisitedNum(Collections.singletonList(share.getShVisitedNum()));
             shareMessage.setShWantedNum(Collections.singletonList(share.getShWantedNum()));
 
-            user = new com.young.share.model.User();
+            myUser = new MyUser();
             User userId = share.getUserId();
 
 //            DataSupport.where("objectid", )
-            user.setAddress(userId.getAddress());
-            user.setQq(userId.getAvatar());
-            user.setEmail(userId.getEmail());
-            user.setObjectId(userId.getObjectId());
-            user.setAge(userId.getAge());
-            user.setMobilePhoneNumber(userId.getMobilePhoneNumber());
-            user.setGender(userId.isGender());
-            user.setNickName(userId.getNickName());
-            user.setEmailVerified(userId.isEmailVerified());
-            user.setAvatar(userId.getAvatar());
-            user.setMobilePhoneNumberVerified(userId.isMobilePhoneNumberVerified());
-            user.setUsername(userId.getUsername());
-            user.setSignture(userId.getSignture());
-            user.setSessionToken(userId.getAccessToken());
+            myUser.setAddress(userId.getAddress());
+            myUser.setQq(userId.getAvatar());
+            myUser.setEmail(userId.getEmail());
+            myUser.setObjectId(userId.getObjectId());
+            myUser.setAge(userId.getAge());
+            myUser.setMobilePhoneNumber(userId.getMobilePhoneNumber());
+            myUser.setGender(userId.isGender());
+            myUser.setNickName(userId.getNickName());
+            myUser.setEmailVerified(userId.isEmailVerified());
+            myUser.setAvatar(userId.getAvatar());
+            myUser.setMobilePhoneNumberVerified(userId.isMobilePhoneNumberVerified());
+            myUser.setUsername(userId.getUsername());
+            myUser.setSignture(userId.getSignture());
+            myUser.setSessionToken(userId.getAccessToken());
 
-            shareMessage.setUserId(user);
+            shareMessage.setMyUserId(myUser);
             dataList.add(shareMessage);
 
         }
@@ -110,7 +111,7 @@ public class DBUtils {
             return messageRec.save();
         } else {//不保存
             int result = messageRec.updateAll("shContent = ?", messageRec.getShContent());
-            LogUtils.logI("返回码 " + result);
+            LogUtils.i("返回码 " + result);
             //++++++++++++++++++返回码++++++++++++++++++++++
             return true;
         }

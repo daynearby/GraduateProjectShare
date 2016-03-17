@@ -17,15 +17,14 @@ import com.young.share.R;
 import com.young.share.adapter.DiscoverAdapter;
 import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
+import com.young.share.interfaces.AsyncListener;
+import com.young.share.interfaces.ListViewRefreshListener;
 import com.young.share.model.DiscountMessageList;
 import com.young.share.model.ShareMessageList;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.dbmodel.ShareMessage;
 import com.young.share.model.dbmodel.User;
-import com.young.share.myInterface.GotoAsyncFunction;
-import com.young.share.myInterface.ListViewRefreshListener;
 import com.young.share.network.BmobApi;
-import com.young.share.thread.MyRunnable;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DBUtils;
 import com.young.share.utils.DataFormateUtils;
@@ -87,14 +86,21 @@ public class DiscoverFragment extends BaseFragment {
         dataList = (List<ShareMessage_HZ>) app.getCacheInstance().getAsObject(Contants.ACAHE_KEY_DISCOVER);
 
         if (CommonUtils.isNetworkAvailable(context)) {//有网络
-            threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
-                @Override
-                public void running() {
+
+//            threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+//                @Override
+//                public void running() {
+//                    getDataFromRemote();
+//                }
+//            }));
+
+//
+//            threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+//                @Override
+//                public void running() {
                     getDataFromRemote();
-                }
-            }));
-
-
+//                }
+//            }));
         } else {
             SVProgressHUD.showInfoWithStatus(context,
                     getString(R.string.without_network));
@@ -136,12 +142,12 @@ public class DiscoverFragment extends BaseFragment {
                         }
 
                         swipeRefreshLayout.setRefreshing(false);
-                        LogUtils.logD("上拉刷新");
+                        LogUtils.d("上拉刷新");
                     }
 
                     @Override
                     public void pullToRefresh() {
-                        LogUtils.logD("下拉刷新");
+                        LogUtils.d("下拉刷新");
                         PUSH_TIMES = 1;
                         startRow = 0;
                         isGetMore = false;
@@ -176,7 +182,7 @@ public class DiscoverFragment extends BaseFragment {
             isFirstIn = false;
         }
 
-        if (dataList !=null && dataList.size() >0){
+        if (dataList != null && dataList.size() > 0) {
             mhandler.sendEmptyMessage(HANDLER_GET_DATA);
         }
 
@@ -191,7 +197,7 @@ public class DiscoverFragment extends BaseFragment {
 
                 break;
 //            case FIRST_GETDATA:
-//                LogUtils.logD("获取数据");
+//                LogUtils.d("获取数据");
 //                break;
             case HANDLER_GET_DATA:
                 if (dataList != null && dataList.size() > 0) {
@@ -218,17 +224,17 @@ public class DiscoverFragment extends BaseFragment {
             params.put(Contants.SKIP, String.valueOf(startRow));
         } catch (JSONException e) {
 
-            LogUtils.logD("添加 网络参数 失败 = " + e.toString());
+            LogUtils.d("添加 网络参数 失败 = " + e.toString());
         }
 
         BmobApi.AsyncFunction(context, params, BmobApi.GET_RECENTLY_SHAREMESSAGES,
-                DiscountMessageList.class, new GotoAsyncFunction() {
+                DiscountMessageList.class, new AsyncListener() {
+
                     @Override
                     public void onSuccess(Object object) {
                         ShareMessageList shareMessageList = (ShareMessageList) object;
 
-
-                        if (isGetMore) {
+                        if (isGetMore) {//上拉加载更多
                             if (shareMessageList.getShareMessageHzList().size() > 0) {
                                 dataList.addAll(shareMessageList.getShareMessageHzList());
                             } else {
@@ -236,7 +242,10 @@ public class DiscoverFragment extends BaseFragment {
                             }
 
                         } else {
-                            dataList.clear();
+                            if (dataList!=null&&dataList.size()>0){
+                                dataList.clear();
+                            }
+
                             dataList = shareMessageList.getShareMessageHzList();
                             //保存数据到本地数据库
 //                            saveData(dataList);
@@ -267,10 +276,10 @@ public class DiscoverFragment extends BaseFragment {
         for (ShareMessage_HZ share : shareList) {
 
             //分享信息
-            ShareMessage shareMessageHZ = DataFormateUtils.formateShareMessage(share);
+            ShareMessage shareMessageHZ = DataFormateUtils.formateShareMessae(share);
 
             //用户信息
-            User u = DataFormateUtils.formateUser(share.getUserId());
+            User u = DataFormateUtils.formateUser(share.getMyUserId());
 //保存
             u.save();
 

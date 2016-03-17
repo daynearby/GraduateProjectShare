@@ -17,11 +17,11 @@ import com.young.share.R;
 import com.young.share.adapter.DiscountAdapter;
 import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
-import com.young.share.model.DiscountMessage_HZ;
-import com.young.share.model.User;
+import com.young.share.interfaces.AsyncListener;
+import com.young.share.interfaces.ListViewRefreshListener;
 import com.young.share.model.DiscountMessageList;
-import com.young.share.myInterface.GotoAsyncFunction;
-import com.young.share.myInterface.ListViewRefreshListener;
+import com.young.share.model.DiscountMessage_HZ;
+import com.young.share.model.MyUser;
 import com.young.share.network.BmobApi;
 import com.young.share.thread.MyRunnable;
 import com.young.share.utils.CommonUtils;
@@ -180,11 +180,11 @@ public class DiscountFragment extends BaseFragment {
 
         } catch (JSONException e) {
 
-            LogUtils.logD("添加 网络参数 失败 = " + e.toString());
+            LogUtils.d("添加 网络参数 失败 = " + e.toString());
         }
 
         BmobApi.AsyncFunction(context, params, BmobApi.GET_RECENTLY_DICOUNT,
-                DiscountMessageList.class, new GotoAsyncFunction() {
+                DiscountMessageList.class, new AsyncListener() {
                     @Override
                     public void onSuccess(Object object) {
 
@@ -200,7 +200,9 @@ public class DiscountFragment extends BaseFragment {
                             }
 
                         } else {
-                            dataList.clear();
+                            if (dataList != null && dataList.size() > 0) {
+                                dataList.clear();
+                            }
                             dataList = disMessageList.getDiscountList();
                         }
 
@@ -210,7 +212,7 @@ public class DiscountFragment extends BaseFragment {
 
                     @Override
                     public void onFailure(int code, String msg) {
-                        LogUtils.logD("get discountMessage failure. code  = " + code + " message = " + msg);
+                        LogUtils.d("get discountMessage failure. code  = " + code + " message = " + msg);
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }
@@ -246,7 +248,7 @@ public class DiscountFragment extends BaseFragment {
      */
     private class itemClick implements AdapterView.OnItemClickListener {
 
-        private User cu = BmobUser.getCurrentUser(context, User.class);
+        private MyUser cu = BmobUser.getCurrentUser(context, MyUser.class);
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

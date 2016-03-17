@@ -132,13 +132,13 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
      * 显示用户的信息
      */
     private void getUserDatas() {
-        String name = mUser.getNickName();
-        String qq = mUser.getQq();
-        String gender = mUser.isGender() ? Contants.GENDER_MALE : Contants.GENDER_FEMALE;
-        String age = String.valueOf(mUser.getAge());
-        String email = mUser.getEmail();
-        String mobilePhoneNumber = mUser.getMobilePhoneNumber();
-        String hometown = TextUtils.isEmpty(mUser.getAddress()) ? getString(R.string.gd_hz) : mUser.getAddress();
+        String name = mMyUser.getNickName();
+        String qq = mMyUser.getQq();
+        String gender = mMyUser.isGender() ? Contants.GENDER_MALE : Contants.GENDER_FEMALE;
+        String age = String.valueOf(mMyUser.getAge());
+        String email = mMyUser.getEmail();
+        String mobilePhoneNumber = mMyUser.getMobilePhoneNumber();
+        String hometown = TextUtils.isEmpty(mMyUser.getAddress()) ? getString(R.string.gd_hz) : mMyUser.getAddress();
 
         nickname_et.setText(name);
         qq_et.setText(qq);
@@ -197,17 +197,17 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
         if (!TextUtils.isEmpty(nickname_et.getText().toString()) && nickname_et.getText().toString().length() >= Contants.NICKNAME_MIN_LENGHT) {
 
             if (nickname_et.getText().toString().length() <= Contants.NICKNAME_MAX_LENGHT) {
-//User user = new User();
+//MyUser myUser = new MyUser();
 
                 if (!TextUtils.isEmpty(mobilePhone_et.getText().toString())) {
 
                     //未验证
-                    if (!mUser.getMobilePhoneNumberVerified()) {
+                    if (!mMyUser.getMobilePhoneNumberVerified()) {
 
                         smsVerfied(mobilePhone_et.getText().toString());
 
                     } else {//已经验证。验证的手机号和当前验证的手机号不相符。则需要进行验证手机号
-                        if (!mobilePhone_et.getText().toString().equals(mUser.getMobilePhoneNumber())){
+                        if (!mobilePhone_et.getText().toString().equals(mMyUser.getMobilePhoneNumber())){
                             smsVerfied(mobilePhone_et.getText().toString());
                         }
                     }
@@ -215,8 +215,8 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
 
 
                 } else {
-                    mUser.setMobilePhoneNumber("");
-                    mUser.setMobilePhoneNumberVerified(false);
+                    mMyUser.setMobilePhoneNumber("");
+                    mMyUser.setMobilePhoneNumberVerified(false);
                     updateUserInfo();
                 }
 
@@ -231,17 +231,17 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
 
     private void updateUserInfo() {
 
-        mUser.setNickName(nickname_et.getText().toString());
-        mUser.setGender(Contants.GENDER_MALE.equals(gender_tv.getText().toString()));
-        mUser.setAge(Integer.valueOf(age_tv.getText().toString()));
-        mUser.setQq(qq_et.getText().toString());
-        mUser.setEmail(email_et.getText().toString());
-        mUser.setAddress(hometown_tv.getText().toString());
+        mMyUser.setNickName(nickname_et.getText().toString());
+        mMyUser.setGender(Contants.GENDER_MALE.equals(gender_tv.getText().toString()));
+        mMyUser.setAge(Integer.valueOf(age_tv.getText().toString()));
+        mMyUser.setQq(qq_et.getText().toString());
+        mMyUser.setEmail(email_et.getText().toString());
+        mMyUser.setAddress(hometown_tv.getText().toString());
 
-        mUser.update(this, new UpdateListener() {
+        mMyUser.update(this, new UpdateListener() {
             @Override
             public void onSuccess() {
-                LogUtils.logD("更新信息成功");
+                LogUtils.d("更新信息成功");
                 mHandler.sendEmptyMessageDelayed(101, Contants.ONE_SECOND);
 
                 SVProgressHUD.showSuccessWithStatus(mActivity, getString(R.string.update_user_info_success));
@@ -249,7 +249,7 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
 
             @Override
             public void onFailure(int i, String s) {
-                LogUtils.logD("更新失败 code = " + i + " message = " + s);
+                LogUtils.d("更新失败 code = " + i + " message = " + s);
                 SVProgressHUD.showErrorWithStatus(mActivity, getString(R.string.update_user_info_faile));
             }
         });
@@ -281,8 +281,8 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
                         SVProgressHUD.showWithStatus(mActivity, getString(R.string.updating));
 
                         // 提交用户信息
-                        mUser.setMobilePhoneNumber(mobilePhone_et.getText().toString());
-                        mUser.setEmailVerified(true);
+                        mMyUser.setMobilePhoneNumber(mobilePhone_et.getText().toString());
+                        mMyUser.setEmailVerified(true);
 
                         updateUserInfo();
 

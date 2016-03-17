@@ -99,7 +99,7 @@ public class ResetPwdActivity extends ItemActBarActivity implements View.OnClick
 
             @Override
             public void onFailure(int code, String msg) {
-                LogUtils.logD("smile", "密码修改失败：" + msg + "(" + code + ")");
+                LogUtils.d("smile", "密码修改失败：" + msg + "(" + code + ")");
                 switch (code) {
                     case OLD_PASSWORD_INCORRECT:
                         SVProgressHUD.showErrorWithStatus(mActivity, getString(R.string.orin_pwd_not_math));

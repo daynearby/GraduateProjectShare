@@ -16,8 +16,8 @@ import com.young.share.model.CommRemoteModel;
 import com.young.share.model.CommentList;
 import com.young.share.model.Comment_HZ;
 import com.young.share.model.Message_HZ;
-import com.young.share.myInterface.GotoAsyncFunction;
-import com.young.share.myInterface.ListViewRefreshListener;
+import com.young.share.interfaces.AsyncListener;
+import com.young.share.interfaces.ListViewRefreshListener;
 import com.young.share.network.BmobApi;
 import com.young.share.thread.MyRunnable;
 import com.young.share.utils.LocationUtils;
@@ -124,7 +124,7 @@ public class MessageCenterActivity extends ItemActBarActivity {
 
 
                 swipeRefresh.setRefreshing(false);
-                LogUtils.logD("上拉刷新");
+                LogUtils.d("上拉刷新");
             }
 
             @Override
@@ -204,15 +204,15 @@ public class MessageCenterActivity extends ItemActBarActivity {
         JSONObject params = new JSONObject();
 
         try {
-            params.put(Contants.PARAM_USERID, mUser.getObjectId());
+            params.put(Contants.PARAM_USERID, mMyUser.getObjectId());
             params.put(Contants.PARAM_SKIP, String.valueOf(Skip));
 
         } catch (JSONException e) {
 
-            LogUtils.logD("add params failure 　" + e.toString());
+            LogUtils.d("add params failure 　" + e.toString());
         }
 
-        BmobApi.AsyncFunction(mActivity, params, BmobApi.GET_NEW_MESSAGES, CommentList.class, new GotoAsyncFunction() {
+        BmobApi.AsyncFunction(mActivity, params, BmobApi.GET_NEW_MESSAGES, CommentList.class, new AsyncListener() {
             @Override
             public void onSuccess(Object object) {
                 CommentList commentList = (CommentList) object;
@@ -243,7 +243,7 @@ public class MessageCenterActivity extends ItemActBarActivity {
                 LocationUtils.processDialog(mActivity);
 
                 mToast(R.string.tips_loading_faile);
-                LogUtils.logD("get share messages failure. code = " + code + " message = " + msg);
+                LogUtils.d("get share messages failure. code = " + code + " message = " + msg);
 
             }
         });
@@ -321,7 +321,7 @@ public class MessageCenterActivity extends ItemActBarActivity {
 
             @Override
             public void onFailure(int i, String s) {
-                LogUtils.logD(" update message failure. code = " + i + " message = " + s);
+                LogUtils.d(" update message failure. code = " + i + " message = " + s);
             }
         });
 

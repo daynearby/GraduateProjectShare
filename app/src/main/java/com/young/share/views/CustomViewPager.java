@@ -35,9 +35,9 @@ public class CustomViewPager extends ViewPager {
         try {
             return super.onInterceptTouchEvent(ev);
         } catch (IllegalArgumentException e) {
-            LogUtils.logE("viewpager IllegalArgumentException =" + e);
+            LogUtils.e("viewpager IllegalArgumentException =" + e);
         } catch (ArrayIndexOutOfBoundsException e) {
-            LogUtils.logE("viewpager ArrayIndexOutOfBoundsException =" + e);
+            LogUtils.e("viewpager ArrayIndexOutOfBoundsException =" + e);
         }
 
         return false;

@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.PopupWindow;
 
-import com.young.share.model.User;
+import com.young.share.model.MyUser;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public abstract class BasePopupWin extends PopupWindow {
     public LayoutInflater inflater;
     public boolean selectHometown = false;
     public List<String> datas;
-    public User user;
+    public MyUser myUser;
 
     public BasePopupWin(Context context) {
         super(context);
@@ -37,9 +37,9 @@ public abstract class BasePopupWin extends PopupWindow {
 
     }
 
-    public BasePopupWin(Context context, User user) {
+    public BasePopupWin(Context context, MyUser myUser) {
         super(context);
-        this.user = user;
+        this.myUser = myUser;
         config(context);
     }
 

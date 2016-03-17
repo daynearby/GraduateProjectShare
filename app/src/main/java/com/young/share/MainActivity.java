@@ -21,7 +21,7 @@ import com.young.share.fragment.DiscountFragment;
 import com.young.share.fragment.DiscoverFragment;
 import com.young.share.fragment.RankFragment;
 import com.young.share.model.MyBmobInstallation;
-import com.young.share.model.User;
+import com.young.share.model.MyUser;
 import com.young.share.utils.BDLBSUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.XmlUtils;
@@ -36,7 +36,7 @@ import cn.bmob.push.PushConstants;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 
-// TODO: 2016-02-27 做缓存
+// TODO: 2016-02-27 做缓存,百度地图的循环调用，添加一个时间延迟，连续定位没用
 public class MainActivity extends CustomActBarActivity {
 
     private ArcMenu mArcMenu;
@@ -107,7 +107,7 @@ public class MainActivity extends CustomActBarActivity {
         settitle(R.string.discover);
         setBarVisibility(true, false);
         setCity(XmlUtils.getSelectCities(this).get(8));
-        if (mUser == null) {
+        if (mMyUser == null) {
             loginFunction();
         }
 
@@ -116,7 +116,7 @@ public class MainActivity extends CustomActBarActivity {
             @Override
             public void result(View view, String s, int position) {
 
-                LogUtils.logI("选择城市 = " + s + " position = " + position);
+                LogUtils.i("选择城市 = " + s + " position = " + position);
             }
         });
 
@@ -320,11 +320,15 @@ public class MainActivity extends CustomActBarActivity {
                 intents.putExtra(BUNDLE_BROADCAST, bundle);
                 sendBroadcast(intents);
 
-//                LogUtils.logI("定位成功 定位信息 发送广播 ");
+//                LogUtils.i("定位成功 定位信息 发送广播 ");
 
                 bdlbsUtils.stopLocation();
             }
-
+//            try {
+//                wait(60000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
             if (times >= callbackTimes) {
                 bdlbsUtils.stopLocation();
             }
@@ -341,12 +345,12 @@ public class MainActivity extends CustomActBarActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            LogUtils.logD("Intent getAction = " + intent.getAction());
+            LogUtils.d("Intent getAction = " + intent.getAction());
 
             switch (intent.getAction()) {
                 case Contants.BMOB_PUSH_MESSAGES://"Bmob  信息
 
-                    LogUtils.logE("Bmob 收到信息" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
+                    LogUtils.e("Bmob 收到信息" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
                     initMessagesIcon(true);
 
 
@@ -363,7 +367,7 @@ public class MainActivity extends CustomActBarActivity {
 
                 case Contants.BORDCAST_REQUEST_REFRESH://需要进行刷新
                     pagerAdapter.refreshUI(intent.getIntExtra(Contants.REFRESH_TYPE, 0));
-                    LogUtils.logD("get refresh broadcast code = " + intent.getIntExtra(Contants.REFRESH_TYPE, 0));
+                    LogUtils.d("get refresh broadcast code = " + intent.getIntExtra(Contants.REFRESH_TYPE, 0));
                     break;
 
 
@@ -406,14 +410,14 @@ public class MainActivity extends CustomActBarActivity {
 
         @Override
         public void onClick(View view, int pos) {
-//            LogUtils.logI("view = "+view+" position = "+pos);
+//            LogUtils.i("view = "+view+" position = "+pos);
             itemIm = (ImageView) view;
-            mUser = BmobUser.getCurrentUser(mActivity, User.class);
+            mMyUser = BmobUser.getCurrentUser(mActivity, MyUser.class);
 
             switch (pos) {
                 case 1://分享信息
 
-                    if (mUser != null) {
+                    if (mMyUser != null) {
 
                         Bundle bundle = new Bundle();
                         bundle.putBoolean(Contants.BUNDLE_CURRENT_IS_DISCOUNT, isDiscount);
@@ -429,7 +433,7 @@ public class MainActivity extends CustomActBarActivity {
                     break;
                 case 2://消息中心
 
-                    if (mUser != null) {
+                    if (mMyUser != null) {
                         //注册广播接收者
                         registerBoradcastReceiverClearMessages();
                         mStartActivity(MessageCenterActivity.class);
@@ -442,7 +446,7 @@ public class MainActivity extends CustomActBarActivity {
                     break;
                 case 3://个人中心
 
-                    if (mUser != null) {
+                    if (mMyUser != null) {
 
                         mStartActivity(PersonalCenterActivity.class);
 
@@ -464,9 +468,9 @@ public class MainActivity extends CustomActBarActivity {
      * 将installationId与user绑定
      */
     private void savaUserWithInsId() {
-        if (mUser != null) {
+        if (mMyUser != null) {
             MyBmobInstallation myBmobInstallation = new MyBmobInstallation(this);
-            myBmobInstallation.setUser(mUser);
+            myBmobInstallation.setMyUser(mMyUser);
             myBmobInstallation.setInstallationId(MyBmobInstallation.getInstallationId(this));
             myBmobInstallation.save(this);
         }
@@ -475,7 +479,7 @@ public class MainActivity extends CustomActBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        mUser = BmobUser.getCurrentUser(mActivity, User.class);
+//        mMyUser = BmobUser.getCurrentUser(mActivity, MyUser.class);
 //
 //        savaUserWithInsId();
     }

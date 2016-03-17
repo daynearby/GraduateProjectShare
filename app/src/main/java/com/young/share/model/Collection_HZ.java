@@ -8,25 +8,25 @@ import cn.bmob.v3.BmobObject;
  */
 public class Collection_HZ extends BmobObject {
 
-    private User shUserId;
-    private User collUserId;
+    private MyUser shUserId;
+    private MyUser collUserId;
     private ShareMessage_HZ shMsgId;
     private DiscountMessage_HZ dtMsgId;
 
-    public User getShUserId() {
+    public MyUser getShUserId() {
         return shUserId;
     }
 
-    public void setShUserId(User shUserId) {
-        this.shUserId = shUserId;
+    public void setShUserId(MyUser shMyUserId) {
+        this.shUserId = shMyUserId;
     }
 
-    public User getCollUserId() {
+    public MyUser getCollUserId() {
         return collUserId;
     }
 
-    public void setCollUserId(User collUserId) {
-        this.collUserId = collUserId;
+    public void setCollUserId(MyUser collMyUserId) {
+        this.collUserId = collMyUserId;
     }
 
     public ShareMessage_HZ getShMsgId() {

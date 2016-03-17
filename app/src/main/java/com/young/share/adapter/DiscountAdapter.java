@@ -2,6 +2,7 @@ package com.young.share.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,24 +14,28 @@ import android.widget.TextView;
 import com.klinker.android.link_builder.Link;
 import com.klinker.android.link_builder.LinkBuilder;
 import com.young.share.BaiduMapActivity;
+import com.young.share.BigPicActivity;
+import com.young.share.R;
+import com.young.share.RankListActivity;
 import com.young.share.adapter.baseAdapter.CommAdapter;
 import com.young.share.adapter.baseAdapter.ViewHolder;
 import com.young.share.config.Contants;
 import com.young.share.model.DiscountMessage_HZ;
-import com.young.share.model.User;
-import com.young.share.R;
-import com.young.share.RankListActivity;
+import com.young.share.model.MyUser;
+import com.young.share.model.PictureInfo;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.DisplayUtils;
+import com.young.share.utils.EvaluateUtil;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LocationUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.utils.UserUtils;
 import com.young.share.views.Dialog4Tips;
+import com.young.share.views.MultiImageView.MultiImageView;
 import com.young.share.views.PopupWinUserInfo;
-import com.young.share.views.WrapHightGridview;
 
+import java.io.Serializable;
 import java.util.List;
 
 import cn.bmob.v3.datatype.BmobGeoPoint;
@@ -48,28 +53,26 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
     }
 
     @Override
-    public void convert(ViewHolder holder, DiscountMessage_HZ discountMessage_hz, int position) {
-        User user = discountMessage_hz.getUserId();
+    public void convert(ViewHolder holder, final DiscountMessage_HZ discountMessage_hz, int position) {
+        MyUser myUser = discountMessage_hz.getMyUserId();
 
         ImageView avatar = holder.getView(R.id.id_im_userH);//用户头像
         TextView nickname_tv = holder.getView(R.id.id_userName);//昵称
         TextView tag_tv = holder.getView(R.id.id_tx_tab);//标签
         TextView content_tv = holder.getView(R.id.id_tx_share_content);//分享的文本内容
         TextView location = holder.getView(R.id.tv_item_share_main_location);//分享信息的位置
-        WrapHightGridview myGridview = holder.getView(R.id.id_gv_shareimg);
+        MultiImageView multiImageView = holder.getView(R.id.miv_share_iamges);
+//        WrapHightGridview myGridview = holder.getView(R.id.id_gv_shareimg);
         TextView wanto_tv = holder.getView(R.id.id_tx_wantogo);//想去数量
         TextView hadgo_tv = holder.getView(R.id.id_hadgo);//去过数量
         RelativeLayout tagLayout = holder.getView(R.id.rl_head_tag_layout);
-        ViewGroup.LayoutParams lp = myGridview.getLayoutParams();
+        ViewGroup.LayoutParams lp = multiImageView.getLayoutParams();
         lp.width = DisplayUtils.getScreenWidthPixels((Activity) ctx) / 3 * 2;//设置宽度
-        myGridview.setLayoutParams(lp);
 
         holder.getView(R.id.id_tx_comment).setVisibility(View.GONE);//评论数量
 
         ((TextView) holder.getView(R.id.tv_item_share_main_created_at)).setText(DateUtils.convertDate2Str(discountMessage_hz.getCreatedAt()));//创建时间
 
-        GridviewAdapter gridViewAdapter = new GridviewAdapter((Activity) ctx, myGridview, false);
-        myGridview.setAdapter(gridViewAdapter);
 
 //************************************************初始化数据********************************************
 
@@ -81,7 +84,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         } else {
             content_tv.setVisibility(View.GONE);
         }
-        nickname_tv.setText(TextUtils.isEmpty(user.getNickName()) ? ctx.getString(R.string.user_name_defual) : user.getNickName());
+        nickname_tv.setText(TextUtils.isEmpty(myUser.getNickName()) ? ctx.getString(R.string.user_name_defual) : myUser.getNickName());
         //地理信息的显示。显示了可以点击查看详细
         if (!TextUtils.isEmpty(discountMessage_hz.getDtLocation())) {
             location.setVisibility(View.VISIBLE);
@@ -91,7 +94,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
                     discountMessage_hz.getGeographic())).build();
         }
         ImageHandlerUtils.loadIamgeThumbnail(ctx,
-                TextUtils.isEmpty(user.getAvatar()) ? Contants.DEFAULT_AVATAR : user.getAvatar(), avatar);
+                TextUtils.isEmpty(myUser.getAvatar()) ? Contants.DEFAULT_AVATAR : myUser.getAvatar(), avatar);
         if (TextUtils.isEmpty(discountMessage_hz.getDtTag())) {
             tagLayout.setVisibility(View.INVISIBLE);
         } else {
@@ -125,11 +128,28 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
 
         //图片显示
-        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx,discountMessage_hz.getDtImgs()));
+//        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx,discountMessage_hz.getDtImgs()));
+        multiImageView.setList(DataFormateUtils.thumbnailList(ctx, discountMessage_hz.getDtImgs()));
+        multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(ctx, discountMessage_hz.getDtImgs());
 
+                EvaluateUtil.setupCoords(ctx, (ImageView) view, pictureInfoList, position);
+                Intent intent = new Intent(ctx, BigPicActivity.class);
+                Bundle bundle = new Bundle();
+
+                bundle.putSerializable(Contants.INTENT_IMAGE_INFO_LIST, (Serializable) pictureInfoList);
+                intent.putExtras(bundle);
+                intent.putExtra(Contants.INTENT_CURRENT_ITEM, position);
+
+                ctx.startActivity(intent);
+                ((Activity) ctx).overridePendingTransition(0, 0);
+            }
+        });
 //添加监听事件
-        nickname_tv.setOnClickListener(new click(user));
-        avatar.setOnClickListener(new click(user));
+        nickname_tv.setOnClickListener(new click(myUser));
+        avatar.setOnClickListener(new click(myUser));
         wanto_tv.setOnClickListener(new click(discountMessage_hz));
         hadgo_tv.setOnClickListener(new click(discountMessage_hz));
         tag_tv.setOnClickListener(new click(discountMessage_hz.getDtTag()));
@@ -183,7 +203,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
             switch (v.getId()) {
 
                 case R.id.id_im_userH://用户资料
-                    User u = (User) o;
+                    MyUser u = (MyUser) o;
                     userInfo = new PopupWinUserInfo(ctx, u);
                     userInfo.onShow(v);
 //                    LogUtils.logD("用户资料 = " + u.toString());
@@ -191,7 +211,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
                 case R.id.id_userName:
 
-                    u = (User) o;
+                    u = (MyUser) o;
                     userInfo = new PopupWinUserInfo(ctx, u);
                     userInfo.onShow(v);
                     break;

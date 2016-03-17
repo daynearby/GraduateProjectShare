@@ -16,8 +16,8 @@ import com.young.share.model.CollectionList;
 import com.young.share.model.Collection_HZ;
 import com.young.share.model.ShareMessageList;
 import com.young.share.model.ShareMessage_HZ;
-import com.young.share.myInterface.GotoAsyncFunction;
-import com.young.share.myInterface.ListViewRefreshListener;
+import com.young.share.interfaces.AsyncListener;
+import com.young.share.interfaces.ListViewRefreshListener;
 import com.young.share.network.BmobApi;
 import com.young.share.thread.MyRunnable;
 import com.young.share.utils.LocationUtils;
@@ -129,7 +129,7 @@ public class RecordCommActivity extends ItemActBarActivity {
 
 
                 swipeRefresh.setRefreshing(false);
-                LogUtils.logD("上拉刷新");
+                LogUtils.d("上拉刷新");
 
             }
 
@@ -220,13 +220,13 @@ public class RecordCommActivity extends ItemActBarActivity {
         JSONObject params = new JSONObject();
 
         try {
-            params.put(Contants.PARAM_USERID, mUser.getObjectId());
+            params.put(Contants.PARAM_USERID, mMyUser.getObjectId());
             params.put(Contants.PARAM_SKIP, String.valueOf(Skip));
         } catch (JSONException e) {
-            LogUtils.logD("add params failure 　" + e.toString());
+            LogUtils.d("add params failure 　" + e.toString());
         }
 
-        BmobApi.AsyncFunction(mActivity, params, BmobApi.GET_SHARE_RECROD, ShareMessageList.class, new GotoAsyncFunction() {
+        BmobApi.AsyncFunction(mActivity, params, BmobApi.GET_SHARE_RECROD, ShareMessageList.class, new AsyncListener() {
             @Override
             public void onSuccess(Object object) {
                 ShareMessageList sharemessageList = (ShareMessageList) object;
@@ -254,7 +254,7 @@ public class RecordCommActivity extends ItemActBarActivity {
                 LocationUtils.processDialog(mActivity);
 
                 mToast(R.string.tips_loading_faile);
-                LogUtils.logD("get share messages failure. code = " + code + " message = " + msg);
+                LogUtils.d("get share messages failure. code = " + code + " message = " + msg);
 
             }
         });
@@ -269,13 +269,13 @@ public class RecordCommActivity extends ItemActBarActivity {
         JSONObject params = new JSONObject();
 
         try {
-            params.put(Contants.PARAM_USERID, mUser.getObjectId());
+            params.put(Contants.PARAM_USERID, mMyUser.getObjectId());
             params.put(Contants.PARAM_SKIP, String.valueOf(Skip));
         } catch (JSONException e) {
-            LogUtils.logD("add params failure 　" + e.toString());
+            LogUtils.d("add params failure 　" + e.toString());
         }
 
-        BmobApi.AsyncFunction(mActivity, params, BmobApi.GET_RECOLLECTION_RECORD, CollectionList.class, new GotoAsyncFunction() {
+        BmobApi.AsyncFunction(mActivity, params, BmobApi.GET_RECOLLECTION_RECORD, CollectionList.class, new AsyncListener() {
             @Override
             public void onSuccess(Object object) {
                 CollectionList collectionList = (CollectionList) object;
@@ -302,7 +302,7 @@ public class RecordCommActivity extends ItemActBarActivity {
                 //提示框处理
                 LocationUtils.processDialog(mActivity);
                 mToast(R.string.tips_loading_faile);
-                LogUtils.logD("get share messages failure. code = " + code + " message = " + msg);
+                LogUtils.d("get share messages failure. code = " + code + " message = " + msg);
 
             }
         });

@@ -188,7 +188,7 @@ public class GridviewAdapter extends BaseAdapter {
 //        y方向的第几个
         int yn = position / 3 + 1;
 //        x方向的总间距
-        int h = (xn - 1) * DisplayUtils.dp2px(mActivity, 4);
+        int h = (xn - 1) * DisplayUtils.dip2px(mActivity, 4);
 //        y方向的总间距
         int v = h;
 //        图片宽高
@@ -234,14 +234,8 @@ public class GridviewAdapter extends BaseAdapter {
 
                 case R.id.im_gridview_item_dele://删除按钮
 
-//                    LogUtils.logE("点击删除图片按钮 position = " + _postion);
                     data.remove(pos);
 
-//                    if (data.size() == Contants.IMAGENUMBER-1) {
-//                        if (!data.get(Contants.IMAGENUMBER - 2).equals(Contants.LAST_ADD_IMG)) {
-//                            data.add(Contants.LAST_ADD_IMG);
-//                        }
-//                    }
                     notifyDataSetChanged();
 
                     break;

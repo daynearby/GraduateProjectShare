@@ -13,7 +13,7 @@ import cn.bmob.v3.datatype.BmobGeoPoint;
  */
 public class ShareMessage_HZ extends BmobObject{
 
-    private User userId;
+    private MyUser userId;
     private String shContent;
     private List<String> shImgs;
     private String shLocation;
@@ -23,11 +23,11 @@ public class ShareMessage_HZ extends BmobObject{
     private List<String> shVisitedNum;
     private Integer shCommNum;
 
-    public User getUserId() {
+    public MyUser getMyUserId() {
         return userId;
     }
 
-    public void setUserId(User userId) {
+    public void setMyUserId(MyUser userId) {
         this.userId = userId;
     }
 

@@ -48,18 +48,18 @@ public class CommonUtils {
 //
 //        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 //            //外置内存卡存在
-//            File share = new File(Environment.getExternalStorageDirectory(), "share/user/icon");
+//            File share = new File(Environment.getExternalStorageDirectory(), "share/myUser/icon");
 //            share.mkdirs();
 //
-//            filepath = new File(Environment.getExternalStorageDirectory(), "share/user/icon/user");
+//            filepath = new File(Environment.getExternalStorageDirectory(), "share/myUser/icon/myUser");
 //
 //        } else {
 //            //外置内存卡不存在
 //
-//            File share = new File(this.getCacheDir(), "/user/icon");
+//            File share = new File(this.getCacheDir(), "/myUser/icon");
 //            share.mkdirs();
 //
-//            filepath = new File(this.getCacheDir(), "user/icon/user");
+//            filepath = new File(this.getCacheDir(), "myUser/icon/myUser");
 //
 //        }
 

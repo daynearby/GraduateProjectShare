@@ -16,7 +16,7 @@ import com.bmob.btp.callback.UploadListener;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.CustomActBarActivity;
 import com.young.share.config.Contants;
-import com.young.share.model.User;
+import com.young.share.model.MyUser;
 import com.young.share.utils.BDLBSUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.StringUtils;
@@ -97,7 +97,7 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
         String email;
         String pwd;
         String config_pwd;
-        User userRegister = new User();
+        MyUser myUserRegister = new MyUser();
 
         switch (v.getId()) {
             case R.id.tv_register_btn:
@@ -121,13 +121,13 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
 
                                     SVProgressHUD.show(this);
                                     //随机字符串
-                                    userRegister.setNickName(StringUtils.getRanDom());
-                                    userRegister.setEmail(email);
-                                    userRegister.setPassword(pwd);
-                                    userRegister.setAddress(province + " " + city + " " + district);
-                                    userRegister.setUsername(email.substring(0, email.indexOf("@")));
+                                    myUserRegister.setNickName(StringUtils.getRanDom());
+                                    myUserRegister.setEmail(email);
+                                    myUserRegister.setPassword(pwd);
+                                    myUserRegister.setAddress(province + " " + city + " " + district);
+                                    myUserRegister.setUsername(email.substring(0, email.indexOf("@")));
 
-                                    userRegister.signUp(RegisterActivity.this, new SaveListener() {
+                                    myUserRegister.signUp(RegisterActivity.this, new SaveListener() {
                                         @Override
                                         public void onSuccess() {
 
@@ -142,7 +142,7 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
                                             if (i == 202) {
                                                 SVProgressHUD.showInfoWithStatus(RegisterActivity.this, getString(R.string.user_had_register), SVProgressHUD.SVProgressHUDMaskType.Gradient);
                                             }
-                                            LogUtils.logE(getClass().getName(), "注册失败  code = " + i + " message = " + s);
+                                            LogUtils.e(getClass().getName(), "注册失败  code = " + i + " message = " + s);
                                         }
                                     });
 
@@ -181,20 +181,20 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
     }
 
 
-    private void uploadAvatarAndRegisrter(final User user) {
+    private void uploadAvatarAndRegisrter(final MyUser myUser) {
 
         String filePath = "";
         BTPFileResponse response = BmobProFile.getInstance(this).upload(filePath, new UploadListener() {
 
             @Override
             public void onSuccess(String fileName, String url, BmobFile file) {
-                LogUtils.logI("bmob", "文件上传成功：" + fileName + ",可访问的文件地址：" + file.getUrl());
+                LogUtils.i("bmob", "文件上传成功：" + fileName + ",可访问的文件地址：" + file.getUrl());
                 // fileName ：文件名（带后缀），这个文件名是唯一的，开发者需要记录下该文件名，方便后续下载或者进行缩略图的处理
                 // url        ：文件地址
                 // file        :BmobFile文件类型，`V3.4.1版本`开始提供，用于兼容新旧文件服务。
 //                注：若上传的是图片，url地址并不能直接在浏览器查看（会出现404错误），需要经过`URL签名`得到真正的可访问的URL地址,当然，`V3.4.1`的版本可直接从'file.getUrl()'中获得可访问的文件地址。
 
-                user.setAvatar(url);
+                myUser.setAvatar(url);
 
 
             }
@@ -202,12 +202,12 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
             @Override
             public void onProgress(int progress) {
 
-                LogUtils.logI("bmob", "onProgress :" + progress);
+                LogUtils.i("bmob", "onProgress :" + progress);
             }
 
             @Override
             public void onError(int statuscode, String errormsg) {
-                LogUtils.logI("bmob", "文件上传失败：" + errormsg);
+                LogUtils.i("bmob", "文件上传失败：" + errormsg);
             }
         });
     }

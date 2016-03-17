@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.young.share.base.BasePopupWin;
 import com.young.share.config.Contants;
-import com.young.share.model.User;
+import com.young.share.model.MyUser;
 import com.young.share.R;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.ImageHandlerUtils;
@@ -35,8 +35,8 @@ public class PopupWinUserInfo extends BasePopupWin {
     private LinearLayout hometown_layout;
 
 
-    public PopupWinUserInfo(Context context, User user) {
-        super(context, user);
+    public PopupWinUserInfo(Context context, MyUser myUser) {
+        super(context, myUser);
 
 
     }
@@ -91,41 +91,41 @@ public class PopupWinUserInfo extends BasePopupWin {
         boolean isLoaction;
         String url;
 
-        if (TextUtils.isEmpty(user.getAvatar())) {
+        if (TextUtils.isEmpty(myUser.getAvatar())) {
             url = Contants.DEFAULT_AVATAR;
             isLoaction = true;
         } else {
-            url = user.getAvatar();
+            url = myUser.getAvatar();
             isLoaction = false;
         }
 
         ImageHandlerUtils.loadIamge(context, url, avatar, isLoaction);
 
-        nickname.setText(user.getNickName() == null ?
-                context.getText(R.string.user_name_defual) : user.getNickName());
+        nickname.setText(myUser.getNickName() == null ?
+                context.getText(R.string.user_name_defual) : myUser.getNickName());
 
-        signture.setText(user.getSignture() == null ?
-                context.getText(R.string.user_info_hint_enjoy_life) : user.getSignture());
+        signture.setText(myUser.getSignture() == null ?
+                context.getText(R.string.user_info_hint_enjoy_life) : myUser.getSignture());
 
-        int genderId = user.isGender() ? R.drawable.icon_male : R.drawable.icon_female;
+        int genderId = myUser.isGender() ? R.drawable.icon_male : R.drawable.icon_female;
 
         nickname.setCompoundDrawablesWithIntrinsicBounds(0, 0, genderId, 0);
 
-        if (!TextUtils.isEmpty(user.getQq())) {
-            qq.setText(user.getQq());
+        if (!TextUtils.isEmpty(myUser.getQq())) {
+            qq.setText(myUser.getQq());
             qq_layout.setVisibility(View.VISIBLE);
         } else {
             qq_layout.setVisibility(View.GONE);
         }
-        if (!TextUtils.isEmpty(user.getEmail())) {
-            email.setText(user.getEmail());
+        if (!TextUtils.isEmpty(myUser.getEmail())) {
+            email.setText(myUser.getEmail());
             email_layout.setVisibility(View.VISIBLE);
         } else {
             email_layout.setVisibility(View.GONE);
         }
 
-        if (!TextUtils.isEmpty(user.getAddress())) {
-            hometown.setText(user.getAddress());
+        if (!TextUtils.isEmpty(myUser.getAddress())) {
+            hometown.setText(myUser.getAddress());
             hometown_layout.setVisibility(View.VISIBLE);
         } else {
             hometown_layout.setVisibility(View.GONE);

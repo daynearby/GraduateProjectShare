@@ -1,26 +1,34 @@
 package com.young.share;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.young.share.adapter.GridviewAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.ItemActBarActivity;
 import com.young.share.config.Contants;
 import com.young.share.model.CommRemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
-import com.young.share.model.User;
+import com.young.share.model.MyUser;
+import com.young.share.model.PictureInfo;
 import com.young.share.thread.MyRunnable;
 import com.young.share.utils.DataFormateUtils;
+import com.young.share.utils.DisplayUtils;
+import com.young.share.utils.EvaluateUtil;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LocationUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.UserUtils;
 import com.young.share.views.Dialog4Tips;
+import com.young.share.views.MultiImageView.MultiImageView;
 import com.young.share.views.PopupWinUserInfo;
-import com.young.share.views.WrapHightGridview;
+
+import java.io.Serializable;
+import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -42,8 +50,10 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
     private TextView tag_tv;//标签
     @InjectView(R.id.id_tx_share_content)
     private TextView content_tv;//分享的文本内容
-    @InjectView(R.id.id_gv_shareimg)
-    private WrapHightGridview myGridview;
+//    @InjectView(R.id.id_gv_shareimg)
+//    private WrapHightGridview myGridview;
+    @InjectView(R.id.miv_share_iamges)
+    private MultiImageView multiImageView;
     @InjectView(R.id.id_tx_wantogo)
     private TextView wanto_tv;//想去数量
     @InjectView(R.id.id_hadgo)
@@ -117,7 +127,7 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
 
             @Override
             public void onFailure(int i, String s) {
-                LogUtils.logD("get new message failure. code = " + i + " message = " + s);
+                LogUtils.d("get new message failure. code = " + i + " message = " + s);
             }
         });
     }
@@ -135,31 +145,50 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
     public void bindData() {
         String url;
         boolean isLocation;
-        User user = commModel.getUser();
+        MyUser myUser = commModel.getMyUser();
 
-        if (user.getAvatar() == null) {
+        if (myUser.getAvatar() == null) {
             url = Contants.DEFAULT_AVATAR;
             isLocation = true;
         } else {
-            url = user.getAvatar();
+            url = myUser.getAvatar();
             isLocation = false;
         }
 
         ImageHandlerUtils.loadIamge(mActivity, url, avatar, isLocation);
 
-        nickname_tv.setText(user.getNickName() == null ?
-                getString(R.string.user_name_defual) : user.getNickName());
+        nickname_tv.setText(myUser.getNickName() == null ?
+                getString(R.string.user_name_defual) : myUser.getNickName());
 
         tag_tv.setText(commModel.getTag());
         content_tv.setText(commModel.getContent());
         createdAt.setText(commModel.getMcreatedAt());
         initBottomBar(commModel);
 
-        GridviewAdapter gridViewAdapter = new GridviewAdapter(mActivity, myGridview, false);
-        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(this,commModel.getImages()));
+//        GridviewAdapter gridViewAdapter = new GridviewAdapter(mActivity, myGridview, false);
+//        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(this,commModel.getImages()));
+//
+//        myGridview.setAdapter(gridViewAdapter);
+        ViewGroup.LayoutParams lp = multiImageView.getLayoutParams();
+        lp.width = DisplayUtils.getScreenWidthPixels(mActivity) / 3 * 2;//设置宽度
+        multiImageView.setList(DataFormateUtils.thumbnailList(this, commModel.getImages()));
+        multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(mActivity, commModel.getImages());
 
-        myGridview.setAdapter(gridViewAdapter);
+                EvaluateUtil.setupCoords(mActivity, (ImageView) view, pictureInfoList, position);
+                Intent intent = new Intent(mActivity, BigPicActivity.class);
+                Bundle bundle = new Bundle();
 
+                bundle.putSerializable(Contants.INTENT_IMAGE_INFO_LIST, (Serializable) pictureInfoList);
+                intent.putExtras(bundle);
+                intent.putExtra(Contants.INTENT_CURRENT_ITEM, position);
+
+                startActivity(intent);
+               overridePendingTransition(0, 0);
+            }
+        });
     }
 
     /**
@@ -173,8 +202,8 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
         hadgo_tv.setText(comm.getVisited() == null ?
                 getString(R.string.hadgo) : String.valueOf(comm.getVisited().size()));
 
-        LocationUtils.leftDrawableWantoGO(wanto_tv, comm.getWanted(), mUser.getObjectId());
-        LocationUtils.leftDrawableVisited(hadgo_tv, comm.getVisited(), mUser.getObjectId());
+        LocationUtils.leftDrawableWantoGO(wanto_tv, comm.getWanted(), mMyUser.getObjectId());
+        LocationUtils.leftDrawableVisited(hadgo_tv, comm.getVisited(), mMyUser.getObjectId());
 
     }
 
@@ -207,9 +236,9 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
             case R.id.id_tx_wantogo://想去
 
                 getUser();
-                if (mUser != null) {
-                    LocationUtils.discountWanto(mActivity, mUser, discountMessage,
-                            UserUtils.isHadCurrentUser(commModel.getWanted(), mUser.getObjectId()),
+                if (mMyUser != null) {
+                    LocationUtils.discountWanto(mActivity, mMyUser, discountMessage,
+                            UserUtils.isHadCurrentUser(commModel.getWanted(), mMyUser.getObjectId()),
                             (TextView) v);
                     isClick = true;
                 } else {
@@ -221,10 +250,10 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
 
             case R.id.id_hadgo://去过
                 getUser();
-                if (mUser != null) {
+                if (mMyUser != null) {
 
-                    LocationUtils.discountVisit(mActivity, mUser, discountMessage,
-                            UserUtils.isHadCurrentUser(commModel.getVisited(), mUser.getObjectId()),
+                    LocationUtils.discountVisit(mActivity, mMyUser, discountMessage,
+                            UserUtils.isHadCurrentUser(commModel.getVisited(), mMyUser.getObjectId()),
                             (TextView) v);
                     isClick = true;
 
@@ -245,7 +274,7 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
      */
     private void userInfo(View v) {
 
-        PopupWinUserInfo userWindow = new PopupWinUserInfo(mActivity, commModel.getUser());
+        PopupWinUserInfo userWindow = new PopupWinUserInfo(mActivity, commModel.getMyUser());
         userWindow.onShow(v);
 
     }
@@ -254,8 +283,8 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
      * 获取当前用户
      */
     public void getUser() {
-        if (mUser == null) {
-            mUser = BmobUser.getCurrentUser(mActivity, User.class);
+        if (mMyUser == null) {
+            mMyUser = BmobUser.getCurrentUser(mActivity, MyUser.class);
         }
     }
 
