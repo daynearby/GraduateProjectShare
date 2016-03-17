@@ -22,7 +22,42 @@ import java.util.List;
  */
 public class DataFormateUtils {
 
+    /**
+     * 将只是图片地址的list转化成pictureInfo的list
+     * 处理图片地址,添加缩略图地址与高清大图地址
+     *
+     * @param context
+     * @param list
+     * @return 图片缩率图与高清大图的链表
+     */
+    public static List<PictureInfo> formate2PictureInfo(Context context, List<String> list) {
 
+        List<PictureInfo> pictureInfoList = new ArrayList<>();
+        if (list != null) {
+            for (String url : list) {
+                PictureInfo pictureInfo = new PictureInfo(NetworkUtils.getRealUrl(context, url, false), NetworkUtils.getRealUrl(context, url));
+                pictureInfoList.add(pictureInfo);
+            }
+        }
+        return pictureInfoList;
+    }
+
+    /**
+     * 批量将网址转化为缩略图地址
+     * bmob中需要使用
+     *
+     * @param context
+     * @param list
+     * @return
+     */
+    public static List<String> thumbnailList(Context context, List<String> list) {
+        List<String> urlList = new ArrayList<>();
+        for (String thumbnailUrl : list) {
+            urlList.add(NetworkUtils.getRealUrl(context, thumbnailUrl));
+            LogUtils.d(" 真实的url = " + NetworkUtils.getRealUrl(context, thumbnailUrl));
+        }
+        return urlList;
+    }
 
 
     /**

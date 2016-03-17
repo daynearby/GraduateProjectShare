@@ -188,7 +188,7 @@ public class GridviewAdapter extends BaseAdapter {
 //        y方向的第几个
         int yn = position / 3 + 1;
 //        x方向的总间距
-        int h = (xn - 1) * DisplayUtils.dp2px(mActivity, 4);
+        int h = (xn - 1) * DisplayUtils.dip2px(mActivity, 4);
 //        y方向的总间距
         int v = h;
 //        图片宽高

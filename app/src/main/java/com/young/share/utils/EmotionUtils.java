@@ -46,7 +46,7 @@ public class EmotionUtils implements Serializable {
 		// 获取屏幕宽度
 		int gvWidth = DisplayUtils.getScreenWidthPixels(mActivity);
 		// 表情边距
-		int spacing = DisplayUtils.dp2px(mActivity, 8);
+		int spacing = DisplayUtils.dip2px(mActivity, 8);
 		// GridView中item的宽度
 		int itemWidth = (gvWidth - spacing * 8) / 7;
 		int gvHeight = itemWidth * 3 + spacing * 4;

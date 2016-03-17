@@ -66,11 +66,11 @@ public class CitySelectPopupWin extends PopupWinListView {
     public void onShow(View v) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             int offsetPx = (DisplayUtils.getScreenWidthPixels((Activity) ctx) - v.getWidth()) / 2;
-            int offsetPx2dp = DisplayUtils.px2dp(ctx, offsetPx);
+            int offsetPx2dp = DisplayUtils.px2dip(ctx, offsetPx);
             showAsDropDown(v, -offsetPx2dp, 0, Gravity.TOP);
         } else {
 
-            int widthDp = DisplayUtils.px2dp(ctx, v.getWidth()) / 2;
+            int widthDp = DisplayUtils.px2dip(ctx, v.getWidth()) / 2;
             showAtLocation(v, Gravity.TOP, -widthDp, 0);
         }
 

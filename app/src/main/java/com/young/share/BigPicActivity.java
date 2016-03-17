@@ -294,9 +294,9 @@ public class BigPicActivity extends BaseAppCompatActivity implements ViewTreeObs
             }
             // 指定点的大小
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    DisplayUtils.dp2px(this, 5), DisplayUtils.dp2px(this, 5));
+                    DisplayUtils.dip2px(this, 5), DisplayUtils.dip2px(this, 5));
             // 指定点的间距
-            layoutParams.setMargins(DisplayUtils.dp2px(this, 2), 0, DisplayUtils.dp2px(this, 2), 0);
+            layoutParams.setMargins(DisplayUtils.dip2px(this, 2), 0, DisplayUtils.dip2px(this, 2), 0);
             // 添加到线性布局中
             indexLayout.addView(view, layoutParams);
             // 添加到集合中去

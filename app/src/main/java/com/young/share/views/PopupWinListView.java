@@ -110,7 +110,7 @@ public class PopupWinListView extends BasePopupWin {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             int offsetPx = (DisplayUtils.getScreenWidthPixels((Activity) context) - v.getWidth()) / 2;
-            int offsetPx2dp = DisplayUtils.px2dp(context, offsetPx);
+            int offsetPx2dp = DisplayUtils.px2dip(context, offsetPx);
             showAsDropDown(v, -offsetPx2dp, 0, Gravity.CENTER);
         } else {
 
@@ -123,7 +123,7 @@ public class PopupWinListView extends BasePopupWin {
 //            int x = location[0];
 //            int y = location[1];
 //            LogUtils.logE(" v x = " + x + " y = " + y);
-            int widthDp = DisplayUtils.px2dp(context, v.getWidth()) / 2;
+            int widthDp = DisplayUtils.px2dip(context, v.getWidth()) / 2;
 
 
 //            showAtLocation(v, Gravity.NO_GRAVITY, x-v.getWidth(),y+v.getHeight());
