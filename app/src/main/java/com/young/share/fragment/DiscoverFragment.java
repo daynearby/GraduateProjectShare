@@ -19,12 +19,12 @@ import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
 import com.young.share.interfaces.AsyncListener;
 import com.young.share.interfaces.ListViewRefreshListener;
-import com.young.share.model.DiscountMessageList;
 import com.young.share.model.ShareMessageList;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.dbmodel.ShareMessage;
 import com.young.share.model.dbmodel.User;
 import com.young.share.network.BmobApi;
+import com.young.share.thread.MyRunnable;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DBUtils;
 import com.young.share.utils.DataFormateUtils;
@@ -86,21 +86,14 @@ public class DiscoverFragment extends BaseFragment {
         dataList = (List<ShareMessage_HZ>) app.getCacheInstance().getAsObject(Contants.ACAHE_KEY_DISCOVER);
 
         if (CommonUtils.isNetworkAvailable(context)) {//有网络
-
-//            threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
-//                @Override
-//                public void running() {
-//                    getDataFromRemote();
-//                }
-//            }));
-
 //
-//            threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
-//                @Override
-//                public void running() {
+            threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+                @Override
+                public void running() {
                     getDataFromRemote();
-//                }
-//            }));
+                }
+            }));
+
         } else {
             SVProgressHUD.showInfoWithStatus(context,
                     getString(R.string.without_network));
@@ -228,7 +221,7 @@ public class DiscoverFragment extends BaseFragment {
         }
 
         BmobApi.AsyncFunction(context, params, BmobApi.GET_RECENTLY_SHAREMESSAGES,
-                DiscountMessageList.class, new AsyncListener() {
+                ShareMessageList.class, new AsyncListener() {
 
                     @Override
                     public void onSuccess(Object object) {
@@ -242,11 +235,13 @@ public class DiscoverFragment extends BaseFragment {
                             }
 
                         } else {
-                            if (dataList!=null&&dataList.size()>0){
+                            LogUtils.e("data --  --- --- " + dataList);
+                            if (dataList != null && dataList.size() > 0) {
                                 dataList.clear();
                             }
-
+                            LogUtils.e("data --  --- --- "+dataList);
                             dataList = shareMessageList.getShareMessageHzList();
+                            LogUtils.e("data --  --- --- "+dataList);
                             //保存数据到本地数据库
 //                            saveData(dataList);
                             app.getCacheInstance().put(Contants.ACAHE_KEY_DISCOVER, (Serializable) dataList);
