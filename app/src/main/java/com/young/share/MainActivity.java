@@ -107,7 +107,7 @@ public class MainActivity extends CustomActBarActivity {
         settitle(R.string.discover);
         setBarVisibility(true, false);
         setCity(XmlUtils.getSelectCities(this).get(8));
-        if (mMyUser == null) {
+        if (cuser == null) {
             loginFunction();
         }
 
@@ -412,12 +412,12 @@ public class MainActivity extends CustomActBarActivity {
         public void onClick(View view, int pos) {
 //            LogUtils.i("view = "+view+" position = "+pos);
             itemIm = (ImageView) view;
-            mMyUser = BmobUser.getCurrentUser(mActivity, MyUser.class);
+            cuser = BmobUser.getCurrentUser(mActivity, MyUser.class);
 
             switch (pos) {
                 case 1://分享信息
 
-                    if (mMyUser != null) {
+                    if (cuser != null) {
 
                         Bundle bundle = new Bundle();
                         bundle.putBoolean(Contants.BUNDLE_CURRENT_IS_DISCOUNT, isDiscount);
@@ -433,7 +433,7 @@ public class MainActivity extends CustomActBarActivity {
                     break;
                 case 2://消息中心
 
-                    if (mMyUser != null) {
+                    if (cuser != null) {
                         //注册广播接收者
                         registerBoradcastReceiverClearMessages();
                         mStartActivity(MessageCenterActivity.class);
@@ -446,7 +446,7 @@ public class MainActivity extends CustomActBarActivity {
                     break;
                 case 3://个人中心
 
-                    if (mMyUser != null) {
+                    if (cuser != null) {
 
                         mStartActivity(PersonalCenterActivity.class);
 
@@ -468,9 +468,9 @@ public class MainActivity extends CustomActBarActivity {
      * 将installationId与user绑定
      */
     private void savaUserWithInsId() {
-        if (mMyUser != null) {
+        if (cuser != null) {
             MyBmobInstallation myBmobInstallation = new MyBmobInstallation(this);
-            myBmobInstallation.setMyUser(mMyUser);
+            myBmobInstallation.setMyUser(cuser);
             myBmobInstallation.setInstallationId(MyBmobInstallation.getInstallationId(this));
             myBmobInstallation.save(this);
         }
@@ -479,7 +479,7 @@ public class MainActivity extends CustomActBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        mMyUser = BmobUser.getCurrentUser(mActivity, MyUser.class);
+//        cuser = BmobUser.getCurrentUser(mActivity, MyUser.class);
 //
 //        savaUserWithInsId();
     }

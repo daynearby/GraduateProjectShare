@@ -220,7 +220,7 @@ public class RecordCommActivity extends ItemActBarActivity {
         JSONObject params = new JSONObject();
 
         try {
-            params.put(Contants.PARAM_USERID, mMyUser.getObjectId());
+            params.put(Contants.PARAM_USERID, cuser.getObjectId());
             params.put(Contants.PARAM_SKIP, String.valueOf(Skip));
         } catch (JSONException e) {
             LogUtils.d("add params failure 　" + e.toString());
@@ -269,7 +269,7 @@ public class RecordCommActivity extends ItemActBarActivity {
         JSONObject params = new JSONObject();
 
         try {
-            params.put(Contants.PARAM_USERID, mMyUser.getObjectId());
+            params.put(Contants.PARAM_USERID, cuser.getObjectId());
             params.put(Contants.PARAM_SKIP, String.valueOf(Skip));
         } catch (JSONException e) {
             LogUtils.d("add params failure 　" + e.toString());
@@ -329,7 +329,7 @@ public class RecordCommActivity extends ItemActBarActivity {
             Bundle bundle = new Bundle();
             bundle.putSerializable(Contants.BUNDLE_TAG, dataList.get(position));
             bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_PERSONAL_ACTIVITY);//shareMessage
-            mStartActivity(MessageDetail.class, bundle);
+            mStartActivity(MessageDetailActivity.class, bundle);
         }
     }
 

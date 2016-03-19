@@ -132,13 +132,13 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
      * 显示用户的信息
      */
     private void getUserDatas() {
-        String name = mMyUser.getNickName();
-        String qq = mMyUser.getQq();
-        String gender = mMyUser.isGender() ? Contants.GENDER_MALE : Contants.GENDER_FEMALE;
-        String age = String.valueOf(mMyUser.getAge());
-        String email = mMyUser.getEmail();
-        String mobilePhoneNumber = mMyUser.getMobilePhoneNumber();
-        String hometown = TextUtils.isEmpty(mMyUser.getAddress()) ? getString(R.string.gd_hz) : mMyUser.getAddress();
+        String name = cuser.getNickName();
+        String qq = cuser.getQq();
+        String gender = cuser.isGender() ? Contants.GENDER_MALE : Contants.GENDER_FEMALE;
+        String age = String.valueOf(cuser.getAge());
+        String email = cuser.getEmail();
+        String mobilePhoneNumber = cuser.getMobilePhoneNumber();
+        String hometown = TextUtils.isEmpty(cuser.getAddress()) ? getString(R.string.gd_hz) : cuser.getAddress();
 
         nickname_et.setText(name);
         qq_et.setText(qq);
@@ -202,12 +202,12 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
                 if (!TextUtils.isEmpty(mobilePhone_et.getText().toString())) {
 
                     //未验证
-                    if (!mMyUser.getMobilePhoneNumberVerified()) {
+                    if (!cuser.getMobilePhoneNumberVerified()) {
 
                         smsVerfied(mobilePhone_et.getText().toString());
 
                     } else {//已经验证。验证的手机号和当前验证的手机号不相符。则需要进行验证手机号
-                        if (!mobilePhone_et.getText().toString().equals(mMyUser.getMobilePhoneNumber())){
+                        if (!mobilePhone_et.getText().toString().equals(cuser.getMobilePhoneNumber())){
                             smsVerfied(mobilePhone_et.getText().toString());
                         }
                     }
@@ -215,8 +215,8 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
 
 
                 } else {
-                    mMyUser.setMobilePhoneNumber("");
-                    mMyUser.setMobilePhoneNumberVerified(false);
+                    cuser.setMobilePhoneNumber("");
+                    cuser.setMobilePhoneNumberVerified(false);
                     updateUserInfo();
                 }
 
@@ -231,14 +231,14 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
 
     private void updateUserInfo() {
 
-        mMyUser.setNickName(nickname_et.getText().toString());
-        mMyUser.setGender(Contants.GENDER_MALE.equals(gender_tv.getText().toString()));
-        mMyUser.setAge(Integer.valueOf(age_tv.getText().toString()));
-        mMyUser.setQq(qq_et.getText().toString());
-        mMyUser.setEmail(email_et.getText().toString());
-        mMyUser.setAddress(hometown_tv.getText().toString());
+        cuser.setNickName(nickname_et.getText().toString());
+        cuser.setGender(Contants.GENDER_MALE.equals(gender_tv.getText().toString()));
+        cuser.setAge(Integer.valueOf(age_tv.getText().toString()));
+        cuser.setQq(qq_et.getText().toString());
+        cuser.setEmail(email_et.getText().toString());
+        cuser.setAddress(hometown_tv.getText().toString());
 
-        mMyUser.update(this, new UpdateListener() {
+        cuser.update(this, new UpdateListener() {
             @Override
             public void onSuccess() {
                 LogUtils.d("更新信息成功");
@@ -281,8 +281,8 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
                         SVProgressHUD.showWithStatus(mActivity, getString(R.string.updating));
 
                         // 提交用户信息
-                        mMyUser.setMobilePhoneNumber(mobilePhone_et.getText().toString());
-                        mMyUser.setEmailVerified(true);
+                        cuser.setMobilePhoneNumber(mobilePhone_et.getText().toString());
+                        cuser.setEmailVerified(true);
 
                         updateUserInfo();
 

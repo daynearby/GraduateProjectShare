@@ -117,13 +117,15 @@
 
         <!-- 信息详细页面 -->
         <activity
-            android:name=".MessageDetail"
-            android:launchMode="singleTask" />
+            android:name=".MessageDetailActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!--通用记录查看 -->
         <activity
             android:name=".RecordCommActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!--消息中心 -->
         <activity android:name=".MessageCenterActivity" />

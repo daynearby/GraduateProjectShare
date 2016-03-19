@@ -202,8 +202,8 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
         hadgo_tv.setText(comm.getVisited() == null ?
                 getString(R.string.hadgo) : String.valueOf(comm.getVisited().size()));
 
-        LocationUtils.leftDrawableWantoGO(wanto_tv, comm.getWanted(), mMyUser.getObjectId());
-        LocationUtils.leftDrawableVisited(hadgo_tv, comm.getVisited(), mMyUser.getObjectId());
+        LocationUtils.leftDrawableWantoGO(wanto_tv, comm.getWanted(), cuser.getObjectId());
+        LocationUtils.leftDrawableVisited(hadgo_tv, comm.getVisited(), cuser.getObjectId());
 
     }
 
@@ -236,9 +236,9 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
             case R.id.id_tx_wantogo://想去
 
                 getUser();
-                if (mMyUser != null) {
-                    LocationUtils.discountWanto(mActivity, mMyUser, discountMessage,
-                            UserUtils.isHadCurrentUser(commModel.getWanted(), mMyUser.getObjectId()),
+                if (cuser != null) {
+                    LocationUtils.discountWanto(mActivity, cuser, discountMessage,
+                            UserUtils.isHadCurrentUser(commModel.getWanted(), cuser.getObjectId()),
                             (TextView) v);
                     isClick = true;
                 } else {
@@ -250,10 +250,10 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
 
             case R.id.id_hadgo://去过
                 getUser();
-                if (mMyUser != null) {
+                if (cuser != null) {
 
-                    LocationUtils.discountVisit(mActivity, mMyUser, discountMessage,
-                            UserUtils.isHadCurrentUser(commModel.getVisited(), mMyUser.getObjectId()),
+                    LocationUtils.discountVisit(mActivity, cuser, discountMessage,
+                            UserUtils.isHadCurrentUser(commModel.getVisited(), cuser.getObjectId()),
                             (TextView) v);
                     isClick = true;
 
@@ -283,8 +283,8 @@ public class DiscoutDetailActivity extends ItemActBarActivity implements View.On
      * 获取当前用户
      */
     public void getUser() {
-        if (mMyUser == null) {
-            mMyUser = BmobUser.getCurrentUser(mActivity, MyUser.class);
+        if (cuser == null) {
+            cuser = BmobUser.getCurrentUser(mActivity, MyUser.class);
         }
     }
 

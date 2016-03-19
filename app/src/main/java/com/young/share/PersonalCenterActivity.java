@@ -103,8 +103,8 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
         select_ls.setAdapter(arrayAdapter);
         select_ls.setOnItemClickListener(new onitemClick());
 
-        nickname_tv.setText(TextUtils.isEmpty(mMyUser.getNickName()) ? getString(R.string.user_name_defual) : mMyUser.getNickName());
-        signture_tv.setText(TextUtils.isEmpty(mMyUser.getSignture()) ? getString(R.string.user_info_hint_enjoy_life) : mMyUser.getSignture());
+        nickname_tv.setText(TextUtils.isEmpty(cuser.getNickName()) ? getString(R.string.user_name_defual) : cuser.getNickName());
+        signture_tv.setText(TextUtils.isEmpty(cuser.getSignture()) ? getString(R.string.user_info_hint_enjoy_life) : cuser.getSignture());
         loadingAvatar();
     }
 
@@ -184,8 +184,8 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
         String url;
         boolean isLocation;
 
-        if (!TextUtils.isEmpty(mMyUser.getAvatar())) {
-            url = mMyUser.getAvatar();
+        if (!TextUtils.isEmpty(cuser.getAvatar())) {
+            url = cuser.getAvatar();
             isLocation = false;
         } else {
             url = Contants.DEFAULT_AVATAR;
@@ -273,13 +273,13 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
                     //上传文件成功
                     if (isFinish) {
 
-                        mMyUser = BmobUser.getCurrentUser(mActivity, MyUser.class);
+                        cuser = BmobUser.getCurrentUser(mActivity, MyUser.class);
                         String avatar_url = urls[0];
 
                         if (!TextUtils.isEmpty(avatar_url)) {
-                            mMyUser.setAvatar(avatar_url);
+                            cuser.setAvatar(avatar_url);
 
-                            mMyUser.update(mActivity, new UpdateListener() {
+                            cuser.update(mActivity, new UpdateListener() {
                                 @Override
                                 public void onSuccess() {
                                     mToast(R.string.reset_avatar_success);

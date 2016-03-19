@@ -26,6 +26,7 @@
     <dimen name="maginMediu">30dp</dimen>
     <dimen name="maginNornal">16dp</dimen>
     <dimen name="maginSmall">8dp</dimen>
+    <dimen name="maginMicro">4dp</dimen>
 
     <dimen name="avatar_size_default">80dp</dimen>
     <dimen name="avatar_size_mediu">100dp</dimen>

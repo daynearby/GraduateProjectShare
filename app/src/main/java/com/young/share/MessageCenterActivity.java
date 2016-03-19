@@ -204,7 +204,7 @@ public class MessageCenterActivity extends ItemActBarActivity {
         JSONObject params = new JSONObject();
 
         try {
-            params.put(Contants.PARAM_USERID, mMyUser.getObjectId());
+            params.put(Contants.PARAM_USERID, cuser.getObjectId());
             params.put(Contants.PARAM_SKIP, String.valueOf(Skip));
 
         } catch (JSONException e) {
@@ -292,7 +292,7 @@ public class MessageCenterActivity extends ItemActBarActivity {
             bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY);
             bundle.putSerializable(Contants.CLAZZ_DATA_MESSAGE, dataList.get(position).getShareMessage());
 
-            mStartActivity(MessageDetail.class, bundle);
+            mStartActivity(MessageDetailActivity.class, bundle);
 
 
         }

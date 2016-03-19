@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.young.share.MessageDetail;
+import com.young.share.MessageDetailActivity;
 import com.young.share.R;
 import com.young.share.adapter.DiscoverAdapter;
 import com.young.share.base.BaseFragment;
@@ -160,7 +160,7 @@ public class DiscoverFragment extends BaseFragment {
                 bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_DISCOVER_ACTIVITY);
                 bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, dataList.get(position));
 
-                LocationUtils.startActivity(context, bundle, MessageDetail.class);
+                LocationUtils.startActivity(context, bundle, MessageDetailActivity.class);
             }
         });
 

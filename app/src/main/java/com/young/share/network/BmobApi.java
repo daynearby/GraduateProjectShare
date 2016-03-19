@@ -48,6 +48,7 @@ public class BmobApi {
     public static final String GET_RECENTLY_DICOUNT = "GetRecentlyDicount";//获取全部商家优惠
     public static final String GET_RANK_DATA = "GetRankData";//获取排行榜数据
     public static final String GET_HEAT_MESSAGES = "GetHeatMessages";//获取排行榜热门数据
+    public static final String GET_USER_AVATAR = "GetUserAvatar";//获取用户头像的地址，还需要进行编码
 
 
     private static Gson gson = new Gson();
@@ -73,6 +74,7 @@ public class BmobApi {
                     @Override
                     public void onSuccess(Object object) {
 /*在json解析出现错误的时候，这里会显示两次*/
+                        LogUtils.d("clazz " + clazz);
 //                        LogUtils.i("clazz " + clazz + "返回JSON数据:" + object.toString());
 //                        Object obj =gson.fromJson(object.toString(), clazz);
 //                        LogUtils.i("返回JSON数据:" + obj.toString());

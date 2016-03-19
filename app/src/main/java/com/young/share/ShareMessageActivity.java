@@ -571,7 +571,7 @@ private List<String> urlAddHead(  List<String> pathList){
         shareMessage_hz.setShTag(tagInfo);
         shareMessage_hz.setShLocation(!TextUtils.isEmpty(locationInfo) ? locationInfo : null);
         shareMessage_hz.setGeographic(new BmobGeoPoint(longitude, latitude));
-        shareMessage_hz.setMyUserId(mMyUser);
+        shareMessage_hz.setMyUserId(cuser);
         shareMessage_hz.setShCommNum(0);
         shareMessage_hz.setShVisitedNum(new ArrayList<String>());
         shareMessage_hz.setShWantedNum(new ArrayList<String>());
@@ -632,7 +632,7 @@ private List<String> urlAddHead(  List<String> pathList){
         disMessages.setDtContent(content);
 
         disMessages.setDtLocation(!TextUtils.isEmpty(locationInfo) ? locationInfo : null);
-        disMessages.setMyUserId(mMyUser);
+        disMessages.setMyUserId(cuser);
 
 
         if (lists != null && !lists.isEmpty()) {//有上传图片的

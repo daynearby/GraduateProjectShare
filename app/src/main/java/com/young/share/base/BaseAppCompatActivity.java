@@ -41,7 +41,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public Intent intents = new Intent();
     public IntentFilter myIntentFilter = new IntentFilter();
     public ApplicationConfig app;
-    public MyUser mMyUser;
+    public MyUser cuser;
     public ThreadUtils threadUtils;
 
 
@@ -57,7 +57,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(getLayoutId());
         Injector.inject(this);
-        mMyUser = BmobUser.getCurrentUser(this, MyUser.class);
+        cuser = BmobUser.getCurrentUser(this, MyUser.class);
         mActivity = this;
         app = ApplicationConfig.getInstance();
         threadUtils = app.getThreadInstance();

@@ -237,7 +237,7 @@ public class RankListActivity extends BaseAppCompatActivity {
 
                     bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_RANK_LIST_ACTIVITY);
 
-                    mStartActivity(MessageDetail.class, bundle);
+                    mStartActivity(MessageDetailActivity.class, bundle);
 
                 } else {//商家优惠
 

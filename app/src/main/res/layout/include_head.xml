@@ -24,7 +24,7 @@
             android:textColor="@drawable/sele_text_color_def_back"
             android:padding="@dimen/paddingMic"
             android:text="@string/user_name_defual"
-            android:textSize="@dimen/textSizeLarge" />
+            android:textSize="@dimen/textSizeMediu" />
 
 
     </LinearLayout>
@@ -42,8 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@drawable/sele_text_color_def_back"
-            android:text="@string/tab_appoinment"
-            android:textSize="@dimen/abc_text_size_medium_material" />
+            android:text="@string/tab_appoinment" />
 
         <ImageView
             android:layout_width="wrap_content"

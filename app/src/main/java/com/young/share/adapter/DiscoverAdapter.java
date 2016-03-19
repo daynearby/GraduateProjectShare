@@ -15,7 +15,7 @@ import com.klinker.android.link_builder.Link;
 import com.klinker.android.link_builder.LinkBuilder;
 import com.young.share.BaiduMapActivity;
 import com.young.share.BigPicActivity;
-import com.young.share.MessageDetail;
+import com.young.share.MessageDetailActivity;
 import com.young.share.R;
 import com.young.share.RankListActivity;
 import com.young.share.adapter.baseAdapter.CommAdapter;
@@ -296,7 +296,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         bundle.putInt(Contants.EXPEND_OPTION_ONE, Contants.EXPEND_START_INPUT);
         bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, shareMessage);
 
-        startActivity(MessageDetail.class, bundle);
+        startActivity(MessageDetailActivity.class, bundle);
 
     }
 

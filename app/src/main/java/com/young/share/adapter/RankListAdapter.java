@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.young.share.BigPicActivity;
-import com.young.share.MessageDetail;
+import com.young.share.MessageDetailActivity;
 import com.young.share.R;
 import com.young.share.adapter.baseAdapter.CommAdapter;
 import com.young.share.adapter.baseAdapter.ViewHolder;
@@ -309,7 +309,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
         bundle.putInt(Contants.EXPEND_OPTION_ONE, Contants.EXPEND_START_INPUT);
         bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, commModel);
 
-        startActivity(MessageDetail.class, bundle);
+        startActivity(MessageDetailActivity.class, bundle);
 
     }
 
