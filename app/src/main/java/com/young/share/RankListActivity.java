@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
@@ -14,13 +15,13 @@ import com.young.share.adapter.RankListAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
+import com.young.share.interfaces.AsyncListener;
+import com.young.share.interfaces.ComparatorImpl;
+import com.young.share.interfaces.ListViewRefreshListener;
+import com.young.share.model.CommRemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.RankList;
 import com.young.share.model.ShareMessage_HZ;
-import com.young.share.model.CommRemoteModel;
-import com.young.share.interfaces.ComparatorImpl;
-import com.young.share.interfaces.AsyncListener;
-import com.young.share.interfaces.ListViewRefreshListener;
 import com.young.share.network.BmobApi;
 import com.young.share.thread.MyRunnable;
 import com.young.share.utils.CommonUtils;
@@ -45,6 +46,9 @@ public class RankListActivity extends BaseAppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     @InjectView(R.id.list_ranklist)
     private ListView listview;
+    @InjectView(R.id.ll_rank_list_bg)
+    private LinearLayout bgLayout;
+
     private RankListAdapter rankAdapter;
 
     private String tag;
@@ -57,7 +61,8 @@ public class RankListActivity extends BaseAppCompatActivity {
 
     private List<CommRemoteModel> remoteList;
 
-    private static final int HANDLER_GET_DATA = 10;
+    private static final int HANDLER_GET_DATA = 0x01;
+    private static final int HANDLER_GET_NO_DATA = 0x02;//没有数据
 
     @Override
     public int getLayoutId() {
@@ -86,6 +91,7 @@ public class RankListActivity extends BaseAppCompatActivity {
         }));
 
     }
+
     /**
      * 初始化toolbar
      */
@@ -103,6 +109,7 @@ public class RankListActivity extends BaseAppCompatActivity {
         });
 
     }
+
     /**
      * 从远程数据库获取数据
      * 解析并且转换成remoteModel
@@ -138,18 +145,28 @@ public class RankListActivity extends BaseAppCompatActivity {
 
                 List<ShareMessage_HZ> sharemessagesList = rankLists.getSharemessages();
                 List<DiscountMessage_HZ> discountMessagesList = rankLists.getDiscountMessages();
-
-                for (ShareMessage_HZ share : sharemessagesList) {
-                    remoteList.add(DataFormateUtils.formateDataDiscover(share, Contants.DATA_MODEL_SHARE_MESSAGES));
+/*分享信息的数据*/
+                if (sharemessagesList != null) {
+                    for (ShareMessage_HZ share : sharemessagesList) {
+                          /*格式化数据，通用格式*/
+                        remoteList.add(DataFormateUtils.formateDataDiscover(share, Contants.DATA_MODEL_SHARE_MESSAGES));
+                    }
                 }
-
-                for (DiscountMessage_HZ discountMessage : discountMessagesList) {
-                    remoteList.add(DataFormateUtils.formateDataDiscount(discountMessage));
+                if (discountMessagesList != null) {
+                    for (DiscountMessage_HZ discountMessage : discountMessagesList) {
+                        /*格式化数据，通用格式*/
+                        remoteList.add(DataFormateUtils.formateDataDiscount(discountMessage));
+                    }
                 }
 //进行排序
-                Collections.sort(remoteList, new ComparatorImpl(key));
+                if (remoteList != null && remoteList.size() > 0) {
+                    Collections.sort(remoteList, new ComparatorImpl(key));
 
-                mHandler.sendEmptyMessage(HANDLER_GET_DATA);
+                    mHandler.sendEmptyMessage(HANDLER_GET_DATA);
+                } else {
+                    mHandler.sendEmptyMessage(HANDLER_GET_NO_DATA);
+                }
+
             }
 
             @Override
@@ -251,8 +268,17 @@ public class RankListActivity extends BaseAppCompatActivity {
 
     @Override
     public void handerMessage(Message msg) {
+        switch (msg.what) {
+            case HANDLER_GET_DATA:
 
-        refreshUI();
+                refreshUI();
+                break;
+
+            case HANDLER_GET_NO_DATA:
+
+                bgLayout.setBackgroundResource(R.drawable.icon_conten_empty);
+                break;
+        }
 
     }
 

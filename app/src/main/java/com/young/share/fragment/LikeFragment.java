@@ -21,6 +21,7 @@ import com.young.share.network.BmobApi;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.NetworkUtils;
 import com.young.share.utils.StringUtils;
+import com.young.share.views.PopupWinUserInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,43 +65,46 @@ public class LikeFragment extends BaseFragment {
 
     @Override
     public void initData() {
-        String userIds = "[";
+        if (userIdList != null && userIdList.size() > 0) {
+            String userIds = "[";
 
-        for (int i = 0; i < userIdList.size(); i++) {
-            userIds = userIds + "\"" + userIdList.get(i) + "\",";
-        }
-        userIds = userIds.substring(0, userIds.length() - 1) + "]";
+            for (int i = 0; i < userIdList.size(); i++) {
+                userIds = userIds + "\"" + userIdList.get(i) + "\",";
+            }
 
-        JSONObject params = new JSONObject();
-        try {
-            params.put(Contants.PARAMS_USER_OBJECT_IDS, userIds);
-        } catch (JSONException e) {
-            LogUtils.e("获取用户信息，添加参数失败" + e.toString());
-        }
+            userIds = userIds.substring(0, userIds.length() - 1) + "]";
+
+//            LogUtils.e(" user id array =  " + userIds);
+            JSONObject params = new JSONObject();
+            try {
+                params.put(Contants.PARAMS_USER_OBJECT_IDS, userIds);
+            } catch (JSONException e) {
+                LogUtils.e("获取用户信息，添加参数失败" + e.toString());
+            }
 
         /*用户信息*/
-        BmobApi.AsyncFunction(context, params, BmobApi.GET_USER_AVATAR, UserList.class, new AsyncListener() {
-            @Override
-            public void onSuccess(Object object) {
-                UserList userLists = (UserList) object;
+            BmobApi.AsyncFunction(context, params, BmobApi.GET_USER_AVATAR, UserList.class, new AsyncListener() {
+                @Override
+                public void onSuccess(Object object) {
+                    UserList userLists = (UserList) object;
 
-                for (MyUser user : userLists.getUserList()) {
-                    userList.add(user);
-                }
+                    for (MyUser user : userLists.getUserList()) {
+                        userList.add(user);
+                    }
 
                 /*只要用户存在，发送信息*/
-                if (userList.size() > 0) {
-                    mhandler.sendEmptyMessage(MESSAGE_GET_USER_INFO);
+                    if (userList.size() > 0) {
+                        mhandler.sendEmptyMessage(MESSAGE_GET_USER_INFO);
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(int code, String msg) {
+                @Override
+                public void onFailure(int code, String msg) {
                 /*存在错误的话，还不知道呀有怎样的错误，现在不做处理*/
-                LogUtils.e("code = " + code + " msg = " + msg);
-            }
-        });
-
+                    LogUtils.e("code = " + code + " msg = " + msg);
+                }
+            });
+        }
     }
 
     @Override
@@ -153,7 +157,7 @@ public class LikeFragment extends BaseFragment {
                             if (userIdList.size() == avatar.size()) {
                                 Message message = new Message();
                                 message.what = MESSAGE_CONVERT_USER_INFO;
-                                message.obj = StringUtils.idConver2Bitmap(context, userIdList, avatar);
+                                message.obj = StringUtils.idConver2Bitmap(context, userIdList, avatar, textLink);
                                 mhandler.sendMessage(message);
 
                             }
@@ -165,5 +169,37 @@ public class LikeFragment extends BaseFragment {
 
     }
 
+
+    /**
+     * 点击用户头像，显示用户信息
+     */
+    private StringUtils.TextLink textLink = new StringUtils.TextLink() {
+        @Override
+        public void onclick(String str) {
+//            LogUtils.ts(str);
+            for (int i = 0; i < userList.size(); i++) {
+
+                if (str.equals(userList.get(i).getObjectId())) {
+
+                    showUserInfo(avatarTxt, userList.get(i));
+                    break;
+                }
+
+            }
+
+
+        }
+    };
+
+    /**
+     * 查看用户资料
+     *
+     * @param v
+     */
+    private void showUserInfo(View v, MyUser user) {
+
+        PopupWinUserInfo userInfo = new PopupWinUserInfo(context, user);
+        userInfo.onShow(v);
+    }
 
 }

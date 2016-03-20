@@ -74,7 +74,7 @@ public class BigpicturePagerAdapter extends BasePagerAdapter<PictureInfo> implem
      */
     private void setNetImage(final PhotoView photoView, final ProgressBar progressBar, final PictureInfo pictureInfo) {
 
-        mImageLoader.displayImage(pictureInfo.getImageUrl(), photoView, ImageHandlerUtils.imageloaderOption2(), new ImageLoadingListener() {
+        mImageLoader.displayImage(pictureInfo.getImageUrl(), photoView, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String s, View view) {
                 startLoad(progressBar);

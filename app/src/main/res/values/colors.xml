@@ -8,7 +8,8 @@
     <color name="translucent">#80ffffff</color>
     <color name="translucent_l">#96ffffff</color>
     <color name="light_gray">#c2c2c2</color>
-    <color name="gray">#dddddd</color>
+    <color name="gray">#ddd</color>
+    <color name="gray_lighter">#eee</color>
     <color name="lake_blue">#1E90FF</color>
 
     <color name="colorPrimary">#9d55b8</color>

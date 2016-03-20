@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     >
 
         <View
             android:id="@+id/view_bottom_bar_divilier"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="1px"
             android:background="@color/light_gray" />
 
         <LinearLayout
@@ -23,8 +23,7 @@
                 android:id="@+id/id_tx_wantogo"
                 style="@style/text_style"
                 android:drawableLeft="@drawable/icon_wantogo"
-                android:drawablePadding="@dimen/paddingHit"
-                android:text="@string/tx_wantogo" />
+                android:text="@string/tx_wantogo"/>
 
             <TextView
                 android:id="@+id/id_hadgo"

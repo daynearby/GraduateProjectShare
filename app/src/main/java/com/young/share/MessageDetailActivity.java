@@ -28,13 +28,10 @@ import com.young.share.fragment.WantToGoFragment;
 import com.young.share.interfaces.AsyncListener;
 import com.young.share.model.BaseModel;
 import com.young.share.model.CommRemoteModel;
-import com.young.share.model.CommentList;
-import com.young.share.model.Comment_HZ;
 import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.network.BmobApi;
-import com.young.share.thread.MyRunnable;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.EmotionUtils;
 import com.young.share.utils.EvaluateUtil;
@@ -106,20 +103,16 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
     private String superTagClazz;
     private CommRemoteModel commModel = new CommRemoteModel();//存放分享信息的具体内容
-    private List<CommRemoteModel> dataList = new ArrayList<>();//数据
     private ShareMessage_HZ shareMessage;//直接显示的分享信息
     private ButtombarPageAdapter pageAdapter;
-    //    private CommentAdapter commAdapter;
     private InputMethodManager imm;
     private String receiverId;//接收消息者id
     private int commentClick;//是否是点击评论进去
 
-    private static final int GET_MESSAGE = 0x01;//格式化数据
-    private static final int MESSAGE_SHARE_MESSAGE = 0x02;//显示传过来的sharemessage
-    private static final int MESSAGE_BING_MESSAGE = 0x03;//显示传过来的sharemessage
+    private static final int MESSAGE_SHARE_MESSAGE = 0x01;//显示传过来的sharemessage
+    private static final int MESSAGE_BING_MESSAGE = 0x02;//显示传过来的sharemessage
     private static final int COMMENT_CLICK = 0;//点击事件，是评论
 
-    private boolean isClick = false;//是否点击过，点击过那么就需要更新主界面
     private boolean SendMessageFinish = true;//消息是否已经发送
 
 
@@ -140,8 +133,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         commentClick = bundle.getInt(Contants.EXPEND_OPTION_ONE, 0);
 
 
-        //提示
-        SVProgressHUD.showWithStatus(mActivity, getString(R.string.tips_loading));
 /*获取数据*/
         getData(bundle);
 
@@ -158,16 +149,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     @Override
     public void bindData() {
 ////回复评论
-//        commAdapter.setToReply(new CommentAdapter.ToReply() {
-//            @Override
-//            public void reply(String uId) {
-////                LogUtils.logD("callback  messagedetail");
-//                receiverId = uId;
-//                startPrepare();
-//            }
-//        });
-//
-//        listView.setAdapter(commAdapter);
 
         //表情
         new EmotionUtils(mActivity, vp_emotion_dashboard, sendComment_edt);
@@ -187,7 +168,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private void createdFragments() {
 
         List<Fragment> fragmentList = new ArrayList<>();
-//        LayoutInflater inflater = LayoutInflater.from(this);
 
         fragmentList.add(new LikeFragment(this, commModel.getWanted()));
         fragmentList.add(new WantToGoFragment(this, commModel.getVisited()));
@@ -218,7 +198,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
 
         nickname_tv.setText(TextUtils.isEmpty(myUser.getNickName()) ? "" : myUser.getNickName());
-
+/*用户头像*/
         ImageHandlerUtils.loadIamgeThumbnail(this,
                 TextUtils.isEmpty(myUser.getAvatar()) ? Contants.DEFAULT_AVATAR : myUser.getAvatar(), avatar);
 
@@ -230,11 +210,12 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
             tag_tv.setText(commModel.getTag());
         }
 
-        wanto_tv.setText(commModel.getWanted() == null ?
-                this.getString(R.string.tx_wantogo) : String.valueOf(commModel.getWanted().size()));
+        wanto_tv.setText(commModel.getWanted() != null && commModel.getWanted().size() > 0 ?
+                String.valueOf(commModel.getWanted().size()) : getString(R.string.tx_wantogo));
 
-        hadgo_tv.setText(commModel.getVisited() == null ?
-                this.getString(R.string.hadgo) : String.valueOf(commModel.getVisited().size()));
+
+        hadgo_tv.setText(commModel.getVisited() != null && commModel.getVisited().size() > 0 ?
+                String.valueOf(commModel.getVisited().size()) : getString(R.string.hadgo));
         //判断当前用户是否点赞
         if (cuser != null) {
             LocationUtils.leftDrawableWantoGO(wanto_tv, commModel.getWanted(), cuser.getObjectId());//设置图标
@@ -243,9 +224,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
         ceatedAt_tv.setText(commModel.getMcreatedAt());
 
-        comment_tv.setText(String.valueOf(commModel.getComment()));
-//        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(this, commModel.getImages()));
-//        myGridview.setOnItemClickListener(new itemClick(commRemoteModel.getImages()));
+        comment_tv.setText(commModel.getComment()>0?String.valueOf(commModel.getComment()):getString(R.string.tx_comment));
+
         multiImageView.setList(DataFormateUtils.thumbnailList(this, commModel.getImages()));
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
@@ -288,11 +268,11 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
         switch (msg.what) {
 
-            case GET_MESSAGE:
+//            case GET_MESSAGE:
 /*更新信息*/
 //                commAdapter.setData(dataList);
-
-                break;
+//
+//                break;
 
 
             case MESSAGE_SHARE_MESSAGE:
@@ -348,87 +328,55 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
      * @param bundle
      */
     private void getData(final Bundle bundle) {
-        //线程
-        threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
-
-            @Override
-            public void running() {
 
 
-                switch (superTagClazz) {
+        switch (superTagClazz) {
 
-                    case Contants.CLAZZ_DISCOVER_ACTIVITY://shareMessage详细信息
+            case Contants.CLAZZ_DISCOVER_ACTIVITY://shareMessage详细信息
 
+                shareMessage = (ShareMessage_HZ) bundle
+                        .getSerializable(Contants.CLAZZ_DATA_MODEL);
 
-                        shareMessage = (ShareMessage_HZ) bundle
-                                .getSerializable(Contants.CLAZZ_DATA_MODEL);
+                break;
 
-//                        formateDataDiscover(shareMessage);
+            case Contants.CLAZZ_PERSONAL_ACTIVITY://分享消息记录
 
-                        break;
-
-                    case Contants.CLAZZ_PERSONAL_ACTIVITY://分享消息记录
-
-
-                        shareMessage = (ShareMessage_HZ) bundle
-                                .getSerializable(Contants.BUNDLE_TAG);
-
-//                        formateDataDiscover(shareMessage);
+                shareMessage = (ShareMessage_HZ) bundle
+                        .getSerializable(Contants.BUNDLE_TAG);
 
 
-                        break;
+                break;
 
-                    case Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY://消息列表
-                        shareMessage = (ShareMessage_HZ) bundle
-                                .getSerializable(Contants.CLAZZ_DATA_MESSAGE);
+            case Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY://消息列表
+                shareMessage = (ShareMessage_HZ) bundle
+                        .getSerializable(Contants.CLAZZ_DATA_MESSAGE);
 
-//                        formateDataDiscover(shareMessageMessage);
+                break;
 
-                        break;
+            case Contants.CLAZZ_RANK_LIST_ACTIVITY://排行榜
 
-                    case Contants.CLAZZ_RANK_LIST_ACTIVITY://排行榜
+                CommRemoteModel commModel = (CommRemoteModel) bundle
+                        .getSerializable(Contants.CLAZZ_DATA_MODEL);
 
-//                        LogUtils.logD("thread start");
-                        CommRemoteModel commModel = (CommRemoteModel) bundle
-                                .getSerializable(Contants.CLAZZ_DATA_MODEL);
+                if (commModel != null) {
 
-
-                        if (commModel != null) {
-
-//                            commRemoteModel.setType(Contants.DATA_MODEL_HEAD);
-                            formateDataDiscover(commModel);
-
-                            getComment(commModel.getObjectId());
-
-                        } else {
-
-                            LocationUtils.processDialog(mActivity);
-
-                        }
-
-                        break;
+                    formateDataDiscover(commModel);
 
                 }
+                break;
+
+        }
 
                 /*获取最新的评论*/
-                if (superTagClazz.equals(Contants.CLAZZ_DISCOVER_ACTIVITY) ||
-                        superTagClazz.equals(Contants.CLAZZ_PERSONAL_ACTIVITY) ||
-                        superTagClazz.equals(Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY)
-                        ) {
+        if (superTagClazz.equals(Contants.CLAZZ_DISCOVER_ACTIVITY) ||
+                superTagClazz.equals(Contants.CLAZZ_PERSONAL_ACTIVITY) ||
+                superTagClazz.equals(Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY)
+                ) {
 
-                    formateDataDiscover(shareMessage);
+            formateDataDiscover(shareMessage);
 
-                    //获取最新的评论
-                    if (shareMessage != null) {
-                        getComment(shareMessage.getObjectId());
-                    } else {
-                        LocationUtils.processDialog(mActivity);
-                    }
-                }
+        }
 
-
-            }
-        }));
 
     }
 
@@ -508,66 +456,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 DataFormateUtils.formateDataDiscover(serializableExtra, Contants.DATA_MODEL_HEAD) :
                 (CommRemoteModel) serializableExtra;
 
-//        dataList.add(commModel);
 
         mHandler.sendEmptyMessage(MESSAGE_BING_MESSAGE);
-    }
-
-    /**
-     * 获取评论数据
-     *
-     * @param messageId
-     */
-    private void getComment(String messageId) {
-
-
-        JSONObject params = new JSONObject();
-
-        try {
-            params.put("messageID", messageId);
-        } catch (JSONException e) {
-            LogUtils.d("get comment add params failure" + e.toString());
-        }
-
-        BmobApi.AsyncFunction(mActivity, params, BmobApi.GET_MESSAGE_COMMENTS, CommentList.class, new AsyncListener() {
-            @Override
-            public void onSuccess(Object object) {
-                CommentList commentList = (CommentList) object;
-
-                if (commentList.getCommentList() != null && commentList.getCommentList().size() > 0) {
-
-//                    CommRemoteModel commRemoteModle = dataList.get(0);
-
-                    if (dataList != null && dataList.size() > 0) {
-                        dataList.clear();
-//                        dataList = new ArrayList<>();
-                    }
-
-//                    dataList.add(commRemoteModle);
-
-                    for (Comment_HZ comm : commentList.getCommentList()) {
-                        //格式化数据
-                        dataList.add(DataFormateUtils.formateComments(comm));
-                    }
-
-                }
-
-                processDialogDismisson();
-
-//刷新评论列表
-                mHandler.sendEmptyMessage(GET_MESSAGE);
-
-
-            }
-
-            @Override
-            public void onFailure(int code, String msg) {
-                processDialogDismisson();
-
-                mToast(R.string.tips_loading_faile);
-                LogUtils.d("get comment add params failure.  code = " + code + " message =  " + msg);
-            }
-        });
     }
 
 
@@ -592,11 +482,9 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 finishPrepare();
                 receiverId = commModel.getMyUser().getObjectId();
                 sendComment();
-                isClick = true;
                 break;
             case R.id.id_im_userH://用户资料
                 showUserInfo(v);
-//                    LogUtils.logD("用户资料 = " + u.toString());
                 break;
             case R.id.id_userName:
                 showUserInfo(v);
@@ -611,7 +499,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                     List<String> shWantedNum = commModel.getWanted();
 
                     wantToGo(UserUtils.isHadCurrentUser(shWantedNum, cuser.getObjectId()), v);
-                    isClick = true;
                 } else {
                     v.setClickable(true);
                     Dialog4Tips.loginFunction(mActivity);
@@ -626,10 +513,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 if (cuser != null) {
 
                     List<String> shVisitedNum = commModel.getVisited();
-
                     visit(UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()), v);
-
-                    isClick = true;
 
                 } else {
                     v.setClickable(true);
@@ -639,12 +523,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
             case R.id.id_tx_comment://评论数量
                 getUser();
-
-                /*回复的回调*/
-//                if (cuser != null && toReply != null) {
-//                    toReply.reply(commModel.getMyUser().getObjectId());
-//                }
-
 
                 break;
 
@@ -824,10 +702,13 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
     }
 
+    /**
+     * 增加评论数量
+     */
     private void commentIncrement() {
         ShareMessage_HZ share = new ShareMessage_HZ();
         share.setObjectId(commModel.getObjectId());
-        share.increment("shCommNum");
+        share.increment(Contants.PARAMS_SHCOMM_NUM);
         share.update(mActivity);
     }
 
@@ -839,19 +720,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         sendComment_edt.setText("");
 
         //获取最新的评论数据
-        getComment(commModel.getObjectId());
-    }
-
-    /**
-     * 关闭进度条提示
-     */
-    private void processDialogDismisson() {
-//        LogUtils.d(" isshow" + SVProgressHUD.isShowing(mActivity));
-        if (SVProgressHUD.isShowing(mActivity)) {
-
-            //提示
-            SVProgressHUD.dismiss(mActivity);
-        }
+//        getComment(commModel.getObjectId());
     }
 
     /**
@@ -861,7 +730,20 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            if (position == 0) {
+                wanto_tv.setBackgroundColor(getResources().getColor(R.color.gray_lighter));
+                hadgo_tv.setBackgroundColor(Color.WHITE);
+                comment_tv.setBackgroundColor(Color.WHITE);
 
+            } else if (position == 1) {
+                wanto_tv.setBackgroundColor(Color.WHITE);
+                hadgo_tv.setBackgroundColor(getResources().getColor(R.color.gray_lighter));
+                comment_tv.setBackgroundColor(Color.WHITE);
+            } else {
+                wanto_tv.setBackgroundColor(Color.WHITE);
+                hadgo_tv.setBackgroundColor(Color.WHITE);
+                comment_tv.setBackgroundColor(getResources().getColor(R.color.gray_lighter));
+            }
 
         }
 

@@ -12,7 +12,6 @@ import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.young.share.R;
 import com.young.share.config.Contants;
@@ -100,7 +99,7 @@ public class StringUtils {
      */
     public static SpannableStringBuilder idConver2Bitmap(final Context context,
                                                          List<String> userIds,
-                                                         List<Bitmap> avatarList) {
+                                                         List<Bitmap> avatarList, final TextLink textLink) {
 
         String text = "";
         for (String id : userIds) {
@@ -113,10 +112,14 @@ public class StringUtils {
 
             @Override
             public void onClick(View widget) {
+                TextView tx = (TextView) widget;
 
-                Toast.makeText(context,
-                        "Image Clicked " + widget.getId() + " tag " + widget.getTag(),
-                        Toast.LENGTH_SHORT).show();
+                if (textLink!=null){
+                    textLink.onclick(tx.getText().toString().trim());
+                }
+//                Toast.makeText(context,
+//                        "Image Clicked " + widget.getId() + " text " + tx.getText(),
+//                        Toast.LENGTH_SHORT).show();
 
             }
 
@@ -132,9 +135,10 @@ public class StringUtils {
                         , matcher.start(), matcher
                         .end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-            
+
             int start = ssb.getSpanStart(imageSpan);
             int end = ssb.getSpanEnd(imageSpan);
+
 /*设置监听*/
             ssb.setSpan(click_span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 

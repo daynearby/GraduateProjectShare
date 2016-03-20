@@ -2,13 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/paddingMediu"
     android:orientation="vertical">
 
-    <com.young.share.views.CommentListView.CommentListView
-        android:id="@+id/clv_frament_com_list"
+    <com.young.share.views.CustomViewPager
+        android:id="@+id/vp_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" />
-
+        android:overScrollMode="never" />
 </LinearLayout>

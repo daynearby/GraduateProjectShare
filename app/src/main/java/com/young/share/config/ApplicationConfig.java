@@ -12,6 +12,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.young.share.utils.CommonUtils;
+import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.ThreadUtils;
 import com.young.share.utils.cache.ACache;
 
@@ -81,6 +82,7 @@ public class ApplicationConfig extends LitePalApplication {
                         // 由原先的discCache -> diskCache
                 .diskCache(new UnlimitedDiskCache(cacheFile))//自定义缓存路径
                 .imageDownloader(new BaseImageDownloader(ctx, 5 * 1000, 30 * 1000)) // connectTimeout (5 s), readTimeout (30 s)超时时间
+                .defaultDisplayImageOptions(ImageHandlerUtils.imageloaderOption())
 //                .writeDebugLogs() // Remove for release app
                 .build();
 
@@ -109,9 +111,9 @@ public class ApplicationConfig extends LitePalApplication {
      *
      * @return
      */
-    public ACache getCacheInstance(){
+    public ACache getCacheInstance() {
 
-      return aCache = ACache.get(com.young.share.utils.StorageUtils.CreateCacheFile(getApplicationContext()));
+        return aCache = ACache.get(com.young.share.utils.StorageUtils.CreateCacheFile(getApplicationContext()));
     }
 
 }

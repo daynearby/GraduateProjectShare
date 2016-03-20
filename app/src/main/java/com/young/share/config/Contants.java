@@ -194,6 +194,8 @@ public class Contants {
     public static final String PARAM_PAGE_NUM = "page_num";//参数名
     public static final String PARAM_PAGE_SIZE = "page_size";//参数名
     public static final String PARAMS_USER_OBJECT_IDS = "userObjectIds";//参数名
+    public static final String PARAMS_MESSAGE_ID = "messageID";//参数名
+    public static final String PARAMS_SHCOMM_NUM = "shCommNum";//参数名
 
 
     public static final String MCODE = "19:C4:5F:A4:13:B9:82:7D:F0:8C:3C:B2:7C:D8:02:78:18:DB:65:86;com.young.share";

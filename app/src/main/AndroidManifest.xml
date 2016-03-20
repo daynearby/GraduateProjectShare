@@ -133,7 +133,9 @@
         <!-- 详细优惠信息 -->
         <activity
             android:name=".DiscoutDetailActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
 
         <!--排行榜的列表-->
         <activity

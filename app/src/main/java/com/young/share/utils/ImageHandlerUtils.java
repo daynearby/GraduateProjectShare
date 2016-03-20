@@ -118,7 +118,7 @@ public class ImageHandlerUtils {
      */
     public static DisplayImageOptions imageloaderOption() {
         return new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.icon_default_iamge) //设置图片在下载期间显示的图片
+                .showImageOnLoading(R.color.gray_lighter) //设置图片在下载期间显示的图片
                 .showImageForEmptyUri(R.drawable.icon_iamge_uri_empty)//设置图片Uri为空或是错误的时候显示的图片
                 .showImageOnFail(R.drawable.icon_loading_image_fail)  //设置图片加载/解码过程中错误时候显示的图片
                 .cacheInMemory(true)//设置下载的图片是否缓存在内存中
@@ -136,28 +136,7 @@ public class ImageHandlerUtils {
                 .build();//构建完成
     }
 
-    /**
-     * 现在过程中没有显示默认图片，通过加载内存中的图片
-     * @return
-     */
-    public static DisplayImageOptions imageloaderOption2() {
-        return new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.drawable.icon_iamge_uri_empty)//设置图片Uri为空或是错误的时候显示的图片
-                .showImageOnFail(R.drawable.icon_loading_image_fail)  //设置图片加载/解码过程中错误时候显示的图片
-                .cacheInMemory(true)//设置下载的图片是否缓存在内存中
-                .cacheOnDisc()//设置下载的图片是否缓存在SD卡中
-                .considerExifParams(true)  //是否考虑JPEG图像EXIF参数（旋转，翻转）
-                .imageScaleType(ImageScaleType.EXACTLY_STRETCHED)//设置图片以如何的编码方式显示
-                .bitmapConfig(Bitmap.Config.RGB_565)//设置图片的解码类型//
-//                .decodingOptions(android.graphics.BitmapFactory.OptionsdecodingOptions)//设置图片的解码配置
-//.delayBeforeLoading(int delayInMillis)//int delayInMillis为你设置的下载前的延迟时间
-//设置图片加入缓存前，对bitmap进行设置
-//.preProcessor(BitmapProcessor preProcessor)
-//                .resetViewBeforeLoading(true)//设置图片在下载前是否重置，复位
-//                .displayer(new RoundedBitmapDisplayer(20))//是否设置为圆角，弧度为多少
-                .displayer(new FadeInBitmapDisplayer(100))//是否图片加载好后渐入的动画时间
-                .build();//构建完成
-    }
+
 
     /**
      * @param ctx
@@ -167,7 +146,7 @@ public class ImageHandlerUtils {
      */
     public static void loadIamge(Context ctx, String imageUri, ImageView im, boolean isLocation) {
 
-        ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(ctx, imageUri, isLocation), im, imageloaderOption());
+        ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(ctx, imageUri, isLocation), im);
     }
 
     /**
@@ -177,7 +156,7 @@ public class ImageHandlerUtils {
      * @param im
      */
     public static void loadIamgeThumbnail(Context ctx, String imageUri, ImageView im) {
-        ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(ctx, imageUri), im, imageloaderOption());
+        ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(ctx, imageUri), im);
     }
 
     /**
@@ -188,7 +167,7 @@ public class ImageHandlerUtils {
      */
     public static void loadIamge2(Context ctx, String imageUri, ImageView im, boolean isLocation) {
 
-        ImageLoader.getInstance().displayImage(imageUri, im, imageloaderOption());
+        ImageLoader.getInstance().displayImage(imageUri, im);
     }
     /**
      * 缩略图
@@ -197,7 +176,7 @@ public class ImageHandlerUtils {
      * @param im
      */
     public static void loadIamgeThumbnail2(Context ctx, String imageUri, ImageView im) {
-        ImageLoader.getInstance().displayImage(imageUri, im, imageloaderOption());
+        ImageLoader.getInstance().displayImage(imageUri, im);
     }
 
     /**
@@ -208,7 +187,7 @@ public class ImageHandlerUtils {
      */
     public static void loadImage2(String uri,ImageView imageView){
 
-        ImageLoader.getInstance().displayImage(uri,imageView,imageloaderOption2());
+        ImageLoader.getInstance().displayImage(uri,imageView);
     }
 
 
@@ -221,7 +200,7 @@ public class ImageHandlerUtils {
     public static void loadIamgeWithState(final Context ctx, String imageUri, ImageView im) {
 
 
-        ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(ctx, imageUri, false), im, imageloaderOption(), new ImageLoadingListener() {
+        ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(ctx, imageUri, false), im,  new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String s, View view) {
                 SVProgressHUD.showWithStatus(ctx, ctx.getString(R.string.tips_loading));
