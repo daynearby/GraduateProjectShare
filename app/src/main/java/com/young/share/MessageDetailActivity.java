@@ -92,7 +92,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private MultiImageView multiImageView;
     //    @InjectView(R.id.gv_message_detailshareimg)
 //    private GridView myGridview ;
-    @InjectView(R.id.vp_popupwindow_emotion_dashboard)
+    @InjectView(R.id.vp_message_detail)
     private CustomViewPager viewPager;
     @InjectView(R.id.id_tx_wantogo)
     private TextView wanto_tv;//想去数量
@@ -189,9 +189,9 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         List<Fragment> fragmentList = new ArrayList<>();
 //        LayoutInflater inflater = LayoutInflater.from(this);
 
-        fragmentList.add(new LikeFragment(this,commModel.getWanted()));
-        fragmentList.add(new WantToGoFragment(this,commModel.getVisited()));
-        fragmentList.add(new CommentFragment(this,commModel.getObjectId()));
+        fragmentList.add(new LikeFragment(this, commModel.getWanted()));
+        fragmentList.add(new WantToGoFragment(this, commModel.getVisited()));
+        fragmentList.add(new CommentFragment(this, commModel.getObjectId()));
 
         pageAdapter = new ButtombarPageAdapter(fragmentList, getSupportFragmentManager());
         viewPager.setAdapter(pageAdapter);
@@ -650,7 +650,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
             case R.id.id_tx_tab://标签
 
-
+                LogUtils.ts("标签的点击事件");
                 break;
 
         }
@@ -857,11 +857,10 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     /**
      * pager change listener
      */
-    private ViewPager.OnPageChangeListener pageChangeListener = new  ViewPager.OnPageChangeListener(){
+    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
 
 
         }

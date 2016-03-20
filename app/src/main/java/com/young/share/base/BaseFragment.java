@@ -43,11 +43,7 @@ public abstract class BaseFragment extends Fragment {
         }
     };
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setArguments(savedInstanceState);
-    }
+
 
     @Nullable
     @Override

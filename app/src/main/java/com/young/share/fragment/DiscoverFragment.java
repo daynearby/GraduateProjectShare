@@ -241,7 +241,9 @@ public class DiscoverFragment extends BaseFragment {
                             dataList = shareMessageList.getShareMessageHzList();
                             //保存数据到本地数据库
 //                            saveData(dataList);
-                            app.getCacheInstance().put(Contants.ACAHE_KEY_DISCOVER, (Serializable) dataList);
+                            if (dataList != null && dataList.size() > 0) {
+                                app.getCacheInstance().put(Contants.ACAHE_KEY_DISCOVER, (Serializable) dataList);
+                            }
                         }
                         mhandler.sendEmptyMessage(HANDLER_GET_DATA);
                     }
@@ -292,13 +294,20 @@ public class DiscoverFragment extends BaseFragment {
     private void refreshUI() {
 
         if (isGetMore) {
+            int tempEnd = endIndex;
             endIndex = dataList.size() < (PUSH_TIMES + 1) * Contants.PAGE_SIZE ?
                     dataList.size() : (PUSH_TIMES + 1) * Contants.PAGE_SIZE;
+
+            listviewAdapter.getData().addAll(dataList.subList(tempEnd, endIndex));
+            listviewAdapter.notifyDataSetChanged();
+
         } else {
             endIndex = dataList.size() < Contants.PAGE_SIZE ? dataList.size() : endIndex;
+
+            listviewAdapter.setData(dataList.subList(startIndex, endIndex));
+
         }
 
-        listviewAdapter.setData(dataList.subList(startIndex, endIndex));
         //停止刷新动画
         swipeRefreshLayout.setRefreshing(false);
     }

@@ -6,11 +6,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
+import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.young.share.R;
 import com.young.share.config.Contants;
 
+import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -81,5 +88,103 @@ public class StringUtils {
         }
 
         return val;
+    }
+
+    /**
+     * 将全部的用户id对应的头像都添加在string中
+     *
+     * @param context
+     * @param userIds
+     * @param avatarList
+     * @return
+     */
+    public static SpannableStringBuilder idConver2Bitmap(final Context context,
+                                                         List<String> userIds,
+                                                         List<Bitmap> avatarList) {
+
+        String text = "";
+        for (String id : userIds) {
+            text = text + id + "  ";
+        }
+
+        SpannableStringBuilder ssb = new SpannableStringBuilder(text);
+
+        ClickableSpan click_span = new ClickableSpan() {
+
+            @Override
+            public void onClick(View widget) {
+
+                Toast.makeText(context,
+                        "Image Clicked " + widget.getId() + " tag " + widget.getTag(),
+                        Toast.LENGTH_SHORT).show();
+
+            }
+
+        };
+
+        for (int i = 0; i < userIds.size(); i++) {
+            Pattern pattern = Pattern.compile(userIds.get(i));
+            Matcher matcher = pattern.matcher(text);
+            ImageSpan imageSpan = new ImageSpan(context, avatarList.get(i));
+
+            while (matcher.find()) {
+                ssb.setSpan(imageSpan
+                        , matcher.start(), matcher
+                        .end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            
+            int start = ssb.getSpanStart(imageSpan);
+            int end = ssb.getSpanEnd(imageSpan);
+/*设置监听*/
+            ssb.setSpan(click_span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        }
+
+        return ssb;
+    }
+
+    /**
+     * 评论与回复，用户名点击
+     *
+     * @param context
+     * @param str
+     * @param textLink
+     * @return
+     */
+    public static SpannableStringBuilder clickUsername(final Context context, final String str, final TextLink textLink) {
+        SpannableString spanStr = new SpannableString(str);
+
+        spanStr.setSpan(null, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder ssb = new SpannableStringBuilder(spanStr);
+
+        ssb.setSpan(new ClickableSpan() {
+
+            @Override
+            public void onClick(View widget) {
+
+                if (textLink != null) {
+                    textLink.onclick(str);
+                }
+                LogUtils.d("text click " + str);
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setColor(context.getResources().getColor(R.color.color_name)); // 设置文本颜色
+                // 去掉下划线
+                ds.setUnderlineText(false);
+            }
+
+        }, 0, str.length(), 0);
+//            }
+//        }
+
+        return ssb;
+    }
+
+
+    public interface TextLink {
+        void onclick(String str);
     }
 }

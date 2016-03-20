@@ -120,7 +120,7 @@
     <string name="collect_success">想去</string>
     <string name="not_visit">没去过</string>
     <string name="title_body">正文</string>
-    <string name="txt_replay">回复</string>
+    <string name="txt_replay"> 回复 </string>
     <string name="txt_comment">评论</string>
     <string name="comment_not_empty">评论内容不能为空</string>
     <string name="operation_success">操作成功</string>

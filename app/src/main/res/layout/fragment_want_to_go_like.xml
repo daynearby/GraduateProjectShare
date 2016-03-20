@@ -7,8 +7,10 @@
     <TextView
         android:id="@+id/tv_want_to_go_avatar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:lineSpacingMultiplier="1.3"
         style="?android:attr/textAppearanceMedium"
         android:padding="@dimen/paddingMic"/>
+
+
 </LinearLayout>

@@ -8,37 +8,36 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.momentsdemo.R;
-import com.example.momentsdemo.comment.TextMovementMethod;
-import com.example.momentsdemo.model.Comment;
-import com.example.momentsdemo.utils.StringUtils;
-import com.example.momentsdemo.view.CommentListView;
+import com.young.share.R;
+import com.young.share.config.TextMovementMethod;
+import com.young.share.model.Comment_HZ;
+import com.young.share.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 评论列表的适配器
- * <p>
+ * <p/>
  * Created by yiwei on 16/3/2.
  */
 public class CommentAdapter {
 
     private Context context;
     private CommentListView mListview;
-    private List<Comment> mDatas;
+    private List<Comment_HZ> mDatas;
 
     public CommentAdapter(Context context) {
         this.context = context;
-        mDatas = new ArrayList<Comment>();
+        mDatas = new ArrayList<Comment_HZ>();
     }
 
-    public CommentAdapter(Context context, List<Comment> datas) {
+    public CommentAdapter(Context context, List<Comment_HZ> datas) {
         this.context = context;
         setDatas(datas);
     }
 
-    public CommentAdapter(Context context, CommentListView mListview, List<Comment> datas) {
+    public CommentAdapter(Context context, CommentListView mListview, List<Comment_HZ> datas) {
         this.context = context;
         this.mListview = mListview;
 
@@ -52,14 +51,14 @@ public class CommentAdapter {
         mListview = listView;
     }
 
-    public void setDatas(List<Comment> datas) {
+    public void setDatas(List<Comment_HZ> datas) {
         if (datas == null) {
-            datas = new ArrayList<Comment>();
+            datas = new ArrayList<Comment_HZ>();
         }
         mDatas = datas;
     }
 
-    public List<Comment> getDatas() {
+    public List<Comment_HZ> getDatas() {
         return mDatas;
     }
 
@@ -70,7 +69,7 @@ public class CommentAdapter {
         return mDatas.size();
     }
 
-    public Comment getItem(int position) {
+    public Comment_HZ getItem(int position) {
         if (mDatas == null) {
             return null;
         }
@@ -83,7 +82,7 @@ public class CommentAdapter {
 
     /**
      * 刷新整个Linearlayout
-     * <p>
+     * <p/>
      * 添加控件到linearLayout中
      */
     public void notifyDataSetChanged() {
@@ -94,7 +93,8 @@ public class CommentAdapter {
         if (mDatas == null || mDatas.size() == 0) {
             return;
         }
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout
+                .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         for (int i = 0; i < mDatas.size(); i++) {
             //
             View view = getView(i);
@@ -121,7 +121,7 @@ public class CommentAdapter {
         final TextView commentTv = (TextView) convertView.findViewById(R.id.txt_signal_text);
         /*名字点击，设置颜色*/
 
-        final Comment comment = mDatas.get(position);
+        final Comment_HZ comment = mDatas.get(position);
 
         //布局复用，设置不同的样式
         commentTv.setTextSize(14);
@@ -131,8 +131,8 @@ public class CommentAdapter {
         final TextMovementMethod textMovementMethod = new TextMovementMethod();
         commentTv.setMovementMethod(textMovementMethod);
 
-        String senderName = comment.getSender().getUsername();
-        String receiver = comment.getReceiver().getUsername();
+        String senderName = comment.getSenderId().getUsername();
+        String receiver = comment.getReveicerId().getUsername();
 
         /*发送者用户名点击*/
         commentTv.setText(StringUtils.clickUsername(context, senderName, new StringUtils.TextLink() {
@@ -144,7 +144,7 @@ public class CommentAdapter {
         }));
 /*接收者用户名点击*/
         if (!TextUtils.isEmpty(receiver)) {
-            commentTv.append(context.getString(R.string.reply));
+            commentTv.append(context.getString(R.string.txt_replay));
 
             commentTv.append(StringUtils.clickUsername(context, receiver, new StringUtils.TextLink() {
                 @Override
@@ -158,7 +158,8 @@ public class CommentAdapter {
 
         //表情
         commentTv.append(":");
-        commentTv.append(StringUtils.getEmotionContent(context, commentTv, comment.getContent()));
+        commentTv.append(StringUtils.getEmotionContent(context, commentTv,
+                comment.getMessageId().getCommContent()));
 
         /*item click */
         commentTv.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +179,8 @@ public class CommentAdapter {
             public boolean onLongClick(View v) {
 //                Toast.makeText(context, " long click ", Toast.LENGTH_SHORT).show();
                 if (mListview.getOnItemLongClickListener() != null) {
-                    mListview.getOnItemLongClickListener().onItemLongClick(comment.getContent(), position);
+                    mListview.getOnItemLongClickListener()
+                            .onItemLongClick(comment.getMessageId().getCommContent(), position);
 
                 }
                 return false;
