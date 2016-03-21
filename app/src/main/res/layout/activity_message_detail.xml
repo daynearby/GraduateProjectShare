@@ -20,55 +20,97 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="@dimen/paddingMic">
 
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <!--头部-->
+                <include layout="@layout/include_head" />
+
+                <TextView
+                    android:id="@+id/tx_message_detail_content"
+                    style="?android:attr/textAppearanceMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/paddingMic"
+                    android:text="@string/defaul_share_text"
+                    android:textColor="@android:color/black"
+                    android:visibility="gone" />
+
+                <com.young.share.views.MultiImageView.MultiImageView
+                    android:id="@+id/miv_message_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tv_item_message_detail_createdat"
+                    style="@style/text_style_wrap"
+                    android:layout_gravity="right"
+                    android:padding="@dimen/paddingMic"
+                    android:text="@string/created_at" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <!--头部-->
-                    <include layout="@layout/include_head" />
 
-                    <TextView
-                        android:id="@+id/tx_message_detail_content"
-                        style="?android:attr/textAppearanceMedium"
-                        android:layout_width="match_parent"
+
+                    <RadioGroup
+                        android:id="@+id/rg_msg_detail_gd"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/paddingMic"
-                        android:text="@string/defaul_share_text"
-                        android:textColor="@android:color/black"
-                        android:visibility="gone" />
+                        android:orientation="horizontal">
 
-                    <com.young.share.views.MultiImageView.MultiImageView
-                        android:id="@+id/miv_message_detail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        <RadioButton
+                            android:id="@+id/rb_message_detail_want_to"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:padding="@dimen/paddingMic"
+                            android:text="@string/tx_wantogo" />
 
-                    <TextView
-                        android:id="@+id/tv_item_message_detail_createdat"
-                        style="@style/text_style_wrap"
-                        android:layout_gravity="right"
-                        android:padding="@dimen/paddingMic"
-                        android:text="@string/created_at" />
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:padding="@dimen/paddingMic"
+                            android:text="@string/hadgo" />
 
-                    <!--底部-->
-                    <include layout="@layout/include_bottom_bar" />
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:padding="@dimen/paddingMic"
+                            android:text="@string/tx_comment" />
 
-                    <!--展示点赞用户、去过、评论-->
-                    <com.young.share.views.CustomViewPager
-                        android:id="@+id/vp_message_detail"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:overScrollMode="never"
-                        />
+                    </RadioGroup>
+                    <ImageView
+                        android:id="@+id/im_msg_detail_index"
+                        android:layout_width="30dp"
+                        android:layout_height="@dimen/size_width"
+                        android:background="@color/theme_puple" />
                 </LinearLayout>
 
+                <!--展示点赞用户、去过、评论-->
+                <com.young.share.views.CustomViewPager
+                    android:id="@+id/vp_message_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never" />
+            </LinearLayout>
 
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>
+
 
     <!--发送评论的输入框-->
     <LinearLayout
@@ -120,4 +162,10 @@
             android:visibility="gone" />
 
     </LinearLayout>
+    <!--底部-->
+    <include
+        layout="@layout/include_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

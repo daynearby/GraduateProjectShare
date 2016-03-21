@@ -3,6 +3,7 @@ package com.young.share;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -10,14 +11,17 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
+import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.young.share.adapter.ButtombarPageAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
@@ -99,6 +103,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private TextView comment_tv;//评论数量
     @InjectView(R.id.tv_item_message_detail_createdat)
     private TextView ceatedAt_tv;
+    @InjectView(R.id.rg_msg_detail_gd)
+    private RadioGroup indexRadiog;
 
 
     private String superTagClazz;
@@ -114,7 +120,13 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private static final int COMMENT_CLICK = 0;//点击事件，是评论
 
     private boolean SendMessageFinish = true;//消息是否已经发送
-
+    /*指示器*/
+    private ImageView indexIm;// 页面指示器
+    private int offset = 0;// 动画图片偏移量
+    private int tabWidth = 0;
+    private int bmpW;// 动画图片宽度
+    private OvershootInterpolator overshootInterpolator;
+    private int DURATION = 500;
 
     @Override
     public int getLayoutId() {
@@ -142,8 +154,30 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     @Override
     public void findviewbyid() {
 //        commAdapter = new CommentAdapter(mActivity);
+/*初始化指示器*/
+        initialiIndicator();
+    }
 
+    /**
+     * 初始化指示器
+     */
+    private void initialiIndicator() {
 
+        /**
+         * 初始化动画滚动条
+         */
+        indexIm = (ImageView) findViewById(R.id.im_msg_detail_index);
+//        bmpW = BitmapFactory.decodeResource(getResources(), R.drawable.icon_cursor)
+//                .getWidth();// 获取图片宽度
+
+        indexRadiog.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        tabWidth =indexRadiog.getMeasuredWidth() / 3;
+
+        Matrix matrix = new Matrix();
+//        offset = (indexRadiog.getMeasuredWidth()/ 3 - tabWidth) / 3;
+        matrix.postTranslate(0, 0);
+        indexIm.setImageMatrix(matrix);// 设置动画初始位置
+        overshootInterpolator = new OvershootInterpolator();
     }
 
     @Override
@@ -224,7 +258,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
         ceatedAt_tv.setText(commModel.getMcreatedAt());
 
-        comment_tv.setText(commModel.getComment()>0?String.valueOf(commModel.getComment()):getString(R.string.tx_comment));
+        comment_tv.setText(commModel.getComment() > 0 ? String.valueOf(commModel.getComment()) : getString(R.string.tx_comment));
 
         multiImageView.setList(DataFormateUtils.thumbnailList(this, commModel.getImages()));
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
@@ -749,7 +783,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
         @Override
         public void onPageSelected(int position) {
-
+            changeTab(position);// 页面变化时指示器的动画效果
         }
 
         @Override
@@ -757,4 +791,15 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
         }
     };
+// TODO: 2016-03-22 计算偏移值
+
+    /**
+     * 动画效果
+     * @param index
+     */
+    private void changeTab(int index) {
+        int position = tabWidth * (index + 1);
+        ViewPropertyAnimator.animate(indexIm).translationX(position)
+                .setInterpolator(overshootInterpolator).setDuration(DURATION);
+    }
 }

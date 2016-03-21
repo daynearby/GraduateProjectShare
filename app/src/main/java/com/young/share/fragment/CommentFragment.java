@@ -117,6 +117,8 @@ public class CommentFragment extends BaseFragment {
 
                     if (dataList != null && dataList.size() > 0) {
                         dataList.clear();
+                    }else {
+                        dataList = new ArrayList<Comment_HZ>();
                     }
 
                     dataList.addAll(commentList.getCommentList());

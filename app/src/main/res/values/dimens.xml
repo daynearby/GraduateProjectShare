@@ -33,6 +33,7 @@
     <dimen name="btnSizeDefault">50dp</dimen>
 
     <dimen name="stroke_width">1dp</dimen>
+    <dimen name="size_width">3dp</dimen>
 
     <dimen name="arcButtonChild">52dp</dimen>
     <dimen name="arcButton">62dp</dimen>
