@@ -75,6 +75,7 @@
                             android:text="@string/tx_wantogo" />
 
                         <RadioButton
+                            android:id="@+id/rb_message_detail_had_go"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:button="@null"
@@ -83,6 +84,7 @@
                             android:text="@string/hadgo" />
 
                         <RadioButton
+                            android:id="@+id/rb_message_detail_comment"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -94,9 +96,9 @@
                     </RadioGroup>
                     <ImageView
                         android:id="@+id/im_msg_detail_index"
-                        android:layout_width="30dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/size_width"
-                        android:background="@color/theme_puple" />
+                        android:src="@color/theme_puple" />
                 </LinearLayout>
 
                 <!--展示点赞用户、去过、评论-->

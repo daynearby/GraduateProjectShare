@@ -11,12 +11,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -105,6 +107,12 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private TextView ceatedAt_tv;
     @InjectView(R.id.rg_msg_detail_gd)
     private RadioGroup indexRadiog;
+    @InjectView(R.id.rb_message_detail_comment)
+    private RadioButton commentRbtn;
+    @InjectView(R.id.rb_message_detail_had_go)
+    private RadioButton hadGoRbtn;
+    @InjectView(R.id.rb_message_detail_want_to)
+    private RadioButton wantToRbtn;
 
 
     private String superTagClazz;
@@ -122,11 +130,11 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private boolean SendMessageFinish = true;//消息是否已经发送
     /*指示器*/
     private ImageView indexIm;// 页面指示器
-    private int offset = 0;// 动画图片偏移量
     private int tabWidth = 0;
-    private int bmpW;// 动画图片宽度
     private OvershootInterpolator overshootInterpolator;
     private int DURATION = 500;
+    private int totalOffset = 0;//动画总的偏移量
+    private int lastIndex = 0;//上一个页面的position
 
     @Override
     public int getLayoutId() {
@@ -167,17 +175,20 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
          * 初始化动画滚动条
          */
         indexIm = (ImageView) findViewById(R.id.im_msg_detail_index);
-//        bmpW = BitmapFactory.decodeResource(getResources(), R.drawable.icon_cursor)
-//                .getWidth();// 获取图片宽度
 
         indexRadiog.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        tabWidth =indexRadiog.getMeasuredWidth() / 3;
+        tabWidth = indexRadiog.getMeasuredWidth() / 3;
+        ViewGroup.LayoutParams params = indexIm.getLayoutParams();
+        params.width = tabWidth;
 
         Matrix matrix = new Matrix();
-//        offset = (indexRadiog.getMeasuredWidth()/ 3 - tabWidth) / 3;
         matrix.postTranslate(0, 0);
         indexIm.setImageMatrix(matrix);// 设置动画初始位置
         overshootInterpolator = new OvershootInterpolator();
+        wantToRbtn.setTextColor(getResources().getColor(R.color.theme_puple));
+        wantToRbtn.setOnClickListener(this);
+        hadGoRbtn.setOnClickListener(this);
+        commentRbtn.setOnClickListener(this);
     }
 
     @Override
@@ -564,7 +575,15 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
                 LogUtils.ts("标签的点击事件");
                 break;
-
+            case R.id.rb_message_detail_want_to://想去，也就是收藏
+                viewPager.setCurrentItem(0);
+                break;
+            case R.id.rb_message_detail_had_go://去过
+                viewPager.setCurrentItem(1);
+                break;
+            case R.id.rb_message_detail_comment://评论
+                viewPager.setCurrentItem(2);
+                break;
         }
 
     }
@@ -765,18 +784,18 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             if (position == 0) {
-                wanto_tv.setBackgroundColor(getResources().getColor(R.color.gray_lighter));
-                hadgo_tv.setBackgroundColor(Color.WHITE);
-                comment_tv.setBackgroundColor(Color.WHITE);
+                wantToRbtn.setTextColor(getResources().getColor(R.color.theme_puple));
+                hadGoRbtn.setTextColor(Color.BLACK);
+                commentRbtn.setTextColor(Color.BLACK);
 
             } else if (position == 1) {
-                wanto_tv.setBackgroundColor(Color.WHITE);
-                hadgo_tv.setBackgroundColor(getResources().getColor(R.color.gray_lighter));
-                comment_tv.setBackgroundColor(Color.WHITE);
+                wantToRbtn.setTextColor(Color.BLACK);
+                hadGoRbtn.setTextColor(getResources().getColor(R.color.theme_puple));
+                commentRbtn.setTextColor(Color.BLACK);
             } else {
-                wanto_tv.setBackgroundColor(Color.WHITE);
-                hadgo_tv.setBackgroundColor(Color.WHITE);
-                comment_tv.setBackgroundColor(getResources().getColor(R.color.gray_lighter));
+                wantToRbtn.setTextColor(Color.BLACK);
+                hadGoRbtn.setTextColor(Color.BLACK);
+                commentRbtn.setTextColor(getResources().getColor(R.color.theme_puple));
             }
 
         }
@@ -791,15 +810,18 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
         }
     };
-// TODO: 2016-03-22 计算偏移值
 
     /**
      * 动画效果
+     *
      * @param index
      */
     private void changeTab(int index) {
-        int position = tabWidth * (index + 1);
-        ViewPropertyAnimator.animate(indexIm).translationX(position)
+//        int position = tabWidth*index - tabWidth / 3 - bmpW / 3 - offset;
+        totalOffset = totalOffset + (index - lastIndex)*tabWidth;
+        lastIndex = index;
+//        LogUtils.e(" translationX = "+totalOffset);
+        ViewPropertyAnimator.animate(indexIm).translationX(totalOffset)
                 .setInterpolator(overshootInterpolator).setDuration(DURATION);
     }
 }
