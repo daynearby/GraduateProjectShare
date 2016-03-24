@@ -159,7 +159,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
     @Override
     public int getlayoutid(int position) {
-        return R.layout.item_share_main;
+        return R.layout.item_discover;
     }
 
     /**

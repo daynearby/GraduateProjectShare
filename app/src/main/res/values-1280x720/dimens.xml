@@ -7,6 +7,7 @@
 
     <dimen name="size40">40dp</dimen>
     <dimen name="dp20">20dp</dimen>
+    <dimen name="dp32">32dp</dimen>
 
     <dimen name="textSizeMicro">12sp</dimen>
     <dimen name="textSizeSmall">16sp</dimen>

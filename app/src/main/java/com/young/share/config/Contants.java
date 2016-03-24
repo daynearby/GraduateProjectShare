@@ -52,7 +52,7 @@ public class Contants {
 
     public static final String IMAGE_PATH_AND_NAME = "/image/cropped.jpeg";
     public static final String DOWNLOAD_PATH = "share/images/";
-    public static final String FILE_CACHE_PATH = "/share/cache";
+    public static final String FILE_CACHE_PATH = "/share/cache/";
     public static final String FILE_IMAGE_PATH = "/share/images/";
 
 

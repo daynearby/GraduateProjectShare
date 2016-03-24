@@ -83,7 +83,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
 
     @Override
     public int getLayoutId() {
-        return R.layout.item_share_main;
+        return R.layout.item_discover;
 
     }
 

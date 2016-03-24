@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_message_detail_input_comment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <!--发送评论的输入框-->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/stroke_width"
+        android:background="@color/light_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/paddingHit">
+
+        <EditText
+            android:id="@+id/edt_message_detail_comment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:background="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/im_message_detail_emotion"
+            android:layout_width="@dimen/size40"
+            android:layout_height="@dimen/size40"
+            android:layout_gravity="bottom"
+            android:padding="@dimen/paddingHit"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_emotion_def" />
+
+        <TextView
+            android:id="@+id/txt_message_detail_tosend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sele_btn_send"
+            android:padding="@dimen/paddingMic"
+            android:text="@string/send"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_popupwindow_emotion_dashboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:visibility="gone" />
+
+</LinearLayout>

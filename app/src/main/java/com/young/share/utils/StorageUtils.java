@@ -1,6 +1,7 @@
 package com.young.share.utils;
 
 import android.content.Context;
+import android.os.Environment;
 
 import com.young.share.config.Contants;
 
@@ -11,13 +12,7 @@ import java.io.File;
  * Created by Nearby Yang on 2016-03-07.
  */
 public class StorageUtils {
-    /**
-     * 检查SD卡是否存在
-     */
-    public static boolean checkSdCard() {
-        return android.os.Environment.getExternalStorageState().equals(
-                android.os.Environment.MEDIA_MOUNTED);
-    }
+
 
     /**
      * 存放图片对应的文件夹
@@ -50,12 +45,13 @@ public class StorageUtils {
      */
     private static String createdDir(Context context, String dirName) {
 
-        String path = checkSdCard() ? context.getExternalCacheDir().getAbsolutePath() + dirName :
+        String path =Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED) ? Environment.getExternalStorageDirectory().getAbsolutePath() + dirName :
                 context.getCacheDir().getAbsolutePath() + dirName;
         File filePath = new File(path);
 
         if (!filePath.exists()) {
-            filePath.mkdir();
+            filePath.mkdirs();
         }
 
 

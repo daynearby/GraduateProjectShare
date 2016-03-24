@@ -34,6 +34,7 @@ public class CommentFragment extends BaseFragment {
     private CommentListView commentListView;
     private CommentAdapter commentAdapter;
     private List<Comment_HZ> dataList = new ArrayList<>();//数据
+    private CommentListView.OnItemClickListener onItemClickListener;
 
     private static final int GET_MESSAGE = 0x01;//格式化数据
 
@@ -73,6 +74,12 @@ public class CommentFragment extends BaseFragment {
     public void bindData() {
 
         commentAdapter.bindListView(commentListView);
+        commentListView.setOnItemClick(new CommentListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(Comment_HZ comment, int position) {
+                onItemClickListener.onItemClick(comment,position);
+            }
+        });
     }
 
     @Override
@@ -82,7 +89,7 @@ public class CommentFragment extends BaseFragment {
             case GET_MESSAGE:
                 /*评论数据，显示到linearLayout*/
 
-                // TODO: 2016-03-20 展示数据 ，评论、回复，向上滚动
+                // TODO: 2016-03-20 评论、回复，向上滚动
 
                 commentAdapter.setDatas(dataList);
                 commentAdapter.notifyDataSetChanged();
@@ -92,6 +99,13 @@ public class CommentFragment extends BaseFragment {
         }
     }
 
+    /**
+     * 点击评论的回调
+     * @param onItemClickListener
+     */
+    public void setOnItemClickListener(CommentListView.OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     /**
      * 获取评论数据

@@ -10,11 +10,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,6 +34,7 @@ import com.young.share.fragment.WantToGoFragment;
 import com.young.share.interfaces.AsyncListener;
 import com.young.share.model.BaseModel;
 import com.young.share.model.CommRemoteModel;
+import com.young.share.model.Comment_HZ;
 import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
 import com.young.share.model.ShareMessage_HZ;
@@ -46,6 +47,7 @@ import com.young.share.utils.LocationUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.utils.UserUtils;
+import com.young.share.views.CommentListView.CommentListView;
 import com.young.share.views.CustomViewPager;
 import com.young.share.views.Dialog4Tips;
 import com.young.share.views.MultiImageView.MultiImageView;
@@ -70,16 +72,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
     //    @InjectView(R.id.listview_discover)
 //    private ListView listView;
-    @InjectView(R.id.edt_message_detail_comment)
-    private EditText sendComment_edt;
-    @InjectView(R.id.btn_message_detail_tosend)
-    private Button tosend_btn;
-    @InjectView(R.id.im_message_detail_emotion)
-    private ImageView emotion_im;
-    @InjectView(R.id.vp_popupwindow_emotion_dashboard)
-    private ViewPager vp_emotion_dashboard;
-    @InjectView(R.id.llayout_message_detail_input_comment)
-    private LinearLayout layout_comment;
+
     /**
      * header
      */
@@ -97,16 +90,32 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 //    private GridView myGridview ;
     @InjectView(R.id.vp_message_detail)
     private CustomViewPager viewPager;
+    @InjectView(R.id.tv_item_message_detail_createdat)
+    private TextView ceatedAt_tv;
+    /*下面三个bar*/
+    @InjectView(R.id.ll_bottom_option_bar)
+    private LinearLayout bottomOptionBar;//下面三个三个选项的布局
     @InjectView(R.id.id_tx_wantogo)
     private TextView wanto_tv;//想去数量
     @InjectView(R.id.id_hadgo)
     private TextView hadgo_tv;//去过数量
     @InjectView(R.id.id_tx_comment)
     private TextView comment_tv;//评论数量
-    @InjectView(R.id.tv_item_message_detail_createdat)
-    private TextView ceatedAt_tv;
     @InjectView(R.id.rg_msg_detail_gd)
     private RadioGroup indexRadiog;
+    /*发送评论布局*/
+    @InjectView(R.id.edt_message_detail_comment)
+    private EditText sendComment_edt;
+    @InjectView(R.id.txt_message_detail_tosend)
+    private TextView tosendTxt;
+    @InjectView(R.id.im_message_detail_emotion)
+    private ImageView emotion_im;
+    @InjectView(R.id.vp_popupwindow_emotion_dashboard)
+    private ViewPager vp_emotion_dashboard;
+    @InjectView(R.id.ll_message_detail_input_comment)
+    private LinearLayout layout_comment;//发送评论的布局
+
+    /*三个radioButton 显示标题*/
     @InjectView(R.id.rb_message_detail_comment)
     private RadioButton commentRbtn;
     @InjectView(R.id.rb_message_detail_had_go)
@@ -122,6 +131,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private InputMethodManager imm;
     private String receiverId;//接收消息者id
     private int commentClick;//是否是点击评论进去
+    private CommentFragment commentFragment;//评论的界面的对象
 
     private static final int MESSAGE_SHARE_MESSAGE = 0x01;//显示传过来的sharemessage
     private static final int MESSAGE_BING_MESSAGE = 0x02;//显示传过来的sharemessage
@@ -136,6 +146,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private int totalOffset = 0;//动画总的偏移量
     private int lastIndex = 0;//上一个页面的position
 
+    // TODO: 2016-03-23 下方的操作bar，部分事件需要重新定义
     @Override
     public int getLayoutId() {
         return R.layout.activity_message_detail;
@@ -198,8 +209,23 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         //表情
         new EmotionUtils(mActivity, vp_emotion_dashboard, sendComment_edt);
 
+        sendComment_edt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean focus) {
+
+                LogUtils.e("focus = " + focus);
+
+                if (focus) {
+                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                } else {
+                    imm.hideSoftInputFromWindow(sendComment_edt.getWindowToken(), 0);
+
+                }
+            }
+        });
+
         sendComment_edt.setOnClickListener(this);
-        tosend_btn.setOnClickListener(this);
+        tosendTxt.setOnClickListener(this);
         emotion_im.setOnClickListener(this);
 
     }
@@ -213,10 +239,12 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private void createdFragments() {
 
         List<Fragment> fragmentList = new ArrayList<>();
+        commentFragment = new CommentFragment(this, commModel.getObjectId());
+        commentFragment.setOnItemClickListener(onItemClick);
 
         fragmentList.add(new LikeFragment(this, commModel.getWanted()));
         fragmentList.add(new WantToGoFragment(this, commModel.getVisited()));
-        fragmentList.add(new CommentFragment(this, commModel.getObjectId()));
+        fragmentList.add(commentFragment);
 
         pageAdapter = new ButtombarPageAdapter(fragmentList, getSupportFragmentManager());
         viewPager.setAdapter(pageAdapter);
@@ -426,8 +454,27 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     }
 
     @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
+
+            if (layout_comment.getVisibility() == View.VISIBLE) {
+                layout_comment.setVisibility(View.GONE);
+                sendComment_edt.clearFocus();
+                bottomOptionBar.setVisibility(View.VISIBLE);
+                return true;
+            } else {
+                back2superClazz();
+            }
+        }
+
+
+        return super.dispatchKeyEvent(event);
+    }
+    @Override
     public void mBack() {
-        back2superClazz();
+
+
     }
 
     /**
@@ -459,6 +506,29 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         }
     }
 
+    /**
+     * 评论点击事件
+     */
+    private CommentListView.OnItemClickListener onItemClick = new CommentListView.OnItemClickListener() {
+        @Override
+        public void onItemClick(Comment_HZ comment, int position) {
+            prepareSend();
+        }
+    };
+
+    /**
+     * 准备发送
+     */
+    private void prepareSend() {
+        bottomOptionBar.setVisibility(View.GONE);
+        layout_comment.setVisibility(View.VISIBLE);
+        sendComment_edt.requestFocus();
+
+    }
+
+    /**
+     * 结束退出
+     */
     private void backAFinsish() {
 
         mBackStartActivity(superTagClazz);
@@ -523,10 +593,11 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
                 break;
 
-            case R.id.btn_message_detail_tosend://发送消息
+            case R.id.txt_message_detail_tosend://发送消息
                 finishPrepare();
                 receiverId = commModel.getMyUser().getObjectId();
                 sendComment();
+
                 break;
             case R.id.id_im_userH://用户资料
                 showUserInfo(v);
@@ -568,6 +639,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
             case R.id.id_tx_comment://评论数量
                 getUser();
+                /*显示评论输入面板*/
+                editComment();
 
                 break;
 
@@ -575,6 +648,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
                 LogUtils.ts("标签的点击事件");
                 break;
+
             case R.id.rb_message_detail_want_to://想去，也就是收藏
                 viewPager.setCurrentItem(0);
                 break;
@@ -717,6 +791,17 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     }
 
     /**
+     * 评论的布局
+     */
+    private void editComment() {
+
+        layout_comment.setVisibility(View.VISIBLE);
+        bottomOptionBar.setVisibility(View.GONE);
+        sendComment_edt.requestFocus();
+
+    }
+
+    /**
      * 再获取当前用户是否存在
      */
     public void getUser() {
@@ -733,6 +818,9 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
 
         if (!TextUtils.isEmpty(sendComment_edt.getText().toString())) {
+
+            bottomOptionBar.setVisibility(View.VISIBLE);
+            sendComment_edt.clearFocus();
 
             BmobApi.sendMessage(mActivity, commModel.getMyUser().getObjectId(), receiverId, sendComment_edt.getText().toString(),
                     commModel.getObjectId(), new BmobApi.SendMessageCallback() {
@@ -818,7 +906,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
      */
     private void changeTab(int index) {
 //        int position = tabWidth*index - tabWidth / 3 - bmpW / 3 - offset;
-        totalOffset = totalOffset + (index - lastIndex)*tabWidth;
+        totalOffset = totalOffset + (index - lastIndex) * tabWidth;
         lastIndex = index;
 //        LogUtils.e(" translationX = "+totalOffset);
         ViewPropertyAnimator.animate(indexIm).translationX(totalOffset)

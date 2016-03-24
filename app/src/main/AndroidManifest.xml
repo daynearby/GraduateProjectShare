@@ -119,6 +119,7 @@
         <activity
             android:name=".MessageDetailActivity"
             android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <!--通用记录查看 -->
