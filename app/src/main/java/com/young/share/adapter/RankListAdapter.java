@@ -117,6 +117,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
         }
 
         comment_tv.setVisibility(commRemoteModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES ? View.VISIBLE : View.GONE);
+
         comment_tv.setText(commRemoteModel.getComment() > 0 ?
                 String.valueOf(commRemoteModel.getComment()) : ctx.getString(R.string.tx_comment));
 

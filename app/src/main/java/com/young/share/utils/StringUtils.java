@@ -181,8 +181,43 @@ public class StringUtils {
             }
 
         }, 0, str.length(), 0);
-//            }
-//        }
+
+        return ssb;
+    }
+
+
+    /**
+     * 地理信息的点击事件
+     * @param context
+     * @param locationInfo
+     * @param textLink
+     * @return
+     */
+    public static SpannableStringBuilder locatiomInfo(final Context context,
+                                                      final String locationInfo,
+                                                      final TextLink textLink){
+        SpannableStringBuilder ssb = new SpannableStringBuilder(locationInfo);
+
+        ssb.setSpan(new ClickableSpan() {
+
+            @Override
+            public void onClick(View widget) {
+
+                if (textLink != null) {
+                    textLink.onclick(locationInfo);
+                }
+
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setColor(context.getResources().getColor(R.color.color_name)); // 设置文本颜色
+                // 去掉下划线
+                ds.setUnderlineText(false);
+            }
+
+        }, 0, locationInfo.length(), 0);
 
         return ssb;
     }

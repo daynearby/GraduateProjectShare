@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.klinker.android.link_builder.Link;
-import com.klinker.android.link_builder.LinkBuilder;
 import com.young.share.BaiduMapActivity;
 import com.young.share.BigPicActivity;
 import com.young.share.MessageDetailActivity;
@@ -38,8 +36,6 @@ import com.young.share.views.PopupWinUserInfo;
 
 import java.io.Serializable;
 import java.util.List;
-
-import cn.bmob.v3.datatype.BmobGeoPoint;
 
 /**
  * 实例化
@@ -137,8 +133,14 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         //地理信息的显示。显示了可以点击查看详细
         if (!TextUtils.isEmpty(shareMessage.getShLocation())) {
             location.setVisibility(View.VISIBLE);
-            location.setText(shareMessage.getShLocation());
-            LinkBuilder.on(location).addLink(setLocationInfoLink(shareMessage.getShLocation(), shareMessage.getGeographic())).build();
+            StringUtils.locatiomInfo(ctx, shareMessage.getShLocation(), new StringUtils.TextLink() {
+                @Override
+                public void onclick(String str) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT, shareMessage.getGeographic());
+                    startActivity(BaiduMapActivity.class, bundle);
+                }
+            });
         }
 //        location.setText();
         //图片显示
@@ -179,27 +181,6 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
     }
 
 
-    /**
-     * 地理位置的点击事件
-     *
-     * @param linkWhat
-     * @param geoPoint 位置信息
-     * @return
-     */
-    private Link setLocationInfoLink(String linkWhat, final BmobGeoPoint geoPoint) {
-        Link link = new Link(linkWhat);
-        link.setOnClickListener(new Link.OnClickListener() {
-            @Override
-            public void onClick(String clickedText) {
-
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT, geoPoint);
-                startActivity(BaiduMapActivity.class, bundle);
-            }
-        });
-
-        return link;
-    }
 
     /**
      * 点击事件

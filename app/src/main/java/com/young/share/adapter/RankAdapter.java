@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.young.share.model.RankBean;
 import com.young.share.R;
+import com.young.share.model.RankBean;
 
 import java.util.List;
 
@@ -51,7 +51,7 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.myViewHolder> 
 
     @Override
     public int getItemCount() {
-        return dataList == null ? 0 : dataList.size();
+        return dataList != null && dataList.size() > 0 ? dataList.size() : 0;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

@@ -5,7 +5,6 @@
                 <!-- Customize your theme here. -->
                 <!-- API 14 theme customizations can go here. -->
                 <item name="colorPrimary">@color/colorPrimary</item>
-                <item name="linkBuilderStyle">@style/LinkBuilder</item>
                 <item name="android:colorBackground">@color/ripple_material_light</item>
                 <item name="android:textColorPrimary">@android:color/black</item>
                 <item name="android:textColorPrimaryInverse">@android:color/black</item>

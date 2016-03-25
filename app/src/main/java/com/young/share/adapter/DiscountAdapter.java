@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.klinker.android.link_builder.Link;
-import com.klinker.android.link_builder.LinkBuilder;
 import com.young.share.BaiduMapActivity;
 import com.young.share.BigPicActivity;
 import com.young.share.R;
@@ -37,8 +35,6 @@ import com.young.share.views.PopupWinUserInfo;
 
 import java.io.Serializable;
 import java.util.List;
-
-import cn.bmob.v3.datatype.BmobGeoPoint;
 
 /**
  * 商家优惠信息适配器
@@ -85,14 +81,22 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
             content_tv.setVisibility(View.GONE);
         }
         nickname_tv.setText(TextUtils.isEmpty(myUser.getNickName()) ? ctx.getString(R.string.user_name_defual) : myUser.getNickName());
+
         //地理信息的显示。显示了可以点击查看详细
         if (!TextUtils.isEmpty(discountMessage_hz.getDtLocation())) {
             location.setVisibility(View.VISIBLE);
-            location.setText(discountMessage_hz.getDtLocation());
+//            location.setText(discountMessage_hz.getDtLocation());
+            StringUtils.locatiomInfo(ctx, discountMessage_hz.getDtLocation(), new StringUtils.TextLink() {
+                @Override
+                public void onclick(String str) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT,discountMessage_hz.getGeographic());
+                    startActivity(BaiduMapActivity.class, bundle);
+                }
+            });
 
-            LinkBuilder.on(location).addLink(setLocationInfoLink(discountMessage_hz.getDtLocation(),
-                    discountMessage_hz.getGeographic())).build();
         }
+
         ImageHandlerUtils.loadIamgeThumbnail(ctx,
                 TextUtils.isEmpty(myUser.getAvatar()) ? Contants.DEFAULT_AVATAR : myUser.getAvatar(), avatar);
         if (TextUtils.isEmpty(discountMessage_hz.getDtTag())) {
@@ -162,27 +166,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         return R.layout.item_discover;
     }
 
-    /**
-     * 地理位置的点击事件
-     *
-     * @param linkWhat
-     * @param geoPoint 位置信息
-     * @return
-     */
-    private Link setLocationInfoLink(String linkWhat, final BmobGeoPoint geoPoint) {
-        Link link = new Link(linkWhat);
-        link.setOnClickListener(new Link.OnClickListener() {
-            @Override
-            public void onClick(String clickedText) {
 
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT,geoPoint);
-                startActivity(BaiduMapActivity.class, bundle);
-            }
-        });
-
-        return link;
-    }
     /**
      * 点击事件
      */

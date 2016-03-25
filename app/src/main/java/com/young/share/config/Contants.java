@@ -42,6 +42,10 @@ public class Contants {
     //******************************Mob key*******************************
     public static final String SMS_APP_KEY = "b63b43f91a14";
     public static final String SMS_APP_SECRET = "78a2317bbf261f05ebb6c62be8262bb7";
+     //******************************Mob key*******************************
+    public static final String QUPAI_APP_KEY = "2064da4d85d4245";
+    public static final String QUPAI_APP_SECRET = "5f68bc1cd5fe431b8e278479abef617f";
+    public static final String QUPAI_APP_SPACE = "share-video";
 
 
     //******************************本地 文件名 前缀***********************

@@ -3,6 +3,8 @@ package com.young.share.config;
 import android.content.Context;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.duanqu.qupai.upload.AuthService;
+import com.duanqu.qupai.upload.QupaiAuthListener;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
@@ -13,6 +15,7 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.ImageHandlerUtils;
+import com.young.share.utils.LogUtils;
 import com.young.share.utils.ThreadUtils;
 import com.young.share.utils.cache.ACache;
 
@@ -49,8 +52,32 @@ public class ApplicationConfig extends LitePalApplication {
         initImageLoader(getApplicationContext());
         //百度基础地图定位
         SDKInitializer.initialize(getApplicationContext());
+//趣拍初始化
+        initAuth(Contants.QUPAI_APP_KEY, Contants.QUPAI_APP_SECRET, Contants.QUPAI_APP_SPACE);
+    }
 
+    /**
+     * 鉴权 趣拍
+     *
+     * @param appKey    appkey
+     * @param appsecret appsecret
+     * @param space     space
+     */
+    private void initAuth(String appKey, String appsecret, String space) {
+        AuthService service = AuthService.getInstance();
+        service.setQupaiAuthListener(new QupaiAuthListener() {
+            @Override
+            public void onAuthError(int errorCode, String message) {
+                LogUtils.e("AUTHTAG ErrorCode" + errorCode + " message = " + message);
+            }
 
+            @Override
+            public void onAuthComplte(int responseCode, String responseMessage) {
+//                Contant.accessToken = responseMessage;
+                LogUtils.d("accessToken = " + responseMessage);
+            }
+        });
+        service.startAuth(getApplicationContext(), appKey, appsecret, space);
     }
 
     /**

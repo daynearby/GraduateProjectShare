@@ -31,6 +31,7 @@ import com.young.share.utils.LogUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -58,6 +59,7 @@ public class RankListActivity extends BaseAppCompatActivity {
     private int endIndex = 20;
     private int PUSH_TIMES = 0;//下拉次数
     private boolean isGetMore = false;
+    private boolean isHadData = false;//本地是否有数据，false --> 没有
 
     private List<CommRemoteModel> remoteList;
 
@@ -79,8 +81,9 @@ public class RankListActivity extends BaseAppCompatActivity {
         tag = getIntent().getStringExtra(Contants.INTENT_RANK_TYPE);
         key = getString(R.string.tag_manywanttogo).equals(tag) ? ComparatorImpl.COMPREHENSIVE : ComparatorImpl.COMPREHENSIVE_OTHERS;
 
-
-        remoteList = new ArrayList<>();
+        remoteList = (List<CommRemoteModel>) app.getCacheInstance().getAsObject(tag);
+        if (!(isHadData = remoteList != null && remoteList.size() > 0))
+            remoteList = new ArrayList<>();
 
         threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
             @Override
@@ -110,72 +113,6 @@ public class RankListActivity extends BaseAppCompatActivity {
 
     }
 
-    /**
-     * 从远程数据库获取数据
-     * 解析并且转换成remoteModel
-     */
-    private void getDataFromRemote() {
-
-        JSONObject parameters = new JSONObject();
-        String funcationName;
-
-        if (key == ComparatorImpl.COMPREHENSIVE) {
-            funcationName = BmobApi.GET_HEAT_MESSAGES;
-        } else {
-            funcationName = BmobApi.GET_RANK_DATA;
-            try {
-                parameters.put(Contants.PARAM_TAG, tag);
-            } catch (JSONException e) {
-                LogUtils.d("添加参数失败 " + e.toString());
-            }
-        }
-
-        try {
-            parameters.put(Contants.PARAM_SKIP, skip);
-
-        } catch (JSONException e) {
-            LogUtils.d("添加参数失败 " + e.toString());
-        }
-
-
-        BmobApi.AsyncFunction(mActivity, parameters, funcationName, RankList.class, new AsyncListener() {
-            @Override
-            public void onSuccess(Object object) {
-                RankList rankLists = (RankList) object;
-
-                List<ShareMessage_HZ> sharemessagesList = rankLists.getSharemessages();
-                List<DiscountMessage_HZ> discountMessagesList = rankLists.getDiscountMessages();
-/*分享信息的数据*/
-                if (sharemessagesList != null) {
-                    for (ShareMessage_HZ share : sharemessagesList) {
-                          /*格式化数据，通用格式*/
-                        remoteList.add(DataFormateUtils.formateDataDiscover(share, Contants.DATA_MODEL_SHARE_MESSAGES));
-                    }
-                }
-                if (discountMessagesList != null) {
-                    for (DiscountMessage_HZ discountMessage : discountMessagesList) {
-                        /*格式化数据，通用格式*/
-                        remoteList.add(DataFormateUtils.formateDataDiscount(discountMessage));
-                    }
-                }
-//进行排序
-                if (remoteList != null && remoteList.size() > 0) {
-                    Collections.sort(remoteList, new ComparatorImpl(key));
-
-                    mHandler.sendEmptyMessage(HANDLER_GET_DATA);
-                } else {
-                    mHandler.sendEmptyMessage(HANDLER_GET_NO_DATA);
-                }
-
-            }
-
-            @Override
-            public void onFailure(int code, String msg) {
-                LogUtils.d("get rank data failure. code = " + code + " message = " + msg);
-            }
-        });
-
-    }
 
     @Override
     public void findviewbyid() {
@@ -300,10 +237,83 @@ public class RankListActivity extends BaseAppCompatActivity {
             endIndex = remoteList.size() < Contants.PAGE_SIZE ? remoteList.size() : endIndex;
 
         }
-
-        rankAdapter.setData(remoteList.subList(startIndex, endIndex));
-
+        if (remoteList != null && remoteList.size() > 0) {
+            rankAdapter.setData(remoteList.subList(startIndex, endIndex));
+        }
         swipeRefreshLayout.setRefreshing(false);
     }
 
+    /**
+     * 从远程数据库获取数据
+     * 解析并且转换成remoteModel
+     */
+    private void getDataFromRemote() {
+
+        JSONObject parameters = new JSONObject();
+        String funcationName;
+
+        if (key == ComparatorImpl.COMPREHENSIVE) {
+            funcationName = BmobApi.GET_HEAT_MESSAGES;
+        } else {
+            funcationName = BmobApi.GET_RANK_DATA;
+            try {
+                parameters.put(Contants.PARAM_TAG, tag);
+            } catch (JSONException e) {
+                LogUtils.d("添加参数失败 " + e.toString());
+            }
+        }
+
+        try {
+            parameters.put(Contants.PARAM_SKIP, skip);
+
+        } catch (JSONException e) {
+            LogUtils.d("添加参数失败 " + e.toString());
+        }
+
+
+        BmobApi.AsyncFunction(mActivity, parameters, funcationName, RankList.class, new AsyncListener() {
+            @Override
+            public void onSuccess(Object object) {
+                RankList rankLists = (RankList) object;
+
+                List<ShareMessage_HZ> sharemessagesList = rankLists.getSharemessages();
+                List<DiscountMessage_HZ> discountMessagesList = rankLists.getDiscountMessages();
+/*分享信息的数据*/
+                if (remoteList != null && remoteList.size() > 0) {
+                    remoteList.clear();
+                }
+                if (sharemessagesList != null) {
+                    for (ShareMessage_HZ share : sharemessagesList) {
+                          /*格式化数据，通用格式*/
+                        remoteList.add(DataFormateUtils.formateDataDiscover(share, Contants.DATA_MODEL_SHARE_MESSAGES));
+                    }
+                }
+
+                if (discountMessagesList != null) {
+                    for (DiscountMessage_HZ discountMessage : discountMessagesList) {
+                        /*格式化数据，通用格式*/
+                        remoteList.add(DataFormateUtils.formateDataDiscount(discountMessage));
+                    }
+                }
+
+//进行排序
+                if (remoteList != null && remoteList.size() > 0) {
+                    Collections.sort(remoteList, new ComparatorImpl(key));
+
+                    app.getCacheInstance().put(tag, (Serializable) remoteList);
+
+                    mHandler.sendEmptyMessage(HANDLER_GET_DATA);
+                } else {
+                    mHandler.sendEmptyMessage(HANDLER_GET_NO_DATA);
+                }
+
+            }
+
+            @Override
+            public void onFailure(int code, String msg) {
+                LogUtils.d("get rank data failure. code = " + code + " message = " + msg);
+            }
+        });
+
+    }
 }

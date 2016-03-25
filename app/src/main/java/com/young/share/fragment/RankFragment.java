@@ -63,7 +63,15 @@ public class RankFragment extends BaseFragment {
         RecyclerView recyclerView = $(R.id.recv_rank);
         rankAdapter = new RankAdapter(context);
         //瀑布式
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        try {
+//            return super.onTouchEvent(event);//StaggeredGridLayoutManager
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         //item之间距离
         recyclerView.addItemDecoration(new SpacesItemDecoration(16));
         // 设置ItemAnimator

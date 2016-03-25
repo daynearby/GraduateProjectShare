@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.young.share">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <!-- 权限 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -27,6 +27,17 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
 
     <!-- end -->
+    <!--趣拍使用的权限-->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera.flash" />
+
+    <uses-permission android:name="android.permission.OPEN_CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECORD_VIDEO" />
+    <!--趣拍使用的权限 end -->
 
     <!-- BmobPush SDK权限 -->
     <permission
@@ -43,7 +54,7 @@
         android:label="@string/app_name"
         android:theme="@style/mAppTheme"
         tools:replace="android:theme"
-
+        android:hardwareAccelerated="true"
         >
 
         <!-- 主界面 -->

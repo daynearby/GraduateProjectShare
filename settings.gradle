@@ -1,2 +1,3 @@
-include ':app', ':Crop', ':sMSSDK', ':multiImageSelector', ':svprogresshud', ':TextLink', ':Minisdk-release'
+include ':app', ':Crop', ':sMSSDK', ':multiImageSelector', ':svprogresshud', ':Minisdk-release'
 
+include ':flashview'

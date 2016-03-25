@@ -104,3 +104,8 @@
 
 -keepattributes Signature
 -keepnames class com.fasterxml.jackson.** { *; }
+
+#百度地图
+#-libraryjars libs/baidumapapi_v2_1_2.jar 替换成自己所用版本的jar包
+-keep class com.baidu.** { *; }
+-keep class vi.com.gdi.bgl.android.**{*;}
