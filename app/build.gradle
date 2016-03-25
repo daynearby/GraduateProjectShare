@@ -1,6 +1,15 @@
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
 
 android {
+    signingConfigs {
+        debug {
+            keyAlias 'shareLife'
+            keyPassword '56454dfe5c.'
+            storeFile file('D:/我的文档/毕业设计/应用签名/shareKeyStory')
+            storePassword 'hghisj262jj.'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion '23.0.2'
     defaultConfig {
@@ -12,13 +21,17 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
     }
     productFlavors {
     }
-
 //    packagingOptions{
 //        exclude 'META-INF/DEPENDENCIES'
 //        exclude 'META-INF/NOTICE'
@@ -36,9 +49,17 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'eu.the4thfloor.volley:com.android.volley:2015.05.28'
+    compile 'com.android.support:support-v13:23.1.1'
+    apt "com.google.dagger:dagger-compiler:2.0.1"
+    apt 'com.google.auto.factory:auto-factory:1.0-beta2'
+    compile "com.fasterxml.jackson.core:jackson-databind:2.4.4"
+    compile 'com.google.dagger:dagger:2.0.1'
+    compile 'com.google.code.findbugs:jsr305:3.0.0'
+    compile 'com.google.guava:guava:18.0'
     compile project(':Crop')
     compile project(':sMSSDK')
     compile project(':multiImageSelector')
     compile project(':svprogresshud')
     compile project(':TextLink')
+    compile project(':Minisdk-release')
 }
