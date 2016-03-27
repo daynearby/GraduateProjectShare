@@ -29,6 +29,8 @@ public class NetworkReuqest {
     private static final String BAIDU_GEOCODER = "http://api.map.baidu.com/geocoder/v2/";
     private static final String BAIDU_PLACE_SUGGESTION = "http://api.map.baidu.com/place/v2/suggestion";//周围
     private static final String BAIDU_PLACE_SEARCH = "http://api.map.baidu.com/place/v2/search";//服务
+    public static final String BMOB_HOST = "https://api.bmob.cn/1/";//bmob
+    public static final String ADVERTISERMENT = "classes/Advertisement";
 
 
     /**
@@ -142,7 +144,45 @@ public class NetworkReuqest {
 
     }
 
+    /**
+     * post请求
+     * @param context
+     * @param url
+     * @param params
+     * @param clazz
+     * @param jsonRequstCallback
+     * @param <T>
+     */
+    public static <T>void  postRequest(Context context, String url, HashMap<String, String> params,
+                                    Class clazz, final JsonRequstCallback<T> jsonRequstCallback){
 
+
+        GSONRequest<T> jr = new GSONRequest<T>(url,
+                clazz,
+                new Response.Listener<T>() {
+                    @Override
+                    public void onResponse(T t) {
+                        if (jsonRequstCallback != null) {
+                            jsonRequstCallback.onSuccess(t);
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                LogUtils.e(error.toString());
+                if (jsonRequstCallback != null) {
+                    jsonRequstCallback.onFaile(error);
+                }
+            }
+        });
+
+        jr.setTag(url);
+
+//启动
+        VolleyApi.getInstence(context).add(jr);
+    }
 
 
     /**
@@ -195,6 +235,9 @@ public class NetworkReuqest {
         VolleyApi.getInstence(context).add(jr);
 
     }
+
+
+
 
     public interface JsonRequstCallback<T> {
         void onSuccess(T t);

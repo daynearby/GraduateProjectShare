@@ -3,11 +3,13 @@ package com.young.share.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -62,9 +64,11 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         TextView wanto_tv = holder.getView(R.id.id_tx_wantogo);//想去数量
         TextView hadgo_tv = holder.getView(R.id.id_hadgo);//去过数量
         RelativeLayout tagLayout = holder.getView(R.id.rl_head_tag_layout);
+        LinearLayout bottomBar = holder.getView(R.id.ll_bottom_option_bar);
+
         ViewGroup.LayoutParams lp = multiImageView.getLayoutParams();
         lp.width = DisplayUtils.getScreenWidthPixels((Activity) ctx) / 3 * 2;//设置宽度
-
+        bottomBar.setBackgroundColor(Color.WHITE);
         holder.getView(R.id.id_tx_comment).setVisibility(View.GONE);//评论数量
 
         ((TextView) holder.getView(R.id.tv_item_share_main_created_at)).setText(DateUtils.convertDate2Str(discountMessage_hz.getCreatedAt()));//创建时间
@@ -74,7 +78,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
 //        StringBuilder sb = new StringBuilder(discountMessage_hz.getShContent());
         // 特殊文字处理,将表情等转换一下
-        if (! TextUtils.isEmpty(discountMessage_hz.getDtContent())) {
+        if (!TextUtils.isEmpty(discountMessage_hz.getDtContent())) {
             content_tv.setText(StringUtils.getEmotionContent(
                     ctx, content_tv, discountMessage_hz.getDtContent()));
         } else {
@@ -86,14 +90,14 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         if (!TextUtils.isEmpty(discountMessage_hz.getDtLocation())) {
             location.setVisibility(View.VISIBLE);
 //            location.setText(discountMessage_hz.getDtLocation());
-            StringUtils.locatiomInfo(ctx, discountMessage_hz.getDtLocation(), new StringUtils.TextLink() {
+            location.setText(StringUtils.locatiomInfo(ctx, discountMessage_hz.getDtLocation(), new StringUtils.TextLink() {
                 @Override
                 public void onclick(String str) {
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT,discountMessage_hz.getGeographic());
+                    bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT, discountMessage_hz.getGeographic());
                     startActivity(BaiduMapActivity.class, bundle);
                 }
-            });
+            }));
 
         }
 
@@ -163,7 +167,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
     @Override
     public int getlayoutid(int position) {
-        return R.layout.item_discover;
+        return R.layout.item_discount;
     }
 
 

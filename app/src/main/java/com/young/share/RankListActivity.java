@@ -20,7 +20,7 @@ import com.young.share.interfaces.ComparatorImpl;
 import com.young.share.interfaces.ListViewRefreshListener;
 import com.young.share.model.CommRemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
-import com.young.share.model.RankList;
+import com.young.share.model.gson.RankList;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.network.BmobApi;
 import com.young.share.thread.MyRunnable;
@@ -74,12 +74,11 @@ public class RankListActivity extends BaseAppCompatActivity {
     @Override
     public void initData() {
         initializeToolbar();
-        setTitle(tag);
-
 
         //标志
         tag = getIntent().getStringExtra(Contants.INTENT_RANK_TYPE);
         key = getString(R.string.tag_manywanttogo).equals(tag) ? ComparatorImpl.COMPREHENSIVE : ComparatorImpl.COMPREHENSIVE_OTHERS;
+        setTitle(tag);
 
         remoteList = (List<CommRemoteModel>) app.getCacheInstance().getAsObject(tag);
         if (!(isHadData = remoteList != null && remoteList.size() > 0))

@@ -10,7 +10,7 @@ import com.young.share.R;
 import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
 import com.young.share.interfaces.AsyncListener;
-import com.young.share.model.CommentList;
+import com.young.share.model.gson.CommentList;
 import com.young.share.model.Comment_HZ;
 import com.young.share.network.BmobApi;
 import com.young.share.utils.LogUtils;

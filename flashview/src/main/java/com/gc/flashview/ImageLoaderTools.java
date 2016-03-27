@@ -18,7 +18,8 @@ public class ImageLoaderTools{
 	private static final int MEMORY_CACHE_SIZE_BYTES = 2 * 1024 * 1024;
 
 	private ImageLoaderTools(Context context){
-		setImageLoader(initImageLoader(context));
+//		setImageLoader(initImageLoader(context));
+		mImageLoader = ImageLoader.getInstance();
 	}
 	
 	public static ImageLoaderTools getInstance(Context context){
@@ -39,7 +40,7 @@ public class ImageLoaderTools{
 				.showImageForEmptyUri(R.drawable.image_holder)//设置图片URI为空或是错误的时候显示的图片
 				.showImageOnFail(R.drawable.image_holder)//设置图片加载/解码过程中错误时候显示的图片
 				.build();
-		
+
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
 		.defaultDisplayImageOptions(defaultOptions)//
 				.discCacheSize(DISK_CACHE_SIZE_BYTES)

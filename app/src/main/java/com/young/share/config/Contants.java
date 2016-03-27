@@ -14,7 +14,7 @@ public class Contants {
 
     //**********************时间单位******************
     public static final int TIME = 2000;
-    public static final int ONE_SECOND = 1000;
+    public static final int ONE_SECOND = 1500;
 
     public static final String sharePreferenceStr = "WELCOME";
 
@@ -42,11 +42,37 @@ public class Contants {
     //******************************Mob key*******************************
     public static final String SMS_APP_KEY = "b63b43f91a14";
     public static final String SMS_APP_SECRET = "78a2317bbf261f05ebb6c62be8262bb7";
-     //******************************Mob key*******************************
+    //**********************小视频 趣拍*************正式发布的时候应该使用jni装起来吧**
+
+    //******************************趣拍 key*******************************
     public static final String QUPAI_APP_KEY = "2064da4d85d4245";
     public static final String QUPAI_APP_SECRET = "5f68bc1cd5fe431b8e278479abef617f";
     public static final String QUPAI_APP_SPACE = "share-video";
-
+    /*视频比特率*/
+    public static final int VIDEO_BITRATE = 300 * 1024;
+    /*默认最大时长*/
+    public static final int DEFAULT_DURATION_MAX_LIMIT = 6;
+    public static final int DEFAULT_DURATION_LIMIT_MIN = 1;
+    /*默认CRF参数*/
+    public static final int DEFAULT_VIDEO_RATE_CRF = 6;
+    /*VideoPreset*/
+    public static final String DEFAULT_VIDEO_Preset = "faster";
+    /*VideoLevel*/
+    public static final int DEFAULT_VIDEO_LEVEL = 30;
+    /*VideoTune*/
+    public static final String DEFAULT_VIDEO_TUNE = "zerolatency";
+    /* movflags_KEY*/
+    public static final String DEFAULT_VIDEO_MOV_FLAGS_KEY = "movflags";
+    /*movflags_VALUE*/
+    public static final String DEFAULT_VIDEO_MOV_FLAGS_VALUE = "+faststart";
+    /*美颜程度，1~100*/
+    public static final int BEAUTY_PROGRESS = 30;
+    /*美颜 默认开启*/
+    public static final boolean BEAUTY_SKIN = true;
+    /*输出视频宽高，可以使用 320 * 240 ，480 * 480 ，360 * 640 */
+    public static final int OUTPUT_VIDEO_WIDTH = 320;
+    public static final int OUTPUT_VIDEO_HEIGHT = 240;
+    public static final String VIEDO_PROFILE = "high";//视频质量
 
     //******************************本地 文件名 前缀***********************
     public static final String FILE_HEAD = "file://";
@@ -186,6 +212,9 @@ public class Contants {
     //****************参数名********************
     public static final String PARAM_USERID = "userID";//参数名
     public static final String PARAM_SKIP = "skip";//参数名
+    public static final String PARAM_LIMIT = "limit";//参数名
+    public static final String PARAM_CREATED = "createdAt";//参数名
+    public static final String PARAM_ORDER = "order";//参数名
     public static final String PARAM_TAG = "tag";//参数名
     public static final String PARAM_OUTPUT = "output";//参数名
     public static final String PARAM_JSON = "json";//参数值
@@ -211,4 +240,6 @@ public class Contants {
     public static final String ACAHE_KEY_CITY = "acahe_key_city";//城市
     public static final String ACAHE_KEY_DISCOVER = "acahe_key_discover";//发现前面那部分
     public static final String ACAHE_KEY_DISCOUNT = "acahe_key_discount";//商家优惠前面那部分
+    public static final String ACAHE_KEY_USER= "acahe_key_user";//用户信息
+
 }

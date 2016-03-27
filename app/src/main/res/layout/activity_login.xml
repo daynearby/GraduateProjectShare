@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_login_m"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -50,20 +49,20 @@
 
         <TextView
             android:id="@+id/tv_login_forgetPwd"
-            style="@style/bar_text"
-            android:gravity="right"
+            style="@style/text_style_wrap"
             android:padding="@dimen/paddingMic"
             android:text="@string/forget_pwd"
-            android:textColor="@drawable/sele_text_color_def_white"
+            android:layout_gravity="right"
+            android:textColor="@drawable/sele_text_color_def_back"
             android:textSize="@dimen/textSizeMediu" />
 
         <TextView
             android:id="@+id/tv_login_register"
-            style="@style/bar_text"
-            android:gravity="right"
+            style="@style/text_style_wrap"
+            android:layout_gravity="right"
             android:padding="@dimen/paddingMic"
             android:text="@string/regist"
-            android:textColor="@drawable/sele_text_color_def_white"
+            android:textColor="@drawable/sele_text_color_def_back"
             android:textSize="@dimen/textSizeMediu" />
 
 
@@ -76,7 +75,6 @@
             android:gravity="center"
             android:padding="@dimen/paddingMediu"
             android:text="@string/login_text"
-            android:textColor="@color/white"
-            android:textSize="@dimen/textSizeLarge" />
+            android:textSize="@dimen/textSizeMediu" />
     </LinearLayout>
 </RelativeLayout>

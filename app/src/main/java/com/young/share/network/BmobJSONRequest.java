@@ -26,7 +26,7 @@ public class BmobJSONRequest<T> extends Request<T> {
     private HashMap<String, String> params;
 
     //固定请求头
-    private HashMap<String, String> regularMap = new HashMap<String, String>() {
+    private HashMap<String, String> header = new HashMap<String, String>() {
         {
             put(Contants.REST_APP_KEY, Contants.BMOB_APP_KEY);
             put(Contants.REST_APP_REST_KEY, Contants.BMOB_APP_REST_KEY);
@@ -70,14 +70,13 @@ public class BmobJSONRequest<T> extends Request<T> {
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        Map<String, String> appendHeader = super.getHeaders();
-        regularMap.putAll(appendHeader);
-        return regularMap;
+        return header;
     }
 
     @Override
-    protected Map<String, String> getPostParams() throws AuthFailureError {
-        params.putAll(super.getPostParams());
+    public HashMap<String, String> getParams() {
         return params;
     }
+
+
 }

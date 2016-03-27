@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:padding="@dimen/paddingMic">
+
+        <include layout="@layout/include_head" />
+
+        <TextView
+            android:id="@+id/id_tx_share_content"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:padding="@dimen/paddingMic"
+            android:text="@string/defaul_share_text"
+            android:textColor="@android:color/black" />
+
+        <com.young.share.views.MultiImageView.MultiImageView
+            android:id="@+id/miv_share_iamges"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/paddingMic" />
+
+        <TextView
+            android:id="@+id/tv_item_share_main_location"
+            style="@style/text_style_wrap"
+            android:layout_gravity="right"
+            android:paddingLeft="@dimen/paddingMic"
+            android:paddingRight="@dimen/paddingMic"
+            android:paddingTop="@dimen/paddingMic"
+            android:text="@string/txt_location_info"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_item_share_main_created_at"
+            style="@style/text_style_wrap"
+            android:layout_gravity="right"
+            android:paddingLeft="@dimen/paddingMic"
+            android:paddingRight="@dimen/paddingMic"
+            android:paddingTop="@dimen/paddingMic"
+            android:text="@string/created_at" />
+
+    </LinearLayout>
+
+    <include layout="@layout/include_bottom_bar" />
+
+    <!--布局文件复用，为了准备显示viewpager-->
+    <ViewStub
+        android:id="@+id/vs_share_main_vp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout="@layout/item_viewpager" />
+
+</LinearLayout>

@@ -4,10 +4,10 @@ apply plugin: 'android-apt'
 android {
     signingConfigs {
         debug {
-            keyAlias 'shareLife'
-            keyPassword '56454dfe5c.'
-            storeFile file('D:/我的文档/毕业设计/应用签名/shareKeyStory')
-            storePassword 'hghisj262jj.'
+            keyAlias 'shareKeyStorySSL'
+            keyPassword '5sdf5asd555'
+            storeFile file('D:/我的文档/毕业设计/应用签名/key/shareKetStoryssl.keystore')
+            storePassword 'sdf554sdf4c'
         }
     }
     compileSdkVersion 23
@@ -34,6 +34,7 @@ android {
     }
     packagingOptions{
 //        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE'
     }
@@ -62,4 +63,6 @@ dependencies {
     compile project(':svprogresshud')
     compile project(':Minisdk-release')
     compile project(':flashview')
+    compile 'com.hynnet:httpclient:4.5.1'
+    compile 'org.apache.httpcomponents:httpmime:4.5.2'
 }

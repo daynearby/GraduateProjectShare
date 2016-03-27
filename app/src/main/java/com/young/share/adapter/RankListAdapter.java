@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.young.share.BaiduMapActivity;
 import com.young.share.BigPicActivity;
 import com.young.share.MessageDetailActivity;
 import com.young.share.R;
@@ -57,12 +58,12 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
         TextView nickname_tv = holder.getView(R.id.id_userName);//昵称
         TextView tag_tv = holder.getView(R.id.id_tx_tab);//标签
         TextView content_tv = holder.getView(R.id.id_tx_share_content);//分享的文本内容
-//        WrapHightGridview myGridview = holder.getView(R.id.id_gv_shareimg);//分享的照片
         MultiImageView multiImageView = holder.getView(R.id.miv_share_iamges);
         TextView wanto_tv = holder.getView(R.id.id_tx_wantogo);//想去数量
         TextView hadgo_tv = holder.getView(R.id.id_hadgo);//去过数量
         TextView comment_tv = holder.getView(R.id.id_tx_comment);//评论数量
-        ((TextView) holder.getView(R.id.tv_item_share_main_created_at))
+        TextView locationTxt = holder.getView(R.id.tv_item_share_main_location);
+                ((TextView) holder.getView(R.id.tv_item_share_main_created_at))
                 .setText(DateUtils.convertDate2Str(commRemoteModel.getMcreatedAt()));//创建时间
         RelativeLayout tagLayout = holder.getView(R.id.rl_head_tag_layout);
         ViewGroup.LayoutParams lp = multiImageView.getLayoutParams();
@@ -110,6 +111,20 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 
         wanto_tv.setText(wanto);
         hadgo_tv.setText(hadgo);
+
+        //地理信息的显示。显示了可以点击查看详细
+        if (!TextUtils.isEmpty(commRemoteModel.getLocationInfo())) {
+            locationTxt.setVisibility(View.VISIBLE);
+            locationTxt.setText(StringUtils.locatiomInfo(ctx, commRemoteModel.getLocationInfo(), new StringUtils.TextLink() {
+                @Override
+                public void onclick(String str) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT, commRemoteModel.getGeographic());
+                    startActivity(BaiduMapActivity.class, bundle);
+                }
+            }));
+
+        }
 
         if (cuser != null) {
             LocationUtils.leftDrawableWantoGO(wanto_tv, commRemoteModel.getWanted(), cuser.getObjectId());//设置图标

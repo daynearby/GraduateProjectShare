@@ -14,7 +14,7 @@
     <dimen name="textSizeLarge">22sp</dimen>
     <dimen name="textSizeXLarge">28sp</dimen>
     <dimen name="textSizeXXLarge">42sp</dimen>
-
+    <dimen name="micro_px">2px</dimen>
     <dimen name="micro">2dp</dimen>
     <dimen name="radius">10dp</dimen>
     <dimen name="radius_mic">4dp</dimen>
@@ -28,7 +28,7 @@
     <dimen name="maginSmall">8dp</dimen>
     <dimen name="maginMicro">4dp</dimen>
 
-    <dimen name="avatar_size_default">80dp</dimen>
+    <dimen name="avatar_size_default">58dp</dimen>
     <dimen name="avatar_size_mediu">100dp</dimen>
     <dimen name="btnSizeDefault">50dp</dimen>
 
@@ -39,4 +39,5 @@
     <dimen name="arcButton">62dp</dimen>
     <dimen name="size_progress_small">32dp</dimen>
     <dimen name="size_button_height">32dp</dimen>
+    <dimen name="size_capture_height">118dp</dimen>
 </resources>

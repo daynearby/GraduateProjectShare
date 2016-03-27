@@ -16,7 +16,8 @@
         android:id="@+id/cardview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/paddingHit"
+        android:layout_marginTop="@dimen/paddingHit"
+        android:layout_marginBottom="@dimen/paddingHit"
         android:descendantFocusability="blocksDescendants"
         android:fitsSystemWindows="true"
         app:cardBackgroundColor="@color/white"
@@ -42,7 +43,8 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="3"
-                    android:padding="@dimen/paddingMic"
+                    android:paddingTop="@dimen/paddingMic"
+                    android:paddingBottom="@dimen/paddingMic"
                     android:text="@string/defaul_share_text"
                     android:textColor="@android:color/black" />
 
@@ -56,19 +58,16 @@
                     android:id="@+id/tv_item_share_main_location"
                     style="@style/text_style_wrap"
                     android:layout_gravity="right"
-                    android:paddingLeft="@dimen/paddingMic"
-                    android:paddingRight="@dimen/paddingMic"
-                    android:paddingTop="@dimen/paddingMic"
+                    android:paddingLeft="@dimen/paddingHit"
+                    android:paddingRight="@dimen/paddingHit"
                     android:text="@string/txt_location_info"
                     android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tv_item_share_main_created_at"
-                    style="@style/text_style_match"
-                    android:gravity="right"
-                    android:paddingLeft="@dimen/paddingMic"
-                    android:paddingRight="@dimen/paddingMic"
-                    android:paddingTop="@dimen/paddingMic"
+                    style="@style/text_style_wrap"
+                    android:layout_gravity="right"
+                    android:padding="@dimen/paddingHit"
                     android:text="@string/created_at" />
 
             </LinearLayout>

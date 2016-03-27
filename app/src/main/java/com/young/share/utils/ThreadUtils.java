@@ -14,12 +14,12 @@ import java.util.concurrent.Future;
  * 先获取对象，初始化
  * 执行任务先添加任务，再启动
  * 最后在activity停止的时候应该停止该线程，释放资源
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-11-21.
  */
 public class ThreadUtils {
 
-    private  ExecutorService mES;
+    private ExecutorService mES;
     private ConcurrentLinkedQueue<MyRunnable> taskQueue = null;//任务队列
 //    private static final int count = Runtime.getRuntime().availableProcessors() * 3 + 2;
     /**
@@ -41,11 +41,12 @@ public class ThreadUtils {
 
         getInstance();
         init();
-
+        start();
     }
 
     /**
      * 获取线程池对象
+     * 固定数量的线程池
      *
      * @return
      */
@@ -200,7 +201,7 @@ public class ThreadUtils {
      */
     public void startTask(MyRunnable mr) {
         addTask(mr);
-        start();
+//        start();
     }
 
     /**

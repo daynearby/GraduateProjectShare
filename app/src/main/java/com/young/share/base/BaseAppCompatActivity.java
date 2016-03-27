@@ -14,18 +14,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
-import com.young.share.annotation.Injector;
-import com.young.share.config.ApplicationConfig;
-import com.young.share.config.Contants;
-import com.young.share.model.MyUser;
 import com.young.share.MainActivity;
 import com.young.share.MessageCenterActivity;
 import com.young.share.R;
 import com.young.share.RankListActivity;
 import com.young.share.RecordCommActivity;
+import com.young.share.annotation.Injector;
+import com.young.share.config.ApplicationConfig;
+import com.young.share.config.Contants;
+import com.young.share.model.MyUser;
 import com.young.share.utils.ThreadUtils;
-
-import cn.bmob.v3.BmobUser;
 
 /**
  * 基类 v7 兼容activity
@@ -57,10 +55,12 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(getLayoutId());
         Injector.inject(this);
-        cuser = BmobUser.getCurrentUser(this, MyUser.class);
+
         mActivity = this;
         app = ApplicationConfig.getInstance();
         threadUtils = app.getThreadInstance();
+        cuser = app.getCUser();
+
 //        initActionBar();
         initData();
         findviewbyid();
@@ -137,8 +137,8 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
                 break;
 
-            case  Contants.CLAZZ_RANK_LIST_ACTIVITY:
-                clazz =RankListActivity.class;
+            case Contants.CLAZZ_RANK_LIST_ACTIVITY:
+                clazz = RankListActivity.class;
 
                 break;
         }
@@ -203,7 +203,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
                 && event.getAction() != KeyEvent.ACTION_UP) {
-           mBack();
+            mBack();
         }
 
 
@@ -229,6 +229,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     protected abstract void handerMessage(Message msg);
 
     protected abstract void mBack();
+
     /**
      * 简化findviewbyid
      *
@@ -236,7 +237,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * @param <T>
      * @return
      */
-    protected  <T> T $(int viewID) {
+    protected <T> T $(int viewID) {
         return (T) findViewById(viewID);
     }
 

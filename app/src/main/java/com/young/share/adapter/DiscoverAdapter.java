@@ -133,14 +133,15 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         //地理信息的显示。显示了可以点击查看详细
         if (!TextUtils.isEmpty(shareMessage.getShLocation())) {
             location.setVisibility(View.VISIBLE);
-            StringUtils.locatiomInfo(ctx, shareMessage.getShLocation(), new StringUtils.TextLink() {
-                @Override
-                public void onclick(String str) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT, shareMessage.getGeographic());
-                    startActivity(BaiduMapActivity.class, bundle);
-                }
-            });
+
+            location.setText( StringUtils.locatiomInfo(ctx, shareMessage.getShLocation(), new StringUtils.TextLink() {
+               @Override
+               public void onclick(String str) {
+                   Bundle bundle = new Bundle();
+                   bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT, shareMessage.getGeographic());
+                   startActivity(BaiduMapActivity.class, bundle);
+               }
+            }));
         }
 //        location.setText();
         //图片显示

@@ -194,7 +194,9 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
                         sharePreferenceUtils.setString(Contants.SH_PWD.hashCode() + "", PWD, pwd);
 
                         SVProgressHUD.showSuccessWithStatus(LoginActivity.this, getString(R.string.login_success));
-
+/*获取当前用户的信息，bmob同步的速度太慢*/
+                        getCurrent(userName);
+                        /*更新user的installtionId*/
                         savaUserWithInstallId(myUserLogin);
 
                         mHandler.sendEmptyMessageDelayed(102, Contants.ONE_SECOND);
@@ -226,6 +228,34 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
             SVProgressHUD.showInfoWithStatus(this, getString(R.string.email_not_empty), SVProgressHUD.SVProgressHUDMaskType.Gradient);
 
         }
+
+    }
+
+    /**
+     * 获取用户信息
+     *
+     * @param userName
+     */
+    private void getCurrent(final String userName) {
+        BmobQuery<MyUser> query = new BmobQuery<>();
+        query.addWhereEqualTo("username", userName);
+        query.findObjects(this, new FindListener<MyUser>() {
+            @Override
+            public void onSuccess(List<MyUser> users) {
+//                toast("查询用户成功："+object.size());
+
+                if (users != null && users.size() > 0) {
+                    app.getCacheInstance().put(Contants.ACAHE_KEY_USER, users.get(0));
+                }
+            }
+
+            @Override
+            public void onError(int code, String msg) {
+//                toast("查询用户失败："+msg);
+//                getCurrent(userName);
+                LogUtils.e("获取用户的信息失败.code  = " + code + " message = " + msg);
+            }
+        });
 
     }
 

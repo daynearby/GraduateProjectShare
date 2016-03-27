@@ -31,6 +31,7 @@ public abstract class BaseFragment extends Fragment {
     public BaseFragment(Context context) {
         this.context = context;
         app = ApplicationConfig.getInstance();
+
     }
 
 

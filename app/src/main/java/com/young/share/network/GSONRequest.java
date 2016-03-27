@@ -8,6 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.young.share.utils.LogUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -54,6 +55,7 @@ public class GSONRequest<T> extends Request<T> {
              * 得到返回的数据
              */
             String jsonStr = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+            LogUtils.d("volley request clazz = "+clazz+" response = " +jsonStr);
             /**
              * 转化成对象
              */

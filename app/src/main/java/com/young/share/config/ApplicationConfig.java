@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.young.share.model.MyUser;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LogUtils;
@@ -22,6 +23,8 @@ import com.young.share.utils.cache.ACache;
 import org.litepal.LitePalApplication;
 
 import java.io.File;
+
+import cn.bmob.v3.BmobUser;
 
 
 /**
@@ -55,7 +58,7 @@ public class ApplicationConfig extends LitePalApplication {
 //趣拍初始化
         initAuth(Contants.QUPAI_APP_KEY, Contants.QUPAI_APP_SECRET, Contants.QUPAI_APP_SPACE);
     }
-
+// TODO: 2016-03-27 修改了签名，趣拍需要进行修改
     /**
      * 鉴权 趣拍
      *
@@ -141,6 +144,21 @@ public class ApplicationConfig extends LitePalApplication {
     public ACache getCacheInstance() {
 
         return aCache = ACache.get(com.young.share.utils.StorageUtils.CreateCacheFile(getApplicationContext()));
+    }
+
+
+    /**
+     * 获取当前用户的信息，在用户登录之后进行保存
+     *
+     * @return
+     */
+    public MyUser getCUser() {
+        MyUser cuser = BmobUser.getCurrentUser(getContext(), MyUser.class);
+        if (cuser != null) {
+            return cuser;
+        } else {
+            return (MyUser) getCacheInstance().getAsObject(Contants.ACAHE_KEY_USER);
+        }
     }
 
 }

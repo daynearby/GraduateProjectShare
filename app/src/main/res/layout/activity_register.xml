@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_login_m"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -13,18 +12,15 @@
         android:padding="@dimen/paddingMediu"
         >
 
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/paddingMediu">
+            android:padding="@dimen/paddingMic">
 
             <TextView
                 style="@style/text_style_wrap"
                 android:text="@string/account"
-                android:textColor="@color/white"
                 android:textSize="@dimen/textSizeLarge" />
 
             <EditText
@@ -34,9 +30,8 @@
                 android:inputType="textEmailAddress"
                 android:paddingLeft="@dimen/paddingMediu"
                 android:singleLine="true"
-                android:textColor="@color/white"
                 android:textColorHint="@color/light_gray"
-                android:textSize="@dimen/textSizeLarge" >
+                android:textSize="@dimen/textSizeMediu" >
                 <requestFocus/>
             </EditText>
 
@@ -46,12 +41,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/paddingMediu">
+            android:padding="@dimen/paddingMic">
 
             <TextView
                 style="@style/text_style_wrap"
                 android:text="@string/pwd"
-                android:textColor="@color/white"
                 android:textSize="@dimen/textSizeLarge" />
 
             <EditText
@@ -60,8 +54,7 @@
                 android:inputType="textPassword"
                 android:paddingLeft="@dimen/paddingMediu"
                 android:singleLine="true"
-                android:textColor="@color/white"
-                android:textSize="@dimen/textSizeLarge"
+                android:textSize="@dimen/textSizeMediu"
                 android:textColorHint="@color/light_gray"
                 android:hint="最少六位字符"/>
 
@@ -71,12 +64,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/paddingMediu">
+            android:padding="@dimen/paddingMic">
 
             <TextView
                 style="@style/text_style_wrap"
                 android:text="@string/pwd"
-                android:textColor="@color/white"
                 android:textSize="@dimen/textSizeLarge" />
 
             <EditText
@@ -86,23 +78,20 @@
                 android:paddingLeft="@dimen/paddingMediu"
                 android:singleLine="true"
                 android:textColorHint="@color/light_gray"
-                android:textColor="@color/white"
-                android:textSize="@dimen/textSizeLarge"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/textSizeMediu"
                 android:hint="@string/config_pwd"/>
 
         </LinearLayout>
 
         <TextView
             android:id="@+id/tv_go_login"
-            style="@style/bar_text"
-            android:gravity="right"
+            style="@style/text_style_wrap"
+            android:layout_gravity="right"
             android:padding="@dimen/paddingMic"
             android:text="@string/had_register"
-            android:textColor="@drawable/sele_text_color_def_white"
+            android:textColor="@drawable/sele_text_color_def_back"
             android:textSize="@dimen/textSizeMediu" />
-
-
-
 
         <TextView
             android:id="@+id/tv_register_btn"
@@ -113,7 +102,7 @@
             android:gravity="center"
             android:padding="@dimen/paddingMediu"
             android:text="@string/regist"
-            android:textColor="@color/white"
-            android:textSize="@dimen/textSizeLarge" />
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/textSizeMediu" />
     </LinearLayout>
 </RelativeLayout>

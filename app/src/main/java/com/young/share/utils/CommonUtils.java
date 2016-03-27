@@ -38,7 +38,7 @@ public class CommonUtils {
 
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo();
+        return cm != null ? cm.getActiveNetworkInfo() : null;
     }
 
 
@@ -62,7 +62,6 @@ public class CommonUtils {
 //            filepath = new File(this.getCacheDir(), "myUser/icon/myUser");
 //
 //        }
-
 
 
     /**
