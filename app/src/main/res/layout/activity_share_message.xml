@@ -8,7 +8,7 @@
         android:id="@+id/tb_share_message"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/theme_puple"/>
+        android:background="@color/theme_puple" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,18 +21,20 @@
             style="@style/text_style_match"
             android:padding="@dimen/paddingHit"
             android:text="@string/tips_discount_hint"
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/et_contnent_popupwin_content"
             style="@style/text_style_match"
+            android:layout_marginTop="@dimen/maginMicro"
             android:background="@color/white"
             android:gravity="start"
             android:hint="@string/share_what_hint"
             android:inputType="textMultiLine"
             android:lines="5"
-            android:padding="@dimen/paddingHit" >
-            <requestFocus/>
+            android:padding="@dimen/paddingHit">
+
+            <requestFocus />
         </EditText>
 
         <LinearLayout
@@ -40,24 +42,31 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:orientation="horizontal"
-            android:padding="@dimen/paddingMediu">
+            android:padding="@dimen/paddingMic">
+
+            <ImageView
+                android:id="@+id/im_activity_share_message_add_video"
+                android:layout_width="@dimen/size_image"
+                android:layout_height="@dimen/size_image"
+                android:background="@drawable/sele_add_video"
+                android:scaleType="centerInside" />
 
 
             <ImageView
                 android:id="@+id/im_activity_share_message_addimg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/size_image"
+                android:layout_height="@dimen/size_image"
                 android:layout_marginLeft="@dimen/paddingMic"
-                android:scaleType="centerInside"
-                android:src="@drawable/icon_addimg" />
+                android:background="@drawable/sele_add_image"
+                android:scaleType="centerInside" />
 
             <ImageView
                 android:id="@+id/im_content_dialog_share_emotion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/size_image"
+                android:layout_height="@dimen/size_image"
                 android:layout_marginLeft="@dimen/paddingMic"
-                android:scaleType="centerInside"
-                android:src="@drawable/icon_emotion_light" />
+                android:background="@drawable/sele_add_enomotion"
+                android:scaleType="centerInside" />
 
 
         </LinearLayout>
@@ -67,8 +76,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/sele_layout_click"
-            android:orientation="horizontal"
             android:clickable="true"
+            android:orientation="horizontal"
             android:paddingBottom="@dimen/paddingHit"
             android:paddingLeft="@dimen/paddingMic"
             android:paddingRight="@dimen/paddingMic"
@@ -97,8 +106,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/maginNornal"
             android:background="@drawable/sele_layout_click"
-            android:orientation="horizontal"
             android:clickable="true"
+            android:orientation="horizontal"
             android:paddingBottom="@dimen/paddingHit"
             android:paddingLeft="@dimen/paddingMic"
             android:paddingRight="@dimen/paddingMic"
@@ -120,25 +129,24 @@
                 android:layout_gravity="bottom"
                 android:padding="@dimen/paddingMic"
                 android:text="@string/txt_loaction_info"
-                android:textColor="@android:color/black"/>
+                android:textColor="@android:color/black" />
 
         </LinearLayout>
 
-        <com.young.share.views.WrapHightGridview
-            android:id="@+id/gv_content_popupwin_share_addimg"
-            style="@style/gridViwe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/maginSmall"
-            android:paddingLeft="@dimen/paddingMic"
-            android:paddingRight="@dimen/paddingMic"
-            android:visibility="visible" />
-
+        <!--图片-->
         <com.young.share.views.MultiImageView.MultiImageView
             android:id="@+id/miv_share_message_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/paddingMic"/>
+            android:layout_marginTop="@dimen/paddingMic" />
+        <!--视频窗口-->
+        <VideoView
+            android:id="@+id/vdv_share_video"
+            android:layout_width="@dimen/size_video_width"
+            android:layout_height="@dimen/size_video_height"
+            android:layout_margin="@dimen/maginMicro"
+            android:visibility="gone" />
+
     </LinearLayout>
 
     <include layout="@layout/content_popup_window_emotion_panel" />

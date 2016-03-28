@@ -118,7 +118,7 @@ public class RankListActivity extends BaseAppCompatActivity {
             @Override
             public void pushToRefresh() {//上拉
 
-                if (CommonUtils.isNetworkAvailable(mActivity)) {//有网络
+                if (CommonUtils.isNetworkAvailable()) {//有网络
 //                            startRow += Contants.PAGER_NUMBER;
 
                     if (remoteList.size() > Contants.PAGE_SIZE * PUSH_TIMES) {
@@ -153,7 +153,7 @@ public class RankListActivity extends BaseAppCompatActivity {
                 skip = 0;
                 isGetMore = false;
 
-                if (CommonUtils.isNetworkAvailable(mActivity)) {//有网络
+                if (CommonUtils.isNetworkAvailable()) {//有网络
 
                     getDataFromRemote();
 

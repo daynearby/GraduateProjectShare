@@ -20,7 +20,7 @@ public class StorageUtils {
      * @param context 上下文对象
      * @return file对象
      */
-    public static File CreateImageFile(Context context) {
+    public static File createImageFile(Context context) {
 
         return new File(createdDir(context, Contants.FILE_IMAGE_PATH));
     }
@@ -31,9 +31,20 @@ public class StorageUtils {
      * @param context 上下文对象
      * @return file对象
      */
-    public static File CreateCacheFile(Context context) {
+    public static File createCacheFile(Context context) {
 
         return new File(createdDir(context,Contants.FILE_CACHE_PATH));
+    }
+
+    /**
+     * 存放图片对应的文件夹
+     *
+     * @param context 上下文对象
+     * @return file对象
+     */
+    public static File createVideoFile(Context context) {
+
+        return new File(createdDir(context,Contants.FILE_VIDEO_PATH));
     }
 
     /**

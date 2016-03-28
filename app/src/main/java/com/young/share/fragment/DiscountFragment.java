@@ -181,7 +181,7 @@ public class DiscountFragment extends BaseFragment {
             @Override
             public void pushToRefresh() {
 
-                if (CommonUtils.isNetworkAvailable(context)) {//有网络
+                if (CommonUtils.isNetworkAvailable()) {//有网络
 
 //                    skip += Contants.PAGER_NUMBER;
                     if (dataList != null) {

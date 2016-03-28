@@ -3,6 +3,7 @@ package com.young.share;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
@@ -10,17 +11,24 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
+import com.duanqu.qupai.android.app.QupaiServiceImpl;
+import com.duanqu.qupai.editor.EditorResult;
+import com.duanqu.qupai.recorder.EditorCreateInfo;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
+import com.young.share.config.VideoRecorderConfig;
 import com.young.share.interfaces.GoToUploadImages;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.PictureInfo;
@@ -32,6 +40,7 @@ import com.young.share.utils.EmotionUtils;
 import com.young.share.utils.EvaluateUtil;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LogUtils;
+import com.young.share.utils.StorageUtils;
 import com.young.share.utils.XmlUtils;
 import com.young.share.utils.cache.ACache;
 import com.young.share.utils.cache.DarftUtils;
@@ -42,11 +51,13 @@ import com.young.share.views.PopupWinListView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobGeoPoint;
 import cn.bmob.v3.listener.SaveListener;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
@@ -80,10 +91,14 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     private TextView tag_tv;
     @InjectView(R.id.tv_share_message_tips)
     private TextView tips_tv;
+    @InjectView(R.id.im_activity_share_message_add_video)
+    private ImageView addVideo;
+    @InjectView(R.id.vdv_share_video)
+    private VideoView videoPreview;//视频
 
-//    private GridviewAdapter gridViewAdapter;
+    //    private GridviewAdapter gridViewAdapter;
     private InputMethodManager imm;
-
+    private final EditorCreateInfo createInfo = new EditorCreateInfo();//录制的时候，参数设置
     private PopupWinListView popupWinListView;
     //    private boolean isResgiter = false;
     private String locationInfo;//定位信息
@@ -99,9 +114,13 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     private static final int FINISH_ACTIVITY = 0;
     private boolean currentIsDiscount;//当前页面是否为商家优惠
     private String draftType;//草稿类型
+    private String imageFilePath;//图片的地址
+    private String videoPath;
+    private boolean isVideo = false;//上传的内容是否是视频
 
     private int placeSelect = 0;//选择的地点的position
     private PlaceSearch.ResultsEntity placeResult;
+    private static final int REQUEST_CODE_RECORD_VIDEO = 0x01;//录制视频requestCode
 
     // TODO: 2015-12-05 移除item而不需要刷新整个ListView
     // TODO: 2016-02-27 删除图片的操作
@@ -136,6 +155,43 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     }
 
     @Override
+    public void findviewbyid() {
+
+        shareLocation_tv.setOnClickListener(this);
+        emotion_im.setOnClickListener(this);
+        addimg_im.setOnClickListener(this);
+        addVideo.setOnClickListener(this);
+        tagLl.setOnClickListener(this);
+        lactionInfoLl.setOnClickListener(this);
+
+
+        content_et.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emotionPanel_bg.setVisibility(View.GONE);
+            }
+        });
+        /**
+         * 创建文件地址
+         */
+        String videoFilePath = StorageUtils.createVideoFile(this).getAbsolutePath()
+                + "/" + Contants.FILE_START_NAME_VIDEO + System.currentTimeMillis()
+                + Contants.VIDEO_EXTENSION;
+
+        imageFilePath = StorageUtils.createImageFile(this).getAbsolutePath() + "/"
+                + Contants.FILE_START_NAME_IMAGE + System.currentTimeMillis()
+                + Contants.IMAGE_EXTENSION_PNG;
+        /*配置摄像头参数*/
+        createInfo.setSessionCreateInfo(VideoRecorderConfig.CreateInfo(this));
+        createInfo.setNextIntent(null);
+        createInfo.setOutputThumbnailSize(Contants.OUTPUT_VIDEO_WIDTH, Contants.OUTPUT_VIDEO_HEIGHT);//输出图片宽高,与视频的宽高一样
+        createInfo.setOutputVideoPath(videoFilePath);//输出视频路径
+        createInfo.setOutputThumbnailPath(imageFilePath);//输出图片路径
+
+
+    }
+
+    @Override
     public void bindData() {
 
 
@@ -147,7 +203,8 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(mActivity, urlAddHead(multiImageView.getImagesList()));
+                List<PictureInfo> pictureInfoList =
+                        DataFormateUtils.formate2PictureInfo(mActivity, multiImageView.getImagesList());
 
                 EvaluateUtil.setupCoords(mActivity, (ImageView) view, pictureInfoList, position);
                 Intent intent = new Intent(mActivity, BigPicActivity.class);
@@ -158,7 +215,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                 intent.putExtra(Contants.INTENT_CURRENT_ITEM, position);
 
                 startActivity(intent);
-               overridePendingTransition(0, 0);
+                overridePendingTransition(0, 0);
             }
         });
 
@@ -282,25 +339,6 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
     }
 
-    @Override
-    public void findviewbyid() {
-
-        shareLocation_tv.setOnClickListener(this);
-        emotion_im.setOnClickListener(this);
-        addimg_im.setOnClickListener(this);
-        tagLl.setOnClickListener(this);
-        lactionInfoLl.setOnClickListener(this);
-
-        content_et.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                emotionPanel_bg.setVisibility(View.GONE);
-            }
-        });
-
-
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -313,7 +351,14 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
         if (item.getItemId() == R.id.menu_send) {
             /*发送*/
-            send();
+            // TODO: 2016-03-28 使用线程进行分享
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    send();
+                }
+            });
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -331,7 +376,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
             case R.id.im_activity_share_message_addimg://添加照片
 
-                List<PictureInfo> pictureInfoList =DataFormateUtils.formate2PictureInfo(this, multiImageView.getImagesList());
+                List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(this, multiImageView.getImagesList());
 
                 ArrayList<String> l = new ArrayList<>();
                 if (pictureInfoList != null && pictureInfoList.size() > 0) {
@@ -346,26 +391,26 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
             case R.id.ll_share_loaction_info://选择位置
 
-//                addLocation = true;
-//                if (!isGotLocationInfo) {
-//                    startLocation();
-//                } else {
-//                    shareLocation_tv.setText(locationInfoString);
-//                }
-
-
                 intents = new Intent(mActivity, BaiduMapActivity.class);
                 intents.putExtra(Contants.INTENT_BMOB_IS_POSITION, true);
                 intents.putExtra(Contants.INTENT_SELECTOR_POSITION, placeSelect);
 
                 startActivityForResult(intents, Contants.REQUSET_CODE_PLACE);
 
-
                 break;
 
             case R.id.ll_share_select_tag://标签选择
 
                 popupWinListView.onShow(tagLl);
+
+                break;
+
+            case R.id.im_activity_share_message_add_video:/*录制视频*/
+
+                QupaiServiceImpl qupaiService = new QupaiServiceImpl.Builder()
+                        .setEditorCreateInfo(createInfo).build();
+                qupaiService.showRecordPage(mActivity, REQUEST_CODE_RECORD_VIDEO);
+
 
                 break;
         }
@@ -391,7 +436,12 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                     List<String> pathList = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
 
                     //图片路径
-                 multiImageView.setList(urlAddHead(pathList));
+                    multiImageView.setList(urlAddHead(pathList));
+                    if (multiImageView.getImagesList() != null
+                            && multiImageView.getImagesList().size() > 0) {
+                        /*添加视频的按钮*/
+                        addVideo.setVisibility(View.GONE);
+                    }
                 }
 
             }
@@ -409,26 +459,90 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
             }
 
 
+        } else if (requestCode == REQUEST_CODE_RECORD_VIDEO) {
+            if (resultCode == RESULT_OK) {
+                EditorResult result = new EditorResult(data);
+
+                videoPath = result.getPath();
+
+                if (!TextUtils.isEmpty(videoPath)) {
+                    addimg_im.setVisibility(View.GONE);
+                }
+
+                /*输出的缩略图的地址没有返回，取输出的地址*/
+                videoPlayback();
+//                LogUtils.E("file path  video = " + filePath + " iamge = " + thumbnailPath);
+
+
+            }
         }
 
 
     }
 
     /**
+     * 播放视频
+     */
+    private void videoPlayback() {
+        videoPreview.setVisibility(View.VISIBLE);
+        videoPreview.setTag(videoPath);//播放器
+        videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setVolume(0.0f, 0.0f);
+            }
+        });
+        videoPreview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+/*需要播放*/
+                mp.setLooping(true);
+                mp.start();
+            }
+        });
+
+/*不能直接使用onclick，需要通过ontouch进行监听,只触发down*/
+        videoPreview.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    Intent intent = new Intent(mActivity, VideoplayerActivity.class);
+                    intent.putExtra(Contants.INTENT_KEY_VIDEO_PATH, videoPath);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                }
+
+                return false;
+            }
+        });
+
+        /*本地播放视频*/
+        File file = new File(videoPath);
+        if (file.exists()) {//视频找到了
+            videoPreview.setVideoPath(videoPath);
+            videoPreview.start();
+        } else {//视频找不到，可能被删除
+
+            Toast.makeText(this, R.string.toast_video_can_not_found, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
      * 将图片路径添加file://，为了实现universal image loader 加载本地图片
+     *
      * @param pathList
      * @return
      */
-private List<String> urlAddHead(  List<String> pathList){
-    ArrayList<String> mSelectPath = new ArrayList<>();
-    for (String path : pathList) {
-        path = Contants.FILE_HEAD + path;
-        mSelectPath.add(path);
+    private List<String> urlAddHead(List<String> pathList) {
+        ArrayList<String> mSelectPath = new ArrayList<>();
+        for (String path : pathList) {
+            path = Contants.FILE_HEAD + path;
+            mSelectPath.add(path);
 
+        }
+
+        return mSelectPath;
     }
-
-    return mSelectPath;
-}
 
 
     @Override
@@ -455,7 +569,7 @@ private List<String> urlAddHead(  List<String> pathList){
      */
     private void goback() {
 
-        if (!TextUtils.isEmpty(content_et.getText().toString()) |  multiImageView.getImagesList() != null) {
+        if (!TextUtils.isEmpty(content_et.getText().toString()) | multiImageView.getImagesList() != null) {
 
             dialog.setContent(getString(R.string.need_to_save_draft));
             dialog.setBtnOkText(getString(R.string.save));
@@ -515,15 +629,16 @@ private List<String> urlAddHead(  List<String> pathList){
      */
     private void send() {
         String content = content_et.getText().toString();
-
-        List<PictureInfo> pictureInfoList =DataFormateUtils.formate2PictureInfo(this, multiImageView.getImagesList());
-
-        ArrayList<String> lists = new ArrayList<>();
-        if (pictureInfoList != null && pictureInfoList.size() > 0) {
-            for (PictureInfo pictureInfo : pictureInfoList) {
-                lists.add(pictureInfo.getImageUrl());
-            }
-        }
+//
+//        List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(this, multiImageView.getImagesList());
+//
+//        ArrayList<String> lists = new ArrayList<>();
+//        if (pictureInfoList != null && pictureInfoList.size() > 0) {
+//            for (PictureInfo pictureInfo : pictureInfoList) {
+//                lists.add(pictureInfo.getImageUrl());
+//            }
+//        }
+        List<String> lists = multiImageView.getImagesList();
 
         if (!TextUtils.isEmpty(content) || lists.size() > 0) {//信息或者图片不为空
 
@@ -548,6 +663,7 @@ private List<String> urlAddHead(  List<String> pathList){
 
     /**
      * 分享信息
+     * 包含视频 或者 图片
      */
     private void shareDicover(List<String> lists, String content) {
 
@@ -571,20 +687,14 @@ private List<String> urlAddHead(  List<String> pathList){
             }
             BmobApi.UploadFiles(mActivity, files, Contants.IMAGE_TYPE_SHARE, new GoToUploadImages() {
                 @Override
-                public void Result(boolean isFinish, String[] urls) {
+                public void Result(String[] urls, BmobFile[] bmobFile) {
+/*数组转换成list*/
+                    List<String> list = new ArrayList<>();
+                    Collections.addAll(list, urls);
+                    shareMessage_hz.setShImgs(list);
+                    //保存分享信息到云端
+                    shareMessage(shareMessage_hz);
 
-                    if (isFinish) {
-                        List<String> list = new ArrayList<>();
-
-                        Collections.addAll(list, urls);
-
-                        shareMessage_hz.setShImgs(list);
-
-                        //保存分享信息到云端
-                        shareMessage(shareMessage_hz);
-
-
-                    }
                 }
 
                 @Override
@@ -593,6 +703,25 @@ private List<String> urlAddHead(  List<String> pathList){
                 }
             });
 
+        } else if (!TextUtils.isEmpty(videoPath)) {
+
+            String[] file = new String[]{videoPath};
+            BmobApi.UploadFiles(mActivity, file, Contants.FILE_TYPE_SIGNAL, new GoToUploadImages() {
+                @Override
+                public void Result(String[] urls, BmobFile bmobFile[]) {
+
+                  /*只有一个文件*/
+                    shareMessage_hz.setVideo(bmobFile[0]);
+                    //保存分享信息到云端
+                    shareMessage(shareMessage_hz);
+
+                }
+
+                @Override
+                public void onError(int statuscode, String errormsg) {
+                    SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.upload_video_fail));
+                }
+            });
         } else {//没有上传图片的
             mBackStartActivity(MainActivity.class);
             shareMessage(shareMessage_hz);
@@ -630,18 +759,16 @@ private List<String> urlAddHead(  List<String> pathList){
             }
             BmobApi.UploadFiles(mActivity, files, Contants.IMAGE_TYPE_SHARE, new GoToUploadImages() {
                 @Override
-                public void Result(boolean isFinish, String[] urls) {
+                public void Result(String[] urls, BmobFile[] bmobFiles) {
 
-                    if (isFinish) {
-                        List<String> list = new ArrayList<>();
 
-                        Collections.addAll(list, urls);
+                    List<String> list = new ArrayList<>();
 
-                        disMessages.setDtImgs(list);
-                        //保存分享信息到云端
-                        shareDiscountMessage(disMessages);
+                    Collections.addAll(list, urls);
 
-                    }
+                    disMessages.setDtImgs(list);
+                    //保存分享信息到云端
+                    shareDiscountMessage(disMessages);
 //                            else {
 //
 //                                LogUtils.e("回调第一次，isfinish = " + isFinish);
@@ -726,7 +853,7 @@ private List<String> urlAddHead(  List<String> pathList){
     private void saveDarft() {
 
 //        List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
-        List<PictureInfo> pictureInfoList =DataFormateUtils.formate2PictureInfo(this, multiImageView.getImagesList());
+        List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(this, multiImageView.getImagesList());
 
         ArrayList<String> l = new ArrayList<>();
         for (PictureInfo pictureInfo : pictureInfoList) {

@@ -76,7 +76,11 @@ public class Contants {
 
     //******************************本地 文件名 前缀***********************
     public static final String FILE_HEAD = "file://";
-
+    public final static String FILE_START_NAME_VIDEO = "VIDEO_";
+    public final static String FILE_START_NAME_IMAGE = "IMAGE_";
+    public final static String VIDEO_EXTENSION = ".mp4";
+    public final static String IMAGE_EXTENSION_JPG = ".jpg";
+    public final static String IMAGE_EXTENSION_PNG = ".png";
     public static final String LAST_ADD_IMG = "drawable://" + R.drawable.icon_addimg;
     public static final String DEFAULT_AVATAR = "drawable://" + R.drawable.icon_avatar;
 
@@ -84,6 +88,9 @@ public class Contants {
     public static final String DOWNLOAD_PATH = "share/images/";
     public static final String FILE_CACHE_PATH = "/share/cache/";
     public static final String FILE_IMAGE_PATH = "/share/images/";
+    public static final String FILE_VIDEO_PATH = "/share/video/";
+    public static final String FILE_PAHT_DOWNLOAD = "/share/download/";
+    public static final String FILE_PAHT_SAVE = "/share/save/";
 
 
 
@@ -138,8 +145,9 @@ public class Contants {
     public static final int DARFT_LIVE_TIME = 60 * 60;//一个小时
 
     //*************************************上传照片类型***********************************************
-    public static final int IMAGE_TYPE_SHARE = 100;
-    public static final int IMAGE_TYPE_AVATAR = 101;
+    public static final int IMAGE_TYPE_SHARE = 0x01;
+    public static final int IMAGE_TYPE_AVATAR = 0x02;
+    public static final int FILE_TYPE_SIGNAL = 0x03;
     public static final int IAMGE_MAX_WIDTH = 1500;
     public static final int IAMGE_MAX_HEIGHT = 1500;
     public static final int IMAGE_MIN_SIZE = 200;
@@ -177,6 +185,8 @@ public class Contants {
     public static final String INTENT_IMAGE_LIST = "intent_image_list";//intent传输的照片列表
     public static final String INTENT_PLACE = "intent_place";//intent传输的选择de地点信息
     public static final String INTENT_SELECTOR_POSITION = "intent_selector_position";//intent传输的已经选择postion
+    public static final String INTENT_KEY_POST_VIDEO = "intent_key_post_video";
+    public static final String INTENT_KEY_VIDEO_PATH = "intent_key_video_path";
 
     //***********************请求码与结果码*********************
     public static final int REQUSET_CODE_IMAGE_LIST = 0x100;//图片编辑请求码
@@ -231,7 +241,7 @@ public class Contants {
     public static final String PARAMS_SHCOMM_NUM = "shCommNum";//参数名
 
 
-    public static final String MCODE = "19:C4:5F:A4:13:B9:82:7D:F0:8C:3C:B2:7C:D8:02:78:18:DB:65:86;com.young.share";
+    public static final String MCODE = "A9:5B:FA:94:1E:DC:5E:FB:22:16:CA:54:FA:C3:F6:2D:99:36:22:6A;com.young.share";
     public static final String AK = "e5U9Be7dwzr3ElKMWkGdrXri";
 
     //**********************cache key*************************

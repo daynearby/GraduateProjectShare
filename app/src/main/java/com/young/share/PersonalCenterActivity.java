@@ -37,6 +37,7 @@ import com.young.share.views.Dialog4UploadAvatar;
 import java.util.List;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
@@ -267,12 +268,10 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
 
             String[] files = {croppath};
 
-            BmobApi.UploadFiles(mActivity, files, Contants.IMAGE_TYPE_AVATAR, new GoToUploadImages() {
+            BmobApi.UploadFiles(mActivity, files, Contants.FILE_TYPE_SIGNAL, new GoToUploadImages() {
                 @Override
-                public void Result(boolean isFinish, String[] urls) {
+                public void Result( String[] urls,BmobFile[] bmobfiles) {
                     //上传文件成功
-                    if (isFinish) {
-
                         cuser = BmobUser.getCurrentUser(mActivity, MyUser.class);
                         String avatar_url = urls[0];
 
@@ -291,7 +290,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
                                 }
                             });
                         }
-                    }
+
                 }
 
                 @Override

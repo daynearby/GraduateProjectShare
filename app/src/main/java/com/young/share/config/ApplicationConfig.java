@@ -58,7 +58,6 @@ public class ApplicationConfig extends LitePalApplication {
 //趣拍初始化
         initAuth(Contants.QUPAI_APP_KEY, Contants.QUPAI_APP_SECRET, Contants.QUPAI_APP_SPACE);
     }
-// TODO: 2016-03-27 修改了签名，趣拍需要进行修改
     /**
      * 鉴权 趣拍
      *
@@ -143,7 +142,7 @@ public class ApplicationConfig extends LitePalApplication {
      */
     public ACache getCacheInstance() {
 
-        return aCache = ACache.get(com.young.share.utils.StorageUtils.CreateCacheFile(getApplicationContext()));
+        return aCache = ACache.get(com.young.share.utils.StorageUtils.createCacheFile(getApplicationContext()));
     }
 
 

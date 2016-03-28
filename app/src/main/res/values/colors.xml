@@ -12,8 +12,7 @@
     <color name="gray_lighter">#eee</color>
     <color name="lake_blue">#1E90FF</color>
 
-    <color name="colorPrimary">#9d55b8</color>
-    <color name="colorPrimaryDark">#9055B8</color>
+    <color name="theme_pupleDark">#8b51b3</color>
     <color name="colorAccent">#FF4081</color>
     <color name="cherry_red">#fd495a</color>
     <color name="cherry_red_light">#befd495a</color>
@@ -23,7 +22,7 @@
 
     <color name="green_default">#54ca65</color>
     <color name="green_press">#5cc46b</color>
-    <color name="background_material_light">#ebebeb</color>
+    <color name="background_light">#ebebeb</color>
     <color name="dark_blue">#0052a9</color>
     <color name="rank_heat">#FE495A</color>
     <color name="rank_heat_light">#c8fe495a</color>

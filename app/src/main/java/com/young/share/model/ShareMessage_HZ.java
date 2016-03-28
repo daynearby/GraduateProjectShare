@@ -4,6 +4,7 @@ package com.young.share.model;
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobGeoPoint;
 
 /**
@@ -21,7 +22,8 @@ public class ShareMessage_HZ extends BmobObject{
     private String shTag;
     private List<String> shWantedNum;
     private List<String> shVisitedNum;
-    private Integer shCommNum;
+    private int shCommNum;
+    private BmobFile video;
 
     public MyUser getMyUserId() {
         return userId;
@@ -87,11 +89,27 @@ public class ShareMessage_HZ extends BmobObject{
         this.shVisitedNum = shVisitedNum;
     }
 
-    public Integer getShCommNum() {
+    public int getShCommNum() {
         return shCommNum;
     }
 
-    public void setShCommNum(Integer shCommNum) {
+    public void setShCommNum(int shCommNum) {
         this.shCommNum = shCommNum;
+    }
+
+    public MyUser getUserId() {
+        return userId;
+    }
+
+    public void setUserId(MyUser userId) {
+        this.userId = userId;
+    }
+
+    public BmobFile getVideo() {
+        return video;
+    }
+
+    public void setVideo(BmobFile video) {
+        this.video = video;
     }
 }

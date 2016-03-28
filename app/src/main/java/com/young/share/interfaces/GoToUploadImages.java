@@ -1,5 +1,7 @@
 package com.young.share.interfaces;
 
+import cn.bmob.v3.datatype.BmobFile;
+
 /**
  * 选择照片回调函数
  *
@@ -7,6 +9,6 @@ package com.young.share.interfaces;
  */
 public interface GoToUploadImages {
 
-    void Result(boolean isFinish, String[] urls);
+    void Result( String[] urls,BmobFile[] files);
     void onError(int statuscode, String errormsg) ;
 }

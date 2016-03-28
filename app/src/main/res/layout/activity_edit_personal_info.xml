@@ -54,7 +54,7 @@
                 android:id="@+id/popupwin_edit_personnal_info_age"
                 style="@style/text_style_match"
                 android:layout_weight="1"
-                android:drawableEnd="@drawable/icon_drop_down_def"
+                android:drawableRight="@drawable/icon_drop_down_def"
                 android:gravity="center_horizontal"
                 android:text="@string/age_22"
                 android:textSize="@dimen/textSizeMediu" />
@@ -71,7 +71,7 @@
                 android:id="@+id/popupwin_edit_personnal_info_gender"
                 style="@style/text_style_match"
                 android:layout_weight="1"
-                android:drawableEnd="@drawable/icon_drop_down_def"
+                android:drawableRight="@drawable/icon_drop_down_def"
                 android:gravity="center_horizontal"
                 android:text="@string/male"
                 android:textSize="@dimen/textSizeMediu" />
@@ -160,7 +160,7 @@
                 android:id="@+id/popupwin_edit_personnal_info_hometown"
                 style="@style/text_style_match"
                 android:layout_weight="1"
-                android:drawableEnd="@drawable/icon_drop_down_def"
+                android:drawableRight="@drawable/icon_drop_down_def"
                 android:gravity="center_horizontal"
                 android:text="@string/hz"
                 android:textSize="@dimen/textSizeMediu" />

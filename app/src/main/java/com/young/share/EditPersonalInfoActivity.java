@@ -23,6 +23,8 @@ import cn.smssdk.SMSSDK;
 import cn.smssdk.gui.RegisterPage;
 
 /**
+ *
+ * 修改用户资料
  * Created by Nearby Yang on 2015-11-13.
  */
 public class EditPersonalInfoActivity extends ItemActBarActivity implements View.OnClickListener {

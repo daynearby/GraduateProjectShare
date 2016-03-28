@@ -1,10 +1,13 @@
 package com.young.share.network;
 
 import android.content.Context;
+import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
+import com.young.share.R;
 import com.young.share.config.ApplicationConfig;
 import com.young.share.config.Contants;
 import com.young.share.model.gson.Longitude2Location;
@@ -42,6 +45,106 @@ public class NetworkReuqest {
     public static final String BMOB_HOST = "https://api.bmob.cn/1/";//bmob
     public static final String ADVERTISERMENT = "classes/Advertisement";
 
+
+    /**
+     * 下载文件，下载完成返回url
+     *
+     * @param context
+     * @param url
+     * @param jsonResponse
+     */
+    public static void call(Context context, String url, final JsonRequstCallback jsonResponse) {
+
+        SmallFiledownloadRequest smallFiledownloadRequest = new SmallFiledownloadRequest(Request.Method.GET,
+                SmallFiledownloadRequest.FILE_TYPE_VIDEO,
+                null, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (jsonResponse != null) {
+                    jsonResponse.onSuccess(response);
+                }
+                LogUtils.d("success = " + response);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (jsonResponse != null) {
+                    jsonResponse.onFaile(error);
+                }
+                LogUtils.e("failure = " + error.toString());
+
+            }
+        });
+
+
+        smallFiledownloadRequest.setTag(url);
+
+//启动
+        VolleyApi.getInstence(context).add(smallFiledownloadRequest);
+
+    }
+
+    /**
+     * 下载图片
+     *
+     * @param context
+     * @param url     未进行添加key的url,原始的url
+     */
+    public static void call(final Context context, String url) {
+        SmallFiledownloadRequest iamgeDownload = new SmallFiledownloadRequest(context,
+                url,
+                SmallFiledownloadRequest.FILE_TYPE_IMAGE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(context, context.getString(R.string.toast_save_iamge_success) + response, Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, R.string.toast_save_iamge_failure, Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+
+        iamgeDownload.setTag(url);
+
+//启动
+        VolleyApi.getInstence(context).add(iamgeDownload);
+
+    }
+
+    /**
+     * 下载图片
+     *
+     * @param context
+     * @param url     未进行添加key的url,原始的url
+     */
+    public static void call2(final Context context, String url) {
+        SmallFiledownloadRequest iamgeDownload = new SmallFiledownloadRequest(
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(context, context.getString(R.string.toast_save_iamge_success) + response, Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, R.string.toast_save_iamge_failure, Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+
+        iamgeDownload.setTag(url);
+
+//启动
+        VolleyApi.getInstence(context).add(iamgeDownload);
+
+    }
 
     /**
      * @param context

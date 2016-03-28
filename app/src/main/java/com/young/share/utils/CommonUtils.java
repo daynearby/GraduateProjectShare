@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.young.share.config.ApplicationConfig;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,8 +14,8 @@ public class CommonUtils {
     /**
      * 检查是否有网络
      */
-    public static boolean isNetworkAvailable(Context context) {
-        NetworkInfo info = getNetworkInfo(context);
+    public static boolean isNetworkAvailable( ) {
+        NetworkInfo info = getNetworkInfo();
         return info != null && info.isAvailable();
 
     }
@@ -21,22 +23,22 @@ public class CommonUtils {
     /**
      * 检查是否是WIFI
      */
-    public static boolean isWifi(Context context) {
-        NetworkInfo info = getNetworkInfo(context);
+    public static boolean isWifi( ) {
+        NetworkInfo info = getNetworkInfo();
         return info != null && info.getType() == ConnectivityManager.TYPE_WIFI;
     }
 
     /**
      * 检查是否是移动网络
      */
-    public static boolean isMobile(Context context) {
-        NetworkInfo info = getNetworkInfo(context);
+    public static boolean isMobile() {
+        NetworkInfo info = getNetworkInfo();
         return info != null && info.getType() == ConnectivityManager.TYPE_MOBILE;
     }
 
-    private static NetworkInfo getNetworkInfo(Context context) {
+    private static NetworkInfo getNetworkInfo() {
 
-        ConnectivityManager cm = (ConnectivityManager) context
+        ConnectivityManager cm = (ConnectivityManager) ApplicationConfig.getContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm != null ? cm.getActiveNetworkInfo() : null;
     }

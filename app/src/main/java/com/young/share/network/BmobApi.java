@@ -118,15 +118,18 @@ public class BmobApi {
      * Bmob批量上传文件
      * 先修正文件地址，再进行操作
      *
-     * @param file    文件地址，带file：//的
+     * @param file     文件地址，带file：//的
+     * @param type     上传文件的类型。Contants.FILE_TYPE_SIGNAL 单个文件，对上传的地址不做修改。
+     *                 Contants.IMAGE_TYPE_SHARE多个问及按，这里作为上传图片，对文件地址进行修改
      * @param context
+     * @param listener 回调
      */
     public static void UploadFiles(final Context context, String[] file, int type, final GoToUploadImages listener) {
 
         String[] files = new String[file.length];
 
         switch (type) {
-            case Contants.IMAGE_TYPE_AVATAR://头像
+            case Contants.FILE_TYPE_SIGNAL://单个文件夹
                 files[0] = file[0];
                 break;
             case Contants.IMAGE_TYPE_SHARE://分享信息的照片
@@ -141,10 +144,12 @@ public class BmobApi {
 
             @Override
             public void onSuccess(boolean isFinish, String[] fileNames, String[] urls, BmobFile[] files) {
-                if (listener != null) {
-                    listener.Result(isFinish, urls);
-                }
+
                 if (isFinish) {
+                    if (listener != null) {
+                        listener.Result( urls,files);
+                    }
+
                     for (String filename : fileNames) {
                         setThumbnail(context, filename);
                     }

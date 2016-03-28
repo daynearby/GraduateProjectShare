@@ -142,5 +142,11 @@
     <string name="txt_exit_message">你确定要离开吗?</string>
     <string name="txt_search">搜索</string>
     <string name="txt_search_nearby_place">搜索附近位置</string>
+    <string name="toast_download_video_failure">下载错误，请稍候再试</string>
+    <string name="toast_save_iamge_success">保存图片成功</string>
+    <string name="toast_save_iamge_failure">保存图片失败，请稍候再试</string>
+    <string name="txt_video_review">视频预览</string>
+    <string name="toast_video_can_not_found">找不到视频</string>
+    <string name="upload_video_fail">上传视频失败</string>
 
 </resources>

@@ -85,7 +85,7 @@ public class DiscoverFragment extends BaseFragment {
 //        getDataFromLocat();//先从本地加载数据
         dataList = (List<ShareMessage_HZ>) app.getCacheInstance().getAsObject(Contants.ACAHE_KEY_DISCOVER);
 
-        if (CommonUtils.isNetworkAvailable(context)) {//有网络
+        if (CommonUtils.isNetworkAvailable()) {//有网络
 //
             threadPool.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
                 @Override
