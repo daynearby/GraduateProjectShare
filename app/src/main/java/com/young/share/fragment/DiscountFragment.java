@@ -3,6 +3,8 @@ package com.young.share.fragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.gc.flashview.FlashView;
 import com.gc.flashview.constants.EffectConstants;
@@ -32,7 +33,6 @@ import com.young.share.model.gson.AdvertismentList;
 import com.young.share.model.gson.DiscountMessageList;
 import com.young.share.network.BmobApi;
 import com.young.share.network.NetworkReuqest;
-import com.young.share.thread.MyRunnable;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DisplayUtils;
@@ -94,17 +94,12 @@ public class DiscountFragment extends BaseFragment {
     @Override
     public void initData() {
         dataList = (List<DiscountMessage_HZ>) app.getCacheInstance().getAsObject(Contants.ACAHE_KEY_DISCOUNT);
-        threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
-            @Override
-            public void running() {
-//
-                /*数据*/
-                getRemoteData();
-/*广告*/
-//                getADInfo();
-                LogUtils.e("async thread");
-            }
-        }));
+        adList = (List<Advertisement>) app.getCacheInstance().getAsObject(Contants.ACAHE_KEY_ADVERTISMENT);
+
+     /*数据*/
+        getRemoteData();
+
+        /*广告*/
         getADInfo();
 
     }
@@ -124,7 +119,6 @@ public class DiscountFragment extends BaseFragment {
 
     @Override
     public void bindData() {
-        LogUtils.e("async bindData");
            /*设置flashview宽高*/
         ViewGroup.LayoutParams layoutParams = flashView.getLayoutParams();
         layoutParams.height = DisplayUtils.getScreenWidthPixels((Activity) context) / 2;
@@ -139,8 +133,26 @@ public class DiscountFragment extends BaseFragment {
 
 //        Log.d(tag, "bindData");
         swipeRefreshLayout.setRefreshing(true);
+
         if (dataList != null && dataList.size() > 0) {
             mhandler.sendEmptyMessage(MESSAGES_NEW_MESSAGE);
+        }
+   /*根据缓存数据，有数据那么就先刷新*/
+        if (adList != null && adList.size() > 0) {
+            /*如果异步任务先完成，返回数据，那么需要*/
+            if (imageUrlList != null && imageUrlList.size() > 0) {
+                imageUrlList.clear();
+            }
+            for (Advertisement ad : adList) {
+
+                imageUrlList.add(ad.getAdImage().getFileUrl(context));
+            }
+            mhandler.sendEmptyMessage(MESSAGES_GET_AD);
+        }
+
+        if (isFirstIn) {
+            swipeRefreshLayout.setRefreshing(true);
+            isFirstIn = false;
         }
     }
 
@@ -218,10 +230,7 @@ public class DiscountFragment extends BaseFragment {
      */
     public void getRemoteData() {
 
-        if (isFirstIn) {
-            swipeRefreshLayout.setRefreshing(true);
-            isFirstIn = false;
-        }
+
         JSONObject params = new JSONObject();
 
         try {
@@ -286,28 +295,32 @@ public class DiscountFragment extends BaseFragment {
         params.put(Contants.PARAM_ORDER, "-createdAt");
 
 //        adList
-        NetworkReuqest.request(context,
+        NetworkReuqest.getHttpsReponse(
                 NetworkReuqest.BMOB_HOST + NetworkReuqest.ADVERTISERMENT,
                 params, AdvertismentList.class,
-                new NetworkReuqest.JsonRequstCallback<AdvertismentList>() {
+                new NetworkReuqest.SimpleRequestCallback<AdvertismentList>() {
                     @Override
-                    public void onSuccess(AdvertismentList advertismentList) {
+                    public void response(AdvertismentList advertismentList) {
                         if (advertismentList != null && advertismentList.getCollecList().size() > 0) {
 
                             adList = advertismentList.getCollecList();
 
+                            if (imageUrlList != null && imageUrlList.size() > 0) {
+                                imageUrlList.clear();
+                            }
                             for (Advertisement ad : advertismentList.getCollecList()) {
                                 imageUrlList.add(ad.getAdImage().getFileUrl(context));
                             }
 
-                            mhandler.sendEmptyMessage(MESSAGES_GET_AD);
+                            /*建立缓存，并且刷新*/
+                            if (adList != null && adList.size() > 0) {
+                                app.getCacheInstance().put(Contants.ACAHE_KEY_ADVERTISMENT, (Serializable) adList);
+                                mhandler.sendEmptyMessage(MESSAGES_GET_AD);
+                            }
                         }
                     }
 
-                    @Override
-                    public void onFaile(VolleyError error) {
-                        LogUtils.e(" get ad info faile message = " + error.toString());
-                    }
+
                 });
 
     }
@@ -362,7 +375,11 @@ public class DiscountFragment extends BaseFragment {
     private FlashViewListener flashViewListener = new FlashViewListener() {
         @Override
         public void onClick(int position) {
-            Toast.makeText(context, "点击广告  " + position, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "点击广告  " + position, Toast.LENGTH_SHORT).show();
+
+            Intent it = new Intent(Intent.ACTION_VIEW, Uri.parse(adList.get(position).getAdLink()));
+            it.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
+            startActivity(it);
         }
     };
 }

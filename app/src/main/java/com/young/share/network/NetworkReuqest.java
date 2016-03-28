@@ -4,11 +4,16 @@ import android.content.Context;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.young.share.config.ApplicationConfig;
 import com.young.share.config.Contants;
 import com.young.share.model.gson.Longitude2Location;
 import com.young.share.model.gson.PlaceSearch;
 import com.young.share.model.gson.PlaceSuggestion;
+import com.young.share.thread.MyRunnable;
 import com.young.share.utils.LogUtils;
+
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -25,6 +30,11 @@ import java.util.Map;
  * Created by Nearby Yang on 2016-03-03.
  */
 public class NetworkReuqest {
+    private static Gson gson = new Gson();
+
+    public static enum Method {
+        POST, GET
+    }
 
     private static final String BAIDU_GEOCODER = "http://api.map.baidu.com/geocoder/v2/";
     private static final String BAIDU_PLACE_SUGGESTION = "http://api.map.baidu.com/place/v2/suggestion";//周围
@@ -72,7 +82,7 @@ public class NetworkReuqest {
     public static void baiduPlaceSuggestion(Context context, String query, int region,
                                             final SimpleRequestCallback<List<PlaceSuggestion.ResultEntity>> simpleRequestCallback) {
         try {
-            query = URLEncoder.encode(query,"UTF-8");
+            query = URLEncoder.encode(query, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             LogUtils.e("网址中文编码失败 " + e.toString());
         }
@@ -81,7 +91,7 @@ public class NetworkReuqest {
         params.put(Contants.PARAM_REGION, String.valueOf(region));
         params.put(Contants.PARAM_OUTPUT, Contants.PARAM_JSON);
         params.put(Contants.PARAM_AK, Contants.AK);
-        params.put(Contants.PARAM_MCODE,Contants.MCODE);
+        params.put(Contants.PARAM_MCODE, Contants.MCODE);
 //        params.put(Contants.PARAM_SCOPE,String.valueOf(2));
 
 
@@ -109,9 +119,9 @@ public class NetworkReuqest {
      * @param region  如果没有citycode 那么默认是全国
      */
     public static void baiduPlaceSearch(Context context, String query, int region,
-                                            final SimpleRequestCallback<List<PlaceSearch.ResultsEntity>> simpleRequestCallback) {
+                                        final SimpleRequestCallback<List<PlaceSearch.ResultsEntity>> simpleRequestCallback) {
         try {
-            query = URLEncoder.encode(query,"UTF-8");
+            query = URLEncoder.encode(query, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             LogUtils.e("网址中文编码失败 " + e.toString());
         }
@@ -120,10 +130,10 @@ public class NetworkReuqest {
         params.put(Contants.PARAM_REGION, String.valueOf(region));
         params.put(Contants.PARAM_OUTPUT, Contants.PARAM_JSON);
         params.put(Contants.PARAM_AK, Contants.AK);
-        params.put(Contants.PARAM_MCODE,Contants.MCODE);
-        params.put(Contants.PARAM_SCOPE,String.valueOf(1));
-        params.put(Contants.PARAM_PAGE_NUM,String.valueOf(0));
-        params.put(Contants.PARAM_PAGE_SIZE,String.valueOf(20));
+        params.put(Contants.PARAM_MCODE, Contants.MCODE);
+        params.put(Contants.PARAM_SCOPE, String.valueOf(1));
+        params.put(Contants.PARAM_PAGE_NUM, String.valueOf(0));
+        params.put(Contants.PARAM_PAGE_SIZE, String.valueOf(20));
 
 
         request(context, BAIDU_PLACE_SEARCH, params, PlaceSearch.class,
@@ -146,6 +156,7 @@ public class NetworkReuqest {
 
     /**
      * post请求
+     *
      * @param context
      * @param url
      * @param params
@@ -153,8 +164,8 @@ public class NetworkReuqest {
      * @param jsonRequstCallback
      * @param <T>
      */
-    public static <T>void  postRequest(Context context, String url, HashMap<String, String> params,
-                                    Class clazz, final JsonRequstCallback<T> jsonRequstCallback){
+    public static <T> void postRequest(Context context, String url, HashMap<String, String> params,
+                                       Class clazz, final JsonRequstCallback<T> jsonRequstCallback) {
 
 
         GSONRequest<T> jr = new GSONRequest<T>(url,
@@ -205,7 +216,7 @@ public class NetworkReuqest {
             paramsStr.append("&");
         }
 
-        String url = host + paramsStr.substring(0, paramsStr.length()-1);
+        String url = host + paramsStr.substring(0, paramsStr.length() - 1);
 
 
         GSONRequest<T> jr = new GSONRequest<T>(url,
@@ -237,6 +248,73 @@ public class NetworkReuqest {
     }
 
 
+    /**
+     * 使用httpclient实现https请求
+     *
+     * @param url            请求地址
+     * @param clazz          gson解析模板类
+     * @param simpleCallback 回调函数
+     * @param <T>            返回的类型
+     */
+    public static <T> void getHttpsReponse(final String url,
+                                           final HashMap<String, String> params,
+                                           final Class<T> clazz,
+                                           final SimpleRequestCallback<T> simpleCallback) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    StringBuilder paramsStr = new StringBuilder("?");
+                    for (Map.Entry<String, String> entry : params.entrySet()) {
+                        paramsStr = paramsStr.append(entry.getKey());
+                        paramsStr = paramsStr.append("=");
+                        paramsStr = paramsStr.append(entry.getValue());
+                        paramsStr.append("&");
+                    }
+
+                    String serveUrl = url + paramsStr.substring(0, paramsStr.length() - 1);
+                    String responseStr = HttpsRequest.getRequest(serveUrl);
+
+                    LogUtils.d(" responseStr = " + responseStr);
+
+                    simpleCallback.response(gson.fromJson(responseStr, clazz));
+                } catch (Exception e) {
+                    LogUtils.e("get failure. message = " + e.toString());
+                }
+            }
+        }).start();
+
+
+    }
+
+    /**
+     * 使用httpclient实现https请求
+     *
+     * @param url            请求地址
+     * @param params         post请求参数
+     * @param clazz          gson解析模板类
+     * @param simpleCallback 回调函数
+     * @param <T>            返回的类型
+     */
+    public static <T> void postHttpsReponse(final String url,
+                                            final JSONObject params,
+                                            final Class<T> clazz,
+                                            final SimpleRequestCallback<T> simpleCallback) {
+        ApplicationConfig.getInstance().getThreadInstance().startTask(new MyRunnable() {
+            @Override
+            public void run() {
+                try {
+                    String responseStr = HttpsRequest.postRequest(url, params);
+                    simpleCallback.response(gson.fromJson(responseStr, clazz));
+                } catch (Exception e) {
+                    LogUtils.e("get failure. message = " + e.toString());
+                }
+            }
+        });
+
+
+    }
 
 
     public interface JsonRequstCallback<T> {

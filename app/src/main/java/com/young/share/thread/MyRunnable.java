@@ -18,30 +18,34 @@ import com.young.share.utils.LogUtils;
  */
 public class MyRunnable implements Runnable {
 
-    private boolean cancleTask = false;
+    public  boolean cancelTask = false;
 
 
     private GotoRunnable gotoRunnable;
+
+    public MyRunnable() {
+    }
 
     public MyRunnable(GotoRunnable gotoRunnable) {
         this.gotoRunnable = gotoRunnable;
     }
 
+
     @Override
     public void run() {
-
-        if (!cancleTask) {
+        LogUtils.d(" running is cancel " +cancelTask);
+        if (!cancelTask) {
             LogUtils.d("running");
-            gotoRunnable.running();
+            if (gotoRunnable != null)
+                gotoRunnable.running();
 
         }
-
 
     }
 
 
-    public void setCancleTaskUnit(boolean cancleTask) {
-        this.cancleTask = cancleTask;
+    public void setCancleTaskUnit(boolean cancelTask) {
+        this.cancelTask = cancelTask;
     }
 
 

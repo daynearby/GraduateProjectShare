@@ -95,7 +95,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         commModel = (CommRemoteModel) getIntent().getExtras().getSerializable(Contants.CLAZZ_DATA_MODEL);
         discountMessage = new DiscountMessage_HZ();
 
-        threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+        threadPool.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
             @Override
             public void running() {
 

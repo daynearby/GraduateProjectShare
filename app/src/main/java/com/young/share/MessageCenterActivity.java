@@ -82,7 +82,7 @@ public class MessageCenterActivity extends ItemActBarActivity {
 
         SVProgressHUD.showWithStatus(mActivity, getString(R.string.tips_loading));
         //获取数据
-        threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+        threadPool.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
             @Override
             public void running() {
 

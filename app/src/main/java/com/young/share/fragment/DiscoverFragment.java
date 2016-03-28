@@ -87,7 +87,7 @@ public class DiscoverFragment extends BaseFragment {
 
         if (CommonUtils.isNetworkAvailable(context)) {//有网络
 //
-            threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+            threadPool.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
                 @Override
                 public void running() {
                     getDataFromRemote();

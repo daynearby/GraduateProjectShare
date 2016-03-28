@@ -75,7 +75,7 @@ public class RecordCommActivity extends ItemActBarActivity {
         //下载数据
         SVProgressHUD.showWithStatus(mActivity, getString(R.string.tips_loading));
 
-        threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+        threadPool.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
             @Override
             public void running() {
                 getData();//获取数据

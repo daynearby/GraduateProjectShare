@@ -12,6 +12,7 @@ import cn.bmob.v3.datatype.BmobGeoPoint;
  * Created by Nearby Yang on 2015-10-16.
  */
 public class CommRemoteModel implements Serializable {
+    final long serialVersionUID = 1L;
     private int id;
     private String objectId;
     private String createdAt;//createdAt
@@ -27,16 +28,16 @@ public class CommRemoteModel implements Serializable {
     private List<String> wanted;
     private List<String> visited;
     private String mcreatedAt;
-    private Integer comment;
-    private Integer type;
-    private Boolean read;
+    private int comment =0;
+    private int type;
+    private boolean read;
     private ShareMessage_HZ shareMessage;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -152,27 +153,27 @@ public class CommRemoteModel implements Serializable {
         this.mcreatedAt = mcreatedAt;
     }
 
-    public Integer getComment() {
+    public int getComment() {
         return comment;
     }
 
-    public void setComment(Integer comment) {
+    public void setComment(int comment) {
         this.comment = comment;
     }
 
-    public Integer getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(int type) {
         this.type = type;
     }
 
-    public Boolean isRead() {
+    public boolean isRead() {
         return read;
     }
 
-    public void setRead(Boolean read) {
+    public void setRead(boolean read) {
         this.read = read;
     }
 

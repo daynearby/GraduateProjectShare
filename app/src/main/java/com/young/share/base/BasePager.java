@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 
-import com.young.share.utils.ThreadUtils;
+import com.young.share.thread.ThreadPool;
 
 /**
  * view pager 的基类
@@ -15,12 +15,12 @@ import com.young.share.utils.ThreadUtils;
 public abstract class BasePager {
     public Context ctx;
     public View view;
-    public ThreadUtils threadUtils;
+    public ThreadPool threadPool;
 
-    public void init(Context ctx, View view, ThreadUtils threadUtils) {
+    public void init(Context ctx, View view, ThreadPool threadPool) {
         this.ctx = ctx;
         this.view = view;
-        this.threadUtils = threadUtils;
+        this.threadPool = threadPool;
 
         initData();
         initView();

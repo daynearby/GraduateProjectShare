@@ -17,7 +17,7 @@ import com.young.share.model.MyUser;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LogUtils;
-import com.young.share.utils.ThreadUtils;
+import com.young.share.thread.ThreadPool;
 import com.young.share.utils.cache.ACache;
 
 import org.litepal.LitePalApplication;
@@ -38,7 +38,7 @@ public class ApplicationConfig extends LitePalApplication {
     private volatile static ApplicationConfig instance;
     private ACache aCache;
 
-    public ThreadUtils threadUtils;
+    private ThreadPool threadPool;
 
     @Override
     public void onCreate() {
@@ -88,9 +88,9 @@ public class ApplicationConfig extends LitePalApplication {
      *
      * @return
      */
-    public ThreadUtils getThreadInstance() {
-        threadUtils = new ThreadUtils();
-        return threadUtils;
+    public ThreadPool getThreadInstance() {
+        threadPool = new ThreadPool();
+        return threadPool;
     }
 
 

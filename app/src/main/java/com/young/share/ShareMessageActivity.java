@@ -66,8 +66,6 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     private ImageView emotion_im;
     @InjectView(R.id.im_activity_share_message_addimg)
     private ImageView addimg_im;
-//    @InjectView(R.id.gv_content_popupwin_share_addimg)
-//    private GridView gv_img;
     @InjectView(R.id.miv_share_message_image)
     private MultiImageView multiImageView;
     @InjectView(R.id.vp_popupwindow_emotion_dashboard)
@@ -130,10 +128,9 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
             tips_tv.setVisibility(View.VISIBLE);
             draftType = Contants.DRAFT_TYPE_DICOUNT;
         } else {
-            tips_tv.setVisibility(View.INVISIBLE);
+            tips_tv.setVisibility(View.GONE);
             draftType = Contants.DRAFT_TYPE_DICOVER;
         }
-
 
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
@@ -146,12 +143,6 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         tagList.remove(0);
 
         popupWinListView = new PopupWinListView(this, tagList, false);
-//        gridViewAdapter = new GridviewAdapter(this, gv_img, true);
-//        gridViewAdapter.setDatas(null);
-//        ViewGroup.LayoutParams lp = gv_img.getLayoutParams();
-//        lp.width = DisplayUtils.getScreenWidthPixels(mActivity) / 2;
-//        gv_img.setAdapter(gridViewAdapter);
-
 
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
@@ -182,9 +173,6 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
             }
         });
-
-        //监听
-//        setItemListener(new itemClick());
         //表情
         new EmotionUtils(mActivity, vp_emotion_dashboard, content_et);
         acache = ACache.get(mActivity);
@@ -193,7 +181,6 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 //恢复草稿
         resetDraft();
 
-//        startLocation();
     }
 
     /**

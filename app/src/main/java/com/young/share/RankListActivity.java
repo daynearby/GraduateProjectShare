@@ -7,7 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
@@ -20,10 +20,9 @@ import com.young.share.interfaces.ComparatorImpl;
 import com.young.share.interfaces.ListViewRefreshListener;
 import com.young.share.model.CommRemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
-import com.young.share.model.gson.RankList;
 import com.young.share.model.ShareMessage_HZ;
+import com.young.share.model.gson.RankList;
 import com.young.share.network.BmobApi;
-import com.young.share.thread.MyRunnable;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.LogUtils;
@@ -47,8 +46,8 @@ public class RankListActivity extends BaseAppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     @InjectView(R.id.list_ranklist)
     private ListView listview;
-    @InjectView(R.id.ll_rank_list_bg)
-    private LinearLayout bgLayout;
+    @InjectView(R.id.im_ranklist_tips)
+    private ImageView bgLayout;
 
     private RankListAdapter rankAdapter;
 
@@ -84,13 +83,8 @@ public class RankListActivity extends BaseAppCompatActivity {
         if (!(isHadData = remoteList != null && remoteList.size() > 0))
             remoteList = new ArrayList<>();
 
-        threadUtils.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
-            @Override
-            public void running() {
 //获取数据
-                getDataFromRemote();
-            }
-        }));
+        getDataFromRemote();
 
     }
 
@@ -211,8 +205,8 @@ public class RankListActivity extends BaseAppCompatActivity {
                 break;
 
             case HANDLER_GET_NO_DATA:
-
-                bgLayout.setBackgroundResource(R.drawable.icon_conten_empty);
+                bgLayout.setVisibility(View.VISIBLE);
+                bgLayout.setImageResource(R.drawable.icon_conten_empty);
                 break;
         }
 
@@ -281,6 +275,7 @@ public class RankListActivity extends BaseAppCompatActivity {
                 if (remoteList != null && remoteList.size() > 0) {
                     remoteList.clear();
                 }
+
                 if (sharemessagesList != null) {
                     for (ShareMessage_HZ share : sharemessagesList) {
                           /*格式化数据，通用格式*/
@@ -298,9 +293,7 @@ public class RankListActivity extends BaseAppCompatActivity {
 //进行排序
                 if (remoteList != null && remoteList.size() > 0) {
                     Collections.sort(remoteList, new ComparatorImpl(key));
-
                     app.getCacheInstance().put(tag, (Serializable) remoteList);
-
                     mHandler.sendEmptyMessage(HANDLER_GET_DATA);
                 } else {
                     mHandler.sendEmptyMessage(HANDLER_GET_NO_DATA);

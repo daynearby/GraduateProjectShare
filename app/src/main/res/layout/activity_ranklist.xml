@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_rank_list_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:orientation="vertical">
+>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tb_rank"
@@ -15,7 +15,8 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/sw_ranklist_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tb_rank">
 
         <ListView
             android:id="@+id/list_ranklist"
@@ -25,4 +26,12 @@
             android:dividerHeight="@dimen/paddingHit" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/im_ranklist_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        />
+</RelativeLayout>

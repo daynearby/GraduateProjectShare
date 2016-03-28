@@ -11,7 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.view.ViewPager.PageTransformer;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewParent;
@@ -137,8 +136,8 @@ public class FlashView extends FrameLayout {
 //		 }
 //		 }
         }
-        if (BuildConfig.DEBUG)
-            Log.d("Flash View ", "测试bug111：：：imageUris.size()" + imageUris.size());
+//        if (BuildConfig.DEBUG)
+//            Log.d("Flash View ", "测试bug111：：：imageUris.size()" + imageUris.size());
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(5, 0, 0, 0);
@@ -237,7 +236,7 @@ public class FlashView extends FrameLayout {
                 position = position + imageViewsList.size();
 
             }
-            System.out.println("position111:::" + position);
+//            System.out.println("position111:::" + position);
             if (isTwo) {
                 pos = position % 2;
             } else {
@@ -265,9 +264,9 @@ public class FlashView extends FrameLayout {
             ViewParent vp = view.getParent();
             if (vp != null) {
 
-                System.out.println("JJJJJ" + pos);
+//                System.out.println("JJJJJ" + pos);
                 ViewPager pager = (ViewPager) vp;
-                System.out.println("pager.getChildCount()::" + pager.getChildCount());
+//                System.out.println("pager.getChildCount()::" + pager.getChildCount());
 
                 pager.removeView(view);
             }
@@ -439,7 +438,7 @@ public class FlashView extends FrameLayout {
 
         protected ImageHandler(WeakReference<FlashView> wk) {
             weakReference = wk;
-            System.out.println("dsfdsfdsf:::" + currentItem);
+//            System.out.println("dsfdsfdsf:::" + currentItem);
         }
 
         @Override

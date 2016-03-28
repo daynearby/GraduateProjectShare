@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.young.share.R;
 import com.young.share.config.ApplicationConfig;
-import com.young.share.utils.ThreadUtils;
+import com.young.share.thread.ThreadPool;
 
 /**
  * fragment基类
@@ -21,7 +21,7 @@ import com.young.share.utils.ThreadUtils;
 public abstract class BaseFragment extends Fragment {
 
     private View view;
-    public ThreadUtils threadUtils;
+    public ThreadPool threadPool;
     public Context context;
     public ApplicationConfig app;
 
@@ -56,7 +56,7 @@ public abstract class BaseFragment extends Fragment {
         if (vg != null) {
             vg.removeAllViewsInLayout();
         }
-        threadUtils = ApplicationConfig.getInstance().getThreadInstance();
+        threadPool = ApplicationConfig.getInstance().getThreadInstance();
 
         return view;
     }

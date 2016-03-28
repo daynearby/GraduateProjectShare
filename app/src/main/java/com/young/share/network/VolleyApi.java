@@ -7,8 +7,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.young.share.config.ApplicationConfig;
-import com.young.share.network.ssl.SslHttpStack;
 
 import org.json.JSONObject;
 
@@ -34,9 +32,9 @@ public class VolleyApi {
         if (requestQueue == null) {
             synchronized (VolleyApi.class) {
                 if (requestQueue == null) {
-//                    requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+                    requestQueue = Volley.newRequestQueue(context.getApplicationContext());
                     //使用默认的volley请求
-                    requestQueue = Volley.newRequestQueue(ApplicationConfig.getContext(), new SslHttpStack(true));
+//                    requestQueue = Volley.newRequestQueue(ApplicationConfig.getContext(), new SslHttpStack(true));
 
                     requestQueue.start();
                 }

@@ -241,5 +241,6 @@ public class Contants {
     public static final String ACAHE_KEY_DISCOVER = "acahe_key_discover";//发现前面那部分
     public static final String ACAHE_KEY_DISCOUNT = "acahe_key_discount";//商家优惠前面那部分
     public static final String ACAHE_KEY_USER= "acahe_key_user";//用户信息
+    public static final String ACAHE_KEY_ADVERTISMENT= "acahe_key_advertisment";//广告信息
 
 }
