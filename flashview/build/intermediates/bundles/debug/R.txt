@@ -440,9 +440,8 @@ int drawable abc_textfield_search_material 0x7f020044
 int drawable defaultflashview 0x7f020045
 int drawable dot_light 0x7f020046
 int drawable dot_white 0x7f020047
-int drawable ic_launcher 0x7f020048
-int drawable image_holder 0x7f020049
-int drawable notification_template_icon_bg 0x7f02004a
+int drawable image_holder 0x7f020048
+int drawable notification_template_icon_bg 0x7f020049
 int id accordion 0x7f0b0018
 int id action0 0x7f0b005a
 int id action_bar 0x7f0b0049

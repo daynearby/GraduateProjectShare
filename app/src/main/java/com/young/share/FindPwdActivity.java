@@ -20,18 +20,14 @@ import com.young.share.utils.LogUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
-import cn.smssdk.gui.RegisterPage;
 
 /**
  * 找回密码
- * 根据手机号码
+ * 根据手机号码,使用bmob的手机号重置
  * <p/>
  * Created by Nearby Yang on 2015-10-21.
  */
@@ -61,11 +57,12 @@ public class FindPwdActivity extends BaseAppCompatActivity implements View.OnCli
 
     }
 
+    // TODO: 2016-03-30 使用bmob的框架
     @Override
     public void initData() {
         setTitle(R.string.find_pwd_text);
         /*初始化短信服务的时候出错*/
-        SMSSDK.initSDK(this, Contants.SMS_APP_KEY, Contants.SMS_APP_SECRET);
+//        SMSSDK.initSDK(this, Contants.SMS_APP_KEY, Contants.SMS_APP_SECRET);
     }
 
     @Override
@@ -152,38 +149,38 @@ public class FindPwdActivity extends BaseAppCompatActivity implements View.OnCli
      */
     private void smsVerfied(final String mobilePhoneNumber) {
 
-        //打开注册页面
-        RegisterPage registerPage = new RegisterPage();
-
-        registerPage.setRegisterCallback(new EventHandler() {
-            public void afterEvent(int event, int result, Object data) {
-// 解析注册结果
-                if (result == SMSSDK.RESULT_COMPLETE) {
-                    @SuppressWarnings("unchecked")
-                    HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
-                    String country = (String) phoneMap.get("country");
-                    phone = (String) phoneMap.get("phone");
-
-                    if (mobilePhoneNumber.equals(phone)) {//手机验证与预留手机号不相同
-
-                        // 提交用户信息
-                        hadVerfi = true;
-                        findPwdLayout.setVisibility(View.VISIBLE);
-                        et_user_name.setEnabled(false);
-
-                    } else {//手机验证与预留手机号不相同
-
-                        SVProgressHUD.showErrorWithStatus(FindPwdActivity.this, getString(R.string.mobilePhone_not_equals), SVProgressHUD.SVProgressHUDMaskType.GradientCancel);
-
-                    }
-
-
-                }
-            }
-        });
-
-//显示验证窗口
-        registerPage.show(this);
+//        //打开注册页面
+//        RegisterPage registerPage = new RegisterPage();
+//
+//        registerPage.setRegisterCallback(new EventHandler() {
+//            public void afterEvent(int event, int result, Object data) {
+//// 解析注册结果
+//                if (result == SMSSDK.RESULT_COMPLETE) {
+//                    @SuppressWarnings("unchecked")
+//                    HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
+//                    String country = (String) phoneMap.get("country");
+//                    phone = (String) phoneMap.get("phone");
+//
+//                    if (mobilePhoneNumber.equals(phone)) {//手机验证与预留手机号不相同
+//
+//                        // 提交用户信息
+//                        hadVerfi = true;
+//                        findPwdLayout.setVisibility(View.VISIBLE);
+//                        et_user_name.setEnabled(false);
+//
+//                    } else {//手机验证与预留手机号不相同
+//
+//                        SVProgressHUD.showErrorWithStatus(FindPwdActivity.this, getString(R.string.mobilePhone_not_equals), SVProgressHUD.SVProgressHUDMaskType.GradientCancel);
+//
+//                    }
+//
+//
+//                }
+//            }
+//        });
+//
+////显示验证窗口
+//        registerPage.show(this);
     }
 
     /**

@@ -72,10 +72,6 @@
         "source": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\drawable-mdpi\\abc_ic_menu_moreoverflow_mtrl_alpha.png"
     },
     {
-        "merged": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\res\\merged\\release\\drawable-mdpi-v4\\ic_launcher.png",
-        "source": "D:\\AS workSpace\\share\\flashview\\src\\main\\res\\drawable-mdpi\\ic_launcher.png"
-    },
-    {
         "merged": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\res\\merged\\release\\drawable-mdpi-v4\\abc_scrubber_track_mtrl_alpha.9.png",
         "source": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\drawable-mdpi\\abc_scrubber_track_mtrl_alpha.9.png"
     },

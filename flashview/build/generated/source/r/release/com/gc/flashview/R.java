@@ -1608,9 +1608,8 @@ containing a value of this type.
         public static int defaultflashview=0x7f020045;
         public static int dot_light=0x7f020046;
         public static int dot_white=0x7f020047;
-        public static int ic_launcher=0x7f020048;
-        public static int image_holder=0x7f020049;
-        public static int notification_template_icon_bg=0x7f02004a;
+        public static int image_holder=0x7f020048;
+        public static int notification_template_icon_bg=0x7f020049;
     }
     public static final class id {
         public static int accordion=0x7f0b0018;

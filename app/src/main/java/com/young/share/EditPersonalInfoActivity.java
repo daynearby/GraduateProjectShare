@@ -15,12 +15,7 @@ import com.young.share.utils.XmlUtils;
 import com.young.share.views.CitySelectPopupWin;
 import com.young.share.views.PopupWinListView;
 
-import java.util.HashMap;
-
 import cn.bmob.v3.listener.UpdateListener;
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
-import cn.smssdk.gui.RegisterPage;
 
 /**
  *
@@ -81,7 +76,7 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
         });
 
         //手机短信验证
-        SMSSDK.initSDK(this, Contants.SMS_APP_KEY, Contants.SMS_APP_SECRET);
+//        SMSSDK.initSDK(this, Contants.SMS_APP_KEY, Contants.SMS_APP_SECRET);
     }
 
     @Override
@@ -267,40 +262,40 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
 
 
         //打开注册页面
-        RegisterPage registerPage = new RegisterPage();
-
-        registerPage.setRegisterCallback(new EventHandler() {
-            public void afterEvent(int event, int result, Object data) {
-// 解析注册结果
-                if (result == SMSSDK.RESULT_COMPLETE) {
-                    @SuppressWarnings("unchecked")
-                    HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
-//                    String country = (String) phoneMap.get("country");
-                    String phone = (String) phoneMap.get("phone");
-
-                    if (mobilePhoneNumber.equals(phone)) {//手机验证与预留手机号不相同
-
-                        SVProgressHUD.showWithStatus(mActivity, getString(R.string.updating));
-
-                        // 提交用户信息
-                        cuser.setMobilePhoneNumber(mobilePhone_et.getText().toString());
-                        cuser.setEmailVerified(true);
-
-                        updateUserInfo();
-
-                    } else {//手机验证与预留手机号不相同
-
-                        SVProgressHUD.showErrorWithStatus(mActivity, getString(R.string.verify_mobilePhone_faile), SVProgressHUD.SVProgressHUDMaskType.GradientCancel);
-
-                    }
-
-
-                }
-            }
-        });
-
-//显示验证窗口
-        registerPage.show(this);
+//        RegisterPage registerPage = new RegisterPage();
+//
+//        registerPage.setRegisterCallback(new EventHandler() {
+//            public void afterEvent(int event, int result, Object data) {
+//// 解析注册结果
+//                if (result == SMSSDK.RESULT_COMPLETE) {
+//                    @SuppressWarnings("unchecked")
+//                    HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
+////                    String country = (String) phoneMap.get("country");
+//                    String phone = (String) phoneMap.get("phone");
+//
+//                    if (mobilePhoneNumber.equals(phone)) {//手机验证与预留手机号不相同
+//
+//                        SVProgressHUD.showWithStatus(mActivity, getString(R.string.updating));
+//
+//                        // 提交用户信息
+//                        cuser.setMobilePhoneNumber(mobilePhone_et.getText().toString());
+//                        cuser.setEmailVerified(true);
+//
+//                        updateUserInfo();
+//
+//                    } else {//手机验证与预留手机号不相同
+//
+//                        SVProgressHUD.showErrorWithStatus(mActivity, getString(R.string.verify_mobilePhone_faile), SVProgressHUD.SVProgressHUDMaskType.GradientCancel);
+//
+//                    }
+//
+//
+//                }
+//            }
+//        });
+//
+////显示验证窗口
+//        registerPage.show(this);
     }
 
 }
