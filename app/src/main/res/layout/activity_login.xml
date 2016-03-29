@@ -2,15 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:background="@color/theme_puple_dark">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_puple" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:padding="@dimen/paddingMediu"
-        >
+        android:padding="@dimen/paddingMediu">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,33 +32,34 @@
                 android:paddingLeft="@dimen/paddingMediu"
                 android:paddingRight="@dimen/paddingMediu"
                 android:singleLine="true"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:textColorHint="@color/light_gray"
-                android:textSize="@dimen/textSizeLarge" >
-                <requestFocus/>
+                android:textSize="@dimen/textSizeLarge">
+
+                <requestFocus />
             </EditText>
 
             <EditText
                 android:id="@+id/et_login_pwd"
                 style="@style/bar_text"
+                android:hint="@string/pwd"
                 android:inputType="textPassword"
                 android:paddingLeft="@dimen/paddingMediu"
                 android:paddingRight="@dimen/paddingMediu"
                 android:singleLine="true"
-                android:textColor="@color/white"
-                android:textSize="@dimen/textSizeLarge"
-                android:hint="@string/pwd"
-                android:textColorHint="@color/light_gray"/>
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/light_gray"
+                android:textSize="@dimen/textSizeLarge" />
 
         </LinearLayout>
 
         <TextView
             android:id="@+id/tv_login_forgetPwd"
             style="@style/text_style_wrap"
+            android:layout_gravity="right"
             android:padding="@dimen/paddingMic"
             android:text="@string/forget_pwd"
-            android:layout_gravity="right"
-            android:textColor="@drawable/sele_text_color_def_back"
+            android:textColor="@drawable/sele_text_color_def_white"
             android:textSize="@dimen/textSizeMediu" />
 
         <TextView
@@ -62,7 +68,7 @@
             android:layout_gravity="right"
             android:padding="@dimen/paddingMic"
             android:text="@string/regist"
-            android:textColor="@drawable/sele_text_color_def_back"
+            android:textColor="@drawable/sele_text_color_def_white"
             android:textSize="@dimen/textSizeMediu" />
 
 
@@ -72,6 +78,7 @@
             android:layout_marginLeft="@dimen/paddingLarg"
             android:layout_marginRight="@dimen/paddingLarg"
             android:background="@drawable/sele_login_btn"
+            android:textColor="@android:color/white"
             android:gravity="center"
             android:padding="@dimen/paddingMediu"
             android:text="@string/login_text"

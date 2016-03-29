@@ -2,15 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/theme_puple_dark"
     android:fitsSystemWindows="true">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_puple" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:padding="@dimen/paddingMediu"
-        >
+        android:padding="@dimen/paddingMediu">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,20 +27,37 @@
             <TextView
                 style="@style/text_style_wrap"
                 android:text="@string/account"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/textSizeLarge" />
 
             <EditText
-                android:id="@+id/et_registrt_email"
-                style="@style/bar_text"
-                android:hint="@string/user_name"
-                android:inputType="textEmailAddress"
+                android:id="@+id/et_reg_phone"
+                style="@style/editText_width"
+                android:hint="@string/txt_phone_number"
+                android:inputType="phone"
                 android:paddingLeft="@dimen/paddingMediu"
                 android:singleLine="true"
                 android:textColorHint="@color/light_gray"
-                android:textSize="@dimen/textSizeMediu" >
-                <requestFocus/>
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/textSizeMediu">
+
+                <requestFocus />
             </EditText>
 
+            <ImageView
+                android:id="@+id/im_reg_count_state"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/txt_reg_get_identify_code"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:text="@string/txt_get_identify_code"/>
         </LinearLayout>
 
         <LinearLayout
@@ -46,18 +69,26 @@
             <TextView
                 style="@style/text_style_wrap"
                 android:text="@string/pwd"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/textSizeLarge" />
 
             <EditText
                 android:id="@+id/et_register_pwd"
-                style="@style/bar_text"
+                style="@style/editText_width"
+                android:hint="@string/txt_pwd_min_length"
                 android:inputType="textPassword"
                 android:paddingLeft="@dimen/paddingMediu"
                 android:singleLine="true"
-                android:textSize="@dimen/textSizeMediu"
                 android:textColorHint="@color/light_gray"
-                android:hint="最少六位字符"/>
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/textSizeMediu" />
 
+            <ImageView
+                android:id="@+id/im_reg_pwd_state"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:visibility="invisible" />
         </LinearLayout>
 
         <LinearLayout
@@ -69,28 +100,34 @@
             <TextView
                 style="@style/text_style_wrap"
                 android:text="@string/pwd"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/textSizeLarge" />
 
             <EditText
                 android:id="@+id/et_register_config_pwd"
-                style="@style/bar_text"
+                style="@style/editText_width"
+                android:hint="@string/config_pwd"
                 android:inputType="textPassword"
                 android:paddingLeft="@dimen/paddingMediu"
                 android:singleLine="true"
+                android:textColor="@android:color/white"
                 android:textColorHint="@color/light_gray"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/textSizeMediu"
-                android:hint="@string/config_pwd"/>
+                android:textSize="@dimen/textSizeMediu" />
 
+            <ImageView
+                android:id="@+id/im_reg_con_pwd_state"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:visibility="invisible" />
         </LinearLayout>
-
         <TextView
             android:id="@+id/tv_go_login"
             style="@style/text_style_wrap"
             android:layout_gravity="right"
             android:padding="@dimen/paddingMic"
             android:text="@string/had_register"
-            android:textColor="@drawable/sele_text_color_def_back"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/textSizeMediu" />
 
         <TextView
@@ -102,7 +139,7 @@
             android:gravity="center"
             android:padding="@dimen/paddingMediu"
             android:text="@string/regist"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/textSizeMediu" />
     </LinearLayout>
 </RelativeLayout>

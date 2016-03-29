@@ -33,4 +33,6 @@
     <dimen name="arcButtonChild">58dp</dimen>
     <dimen name="arcButton">68dp</dimen>
     <dimen name="size_progress_small">32dp</dimen>
+    <dimen name="size_video_width">240dp</dimen>
+    <dimen name="size_video_height">180dp</dimen>
 </resources>

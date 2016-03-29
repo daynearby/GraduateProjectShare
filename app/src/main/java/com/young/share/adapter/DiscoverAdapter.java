@@ -8,8 +8,10 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.young.share.BaiduMapActivity;
 import com.young.share.BigPicActivity;
@@ -68,8 +70,10 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         TextView tag_tv = holder.getView(R.id.id_tx_tab);//标签
         TextView content_tv = holder.getView(R.id.id_tx_share_content);//分享的文本内容
         TextView location = holder.getView(R.id.tv_item_share_main_location);//分享信息的位置
-//        WrapHightGridview myGridview = holder.getView(R.id.id_gv_shareimg);//图片
-        MultiImageView multiImageView = holder.getView(R.id.miv_share_iamges);
+        MultiImageView multiImageView = holder.getView(R.id.miv_share_iamges);//图片
+        /*视频布局*/
+
+
         TextView wanto_tv = holder.getView(R.id.id_tx_wantogo);//想去数量
         TextView hadgo_tv = holder.getView(R.id.id_hadgo);//去过数量
         TextView comment_tv = holder.getView(R.id.id_tx_comment);//评论数量
@@ -134,19 +138,39 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         if (!TextUtils.isEmpty(shareMessage.getShLocation())) {
             location.setVisibility(View.VISIBLE);
 
-            location.setText( StringUtils.locatiomInfo(ctx, shareMessage.getShLocation(), new StringUtils.TextLink() {
-               @Override
-               public void onclick(String str) {
-                   Bundle bundle = new Bundle();
-                   bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT, shareMessage.getGeographic());
-                   startActivity(BaiduMapActivity.class, bundle);
-               }
+            location.setText(StringUtils.locatiomInfo(ctx, shareMessage.getShLocation(), new StringUtils.TextLink() {
+                @Override
+                public void onclick(String str) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT, shareMessage.getGeographic());
+                    startActivity(BaiduMapActivity.class, bundle);
+                }
             }));
         }
 //        location.setText();
         //图片显示
-//        gridViewAdapter.setDatas(shareMessage.getShImgs(), false);
-//        myGridview.setOnItemClickListener(new LocationUtils.itemClick(ctx, shareMessage.getShImgs()));
+        setImages(multiImageView, shareMessage);
+
+        //设置视频
+        setVideo(holder, shareMessage);
+
+//添加监听事件
+        nickname_tv.setOnClickListener(new click(myUser));
+        avatar.setOnClickListener(new click(myUser));
+        wanto_tv.setOnClickListener(new click(shareMessage));
+        hadgo_tv.setOnClickListener(new click(shareMessage));
+        comment_tv.setOnClickListener(new click(shareMessage));
+        tag_tv.setOnClickListener(new click(shareMessage.getShTag()));
+
+    }
+
+    /**
+     * 设置照片
+     *
+     * @param multiImageView
+     * @param shareMessage
+     */
+    private void setImages(MultiImageView multiImageView, final ShareMessage_HZ shareMessage) {
         multiImageView.setList(DataFormateUtils.thumbnailList(ctx, shareMessage.getShImgs()));
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
@@ -165,14 +189,21 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                 ((Activity) ctx).overridePendingTransition(0, 0);
             }
         });
+    }
 
-//添加监听事件
-        nickname_tv.setOnClickListener(new click(myUser));
-        avatar.setOnClickListener(new click(myUser));
-        wanto_tv.setOnClickListener(new click(shareMessage));
-        hadgo_tv.setOnClickListener(new click(shareMessage));
-        comment_tv.setOnClickListener(new click(shareMessage));
-        tag_tv.setOnClickListener(new click(shareMessage.getShTag()));
+    /**
+     * 设置视频
+     *
+     * @param holder
+     * @param shareMessage
+     */
+    private void setVideo(ViewHolder holder, ShareMessage_HZ shareMessage) {
+        RelativeLayout videoLayout = holder.getView(R.id.rl_share_video_layout);
+        VideoView videoView = holder.getView(R.id.vv_share_preview_video);
+        ImageView videoPrevideo = holder.getView(R.id.im_share_video_priview);
+        ImageView playvideo = holder.getView(R.id.im_share_start_btn);
+        ProgressBar videoDownloadPb = holder.getView(R.id.pb_share_loading);
+
 
     }
 
@@ -180,7 +211,6 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
     public int getlayoutid(int position) {
         return R.layout.item_discover;
     }
-
 
 
     /**

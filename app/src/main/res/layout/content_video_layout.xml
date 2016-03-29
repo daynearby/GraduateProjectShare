@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_share_video_layout"
+        android:layout_width="@dimen/size_video_width"
+        android:layout_height="@dimen/size_video_height"
+        android:layout_marginTop="5dp"
+        android:visibility="gone">
+        <!--视频播放器-->
+        <VideoView
+            android:id="@+id/vv_share_preview_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+        <!--视频预览图-->
+        <ImageView
+            android:id="@+id/im_share_video_priview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <!--设置前景，播放按钮-->
+        <ImageView
+            android:id="@+id/im_share_start_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_play_video"
+            android:visibility="gone" />
+        <!--进度条-->
+        <ProgressBar
+            android:id="@+id/pb_share_loading"
+            style="@android:style/Widget.Holo.ProgressBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:progressDrawable="@drawable/pb_process_bar"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+</LinearLayout>

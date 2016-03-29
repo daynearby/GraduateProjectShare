@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:padding="@dimen/paddingMediu">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/paddingMic"
+            android:text="@string/txt_verific_phone"
+            android:textColor="@android:color/black" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/paddingMic">
+
+            <EditText
+                android:id="@+id/et_dialog_identify_code_input"
+                android:layout_width="76dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_input_text"
+                android:gravity="center"
+                android:padding="@dimen/paddingHit"
+                android:singleLine="true" />
+
+            <ImageView
+                android:id="@+id/im_identify_state"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/paddingHit"
+                android:paddingRight="@dimen/paddingHit"
+                android:src="@drawable/icon_checked"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/txt_et_dialog_identify_code_time"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/paddingMic"
+                android:paddingRight="@dimen/paddingMic"
+                android:gravity="center_vertical"
+                android:text="@string/txt_time"
+                android:textColor="@drawable/sele_text_color_def_back" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_identify_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/maginMicro"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/paddingMic"
+            android:text="@string/config"
+            android:textColor="@drawable/sele_text_color_def_back" />
+    </LinearLayout>
+</RelativeLayout>

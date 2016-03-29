@@ -129,8 +129,8 @@ public class BmobApi {
         String[] files = new String[file.length];
 
         switch (type) {
-            case Contants.FILE_TYPE_SIGNAL://单个文件夹
-                files[0] = file[0];
+            case Contants.FILE_TYPE_MULTI://文件的路径
+                files = file;
                 break;
             case Contants.IMAGE_TYPE_SHARE://分享信息的照片
                 for (int i = 0; i < file.length; i++) {
@@ -147,7 +147,7 @@ public class BmobApi {
 
                 if (isFinish) {
                     if (listener != null) {
-                        listener.Result( urls,files);
+                        listener.Result(urls, files);
                     }
 
                     for (String filename : fileNames) {

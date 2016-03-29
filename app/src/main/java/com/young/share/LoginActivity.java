@@ -1,6 +1,8 @@
 package com.young.share;
 
+import android.graphics.Color;
 import android.os.Message;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -8,7 +10,7 @@ import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.share.annotation.InjectView;
-import com.young.share.base.CustomActBarActivity;
+import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
 import com.young.share.model.MyBmobInstallation;
 import com.young.share.model.MyUser;
@@ -27,7 +29,7 @@ import cn.bmob.v3.listener.UpdateListener;
  * 登陆
  * Created by Nearby Yang on 2015-10-18.
  */
-public class LoginActivity extends CustomActBarActivity implements View.OnClickListener {
+public class LoginActivity extends BaseAppCompatActivity implements View.OnClickListener {
 
     @InjectView(R.id.et_login_email)
     private EditText et_loginEmail;
@@ -51,6 +53,13 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
     }
 
     @Override
+    public void initData() {
+        initialiToolbar();
+        setTitle(R.string.personal_center);
+        sharePreferenceUtils = new SharePreferenceUtils(this);
+    }
+
+    @Override
     public void findviewbyid() {
 
         tv_forgetPwd.setOnClickListener(this);
@@ -58,15 +67,6 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
         tv_login_Btn.setOnClickListener(this);
     }
 
-    @Override
-    public void initData() {
-        super.initData();
-        settitle(R.string.personal_center);
-        setBarVisibility(false, false);
-
-
-        sharePreferenceUtils = new SharePreferenceUtils(this);
-    }
 
     @Override
     public void bindData() {
@@ -84,6 +84,23 @@ public class LoginActivity extends CustomActBarActivity implements View.OnClickL
 
     @Override
     public void mBack() {
+        mActivity.finish();
+    }
+
+    /**
+     * 初始化toolbar
+     */
+    private void initialiToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_login);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.icon_menu_back);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mActivity.finish();
+            }
+        });
 
     }
 

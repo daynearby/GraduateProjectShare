@@ -41,6 +41,6 @@
     <dimen name="size_button_height">32dp</dimen>
     <dimen name="size_capture_height">118dp</dimen>
     <dimen name="size_image">28dp</dimen>
-    <dimen name="size_video_width">120dp</dimen>
-    <dimen name="size_video_height">90dp</dimen>
+    <dimen name="size_video_width">320dp</dimen>
+    <dimen name="size_video_height">240dp</dimen>
 </resources>

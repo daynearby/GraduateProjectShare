@@ -84,13 +84,16 @@
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
 
         <!-- 登录 -->
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- 注册 -->
-        <activity android:name=".RegisterActivity" />
+        <activity android:name=".RegisterActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- 找回密码 -->
-        <activity android:name=".FindPwdActivity" />
+        <activity android:name=".FindPwdActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- 分享信息 -->
         <activity

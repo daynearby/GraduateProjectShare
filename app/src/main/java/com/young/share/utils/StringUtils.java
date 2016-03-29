@@ -88,6 +88,23 @@ public class StringUtils {
 
         return val;
     }
+    /**
+     * 手机号验证
+     *
+     * @param  phoneNumberStr
+     * @return 验证通过返回true
+     */
+    public static boolean phoneNumberValid(String phoneNumberStr){
+
+            Pattern p = null;
+            Matcher m = null;
+            boolean b = false;
+            p = Pattern.compile("^[1][3,4,5,8][0-9]{9}$"); // 验证手机号
+            m = p.matcher(phoneNumberStr);
+            b = m.matches();
+            return b;
+
+    }
 
     /**
      * 将全部的用户id对应的头像都添加在string中

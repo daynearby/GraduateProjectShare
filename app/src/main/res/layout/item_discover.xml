@@ -53,6 +53,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/paddingMic" />
+<!--视频播放布局-->
+                <include layout="@layout/content_video_layout"/>
+
 
                 <TextView
                     android:id="@+id/tv_item_share_main_location"

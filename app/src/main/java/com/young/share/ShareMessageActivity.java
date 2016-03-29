@@ -705,13 +705,20 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
         } else if (!TextUtils.isEmpty(videoPath)) {
 
-            String[] file = new String[]{videoPath};
-            BmobApi.UploadFiles(mActivity, file, Contants.FILE_TYPE_SIGNAL, new GoToUploadImages() {
+            String[] file = new String[]{videoPath, imageFilePath};
+            BmobApi.UploadFiles(mActivity, file, Contants.FILE_TYPE_MULTI, new GoToUploadImages() {
+                /**
+                 * @param urls
+                 * @param bmobFile
+                 */
                 @Override
                 public void Result(String[] urls, BmobFile bmobFile[]) {
-
-                  /*只有一个文件*/
+                    LogUtils.d("video = " + urls[0]);
+                  /*第一个文件*/
                     shareMessage_hz.setVideo(bmobFile[0]);
+                    /*第二个文件，应该是图片*/
+                    shareMessage_hz.setVideoPreview(bmobFile[1]);
+                    LogUtils.d("video prevideo  = " + urls[1]);
                     //保存分享信息到云端
                     shareMessage(shareMessage_hz);
 

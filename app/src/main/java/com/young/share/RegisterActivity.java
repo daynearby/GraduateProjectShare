@@ -1,42 +1,43 @@
 package com.young.share;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Message;
+import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.bmob.BTPFileResponse;
-import com.bmob.BmobProFile;
-import com.bmob.btp.callback.UploadListener;
 import com.young.share.annotation.InjectView;
-import com.young.share.base.CustomActBarActivity;
+import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
 import com.young.share.model.MyUser;
 import com.young.share.utils.BDLBSUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.StringUtils;
+import com.young.share.views.IdentifyCodeDialog;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.sms.BmobSMS;
+import cn.bmob.sms.exception.BmobException;
+import cn.bmob.sms.listener.RequestSMSCodeListener;
 import cn.bmob.v3.listener.SaveListener;
 
 /**
  * 用户注册界面
- *
+ * <p>
  * Created by Nearby Yang on 2015-10-20.
  */
-public class RegisterActivity extends CustomActBarActivity implements View.OnClickListener {
+public class RegisterActivity extends BaseAppCompatActivity implements View.OnClickListener {
 
-    @InjectView(R.id.et_registrt_email)
-    private EditText registEmail;
+    @InjectView(R.id.et_reg_phone)
+    private EditText registPhone;
     @InjectView(R.id.et_register_pwd)
     private EditText registPwd;
     @InjectView(R.id.et_register_config_pwd)
@@ -45,8 +46,21 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
     private TextView gotoLogin;
     @InjectView(R.id.tv_register_btn)
     private TextView registerBtn;
+    @InjectView(R.id.im_reg_count_state)
+    private ImageView phoneState;
+    @InjectView(R.id.im_reg_pwd_state)
+    private ImageView pwdState;
+    @InjectView(R.id.im_reg_con_pwd_state)
+    private ImageView confPwdState;
+    @InjectView(R.id.txt_reg_get_identify_code)
+    private TextView identifyCodeTx;
 
+    private IdentifyCodeDialog identifyCodeDialog;
     private BDLBSUtils bdlbsUtils;
+    private boolean phoneNumberVaild;//手机号验证错误
+    private boolean pwdVaild;//密码无效
+    private boolean comfPwdVaild;//确认密码无效
+    private boolean phoneVerific = false;//手机号验证结果
 
     private String province = "广东省";
     private String city = "惠州市";
@@ -54,36 +68,203 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
     private String street;
     private String streetNumber;
 
+    private static final int MESSAGE_LOCATION = 0x01;//定位
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_register;
     }
 
     @Override
-    public void findviewbyid() {
-        gotoLogin.setOnClickListener(this);
-        registerBtn.setOnClickListener(this);
-    }
-
-    @Override
     public void initData() {
-        super.initData();
+        initialiToolbar();
+        setTitle(R.string.regist);
         bdlbsUtils = new BDLBSUtils(this, new locationListener());
         bdlbsUtils.startLocation();
-        setBarVisibility(false, false);
-        settitle(R.string.regist);
+
+          /*初始化信息服务*/
+        BmobSMS.initialize(this, Contants.BMOB_APP_KEY);
 //        saveFile2SDCard();
     }
 
     @Override
+    public void findviewbyid() {
+        gotoLogin.setOnClickListener(this);
+        registerBtn.setOnClickListener(this);
+        identifyCodeDialog = new IdentifyCodeDialog(this);
+    }
+
+    @Override
     public void bindData() {
+        /*输入监听*/
+        textChangeListener();
+/*设置dialog的dismissListener*/
+        dialogSetDismiss();
+/*注册按钮，初始状态，不可点击*/
+        registerBtn.setEnabled(false);
+        identifyCodeTx.setOnClickListener(this);
+
+    }
+
+    /**
+     * dialog dismiss listener
+     * 取得
+     */
+    private void dialogSetDismiss() {
+        identifyCodeDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+/**
+ * 验证通过，EditText进入不可编辑状态，反之
+ */
+                registPhone.setEnabled(phoneVerific = identifyCodeDialog.isMobilePhoneVerified());
+                identifyCodeTx.setEnabled(phoneVerific);
+                if (phoneVerific) {
+                    registPhone.setTextColor(getResources().getColor(R.color.gray));
+                }
+            }
+        });
+    }
+
+
+    /**
+     * 输入框的内容判断
+     * 减少发送时候的逻辑处理逻辑
+     */
+    private void textChangeListener() {
+        /*文字输入监听,在完成之后进行显示状态*/
+        registPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                phoneNumberVaild = StringUtils.phoneNumberValid(registPhone.getText().toString().trim());
+                if (phoneNumberVaild) {
+                    phoneState.setVisibility(View.VISIBLE);
+                    phoneState.setImageResource(R.drawable.icon_checked);
+                } else {
+                    registPhone.setError(Html.fromHtml("<font color='white'>手机号码格式不对</font>"));
+                }
+                /*更新注册按钮的状态*/
+                registerBtn.setEnabled(phoneNumberVaild && pwdVaild && comfPwdVaild);
+            }
+        });
+/*第一次输入密码*/
+        registPwd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                boolean minlangth = pwdVaild = !TextUtils.isEmpty(registPwd.getText().toString().trim())
+                        && registPwd.getText().toString().trim().length() >= 6;
+                /*密码长度*/
+                if (!pwdVaild) {
+                    registPwd.setError(Html.fromHtml("<font color='white'>密码长度不少于6位</font>"));
+                } else {
+                    pwdState.setVisibility(View.VISIBLE);
+                    pwdState.setImageResource(R.drawable.icon_checked);
+
+                }
+                /*两次密码相同否*/
+                boolean pwdEqual = TextUtils.isEmpty(registConfigPwd.getText().toString().trim());
+
+                if (!pwdEqual) {
+                    pwdEqual = registPwd.getText().toString().trim()
+                            .equals(registConfigPwd.getText().toString().trim());
+                    if (!pwdEqual) {
+
+                        registPwd.setError(Html.fromHtml("<font color='white'>两次输入密码不相符</font>"));
+                    } else {
+                        pwdState.setVisibility(View.VISIBLE);
+                        pwdState.setImageResource(R.drawable.icon_checked);
+
+                    }
+                }
+
+
+                pwdVaild = pwdVaild && pwdEqual;
+                /*更新注册按钮的状态*/
+                registerBtn.setEnabled(phoneNumberVaild && pwdVaild && comfPwdVaild);
+            }
+        });
+/*确认密码*/
+        registConfigPwd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                comfPwdVaild = !TextUtils.isEmpty(registConfigPwd.getText().toString().trim())
+                        && registConfigPwd.getText().toString().trim().length() >= 6;
+
+                confPwdState.setVisibility(View.VISIBLE);
+
+                boolean pwdEqual = registPwd.getText().toString().trim()
+                        .equals(registConfigPwd.getText().toString().trim());
+                if (!pwdEqual || !comfPwdVaild) {
+
+                    registConfigPwd.setError(Html.fromHtml("<font color='white'>两次输入密码不相符</font>"));
+                } else {
+                    confPwdState.setImageResource(R.drawable.icon_checked);
+                    pwdVaild = true;
+                }
+
+                registerBtn.setEnabled(phoneNumberVaild && pwdVaild && comfPwdVaild);
+            }
+        });
+    }
+
+    /**
+     * 初始化toolbar
+     */
+    private void initialiToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_register);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.icon_menu_back);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mActivity.finish();
+            }
+        });
 
     }
 
     @Override
     public void handerMessage(Message msg) {
-        // 停止定位服务并且回到登陆界面
-        gotoLoginAndStopLocationServices();
+        switch (msg.what) {
+            case MESSAGE_LOCATION:
+
+                // 停止定位服务并且回到登陆界面
+                gotoLoginAndStopLocationServices();
+                break;
+        }
     }
 
     @Override
@@ -94,82 +275,13 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
     @Override
     public void onClick(View v) {
 
-        String email;
-        String pwd;
-        String config_pwd;
-        MyUser myUserRegister = new MyUser();
 
         switch (v.getId()) {
             case R.id.tv_register_btn:
 
                 SVProgressHUD.show(this);
-
-                email = registEmail.getText().toString().trim();
-                pwd = registPwd.getText().toString().trim();
-                config_pwd = registConfigPwd.getText().toString().trim();
-
-                if (!TextUtils.isEmpty(email)) {
-
-                    if (email.length() > 3) {
-
-
-                        if (!TextUtils.isEmpty(pwd) || !TextUtils.isEmpty(config_pwd)) {
-                            if (pwd.length() > 5) {
-
-
-                                if (pwd.equals(config_pwd)) {
-
-                                    SVProgressHUD.show(this);
-                                    //随机字符串
-                                    myUserRegister.setNickName(StringUtils.getRanDom());
-                                    myUserRegister.setEmail(email);
-                                    myUserRegister.setPassword(pwd);
-                                    myUserRegister.setAddress(province + " " + city + " " + district);
-                                    myUserRegister.setUsername(email.substring(0, email.indexOf("@")));
-
-                                    myUserRegister.signUp(RegisterActivity.this, new SaveListener() {
-                                        @Override
-                                        public void onSuccess() {
-
-                                            SVProgressHUD.showSuccessWithStatus(RegisterActivity.this, getString(R.string.register_success));
-                                            mHandler.sendEmptyMessageDelayed(101, Contants.ONE_SECOND);
-
-                                        }
-
-                                        @Override
-                                        public void onFailure(int i, String s) {
-
-                                            if (i == 202) {
-                                                SVProgressHUD.showInfoWithStatus(RegisterActivity.this, getString(R.string.user_had_register), SVProgressHUD.SVProgressHUDMaskType.Gradient);
-                                            }
-                                            LogUtils.e(getClass().getName(), "注册失败  code = " + i + " message = " + s);
-                                        }
-                                    });
-
-
-                                } else {
-                                    registPwd.setText("");
-                                    registConfigPwd.setText("");
-
-                                    SVProgressHUD.showInfoWithStatus(this, getString(R.string.pwd_not_equals), SVProgressHUD.SVProgressHUDMaskType.Gradient);
-
-                                }
-                            } else {
-                                SVProgressHUD.showInfoWithStatus(this, getString(R.string.pwd_lenght_not_enough), SVProgressHUD.SVProgressHUDMaskType.Gradient);
-
-                            }
-                        } else {
-                            SVProgressHUD.showInfoWithStatus(this, getString(R.string.pwd_not_empty), SVProgressHUD.SVProgressHUDMaskType.Gradient);
-
-                        }
-                    } else {
-                        SVProgressHUD.showInfoWithStatus(this, getString(R.string.email_eror), SVProgressHUD.SVProgressHUDMaskType.Gradient);
-                    }
-                } else {
-                    SVProgressHUD.showInfoWithStatus(this, getString(R.string.email_not_empty), SVProgressHUD.SVProgressHUDMaskType.Gradient);
-
-                }
-
+                /*注册*/
+                regiter();
 
                 break;
 
@@ -177,66 +289,98 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
 
                 gotoLoginAndStopLocationServices();
                 break;
+
+            case R.id.txt_reg_get_identify_code://获取验证码
+/*请求发送验证码*/
+                String phone = registPhone.getText().toString().trim();
+                if (!TextUtils.isEmpty(phone)) {//手机号不为空
+                    if (StringUtils.phoneNumberValid(phone)) {//手机号格式验证
+
+                        requestIdentifyCode(phone);
+                        identifyCodeDialog.setPhoneNumber(phone);
+                /*输入验证码*/
+                        identifyCodeDialog.show();
+                    } else {
+                        Toast.makeText(this, R.string.toast_phone_number_format_not_correct, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(this, R.string.toast_phone_number_empty, Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
 
-
-    private void uploadAvatarAndRegisrter(final MyUser myUser) {
-
-        String filePath = "";
-        BTPFileResponse response = BmobProFile.getInstance(this).upload(filePath, new UploadListener() {
-
-            @Override
-            public void onSuccess(String fileName, String url, BmobFile file) {
-                LogUtils.i("bmob", "文件上传成功：" + fileName + ",可访问的文件地址：" + file.getUrl());
-                // fileName ：文件名（带后缀），这个文件名是唯一的，开发者需要记录下该文件名，方便后续下载或者进行缩略图的处理
-                // url        ：文件地址
-                // file        :BmobFile文件类型，`V3.4.1版本`开始提供，用于兼容新旧文件服务。
-//                注：若上传的是图片，url地址并不能直接在浏览器查看（会出现404错误），需要经过`URL签名`得到真正的可访问的URL地址,当然，`V3.4.1`的版本可直接从'file.getUrl()'中获得可访问的文件地址。
-
-                myUser.setAvatar(url);
+    /**
+     * 请求发送验证码，请求按钮不可点击
+     */
+    private void requestIdentifyCode(String phone) {
 
 
-            }
+//        identifyCodeTx.setEnabled(false);
+
+        BmobSMS.requestSMSCode(this, phone, Contants.BMOB_MESSAGE_TEMPLE, new RequestSMSCodeListener() {
 
             @Override
-            public void onProgress(int progress) {
+            public void done(Integer smsId, BmobException ex) {
+                if (ex == null) {//验证码发送成功
+                    Toast.makeText(mActivity, R.string.toast_send_idnetify_code_success, Toast.LENGTH_SHORT).show();
+                    LogUtils.i("bmob 短信id：" + smsId);//用于查询本次短信发送详情
 
-                LogUtils.i("bmob", "onProgress :" + progress);
-            }
-
-            @Override
-            public void onError(int statuscode, String errormsg) {
-                LogUtils.i("bmob", "文件上传失败：" + errormsg);
-            }
-        });
-    }
-
-    public void saveFile2SDCard() {
-        // 将默认头像放到手机内存
-        Bitmap bitmap = null;
-        FileOutputStream fos = null;
-
-
-        String path = "/data/data/com.hzu.zao/files/avatar.png";
-
-        bitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.icon_default_avatar);
-
-
-        try {
-            fos = openFileOutput("avatar.png", Context.MODE_PRIVATE);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch (FileNotFoundException e) {
-        } finally {
-            if (fos != null) {
-                try {
-                    fos.flush();
-                    fos.close();
-                } catch (IOException e) {
                 }
             }
+        });
+
+
+    }
+
+    /**
+     * 用户注册
+     */
+    private void regiter() {
+
+        MyUser myUserRegister = new MyUser();
+        String phone = registPhone.getText().toString().trim();
+        String pwd = registPwd.getText().toString().trim();
+
+/*有效*/
+        if (phoneNumberVaild && pwdVaild) {
+
+
+            SVProgressHUD.show(this);
+            //随机字符串
+            myUserRegister.setNickName(StringUtils.getRanDom());
+            myUserRegister.setMobilePhoneNumber(phone);
+            myUserRegister.setPassword(pwd);
+            myUserRegister.setAddress(province + city + district);
+            myUserRegister.setUsername(phone);
+
+            myUserRegister.signUp(RegisterActivity.this, new SaveListener() {
+                @Override
+                public void onSuccess() {
+
+                    SVProgressHUD.showSuccessWithStatus(RegisterActivity.this, getString(R.string.register_success));
+                    mHandler.sendEmptyMessageDelayed(MESSAGE_LOCATION, Contants.ONE_SECOND);
+
+                }
+
+                @Override
+                public void onFailure(int i, String s) {
+/*j*/
+                   if(i==209||i == 202){
+                        SVProgressHUD.showInfoWithStatus(RegisterActivity.this, getString(R.string.user_had_register));
+                    }
+                    LogUtils.e(getClass().getName(), "注册失败  code = " + i + " message = " + s);
+                }
+            });
+
+
+        } else {
+
+            SVProgressHUD.showInfoWithStatus(this, getString(R.string.pwd_not_equals), SVProgressHUD.SVProgressHUDMaskType.Gradient);
+
         }
+
+
     }
 
     /**
@@ -257,7 +401,7 @@ public class RegisterActivity extends CustomActBarActivity implements View.OnCli
     private class locationListener implements BDLBSUtils.LocationInfoListener {
 
         @Override
-        public void LocationInfo(double latitude,double longitude ,
+        public void LocationInfo(double latitude, double longitude,
                                  String Province, String City,
                                  String District, String Street,
                                  String StreetNumber) {

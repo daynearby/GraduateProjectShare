@@ -9,11 +9,11 @@ import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.share.annotation.InjectView;
-import com.young.share.base.CustomActBarActivity;
+import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
+import com.young.share.interfaces.AsyncListener;
 import com.young.share.model.BaseModel;
 import com.young.share.model.MyUser;
-import com.young.share.interfaces.AsyncListener;
 import com.young.share.network.BmobApi;
 import com.young.share.utils.LogUtils;
 
@@ -35,7 +35,7 @@ import cn.smssdk.gui.RegisterPage;
  * <p/>
  * Created by Nearby Yang on 2015-10-21.
  */
-public class FindPwdActivity extends CustomActBarActivity implements View.OnClickListener {
+public class FindPwdActivity extends BaseAppCompatActivity implements View.OnClickListener {
 
     private boolean hadVerfi = false;//是否验证
     private String phone;
@@ -63,9 +63,8 @@ public class FindPwdActivity extends CustomActBarActivity implements View.OnClic
 
     @Override
     public void initData() {
-        super.initData();
-        setBarVisibility(false, false);
-        settitle(R.string.find_pwd_text);
+        setTitle(R.string.find_pwd_text);
+        /*初始化短信服务的时候出错*/
         SMSSDK.initSDK(this, Contants.SMS_APP_KEY, Contants.SMS_APP_SECRET);
     }
 

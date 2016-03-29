@@ -37,6 +37,7 @@ public class Contants {
     public static final String REST_APP_KEY = "X-Bmob-Application-Id";
     public static final String REST_APP_REST_KEY = "X-Bmob-REST-API-Key";
     public static final String BMOB_MAIN_URL = "https://api.bmob.cn/1/classes/";
+    public static final String BMOB_MESSAGE_TEMPLE = "custom";//短信模板
 
 
     //******************************Mob key*******************************
@@ -92,8 +93,6 @@ public class Contants {
     public static final String FILE_PAHT_DOWNLOAD = "/share/download/";
     public static final String FILE_PAHT_SAVE = "/share/save/";
 
-
-
     //******************************定位 Keys***********************
     public static final String LATITUDE = "latitude";
     public static final String LONGITUDE = "longitude";
@@ -148,6 +147,7 @@ public class Contants {
     public static final int IMAGE_TYPE_SHARE = 0x01;
     public static final int IMAGE_TYPE_AVATAR = 0x02;
     public static final int FILE_TYPE_SIGNAL = 0x03;
+    public static final int FILE_TYPE_MULTI = 0x04;//多个文件
     public static final int IAMGE_MAX_WIDTH = 1500;
     public static final int IAMGE_MAX_HEIGHT = 1500;
     public static final int IMAGE_MIN_SIZE = 200;
@@ -194,7 +194,6 @@ public class Contants {
 
     public static final int RESULT_CODE_IMAGE_LIST = 0x0001;//图片编辑返回码
     public static final int RESULT_CODE_PLACE = 0x0002;//图片编辑返回码
-
 
 
     //************************** 数据model 类型******************************

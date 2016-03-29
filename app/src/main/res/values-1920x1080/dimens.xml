@@ -35,4 +35,6 @@
     <dimen name="arcButton">78dp</dimen>
     <dimen name="size_progress_small">42dp</dimen>
     <dimen name="size_image">30dp</dimen>
+    <dimen name="size_video_width">192dp</dimen>
+    <dimen name="size_video_height">144dp</dimen>
 </resources>

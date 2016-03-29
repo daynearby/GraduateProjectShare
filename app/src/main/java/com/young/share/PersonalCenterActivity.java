@@ -268,7 +268,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
 
             String[] files = {croppath};
 
-            BmobApi.UploadFiles(mActivity, files, Contants.FILE_TYPE_SIGNAL, new GoToUploadImages() {
+            BmobApi.UploadFiles(mActivity, files, Contants.FILE_TYPE_MULTI, new GoToUploadImages() {
                 @Override
                 public void Result( String[] urls,BmobFile[] bmobfiles) {
                     //上传文件成功

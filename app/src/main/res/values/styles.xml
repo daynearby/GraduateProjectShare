@@ -76,7 +76,13 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:orientation">horizontal</item>
     </style>
+    <!--输入款，适应宽度，为了显示后面的一个图标-->
+<style name="editText_width">
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_weight">1</item>
 
+</style>
     <style name="text_style_match">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
