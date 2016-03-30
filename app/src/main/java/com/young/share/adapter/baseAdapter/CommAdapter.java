@@ -30,10 +30,8 @@ public abstract class CommAdapter<T> extends BaseAdapter {
 
     public CommAdapter(Context context) {
         ctx = context;
-        cuser = BmobUser.getCurrentUser(ctx, MyUser.class);
-        if (cuser==null){
-            cuser = ApplicationConfig.getInstance().getCUser();
-        }
+        cuser = ApplicationConfig.getInstance().getCUser();
+
     }
 
     public void setData(List<T> dataList) {
@@ -81,7 +79,7 @@ public abstract class CommAdapter<T> extends BaseAdapter {
         if (cuser == null) {
             cuser = BmobUser.getCurrentUser(ctx, MyUser.class);
         }
-        if (cuser==null){
+        if (cuser == null) {
             cuser = ApplicationConfig.getInstance().getCUser();
         }
     }

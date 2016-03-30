@@ -4,13 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
@@ -18,10 +21,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.VideoView;
 
+import com.android.volley.VolleyError;
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.young.share.adapter.ButtombarPageAdapter;
@@ -39,6 +47,7 @@ import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.network.BmobApi;
+import com.young.share.network.NetworkReuqest;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.EmotionUtils;
 import com.young.share.utils.EvaluateUtil;
@@ -56,6 +65,7 @@ import com.young.share.views.PopupWinUserInfo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,9 +80,6 @@ import cn.bmob.v3.listener.UpdateListener;
  */
 public class MessageDetailActivity extends BaseAppCompatActivity implements View.OnClickListener {
 
-    //    @InjectView(R.id.listview_discover)
-//    private ListView listView;
-
     /**
      * header
      */
@@ -86,8 +93,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private TextView content_tv;//分享的文本内容
     @InjectView(R.id.miv_message_detail)
     private MultiImageView multiImageView;
-    //    @InjectView(R.id.gv_message_detailshareimg)
-//    private GridView myGridview ;
     @InjectView(R.id.vp_message_detail)
     private CustomViewPager viewPager;
     @InjectView(R.id.tv_item_message_detail_createdat)
@@ -122,7 +127,17 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private RadioButton hadGoRbtn;
     @InjectView(R.id.rb_message_detail_want_to)
     private RadioButton wantToRbtn;
-
+    /*视频布局*/
+    @InjectView(R.id.rl_share_video_layout)
+    RelativeLayout videoLayout;
+    @InjectView(R.id.vv_share_preview_video)
+   private VideoView videoView ;
+    @InjectView(R.id.im_share_video_priview)
+    private ImageView videoPrevideo ;
+    @InjectView(R.id.im_share_start_btn)
+   private ImageView playvideo;
+    @InjectView(R.id.pb_share_loading)
+    private ProgressBar videoDownloadPb ;
 
     private String superTagClazz;
     private CommRemoteModel commModel = new CommRemoteModel();//存放分享信息的具体内容
@@ -146,7 +161,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private int totalOffset = 0;//动画总的偏移量
     private int lastIndex = 0;//上一个页面的position
 
-    // TODO: 2016-03-23 下方的操作bar，部分事件需要重新定义
+    // TODO: 2016-03-23 下方的操作bar，部分事件需要重新定义，需要进行刷新
     @Override
     public int getLayoutId() {
         return R.layout.activity_message_detail;
@@ -172,9 +187,9 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
     @Override
     public void findviewbyid() {
-//        commAdapter = new CommentAdapter(mActivity);
 /*初始化指示器*/
         initialiIndicator();
+
     }
 
     /**
@@ -205,7 +220,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     @Override
     public void bindData() {
 ////回复评论
-
+        bottomOptionBar.setVisibility(View.VISIBLE);
         //表情
         new EmotionUtils(mActivity, vp_emotion_dashboard, sendComment_edt);
 
@@ -317,6 +332,12 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 overridePendingTransition(0, 0);
             }
         });
+        /**
+         * 分享才需要判断是否有视频信息
+         */
+        if (commModel.getType() ==  Contants.DATA_MODEL_SHARE_MESSAGES){
+            setVideo();
+        }
 
 
         nickname_tv.setOnClickListener(this);
@@ -382,7 +403,121 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
     }
 
+    /**
+     * 设置视频
+     *
+     */
+    private void setVideo() {
+//        RelativeLayout videoLayout = holder.getView(R.id.rl_share_video_layout);
+//        final VideoView videoView = holder.getView(R.id.vv_share_preview_video);
+//        final ImageView videoPrevideo = holder.getView(R.id.im_share_video_priview);
+//        ImageView playvideo = holder.getView(R.id.im_share_start_btn);
+//        final ProgressBar videoDownloadPb = holder.getView(R.id.pb_share_loading);
 
+        if (commModel.getVideo() != null
+                && !TextUtils.isEmpty(commModel.getVideo().getFileUrl(this))) {
+
+            final String videoUrl = commModel.getVideo().getFileUrl(this);
+
+            videoLayout.setVisibility(View.VISIBLE);
+            videoPrevideo.setVisibility(View.VISIBLE);
+            playvideo.setVisibility(View.VISIBLE);
+
+            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.setVolume(0.0f, 0.0f);
+                }
+            });
+            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+/*需要播放*/
+                    mp.setLooping(true);
+                    mp.start();
+                }
+            });
+
+/*判断视频有没有*/
+            if (commModel.getVideoPreview() != null) {
+                ImageHandlerUtils.loadIamge(this, commModel.getVideoPreview().getFileUrl(this), videoPrevideo);
+            } else {
+                videoPrevideo.setBackgroundColor(this.getResources().getColor(R.color.gray_lighter));
+            }
+
+            playvideo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    videoDownloadPb.setVisibility(View.VISIBLE);
+                    videoDownloadPb.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                            return false;
+                        }
+                    });
+                    //下载并且播放视频
+                    downloadVideo(videoUrl, videoView, videoPrevideo, videoDownloadPb);
+                }
+            });
+
+        } else {
+            videoLayout.setVisibility(View.GONE);
+            videoView.setVisibility(View.GONE);
+            videoPrevideo.setVisibility(View.GONE);
+            playvideo.setVisibility(View.GONE);
+            videoDownloadPb.setVisibility(View.GONE);
+        }
+
+
+    }
+
+    /**
+     * 下载视频并且播放
+     *
+     * @param url getfileurl
+     * @param videoView 播放器
+     * @param videoPrevideo 视频预览图片
+     * @param pb 进度条
+     */
+    private void downloadVideo(final String url, final VideoView videoView, final ImageView videoPrevideo, final ProgressBar pb) {
+        String filePath = Environment.getExternalStorageDirectory().getPath() + Contants.FILE_PAHT_DOWNLOAD + url.substring(url.lastIndexOf('/') + 1);
+        File file = new File(filePath);
+//        videoPlayerList.add(view);
+
+        if (file.exists()) {//视频已经下载了
+            videoView.setVideoPath(filePath);
+            pb.setVisibility(View.GONE);
+            videoPrevideo.setVisibility(View.GONE);
+            videoView.setVisibility(View.VISIBLE);
+            videoView.start();
+
+
+        } else {//视频未下载，进行下载
+
+            //下载完成之后进行播放
+            NetworkReuqest.call(this, url, new NetworkReuqest.JsonRequstCallback<String>() {
+                @Override
+                public void onSuccess(String videoPath) {
+//                    LogUtils.E("response Filepath = " + object);
+                        videoView.setVideoPath(videoPath);
+                        pb.setVisibility(View.GONE);
+                        videoPrevideo.setVisibility(View.GONE);
+                        videoView.setVisibility(View.VISIBLE);
+                        videoView.start();
+                }
+
+                @Override
+                public void onFaile(VolleyError error) {
+                    Toast.makeText(mActivity, R.string.toast_download_video_failure, Toast.LENGTH_LONG).show();
+                }
+            });
+
+
+        }
+
+
+    }
     /**
      * 查看用户资料
      *

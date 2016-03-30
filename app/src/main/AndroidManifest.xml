@@ -50,12 +50,11 @@
 
         android:name=".config.ApplicationConfig"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/mAppTheme"
-        tools:replace="android:theme"
-        android:hardwareAccelerated="true"
-        >
+        tools:replace="android:theme">
 
         <!-- 主界面 -->
         <activity
@@ -68,8 +67,8 @@
         <!-- 欢迎界面-->
         <activity
             android:name=".WelcomeActivity"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -84,28 +83,26 @@
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
 
         <!-- 登录 -->
-        <activity android:name=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- 注册 -->
-        <activity android:name=".RegisterActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".RegisterActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- 找回密码 -->
-        <activity android:name=".FindPwdActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".FindPwdActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- 分享信息 -->
         <activity
             android:name=".ShareMessageActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <!-- 短信验证 -->
-        <activity
-            android:name="com.mob.tools.MobUIShell"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+
 
         <!-- 个人中心-->
         <activity
@@ -127,20 +124,22 @@
         <activity android:name=".ResetPwdActivity" />
 
         <!-- 修改个人信息-->
-        <activity android:name=".EditPersonalInfoActivity" />
+        <activity
+            android:name=".EditPersonalInfoActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- 信息详细页面 -->
         <activity
             android:name=".MessageDetailActivity"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!--通用记录查看 -->
         <activity
             android:name=".RecordCommActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!--消息中心 -->
         <activity android:name=".MessageCenterActivity" />
@@ -149,25 +148,27 @@
         <activity
             android:name=".DiscoutDetailActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!--排行榜的列表-->
         <activity
             android:name=".RankListActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!--百度地图 -->
-        <activity android:name=".BaiduMapActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".BaiduMapActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!--高清大图浏览-->
-        <activity android:name=".BigPicActivity"
-            android:theme="@style/AppTheme.Translucent2"/>
+        <activity
+            android:name=".BigPicActivity"
+            android:theme="@style/AppTheme.Translucent2" />
 
-        <activity android:name=".ImageEditorActivity"
-            android:theme="@style/AppTheme.Translucent2"/>
+        <activity
+            android:name=".ImageEditorActivity"
+            android:theme="@style/AppTheme.Translucent2" />
         <!-- 百度定位 services -->
         <service
             android:name="com.baidu.location.f"

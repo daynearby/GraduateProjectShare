@@ -5,10 +5,17 @@
     android:background="@android:color/white"
     android:fitsSystemWindows="true">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_edit_personal_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_puple" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_below="@+id/tb_edit_personal_info"
         android:paddingLeft="@dimen/paddingMic"
         android:paddingRight="@dimen/paddingMic"
         android:paddingTop="@dimen/paddingMic">
@@ -32,10 +39,8 @@
                 android:inputType="text"
                 android:padding="@dimen/paddingMic"
                 android:singleLine="true"
-                android:textSize="@dimen/textSizeMediu"
-                />
+                android:textSize="@dimen/textSizeMediu" />
         </LinearLayout>
-
 
 
         <LinearLayout
@@ -47,8 +52,8 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="@string/age"
-                android:textSize="@dimen/textSizeMediu"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/textSizeMediu" />
 
             <TextView
 
@@ -57,8 +62,8 @@
                 android:layout_weight="1"
                 android:drawableRight="@drawable/icon_drop_down_def"
                 android:gravity="center_horizontal"
-                android:textColor="@android:color/black"
                 android:text="@string/age_22"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/textSizeMediu" />
 
 
@@ -66,8 +71,8 @@
                 style="@style/text_style_match"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:textColor="@android:color/black"
                 android:text="@string/gender"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/textSizeMediu" />
 
             <TextView
@@ -76,8 +81,8 @@
                 android:layout_weight="1"
                 android:drawableRight="@drawable/icon_drop_down_def"
                 android:gravity="center_horizontal"
-                android:textColor="@android:color/black"
                 android:text="@string/male"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/textSizeMediu" />
         </LinearLayout>
 
@@ -89,8 +94,8 @@
                 style="@style/text_style_match"
                 android:layout_weight="3.5"
                 android:gravity="center_horizontal"
-                android:textColor="@android:color/black"
                 android:text="@string/qq"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/textSizeMediu" />
 
             <EditText
@@ -111,8 +116,8 @@
                 style="@style/text_style_match"
                 android:layout_weight="3.5"
                 android:gravity="center_horizontal"
-                android:textColor="@android:color/black"
                 android:text="@string/email"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/textSizeMediu" />
 
             <EditText
@@ -133,8 +138,8 @@
                 style="@style/text_style_match"
                 android:layout_weight="3.5"
                 android:gravity="center_horizontal"
-                android:textColor="@android:color/black"
                 android:text="@string/mobile_phone_number"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/textSizeMediu" />
 
             <EditText
@@ -156,8 +161,8 @@
                 android:layout_weight="3.5"
                 android:gravity="center_horizontal"
                 android:text="@string/hometown"
-                android:textSize="@dimen/textSizeMediu"
-                android:textColor="@android:color/black"/>
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/textSizeMediu" />
 
             <TextView
                 android:id="@+id/popupwin_edit_personnal_info_hometown"
@@ -166,9 +171,10 @@
                 android:drawableRight="@drawable/icon_drop_down_def"
                 android:gravity="center_horizontal"
                 android:text="@string/hz"
-                android:textSize="@dimen/textSizeMediu"
-                android:textColor="@android:color/black"/>
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/textSizeMediu" />
         </LinearLayout>
+
         <LinearLayout
             style="@style/linearLayout_h"
             android:layout_marginTop="@dimen/paddingMediu">
@@ -178,8 +184,8 @@
                 android:layout_weight="3.5"
                 android:gravity="center_horizontal"
                 android:text="@string/personal_signature"
-                android:textSize="@dimen/textSizeMediu"
-                android:textColor="@android:color/black"/>
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/textSizeMediu" />
 
             <EditText
                 style="@style/bar_text"
@@ -192,16 +198,15 @@
     </LinearLayout>
 
 
-
     <TextView
         android:id="@+id/confirm_pwd_bt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/sele_button"
         android:clickable="true"
         android:gravity="center"
         android:padding="10dp"
         android:text="@string/save_pwd"
-        android:textColor="@android:color/black"
-        android:background="@drawable/sele_button"
-        android:layout_alignParentBottom="true"/>
+        android:textColor="@android:color/black" />
 </RelativeLayout>

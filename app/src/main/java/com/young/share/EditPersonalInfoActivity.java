@@ -1,8 +1,10 @@
 package com.young.share;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.os.Message;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
@@ -14,7 +16,7 @@ import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.share.annotation.InjectView;
-import com.young.share.base.ItemActBarActivity;
+import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.StringUtils;
@@ -32,7 +34,7 @@ import cn.bmob.v3.listener.UpdateListener;
  * 修改用户资料
  * Created by Nearby Yang on 2015-11-13.
  */
-public class EditPersonalInfoActivity extends ItemActBarActivity implements View.OnClickListener {
+public class EditPersonalInfoActivity extends BaseAppCompatActivity implements View.OnClickListener {
 
     @InjectView(R.id.et_edit_personal_nickname)
     private EditText nickname_et;
@@ -59,7 +61,7 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
     private PopupWinListView age_popupList;
     private CitySelectPopupWin hometown_popupList;
     private boolean phoneVerific = false;//手机号验证结果
-    private boolean phoneFormateVerific = false;//手机号格式验证结果
+    private boolean phoneFormateVerific = true;//手机号格式验证结果,默认没有进行信息修改
     private boolean nameVerific = false;//用户名长度验证结果
 
 
@@ -76,24 +78,10 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
 
     @Override
     public void initData() {
-        super.initData();
+        initialiToolbar();
+        setTitle(R.string.edit_personal_info);
 
-        setTvTitle(R.string.edit_personal_info);
-        setBarItemVisible(true, false);
-        setItemListener(new BarItemOnClick() {
-            @Override
-            public void leftClick(View v) {
-                back2super();
-            }
 
-            @Override
-            public void rightClivk(View v) {
-
-            }
-        });
-
-        //手机短信验证
-//        SMSSDK.initSDK(this, Contants.SMS_APP_KEY, Contants.SMS_APP_SECRET);
     }
 
     @Override
@@ -160,6 +148,7 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
                 if (!TextUtils.isEmpty(phone)) {
                     if (!StringUtils.phoneNumberValid(phone)) {
                         mobilePhone_et.setError("<font color='white'>手机号格式错误</font>");
+                        phoneFormateVerific = false;
                     } else {
                         phoneFormateVerific = true;
                     }
@@ -202,6 +191,24 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
 
         /*dialog*/
         dialogSetDismiss();
+    }
+
+
+    /**
+     * 初始化toolbar
+     */
+    private void initialiToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_edit_personal_info);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.icon_menu_back);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                back2super();
+            }
+        });
+
     }
 
     /**
@@ -261,8 +268,6 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
         timer = new CountDownTimer(allTime * 1000, intevel) {
             @Override
             public void onTick(long millisUntilFinished) {
-//                Toast.makeText(mActivity, String.format("%s秒后重试", String.valueOf((millisUntilFinished - 15) / 1000)), Toast.LENGTH_SHORT).show();
-//                new Handler().pos
 //                LogUtils.e(String.format("%s秒后重试", String.valueOf((millisUntilFinished - 15) / 1000)));
                 identifyCodeDialog.getTimerTxt().setText(String.format("%s秒后重试", String.valueOf((millisUntilFinished - 15) / 1000)));
             }
@@ -271,7 +276,6 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
             public void onFinish() {
                 identifyCodeDialog.getTimerTxt().setText(R.string.txt_re_send_identify_code);
                 identifyCodeDialog.getTimerTxt().setEnabled(true);
-//                LogUtils.e("finish");
             }
         };
 
@@ -302,22 +306,13 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
      * 显示用户的信息
      */
     private void getUserDatas() {
-        String name = cuser.getNickName();
-
-        String qq = cuser.getQq();
-        String gender = cuser.isGender() ? Contants.GENDER_MALE : Contants.GENDER_FEMALE;
-        String age = String.valueOf(cuser.getAge());
-        String email = cuser.getEmail();
-        String mobilePhoneNumber = cuser.getMobilePhoneNumber();
-        String hometown = TextUtils.isEmpty(cuser.getAddress()) ? getString(R.string.gd_hz) : cuser.getAddress();
-
-        nickname_et.setText(name);
-        qq_et.setText(qq);
-        gender_tv.setText(gender);
-        age_tv.setText(age);
-        email_et.setText(email);
-        mobilePhone_et.setText(mobilePhoneNumber);
-        hometown_tv.setText(hometown);
+        nickname_et.setText(cuser.getNickName());
+        qq_et.setText(cuser.getQq() == null ? "" : cuser.getQq());
+        gender_tv.setText(cuser.isGender() ? Contants.GENDER_MALE : Contants.GENDER_FEMALE);
+        age_tv.setText(cuser.getAge() == 0 ? String.valueOf(20) : String.valueOf(cuser.getAge()));
+        email_et.setText(cuser.getEmail() == null ? "" : cuser.getEmail());
+        mobilePhone_et.setText(cuser.getMobilePhoneNumber() == null ? "" : cuser.getMobilePhoneNumber());
+        hometown_tv.setText(cuser.getAddress() != null && !TextUtils.isEmpty(cuser.getAddress()) ? getString(R.string.gd_hz) : cuser.getAddress());
 
     }
 
@@ -395,7 +390,7 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
             } else {//昵称长度太长
                 SVProgressHUD.showErrorWithStatus(this, String.format(getString(R.string.nickname_lenght_toolong), Contants.NICKNAME_MAX_LENGHT));
             }
-        } else {//你曾长度太短
+        } else {//昵称长度太短
             SVProgressHUD.showErrorWithStatus(this, String.format(getString(R.string.nickname_lenght_short), Contants.NICKNAME_MAX_LENGHT));
         }
     }
@@ -449,24 +444,7 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
 
         identifyCodeDialog.setPhoneNumber(mobilePhoneNumber);
         identifyCodeDialog.show();
-        //打开注册页面
-//
-//                        SVProgressHUD.showWithStatus(mActivity, getString(R.string.updating));
-//
-////                        // 提交用户信息
-//                        cuser.setMobilePhoneNumber(mobilePhone_et.getText().toString());
-//                        cuser.setEmailVerified(true);
-//
-//                        updateUserInfo();
-//
-//                    } else {//手机验证与预留手机号不相同
-//
-//                        SVProgressHUD.showErrorWithStatus(mActivity, getString(R.string.verify_mobilePhone_faile), SVProgressHUD.SVProgressHUDMaskType.GradientCancel);
-//
-//        });
-//
-////显示验证窗口
-//        registerPage.show(this);
+
     }
 
 }

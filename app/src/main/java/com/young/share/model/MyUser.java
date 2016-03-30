@@ -13,8 +13,8 @@ public class MyUser extends BmobUser {
     private String address;
     private String avatar;
     private String qq;
-    private Integer  age;
-    private Boolean gender;
+    private int  age;
+    private boolean gender;
     private String signture;
     private String nickName;
 
@@ -35,11 +35,11 @@ public class MyUser extends BmobUser {
     }
 
 
-    public Boolean isGender() {
+    public boolean isGender() {
         return gender;
     }
 
-    public void setGender(Boolean gender) {
+    public void setGender(boolean gender) {
         this.gender = gender;
     }
 
@@ -68,11 +68,11 @@ public class MyUser extends BmobUser {
         this.qq = qq;
     }
 
-    public Integer getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(Integer age) {
+    public void setAge(int age) {
         this.age = age;
     }
 

@@ -4,6 +4,7 @@ package com.young.share.model;
 import java.io.Serializable;
 import java.util.List;
 
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobGeoPoint;
 
 /**
@@ -32,6 +33,8 @@ public class CommRemoteModel implements Serializable {
     private int type;
     private boolean read;
     private ShareMessage_HZ shareMessage;
+    private BmobFile video;
+    private BmobFile videoPreview;
 
     public int getId() {
         return id;
@@ -183,5 +186,21 @@ public class CommRemoteModel implements Serializable {
 
     public void setShareMessage(ShareMessage_HZ shareMessage) {
         this.shareMessage = shareMessage;
+    }
+
+    public BmobFile getVideo() {
+        return video;
+    }
+
+    public void setVideo(BmobFile video) {
+        this.video = video;
+    }
+
+    public BmobFile getVideoPreview() {
+        return videoPreview;
+    }
+
+    public void setVideoPreview(BmobFile videoPreview) {
+        this.videoPreview = videoPreview;
     }
 }

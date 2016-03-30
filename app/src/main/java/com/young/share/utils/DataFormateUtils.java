@@ -84,6 +84,8 @@ public class DataFormateUtils {
         commModel.setObjectId(shareMessage.getObjectId());
         commModel.setComment(shareMessage.getShCommNum());
         commModel.setMcreatedAt(shareMessage.getCreatedAt());
+        commModel.setVideo(shareMessage.getVideo());
+        commModel.setVideoPreview(shareMessage.getVideoPreview());
         commModel.setType(type);//属于分享信息Contants.DATA_MODEL_HEAD
 
 
