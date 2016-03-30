@@ -162,7 +162,7 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
         Toolbar toolbar = (Toolbar) findViewById(R.id.tb_image_brower);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_menu_back);
+        toolbar.setNavigationIcon(R.drawable.icon_menu_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

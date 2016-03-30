@@ -24,7 +24,7 @@
             android:textColor="@drawable/sele_text_color_def_back"
             android:padding="@dimen/paddingMic"
             android:text="@string/user_name_defual"
-            android:textSize="@dimen/textSizeMediu" />
+            style="?android:attr/textAppearanceMedium"/>
 
 
     </LinearLayout>

@@ -8,7 +8,10 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
+import com.young.share.views.base.BaseImageView;
+
 /**
+ * 圆形的imageview
  * Created by Nearby Yang on 2015-06-27.
  */
 public class CircleImageView extends BaseImageView {

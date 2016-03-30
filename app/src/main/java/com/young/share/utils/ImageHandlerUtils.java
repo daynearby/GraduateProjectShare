@@ -148,6 +148,16 @@ public class ImageHandlerUtils {
 
         ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(ctx, imageUri, isLocation), im);
     }
+    /**
+     * 加载在线资源
+     * @param ctx
+     * @param imageUri
+     * @param im
+     */
+    public static void loadIamge(Context ctx, String imageUri, ImageView im) {
+
+        ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(ctx, imageUri, false), im);
+    }
 
     /**
      * 缩略图

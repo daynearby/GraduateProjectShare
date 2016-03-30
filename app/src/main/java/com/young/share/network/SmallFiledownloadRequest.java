@@ -47,7 +47,7 @@ public class SmallFiledownloadRequest extends Request<String> {
         this.mListener = mListener;
     }
     /**
-     * 下载图片
+     * 下载文件
      * 默认get方法就可以
      *
      * @param context
@@ -81,6 +81,7 @@ public class SmallFiledownloadRequest extends Request<String> {
         filePath += url.substring(url.lastIndexOf('/') + 1);
 
         File file = new File(filePath.substring(0, filePath.lastIndexOf('/')));
+        //创建文件夹
         if (!file.exists()) {
             boolean created = file.mkdirs();
         }

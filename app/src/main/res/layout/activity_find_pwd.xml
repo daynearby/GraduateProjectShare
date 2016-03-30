@@ -22,38 +22,63 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/paddingMediu">
+            android:padding="@dimen/paddingMic">
 
             <TextView
                 style="@style/text_style_wrap"
-                android:text="@string/account"
+                android:text="@string/txt_phone_number"
                 android:textColor="@color/white"
                 android:textSize="@dimen/textSizeLarge" />
 
             <EditText
                 android:id="@+id/et_find_pwd_user_name"
                 style="@style/bar_text"
-                android:hint="@string/user_name"
-                android:inputType="textEmailAddress"
+                android:inputType="phone"
                 android:paddingLeft="@dimen/paddingMediu"
                 android:singleLine="true"
                 android:textColor="@color/white"
-                android:textColorHint="@color/light_gray"
-                android:textSize="@dimen/textSizeLarge" />
+                android:textSize="@dimen/textSizeMediu"
+                android:hint="@string/txt_phone_formate"
+                android:textColorHint="@color/gray"/>
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/paddingMic">
 
+            <TextView
+                style="@style/text_style_wrap"
+                android:text="@string/txt_identify_code"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeLarge" />
+
+            <EditText
+                android:id="@+id/et_find_identify_code"
+                style="@style/bar_text"
+                android:inputType="number"
+                android:paddingLeft="@dimen/paddingMediu"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:textSize="@dimen/textSizeMediu"
+                android:textColor="@android:color/white"
+                android:hint="@string/txt_identify_code_lenght"
+                android:textColorHint="@android:color/white"
+                />
+
+
+        </LinearLayout>
         <LinearLayout
             android:id="@+id/lly_find_pwd_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/paddingMediu"
-            android:visibility="invisible">
+            android:padding="@dimen/paddingMic">
 
             <TextView
                 style="@style/text_style_wrap"
-                android:text="@string/pwd"
+                android:text="@string/new_pwd"
                 android:textColor="@color/white"
                 android:textSize="@dimen/textSizeLarge" />
 
@@ -64,7 +89,9 @@
                 android:paddingLeft="@dimen/paddingMediu"
                 android:singleLine="true"
                 android:textColor="@color/white"
-                android:textSize="@dimen/textSizeLarge" />
+                android:textSize="@dimen/textSizeMediu"
+                android:textColorHint="@android:color/white"
+                android:hint="@string/new_pwd_lenght_not_enough"/>
 
         </LinearLayout>
 
@@ -74,6 +101,7 @@
             style="@style/bar_text"
             android:layout_marginLeft="@dimen/paddingLarg"
             android:layout_marginRight="@dimen/paddingLarg"
+            android:layout_marginTop="@dimen/paddingMediu"
             android:background="@drawable/sele_login_btn"
             android:gravity="center"
             android:padding="@dimen/paddingMediu"

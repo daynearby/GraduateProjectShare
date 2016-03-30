@@ -100,7 +100,7 @@ public class VideoplayerActivity extends BaseAppCompatActivity implements View.O
         Toolbar toolbar = (Toolbar) findViewById(R.id.tb_post_video);
 //        toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_menu_back);
+        toolbar.setNavigationIcon(R.drawable.icon_menu_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

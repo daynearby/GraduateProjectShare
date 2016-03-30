@@ -1,30 +1,33 @@
 package com.young.share;
 
+import android.graphics.Color;
 import android.os.Message;
+import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
-import com.young.share.interfaces.AsyncListener;
-import com.young.share.model.BaseModel;
 import com.young.share.model.MyUser;
-import com.young.share.network.BmobApi;
 import com.young.share.utils.LogUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.young.share.utils.StringUtils;
 
 import java.util.List;
 
 import cn.bmob.sms.BmobSMS;
+import cn.bmob.sms.exception.BmobException;
+import cn.bmob.sms.listener.RequestSMSCodeListener;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.ResetPasswordByCodeListener;
 
 /**
  * 找回密码
@@ -43,9 +46,14 @@ public class FindPwdActivity extends BaseAppCompatActivity implements View.OnCli
     private EditText et_new_pwd;
     @InjectView(R.id.tv_find_pwd_btn)
     private TextView findPwdBtn;
-    @InjectView(R.id.lly_find_pwd_pwd)
-    private LinearLayout findPwdLayout;
+    @InjectView(R.id.et_find_identify_code)
+    private EditText identifyCodeEdt;
 
+    private boolean identifyCode = false;//验证码
+    private String phoneNumber;
+    private String code;//验证码
+    private String newPwd;//新的密码
+    private boolean pwdVaild;//新的密码是否有效
 
     @Override
     public int getLayoutId() {
@@ -58,9 +66,9 @@ public class FindPwdActivity extends BaseAppCompatActivity implements View.OnCli
 
     }
 
-    // TODO: 2016-03-30 使用bmob的框架
     @Override
     public void initData() {
+        initializeToolbar();
         setTitle(R.string.find_pwd_text);
         /*初始化短信服务的时候出错*/
         BmobSMS.initialize(this, Contants.BMOB_APP_KEY);
@@ -68,6 +76,90 @@ public class FindPwdActivity extends BaseAppCompatActivity implements View.OnCli
 
     @Override
     public void bindData() {
+        findPwdBtn.setEnabled(false);
+
+        textChangeListener();
+
+    }
+
+    /**
+     * 初始化toolbar
+     */
+    private void initializeToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_find_pwd);
+        toolbar.setTitleTextColor(Color.WHITE);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.icon_menu_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBack();
+            }
+        });
+    }
+
+    /**
+     * text 监听
+     */
+    private void textChangeListener() {
+
+        et_user_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                phoneNumber = et_user_name.getText().toString().trim();
+                if (!TextUtils.isEmpty(phoneNumber)) {
+                    if (StringUtils.phoneNumberValid(phoneNumber)) {
+                        /*进行发送验证码*/
+                        et_user_name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+                        sendIdentifyCode();
+                    } else {
+                        et_user_name.setError(Html.fromHtml("<font color='white'>手机号码格式不正确</font>"));
+                    }
+                }
+            }
+        });
+
+        /**
+         *
+         */
+        et_new_pwd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                newPwd = et_new_pwd.getText().toString().trim();
+
+                if (!TextUtils.isEmpty(newPwd)) {
+                    if (newPwd.length() < 6) {
+                        et_new_pwd.setError(Html.fromHtml("<font color='white'>密码长度不少于6位</font>"));
+                        pwdVaild = false;
+                    } else {
+                        findPwdBtn.setEnabled(true);
+                        et_new_pwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+                        pwdVaild = true;
+//                        et_new_pwd.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+                    }
+                }
+            }
+        });
 
     }
 
@@ -87,160 +179,97 @@ public class FindPwdActivity extends BaseAppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View v) {
-
-        String userName = et_user_name.getText().toString().trim();
-
-        if (!hadVerfi) {
-
-//            LogUtils.logE(userName + " lenght = " + userName.length());
-
-            if (userName.length() < 1) {
-
-                SVProgressHUD.showInfoWithStatus(this, getString(R.string.email_not_empty), SVProgressHUD.SVProgressHUDMaskType.Gradient);
-
-            } else {
-
-                BmobQuery<MyUser> query = new BmobQuery<>();
-                query.addWhereEqualTo("username", userName);
-                query.findObjects(this, new FindListener<MyUser>() {
-                    @Override
-                    public void onSuccess(List<MyUser> object) {
-                        if (object.size() > 0) {
-
-                            if (!TextUtils.isEmpty(object.get(0).getMobilePhoneNumber())) {
-
-                                smsVerfied(object.get(0).getMobilePhoneNumber());
-
-                            } else {
-
-                                SVProgressHUD.showErrorWithStatus(FindPwdActivity.this, getString(R.string.user_non_verif_monilePhome), SVProgressHUD.SVProgressHUDMaskType.Gradient);
-
-                            }
-
-
-                        } else {
-
-                            SVProgressHUD.showErrorWithStatus(FindPwdActivity.this, getString(R.string.user_non_existent), SVProgressHUD.SVProgressHUDMaskType.Gradient);
-
-                        }
-
-//                        LogUtils.logE(getClass().getName(), "查询用户成功：" + object.size());
-
-                    }
-
-                    @Override
-                    public void onError(int code, String msg) {
-                        LogUtils.e(getClass().getName(), "查询用户失败：" + msg);
-                    }
-                });
-
-
-            }
-        } else {//更新到数据库
-
-            findPwd();
+        if (pwdVaild) {
+            //提交验证码
+            verifiCode();
 
         }
+
     }
 
     /**
-     * 短信验证
-     *
-     * @param mobilePhoneNumber
+     * 发送验证码
+     * 先验证手机号是否注册
      */
-    private void smsVerfied(final String mobilePhoneNumber) {
+    private void sendIdentifyCode() {
+        BmobQuery<MyUser> query = new BmobQuery<>();
+        query.addWhereEqualTo("mobilePhoneNumber", phoneNumber);
+        query.findObjects(this, new FindListener<MyUser>() {
 
-//        //打开注册页面
-//        RegisterPage registerPage = new RegisterPage();
-//
-//        registerPage.setRegisterCallback(new EventHandler() {
-//            public void afterEvent(int event, int result, Object data) {
-//// 解析注册结果
-//                if (result == SMSSDK.RESULT_COMPLETE) {
-//                    @SuppressWarnings("unchecked")
-//                    HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
-//                    String country = (String) phoneMap.get("country");
-//                    phone = (String) phoneMap.get("phone");
-//
-//                    if (mobilePhoneNumber.equals(phone)) {//手机验证与预留手机号不相同
-//
-//                        // 提交用户信息
-//                        hadVerfi = true;
-//                        findPwdLayout.setVisibility(View.VISIBLE);
-//                        et_user_name.setEnabled(false);
-//
-//                    } else {//手机验证与预留手机号不相同
-//
-//                        SVProgressHUD.showErrorWithStatus(FindPwdActivity.this, getString(R.string.mobilePhone_not_equals), SVProgressHUD.SVProgressHUDMaskType.GradientCancel);
-//
-//                    }
-//
-//
-//                }
-//            }
-//        });
-//
-////显示验证窗口
-//        registerPage.show(this);
-    }
-
-    /**
-     * 找回密码
-     */
-    private void findPwd() {
-
-        JSONObject params = new JSONObject();
-        String pwd = et_new_pwd.getText().toString().trim();
-
-        try {
-            params.put("phone", phone);
-
-        } catch (JSONException e) {
-            LogUtils.e(e.toString());
-
-        }
-
-        if (!TextUtils.isEmpty(pwd)) {
-
-            try {
-                params.put("password", pwd);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        } else {
-
-            SVProgressHUD.showInfoWithStatus(this, getString(R.string.pwd_not_empty), SVProgressHUD.SVProgressHUDMaskType.Gradient);
-        }
-
-//云端代码 更新密码
-        BmobApi.AsyncFunction(this, params, BmobApi.FINDPWD, new AsyncListener() {
             @Override
-            public void onSuccess(Object object) {
+            public void onSuccess(List<MyUser> list) {
 
-                if (object != null) {
-                    BaseModel result = (BaseModel) object;
-//LogUtils.e(object + " -- " + (result.getCode() == 0));
-                    if (result.getCode()==0) {
-                        SVProgressHUD.showSuccessWithStatus(FindPwdActivity.this, getString(R.string.find_pwd_success));
-                        mHandler.sendEmptyMessageDelayed(103, Contants.ONE_SECOND);
-                    } else {
-                        SVProgressHUD.showErrorWithStatus(FindPwdActivity.this, getString(R.string.find_pwd_failure));
-                    }
-
+                if (list != null && list.size() > 0) {
+                    sendMessage();
                 } else {
-
+                    toast(R.string.toast_user_not_vail);
                 }
             }
 
             @Override
-            public void onFailure(int code, String msg) {
-                SVProgressHUD.showErrorWithStatus(FindPwdActivity.this, getString(R.string.find_pwd_failure));
+            public void onError(int i, String s) {
+                LogUtils.i("根据注册电话查找用户失败 code " + i + " message = " + s);
+                toast(R.string.without_network);
             }
+        });
+
+
+    }
+
+    /**
+     * 发送验证码
+     */
+    private void sendMessage() {
+        BmobSMS.requestSMSCode(this, phoneNumber, Contants.BMOB_MESSAGE_TEMPLE, new RequestSMSCodeListener() {
+
+            @Override
+            public void done(Integer smsId, BmobException ex) {
+                if (ex == null) {//验证码发送成功
+                    LogUtils.d("短信id：" + smsId);//用于查询本次短信发送详情
+                    toast(R.string.toast_send_idnetify_code_success);
+                } else {
+                    if (10010 == ex.getErrorCode()) {
+                        Toast.makeText(mActivity, "该号码请求信息的数量已经到达没上限，明天再试吧", Toast.LENGTH_LONG).show();
+                    } else {
+                        toast(R.string.toast_send_idnetify_code_failure);
+                    }
+
+                    LogUtils.d("重置失败：code =" + ex.getErrorCode() + ",msg = " + ex.getLocalizedMessage());
+
+                }
+            }
+        });
+    }
+
+    /**
+     * 提交验证码还有新密码
+     */
+    private void verifiCode() {
+
+        BmobUser.resetPasswordBySMSCode(mActivity, identifyCodeEdt.getText().toString().trim(), newPwd, new ResetPasswordByCodeListener() {
+            @Override
+            public void done(cn.bmob.v3.exception.BmobException ex) {
+                if (ex == null) {
+                    LogUtils.d("密码重置成功");
+                    toast(R.string.find_pwd_success);
+                    mBackStartActivity(LoginActivity.class);
+                    mActivity.finish();
+                } else {
+                    LogUtils.d("重置失败：code =" + ex.getErrorCode() + ",msg = " + ex.getLocalizedMessage());
+                    toast(R.string.find_pwd_failure);
+                }
+            }
+
         });
 
     }
 
+    /**
+     * @param strId
+     */
+    private void toast(int strId) {
+
+        Toast.makeText(this, strId, Toast.LENGTH_LONG).show();
+    }
 
 }

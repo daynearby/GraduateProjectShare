@@ -38,25 +38,17 @@
                 android:paddingLeft="@dimen/paddingMediu"
                 android:singleLine="true"
                 android:textColorHint="@color/light_gray"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/textSizeMediu">
+                android:textColor="@android:color/white">
 
                 <requestFocus />
             </EditText>
 
-            <ImageView
-                android:id="@+id/im_reg_count_state"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:scaleType="centerInside"
-                android:visibility="invisible" />
-
-            <TextView
+            <Button
                 android:id="@+id/txt_reg_get_identify_code"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:text="@string/txt_get_identify_code"/>
         </LinearLayout>
 
@@ -80,15 +72,9 @@
                 android:paddingLeft="@dimen/paddingMediu"
                 android:singleLine="true"
                 android:textColorHint="@color/light_gray"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/textSizeMediu" />
+                android:textColor="@android:color/white" />
 
-            <ImageView
-                android:id="@+id/im_reg_pwd_state"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:scaleType="centerInside"
-                android:visibility="invisible" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -112,14 +98,9 @@
                 android:singleLine="true"
                 android:textColor="@android:color/white"
                 android:textColorHint="@color/light_gray"
-                android:textSize="@dimen/textSizeMediu" />
+                 />
 
-            <ImageView
-                android:id="@+id/im_reg_con_pwd_state"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:scaleType="centerInside"
-                android:visibility="invisible" />
+
         </LinearLayout>
         <TextView
             android:id="@+id/tv_go_login"

@@ -12,7 +12,6 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,12 +47,6 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
     private TextView gotoLogin;
     @InjectView(R.id.tv_register_btn)
     private TextView registerBtn;
-    @InjectView(R.id.im_reg_count_state)
-    private ImageView phoneState;
-    @InjectView(R.id.im_reg_pwd_state)
-    private ImageView pwdState;
-    @InjectView(R.id.im_reg_con_pwd_state)
-    private ImageView confPwdState;
     @InjectView(R.id.txt_reg_get_identify_code)
     private TextView identifyCodeTx;
 
@@ -171,8 +164,6 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
         timer = new CountDownTimer(allTime * 1000, intevel) {
             @Override
             public void onTick(long millisUntilFinished) {
-//                Toast.makeText(mActivity, String.format("%s秒后重试", String.valueOf((millisUntilFinished - 15) / 1000)), Toast.LENGTH_SHORT).show();
-//                new Handler().pos
 //                LogUtils.e(String.format("%s秒后重试", String.valueOf((millisUntilFinished - 15) / 1000)));
                 identifyCodeDialog.getTimerTxt().setText(String.format("%s秒后重试", String.valueOf((millisUntilFinished - 15) / 1000)));
             }
@@ -181,7 +172,6 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
             public void onFinish() {
                 identifyCodeDialog.getTimerTxt().setText(R.string.txt_re_send_identify_code);
                 identifyCodeDialog.getTimerTxt().setEnabled(true);
-//                LogUtils.e("finish");
             }
         };
 
@@ -210,13 +200,14 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
 
                 phoneNumberVaild = StringUtils.phoneNumberValid(registPhone.getText().toString().trim());
                 if (phoneNumberVaild) {
-                    phoneState.setVisibility(View.VISIBLE);
-                    phoneState.setImageResource(R.drawable.icon_checked);
+//                    phoneState.setVisibility(View.VISIBLE);
+//                    phoneState.setImageResource(R.drawable.icon_checked);
+                    registPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
                 } else {
                     registPhone.setError(Html.fromHtml("<font color='white'>手机号码格式不对</font>"));
                 }
                 /*更新注册按钮的状态*/
-                registerBtn.setEnabled(phoneNumberVaild && pwdVaild && comfPwdVaild);
+                registerBtn.setEnabled(phoneVerific && phoneNumberVaild && pwdVaild && comfPwdVaild);
             }
         });
 /*第一次输入密码*/
@@ -239,8 +230,8 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                 if (!pwdVaild) {
                     registPwd.setError(Html.fromHtml("<font color='white'>密码长度不少于6位</font>"));
                 } else {
-                    pwdState.setVisibility(View.VISIBLE);
-                    pwdState.setImageResource(R.drawable.icon_checked);
+
+                    registPwd.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.icon_checked,0);
 
                 }
                 /*两次密码相同否*/
@@ -251,10 +242,9 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                             .equals(registConfigPwd.getText().toString().trim());
                     if (!pwdEqual) {
 
-                        registPwd.setError(Html.fromHtml("<font color='white'>两次输入密码不相符</font>"));
+                        registPwd.setError(Html.fromHtml(getString(R.string.html_pwd_not_equal)));
                     } else {
-                        pwdState.setVisibility(View.VISIBLE);
-                        pwdState.setImageResource(R.drawable.icon_checked);
+                        registConfigPwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
 
                     }
                 }
@@ -262,7 +252,7 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
 
                 pwdVaild = pwdVaild && pwdEqual;
                 /*更新注册按钮的状态*/
-                registerBtn.setEnabled(phoneNumberVaild && pwdVaild && comfPwdVaild);
+                registerBtn.setEnabled(phoneVerific&&phoneNumberVaild && pwdVaild && comfPwdVaild);
             }
         });
 /*确认密码*/
@@ -283,7 +273,6 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                 comfPwdVaild = !TextUtils.isEmpty(registConfigPwd.getText().toString().trim())
                         && registConfigPwd.getText().toString().trim().length() >= 6;
 
-                confPwdState.setVisibility(View.VISIBLE);
 
                 boolean pwdEqual = registPwd.getText().toString().trim()
                         .equals(registConfigPwd.getText().toString().trim());
@@ -291,11 +280,11 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
 
                     registConfigPwd.setError(Html.fromHtml("<font color='white'>两次输入密码不相符</font>"));
                 } else {
-                    confPwdState.setImageResource(R.drawable.icon_checked);
+                    registConfigPwd.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.icon_checked, 0);
                     pwdVaild = true;
                 }
 
-                registerBtn.setEnabled(phoneNumberVaild && pwdVaild && comfPwdVaild);
+                registerBtn.setEnabled(phoneVerific&&phoneNumberVaild && pwdVaild && comfPwdVaild);
             }
         });
     }

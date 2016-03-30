@@ -3,16 +3,21 @@ package com.young.share.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.android.volley.VolleyError;
 import com.young.share.BaiduMapActivity;
 import com.young.share.BigPicActivity;
 import com.young.share.MessageDetailActivity;
@@ -24,6 +29,7 @@ import com.young.share.config.Contants;
 import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
 import com.young.share.model.ShareMessage_HZ;
+import com.young.share.network.NetworkReuqest;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.DisplayUtils;
@@ -36,6 +42,7 @@ import com.young.share.views.Dialog4Tips;
 import com.young.share.views.MultiImageView.MultiImageView;
 import com.young.share.views.PopupWinUserInfo;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
@@ -199,13 +206,119 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
      */
     private void setVideo(ViewHolder holder, ShareMessage_HZ shareMessage) {
         RelativeLayout videoLayout = holder.getView(R.id.rl_share_video_layout);
-        VideoView videoView = holder.getView(R.id.vv_share_preview_video);
-        ImageView videoPrevideo = holder.getView(R.id.im_share_video_priview);
+        final VideoView videoView = holder.getView(R.id.vv_share_preview_video);
+        final ImageView videoPrevideo = holder.getView(R.id.im_share_video_priview);
         ImageView playvideo = holder.getView(R.id.im_share_start_btn);
-        ProgressBar videoDownloadPb = holder.getView(R.id.pb_share_loading);
+        final ProgressBar videoDownloadPb = holder.getView(R.id.pb_share_loading);
+
+        if (shareMessage.getVideo() != null
+                && !TextUtils.isEmpty(shareMessage.getVideo().getFileUrl(ctx))) {
+
+            final String videoUrl = shareMessage.getVideo().getFileUrl(ctx);
+
+            videoLayout.setVisibility(View.VISIBLE);
+            videoPrevideo.setVisibility(View.VISIBLE);
+            playvideo.setVisibility(View.VISIBLE);
+            /*设置标识，为了不出现错乱*/
+            videoView.setTag(videoUrl);
+            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.setVolume(0.0f, 0.0f);
+                }
+            });
+            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+/*需要播放*/
+                    mp.setLooping(true);
+                    mp.start();
+                }
+            });
+
+/*判断视频有没有*/
+            if (shareMessage.getVideoPreview() != null) {
+                ImageHandlerUtils.loadIamge(ctx, shareMessage.getVideoPreview().getFileUrl(ctx), videoPrevideo);
+            } else {
+                videoPrevideo.setBackgroundColor(ctx.getResources().getColor(R.color.gray_lighter));
+            }
+
+            playvideo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    videoDownloadPb.setVisibility(View.VISIBLE);
+                    videoDownloadPb.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                            return false;
+                        }
+                    });
+                    //下载并且播放视频
+                    downloadVideo(videoUrl, videoView, videoPrevideo, videoDownloadPb);
+                }
+            });
+
+        } else {
+            videoLayout.setVisibility(View.GONE);
+            videoView.setVisibility(View.GONE);
+            videoPrevideo.setVisibility(View.GONE);
+            playvideo.setVisibility(View.GONE);
+            videoDownloadPb.setVisibility(View.GONE);
+        }
 
 
     }
+
+    /**
+     * 下载视频并且播放
+     *
+     * @param url getfileurl
+     * @param videoView 播放器
+     * @param videoPrevideo 视频预览图片
+     * @param pb 进度条
+     */
+    private void downloadVideo(final String url, final VideoView videoView, final ImageView videoPrevideo, final ProgressBar pb) {
+        String filePath = Environment.getExternalStorageDirectory().getPath() + Contants.FILE_PAHT_DOWNLOAD + url.substring(url.lastIndexOf('/') + 1);
+        File file = new File(filePath);
+//        videoPlayerList.add(view);
+
+        if (file.exists()) {//视频已经下载了
+            videoView.setVideoPath(filePath);
+            pb.setVisibility(View.GONE);
+            videoPrevideo.setVisibility(View.GONE);
+            videoView.setVisibility(View.VISIBLE);
+            videoView.start();
+
+
+        } else {//视频未下载，进行下载
+
+            //下载完成之后进行播放
+            NetworkReuqest.call(ctx, url, new NetworkReuqest.JsonRequstCallback<String>() {
+                @Override
+                public void onSuccess(String videoPath) {
+//                    LogUtils.E("response Filepath = " + object);
+                    if (videoView.getTag().equals(url)) {
+                        videoView.setVideoPath( videoPath);
+                        pb.setVisibility(View.GONE);
+                        videoPrevideo.setVisibility(View.GONE);
+                        videoView.setVisibility(View.VISIBLE);
+                        videoView.start();
+                    }
+                }
+
+                @Override
+                public void onFaile(VolleyError error) {
+                    Toast.makeText(ctx, R.string.toast_download_video_failure, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+        }
+
+
+    }
+
 
     @Override
     public int getlayoutid(int position) {

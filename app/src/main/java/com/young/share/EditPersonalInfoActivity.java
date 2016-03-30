@@ -303,6 +303,7 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
      */
     private void getUserDatas() {
         String name = cuser.getNickName();
+
         String qq = cuser.getQq();
         String gender = cuser.isGender() ? Contants.GENDER_MALE : Contants.GENDER_FEMALE;
         String age = String.valueOf(cuser.getAge());

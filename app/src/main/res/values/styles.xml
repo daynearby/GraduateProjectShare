@@ -38,8 +38,9 @@
     <style name="bar_text" parent="Theme.AppCompat.Light">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">fill_parent</item>
-
     </style>
+
+
 
     <style name="text_style.0dp" parent="Theme.AppCompat.Light">
         <item name="android:layout_height">wrap_content</item>
@@ -77,12 +78,13 @@
         <item name="android:orientation">horizontal</item>
     </style>
     <!--输入款，适应宽度，为了显示后面的一个图标-->
-<style name="editText_width">
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_weight">1</item>
+    <style name="editText_width">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_weight">1</item>
 
-</style>
+    </style>
+
     <style name="text_style_match">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
@@ -123,10 +125,10 @@
         <item name="android:activityCloseExitAnimation">@animator/activity_slid_right_out</item>
     </style>
 
-  <!--  &lt;!&ndash; 超链接颜色 &ndash;&gt;
-    <style name="LinkBuilder">
-        <item name="defaultLinkColor">@color/lake_blue</item>
-    </style>-->
+    <!--  &lt;!&ndash; 超链接颜色 &ndash;&gt;
+      <style name="LinkBuilder">
+          <item name="defaultLinkColor">@color/lake_blue</item>
+      </style>-->
 
     <style name="arcButton">
         <item name="android:layout_width">@dimen/arcButton</item>

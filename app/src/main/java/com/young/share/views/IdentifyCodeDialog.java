@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.young.share.R;
 import com.young.share.utils.LogUtils;
+import com.young.share.views.base.BaseDialog;
 
 import cn.bmob.sms.BmobSMS;
 import cn.bmob.sms.exception.BmobException;
@@ -28,6 +29,7 @@ public class IdentifyCodeDialog extends BaseDialog implements View.OnClickListen
 
     private EditText identifyCodeEt;
     private ImageView identifyStateIm;
+    private ImageView dissmissIm;
     private TextView timerTxt;
 
     private ReSendIdentify reSendIdentifycode;
@@ -79,7 +81,7 @@ public class IdentifyCodeDialog extends BaseDialog implements View.OnClickListen
         identifyCodeEt = (EditText) view.findViewById(R.id.et_dialog_identify_code_input);
         identifyStateIm = (ImageView) view.findViewById(R.id.im_identify_state);
         timerTxt = (TextView) view.findViewById(R.id.txt_et_dialog_identify_code_time);
-
+        dissmissIm = (ImageView) view.findViewById(R.id.im_dialog_dismiss_);
     }
 
     @Override
@@ -87,6 +89,7 @@ public class IdentifyCodeDialog extends BaseDialog implements View.OnClickListen
         /*确认点击*/
         view.findViewById(R.id.txt_identify_confirm).setOnClickListener(this);
         timerTxt.setOnClickListener(this);
+        dissmissIm.setOnClickListener(this);
         identifyCodeEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -125,24 +128,33 @@ public class IdentifyCodeDialog extends BaseDialog implements View.OnClickListen
     @Override
     public void onClick(View view) {
 
-        if (view.getId() == R.id.txt_et_dialog_identify_code_time) {//时间到了之后就显示重试，可以点击状态
+        switch (view.getId()) {
+            case R.id.txt_et_dialog_identify_code_time://时间到了之后就显示重试，可以点击状态
 
-            if (reSendIdentifycode != null) {
-                reSendIdentifycode.resend();
-            }
+                if (reSendIdentifycode != null) {
+                    reSendIdentifycode.resend();
+                }
 
-        } else {//点击确认按钮。关闭dialog
-            LogUtils.e(" mobilePhoneVerified = " + mobilePhoneVerified);
-            if (mobilePhoneVerified) {
+                break;
+            case R.id.txt_identify_confirm://点击确认按钮。关闭dialog
+                LogUtils.e(" mobilePhoneVerified = " + mobilePhoneVerified);
+                if (mobilePhoneVerified) {
+                    dismiss();
+                }
+
+                break;
+
+            case R.id.im_dialog_dismiss_:
                 dismiss();
-            }
-        }
+                break;
 
+        }
     }
 
     /**
      * 初始化状态
      */
+
     public void initSate() {
         identifyCodeEt.getText().clear();
         identifyStateIm.setVisibility(View.GONE);

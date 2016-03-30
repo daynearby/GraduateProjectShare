@@ -53,17 +53,17 @@ public class NetworkReuqest {
      * @param url
      * @param jsonResponse
      */
-    public static void call(Context context, String url, final JsonRequstCallback jsonResponse) {
+    public static void call(Context context, String url, final JsonRequstCallback<String> jsonResponse) {
 
         SmallFiledownloadRequest smallFiledownloadRequest = new SmallFiledownloadRequest(Request.Method.GET,
                 SmallFiledownloadRequest.FILE_TYPE_VIDEO,
                 null, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                LogUtils.d("success = " + response);
                 if (jsonResponse != null) {
                     jsonResponse.onSuccess(response);
                 }
-                LogUtils.d("success = " + response);
 
             }
         }, new Response.ErrorListener() {
