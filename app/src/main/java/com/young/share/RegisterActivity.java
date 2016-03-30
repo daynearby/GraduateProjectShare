@@ -2,12 +2,14 @@ package com.young.share;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,7 +33,7 @@ import cn.bmob.v3.listener.SaveListener;
 
 /**
  * 用户注册界面
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-10-20.
  */
 public class RegisterActivity extends BaseAppCompatActivity implements View.OnClickListener {
@@ -57,10 +59,15 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
 
     private IdentifyCodeDialog identifyCodeDialog;
     private BDLBSUtils bdlbsUtils;
+
+    private CountDownTimer timer;
     private boolean phoneNumberVaild;//手机号验证错误
     private boolean pwdVaild;//密码无效
     private boolean comfPwdVaild;//确认密码无效
     private boolean phoneVerific = false;//手机号验证结果
+
+    private long allTime = 60;//60秒
+    private long intevel = 1000 - 10;//一秒,计时会有10ms误差
 
     private String province = "广东省";
     private String city = "惠州市";
@@ -98,6 +105,8 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
     public void bindData() {
         /*输入监听*/
         textChangeListener();
+        // 初始化计时器
+        timeCount();
 /*设置dialog的dismissListener*/
         dialogSetDismiss();
 /*注册按钮，初始状态，不可点击*/
@@ -119,11 +128,63 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
  */
                 registPhone.setEnabled(phoneVerific = identifyCodeDialog.isMobilePhoneVerified());
                 identifyCodeTx.setEnabled(phoneVerific);
+                identifyCodeTx.setClickable(phoneVerific);
+                registPhone.setClickable(phoneVerific);
+
+                LogUtils.d(" phoneVerific = " + phoneVerific);
                 if (phoneVerific) {
                     registPhone.setTextColor(getResources().getColor(R.color.gray));
                 }
             }
         });
+        /**
+         * 重发验证码
+         */
+        identifyCodeDialog.setReSendIdentifycode(new IdentifyCodeDialog.ReSendIdentify() {
+            @Override
+            public void resend() {
+                /*重发验证码*/
+                requestIdentifyCode(registPhone.getText().toString().trim());
+                /*重新开始计时*/
+                timer.start();
+            }
+        });
+
+/**
+ * 显示窗口
+ */
+        identifyCodeDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                /*防止第二次点开，还出现相同的状态*/
+                identifyCodeDialog.initSate();
+                timer.start();
+            }
+        });
+    }
+
+    /**
+     * 计时器
+     */
+    private void timeCount() {
+
+        timer = new CountDownTimer(allTime * 1000, intevel) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+//                Toast.makeText(mActivity, String.format("%s秒后重试", String.valueOf((millisUntilFinished - 15) / 1000)), Toast.LENGTH_SHORT).show();
+//                new Handler().pos
+//                LogUtils.e(String.format("%s秒后重试", String.valueOf((millisUntilFinished - 15) / 1000)));
+                identifyCodeDialog.getTimerTxt().setText(String.format("%s秒后重试", String.valueOf((millisUntilFinished - 15) / 1000)));
+            }
+
+            @Override
+            public void onFinish() {
+                identifyCodeDialog.getTimerTxt().setText(R.string.txt_re_send_identify_code);
+                identifyCodeDialog.getTimerTxt().setEnabled(true);
+//                LogUtils.e("finish");
+            }
+        };
+
     }
 
 
@@ -269,13 +330,24 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
 
     @Override
     public void mBack() {
-        mBackStartActivity(LoginActivity.class);
+
+    }
+
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
+            mBackStartActivity(LoginActivity.class);
+            return true;
+        }
+
+
+        return super.dispatchKeyEvent(event);
     }
 
     @Override
     public void onClick(View v) {
-
-
         switch (v.getId()) {
             case R.id.tv_register_btn:
 
@@ -314,9 +386,6 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
      * 请求发送验证码，请求按钮不可点击
      */
     private void requestIdentifyCode(String phone) {
-
-
-//        identifyCodeTx.setEnabled(false);
 
         BmobSMS.requestSMSCode(this, phone, Contants.BMOB_MESSAGE_TEMPLE, new RequestSMSCodeListener() {
 
@@ -366,7 +435,7 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                 @Override
                 public void onFailure(int i, String s) {
 /*j*/
-                   if(i==209||i == 202){
+                    if (i == 209 || i == 202) {
                         SVProgressHUD.showInfoWithStatus(RegisterActivity.this, getString(R.string.user_had_register));
                     }
                     LogUtils.e(getClass().getName(), "注册失败  code = " + i + " message = " + s);

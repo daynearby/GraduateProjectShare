@@ -25,6 +25,8 @@ import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.duanqu.qupai.android.app.QupaiServiceImpl;
 import com.duanqu.qupai.editor.EditorResult;
 import com.duanqu.qupai.recorder.EditorCreateInfo;
+import com.duanqu.qupai.upload.AuthService;
+import com.duanqu.qupai.upload.QupaiAuthListener;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
@@ -137,6 +139,9 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         Bundle bundle = getIntent().getExtras();
         currentIsDiscount = bundle.getBoolean(Contants.BUNDLE_CURRENT_IS_DISCOUNT, false);
 
+//趣拍初始化
+        initAuth(Contants.QUPAI_APP_KEY, Contants.QUPAI_APP_SECRET, Contants.QUPAI_APP_SPACE);
+
         String LONGITUDE = app.getCacheInstance().getAsString(Contants.ACAHE_KEY_LONGITUDE);
         String[] strs = LONGITUDE.split(",");
         longitude = Double.valueOf(strs[0]);
@@ -188,7 +193,6 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         createInfo.setOutputVideoPath(videoFilePath);//输出视频路径
         createInfo.setOutputThumbnailPath(imageFilePath);//输出图片路径
 
-
     }
 
     @Override
@@ -238,6 +242,30 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 //恢复草稿
         resetDraft();
 
+    }
+
+    /**
+     * 鉴权 趣拍
+     *
+     * @param appKey    appkey
+     * @param appsecret appsecret
+     * @param space     space
+     */
+    private void initAuth(String appKey, String appsecret, String space) {
+        AuthService service = AuthService.getInstance();
+        service.setQupaiAuthListener(new QupaiAuthListener() {
+            @Override
+            public void onAuthError(int errorCode, String message) {
+                LogUtils.e("AUTHTAG ErrorCode" + errorCode + " message = " + message);
+            }
+
+            @Override
+            public void onAuthComplte(int responseCode, String responseMessage) {
+//                Contant.accessToken = responseMessage;
+                LogUtils.d("accessToken = " + responseMessage);
+            }
+        });
+        service.startAuth(getApplicationContext(), appKey, appsecret, space);
     }
 
     /**

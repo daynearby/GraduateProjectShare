@@ -93,7 +93,7 @@
     <string name="mobile_phone_tips">*找回密码通过绑定手机号码</string>
     <string name="hometown">故乡</string>
     <string name="input_mobile_phone_number">请输入正确的手机号</string>
-    <string name="input_hint_nickname">*昵称长度不少于4个字符，不多于12个字符</string>
+    <string name="input_hint_nickname">长度不少于4个字符，不多于12个字符</string>
     <string name="age">年龄</string>
     <string name="age_22">22</string>
     <string name="gender">性别</string>

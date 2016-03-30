@@ -1,25 +1,24 @@
 package com.young.share.views;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.young.share.R;
-import com.young.share.config.Contants;
 import com.young.share.utils.LogUtils;
 
 import cn.bmob.sms.BmobSMS;
 import cn.bmob.sms.exception.BmobException;
-import cn.bmob.sms.listener.RequestSMSCodeListener;
 import cn.bmob.sms.listener.VerifySMSCodeListener;
+
 
 /**
  * 验证码的输入框
@@ -30,16 +29,16 @@ public class IdentifyCodeDialog extends BaseDialog implements View.OnClickListen
     private EditText identifyCodeEt;
     private ImageView identifyStateIm;
     private TextView timerTxt;
-    private CountDownTimer timer;
 
+    private ReSendIdentify reSendIdentifycode;
     private String phoneNumber;//手机号
     private boolean mobilePhoneVerified;
-    private long allTime = 60;//60秒
-    private long intevel = 1000 - 10;//一秒,计时会有10ms误差
+    private InputMethodManager imm;
 
     public IdentifyCodeDialog(Context context) {
         super(context);
         setCancelable(false);
+        imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     /**
@@ -49,6 +48,16 @@ public class IdentifyCodeDialog extends BaseDialog implements View.OnClickListen
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+
+    }
+
+    /**
+     * 设置回调
+     *
+     * @param reSendIdentifycode
+     */
+    public void setReSendIdentifycode(ReSendIdentify reSendIdentifycode) {
+        this.reSendIdentifycode = reSendIdentifycode;
     }
 
     /**
@@ -91,91 +100,81 @@ public class IdentifyCodeDialog extends BaseDialog implements View.OnClickListen
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String code = identifyCodeEt.getText().toString().trim();
-/*输入验证码的长度不为空*/
-                if (!TextUtils.isEmpty(code)) {
 
-                    verificaCode(code);
+                final String code = identifyCodeEt.getText().toString().trim();
+                LogUtils.e("code = " + code);
+
+/*输入验证码的长度不为空,长度6位，数字*/
+                if (!TextUtils.isEmpty(code) && code.length() == 6) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            verificaCode(code);
+                        }
+                    }, 500);
                 }
 
             }
 
         });
 
-// 初始化计时器
-        timeCount();
-
-     /*显示*/
-        setOnShowListener(new OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-//                Toast.makeText(context,"onShow",Toast.LENGTH_SHORT).show();
-                LogUtils.d("onShow = "+(allTime * 1000));
-
-//                new Handler().post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        timer.start();
-//                    }
-//                });
-
-            }
-        });
 
     }
 
-    /**
-     * 计时器
-     */
-    private void timeCount() {
-
-        timer = new CountDownTimer(allTime * 1000, intevel) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                Toast.makeText(context, String.format("%s秒后重试", String.valueOf((millisUntilFinished - 15) / 1000)), Toast.LENGTH_SHORT).show();
-//                new Handler().pos
-                LogUtils.e(String.format("%s秒后重试", String.valueOf((millisUntilFinished - 15) / 1000)));
-                timerTxt.setText(String.format("%s秒后重试", String.valueOf((millisUntilFinished - 15) / 1000)));
-            }
-
-            @Override
-            public void onFinish() {
-                timerTxt.setText(R.string.txt_re_send_identify_code);
-                timerTxt.setEnabled(true);
-                LogUtils.e(String.format("秒后重试"));
-            }
-        };
-
-    }
 
     @Override
     public void onClick(View view) {
 
         if (view.getId() == R.id.txt_et_dialog_identify_code_time) {//时间到了之后就显示重试，可以点击状态
 
-            requestIdentifyCode();
-        } else {//点击确认按钮。关闭dialog
+            if (reSendIdentifycode != null) {
+                reSendIdentifycode.resend();
+            }
 
-            dismiss();
+        } else {//点击确认按钮。关闭dialog
+            LogUtils.e(" mobilePhoneVerified = " + mobilePhoneVerified);
+            if (mobilePhoneVerified) {
+                dismiss();
+            }
         }
 
+    }
+
+    /**
+     * 初始化状态
+     */
+    public void initSate() {
+        identifyCodeEt.getText().clear();
+        identifyStateIm.setVisibility(View.GONE);
+    }
+
+    /**
+     * 获取 时间控件
+     *
+     * @return
+     */
+    public TextView getTimerTxt() {
+        return timerTxt;
     }
 
     /**
      * @param identifyCode 验证码
      */
     private void verificaCode(String identifyCode) {
+
         BmobSMS.verifySmsCode(context, phoneNumber, identifyCode, new VerifySMSCodeListener() {
 
             @Override
             public void done(BmobException ex) {
                 if (ex == null) {//短信验证码已验证成功
                     identifyStateIm.setImageResource(R.drawable.icon_checked);
+                    identifyStateIm.setVisibility(View.VISIBLE);
                     mobilePhoneVerified = true;
-                    LogUtils.d("短信验证验证通过");
+                    LogUtils.d("短信验证验证通过 ");
 
                 } else {
-                    identifyStateIm.setImageResource(R.drawable.ic_text_erro);
+                    identifyStateIm.setVisibility(View.GONE);
+                    identifyCodeEt.setError(Html.fromHtml("<font color='white'>验证码错误</font>"));
                     mobilePhoneVerified = false;
                     LogUtils.e("验证失败：code =" + ex.getErrorCode() + ",msg = " + ex.getLocalizedMessage());
                 }
@@ -183,24 +182,8 @@ public class IdentifyCodeDialog extends BaseDialog implements View.OnClickListen
         });
     }
 
-    /**
-     * 请求发送验证码，请求按钮不可点击
-     */
-    private void requestIdentifyCode() {
 
-
-        if (!TextUtils.isEmpty(phoneNumber)) {
-            BmobSMS.requestSMSCode(context, phoneNumber, Contants.BMOB_MESSAGE_TEMPLE, new RequestSMSCodeListener() {
-                @Override
-                public void done(Integer smsId, BmobException ex) {
-                    if (ex == null) {//验证码发送成功
-                        LogUtils.i("bmob 短信id：" + smsId);//用于查询本次短信发送详情
-
-                    }
-                }
-            });
-
-        }
-
+    public interface ReSendIdentify {
+        void resend();
     }
 }

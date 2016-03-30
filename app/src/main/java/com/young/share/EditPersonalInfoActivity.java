@@ -1,24 +1,34 @@
 package com.young.share;
 
+import android.content.DialogInterface;
+import android.os.CountDownTimer;
 import android.os.Message;
+import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.ItemActBarActivity;
 import com.young.share.config.Contants;
 import com.young.share.utils.LogUtils;
+import com.young.share.utils.StringUtils;
 import com.young.share.utils.XmlUtils;
 import com.young.share.views.CitySelectPopupWin;
+import com.young.share.views.IdentifyCodeDialog;
 import com.young.share.views.PopupWinListView;
 
+import cn.bmob.sms.BmobSMS;
+import cn.bmob.sms.exception.BmobException;
+import cn.bmob.sms.listener.RequestSMSCodeListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
- *
  * 修改用户资料
  * Created by Nearby Yang on 2015-11-13.
  */
@@ -41,13 +51,20 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
 
     @InjectView(R.id.confirm_pwd_bt)
     private TextView save_tv;
-//    @InjectView(R.id.cancel_pwd)
+    //    @InjectView(R.id.cancel_pwd)
 //    private TextView cancel_tv;
-
+    private IdentifyCodeDialog identifyCodeDialog;
+    private CountDownTimer timer;
     private PopupWinListView gender_popupList;
     private PopupWinListView age_popupList;
     private CitySelectPopupWin hometown_popupList;
+    private boolean phoneVerific = false;//手机号验证结果
+    private boolean phoneFormateVerific = false;//手机号格式验证结果
+    private boolean nameVerific = false;//用户名长度验证结果
 
+
+    private long allTime = 60;//60秒
+    private long intevel = 1000 - 10;//一秒,计时会有10ms误差
     private String hometown;
     private String gender;
     private String age;
@@ -86,6 +103,7 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
         gender_tv.setOnClickListener(this);
         age_tv.setOnClickListener(this);
         hometown_tv.setOnClickListener(this);
+        identifyCodeDialog = new IdentifyCodeDialog(this);
     }
 
     @Override
@@ -93,6 +111,63 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
         gender_popupList = new PopupWinListView(this, XmlUtils.getSelectGender(this), false);
         age_popupList = new PopupWinListView(this, XmlUtils.getSelectAge(this), false);
         hometown_popupList = new CitySelectPopupWin(this, XmlUtils.getSelectCities(this));
+        nickname_et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String name = nickname_et.getText().toString().trim();
+                if (!TextUtils.isEmpty(name)) {
+
+                    if (nickname_et.length() < 4) {
+                        nickname_et.setError(Html.fromHtml("<font color='white'>长度不少于4位</font>"));
+                        nameVerific = false;
+                    } else if (nickname_et.length() > 12) {
+                        nickname_et.setError(Html.fromHtml("<font color='white'>长度不多于12位</font>"));
+                        nameVerific = false;
+                    } else {
+                        nameVerific = false;
+                    }
+                }
+            }
+        });
+/**
+ * 验证手机号码
+ */
+        mobilePhone_et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String phone = mobilePhone_et.getText().toString().trim();
+
+                if (!TextUtils.isEmpty(phone)) {
+                    if (!StringUtils.phoneNumberValid(phone)) {
+                        mobilePhone_et.setError("<font color='white'>手机号格式错误</font>");
+                    } else {
+                        phoneFormateVerific = true;
+                    }
+                } else {//手机号码为空
+                    phoneFormateVerific = true;
+                }
+            }
+        });
 
         gender_popupList.setItemClick(new PopupWinListView.onItemClick() {
             @Override
@@ -120,8 +195,106 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
                 hometown = str;
             }
         });
-
+//
         getUserDatas();
+        //初始化计时器
+        timeCount();
+
+        /*dialog*/
+        dialogSetDismiss();
+    }
+
+    /**
+     * dialog dismiss listener
+     * 取得
+     */
+    private void dialogSetDismiss() {
+        identifyCodeDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+/**
+ * 验证通过，EditText进入不可编辑状态，反之
+ */
+                mobilePhone_et.setEnabled(phoneVerific = identifyCodeDialog.isMobilePhoneVerified());
+                LogUtils.d(" phoneVerific = " + phoneVerific);
+                if (phoneVerific) {
+                    mobilePhone_et.setTextColor(getResources().getColor(R.color.gray));
+////                        // 提交用户信息
+                    cuser.setMobilePhoneNumber(mobilePhone_et.getText().toString());
+//                    cuser.setEmailVerified(true);
+//
+                    updateUserInfo();
+                }
+            }
+        });
+        /**
+         * 重发验证码
+         */
+        identifyCodeDialog.setReSendIdentifycode(new IdentifyCodeDialog.ReSendIdentify() {
+            @Override
+            public void resend() {
+                /*重发验证码*/
+                requestIdentifyCode(mobilePhone_et.getText().toString().trim());
+                /*重新开始计时*/
+                timer.start();
+            }
+        });
+
+/**
+ * 显示窗口
+ */
+        identifyCodeDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                /*防止第二次点开，还出现相同的状态*/
+                identifyCodeDialog.initSate();
+                timer.start();
+            }
+        });
+    }
+
+    /**
+     * 计时器
+     */
+    private void timeCount() {
+
+        timer = new CountDownTimer(allTime * 1000, intevel) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+//                Toast.makeText(mActivity, String.format("%s秒后重试", String.valueOf((millisUntilFinished - 15) / 1000)), Toast.LENGTH_SHORT).show();
+//                new Handler().pos
+//                LogUtils.e(String.format("%s秒后重试", String.valueOf((millisUntilFinished - 15) / 1000)));
+                identifyCodeDialog.getTimerTxt().setText(String.format("%s秒后重试", String.valueOf((millisUntilFinished - 15) / 1000)));
+            }
+
+            @Override
+            public void onFinish() {
+                identifyCodeDialog.getTimerTxt().setText(R.string.txt_re_send_identify_code);
+                identifyCodeDialog.getTimerTxt().setEnabled(true);
+//                LogUtils.e("finish");
+            }
+        };
+
+    }
+
+
+    /**
+     * 请求发送验证码，请求按钮不可点击
+     */
+    private void requestIdentifyCode(String phone) {
+
+        BmobSMS.requestSMSCode(this, phone, Contants.BMOB_MESSAGE_TEMPLE, new RequestSMSCodeListener() {
+
+            @Override
+            public void done(Integer smsId, BmobException ex) {
+                if (ex == null) {//验证码发送成功
+                    Toast.makeText(mActivity, R.string.toast_send_idnetify_code_success, Toast.LENGTH_SHORT).show();
+                    LogUtils.i("bmob 短信id：" + smsId);//用于查询本次短信发送详情
+
+                }
+            }
+        });
+
 
     }
 
@@ -163,17 +336,16 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
     }
 
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.confirm_pwd_bt://保存修改
-                handlerUIDatas();
-                break;
+//验证用户名
+                if (nameVerific && phoneFormateVerific) {
 
-//            case R.id.cancel_pwd:
-//                back2super();
-//                break;
+                    handlerUIDatas();
+                }
+                break;
 
             case R.id.popupwin_edit_personnal_info_gender://性别
                 gender_popupList.onShow(v);
@@ -191,7 +363,8 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
 
     private void handlerUIDatas() {
         //1手机号，邮箱，昵称，qq，家乡，性别，年龄
-        if (!TextUtils.isEmpty(nickname_et.getText().toString()) && nickname_et.getText().toString().length() >= Contants.NICKNAME_MIN_LENGHT) {
+        if (!TextUtils.isEmpty(nickname_et.getText().toString())
+                && nickname_et.getText().toString().length() >= Contants.NICKNAME_MIN_LENGHT) {
 
             if (nickname_et.getText().toString().length() <= Contants.NICKNAME_MAX_LENGHT) {
 //MyUser myUser = new MyUser();
@@ -204,11 +377,11 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
                         smsVerfied(mobilePhone_et.getText().toString());
 
                     } else {//已经验证。验证的手机号和当前验证的手机号不相符。则需要进行验证手机号
-                        if (!mobilePhone_et.getText().toString().equals(cuser.getMobilePhoneNumber())){
+                        /*修改手机号*/
+                        if (!mobilePhone_et.getText().toString().equals(cuser.getMobilePhoneNumber())) {
                             smsVerfied(mobilePhone_et.getText().toString());
                         }
                     }
-
 
 
                 } else {
@@ -226,6 +399,9 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
         }
     }
 
+    /**
+     * 更新用户的信息
+     */
     private void updateUserInfo() {
 
         cuser.setNickName(nickname_et.getText().toString());
@@ -260,24 +436,23 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
      */
     private void smsVerfied(final String mobilePhoneNumber) {
 
+        BmobSMS.requestSMSCode(this, mobilePhoneNumber, Contants.BMOB_MESSAGE_TEMPLE, new RequestSMSCodeListener() {
 
+            @Override
+            public void done(Integer smsId, BmobException ex) {
+                if (ex == null) {//验证码发送成功
+                    LogUtils.i("短信id：" + smsId);//用于查询本次短信发送详情
+                }
+            }
+        });
+
+        identifyCodeDialog.setPhoneNumber(mobilePhoneNumber);
+        identifyCodeDialog.show();
         //打开注册页面
-//        RegisterPage registerPage = new RegisterPage();
-//
-//        registerPage.setRegisterCallback(new EventHandler() {
-//            public void afterEvent(int event, int result, Object data) {
-//// 解析注册结果
-//                if (result == SMSSDK.RESULT_COMPLETE) {
-//                    @SuppressWarnings("unchecked")
-//                    HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
-////                    String country = (String) phoneMap.get("country");
-//                    String phone = (String) phoneMap.get("phone");
-//
-//                    if (mobilePhoneNumber.equals(phone)) {//手机验证与预留手机号不相同
 //
 //                        SVProgressHUD.showWithStatus(mActivity, getString(R.string.updating));
 //
-//                        // 提交用户信息
+////                        // 提交用户信息
 //                        cuser.setMobilePhoneNumber(mobilePhone_et.getText().toString());
 //                        cuser.setEmailVerified(true);
 //
@@ -287,11 +462,6 @@ public class EditPersonalInfoActivity extends ItemActBarActivity implements View
 //
 //                        SVProgressHUD.showErrorWithStatus(mActivity, getString(R.string.verify_mobilePhone_faile), SVProgressHUD.SVProgressHUDMaskType.GradientCancel);
 //
-//                    }
-//
-//
-//                }
-//            }
 //        });
 //
 ////显示验证窗口

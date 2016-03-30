@@ -28,12 +28,16 @@
 
             <EditText
                 android:id="@+id/et_dialog_identify_code_input"
-                android:layout_width="76dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_input_text"
+                android:layout_weight="1"
                 android:gravity="center"
+                android:inputType="number"
+                android:ems="6"
                 android:padding="@dimen/paddingHit"
-                android:singleLine="true" />
+                android:singleLine="true" >
+                <requestFocus/>
+            </EditText>
 
             <ImageView
                 android:id="@+id/im_identify_state"

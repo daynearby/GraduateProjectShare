@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import cn.bmob.sms.BmobSMS;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 
@@ -62,7 +63,7 @@ public class FindPwdActivity extends BaseAppCompatActivity implements View.OnCli
     public void initData() {
         setTitle(R.string.find_pwd_text);
         /*初始化短信服务的时候出错*/
-//        SMSSDK.initSDK(this, Contants.SMS_APP_KEY, Contants.SMS_APP_SECRET);
+        BmobSMS.initialize(this, Contants.BMOB_APP_KEY);
     }
 
     @Override
