@@ -80,7 +80,7 @@
         <!--引导界面-->
         <activity
             android:name=".GuideActivity"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" />
 
         <!-- 登录 -->
         <activity

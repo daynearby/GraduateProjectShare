@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/icon_avatar" />
+        android:background="@color/gray"/>
 
 
     <LinearLayout
@@ -22,23 +22,22 @@
             android:layout_width="@dimen/avatar_size_mediu"
             android:layout_height="@dimen/avatar_size_mediu"
             android:scaleType="centerInside"
-            android:src="@drawable/icon_avatar" />
+            android:background="@color/gray" />
 
         <TextView
             android:id="@+id/tv_user_nickname"
-            style="@style/text_style_match"
-            android:gravity="center"
+            style="@style/text_style_wrap"
+            android:layout_gravity="center"
             android:text="@string/user_name_defual"
             android:textColor="@color/white"
-            android:textSize="@dimen/textSizeLarge" />
+            android:textSize="@dimen/textSizeMediu" />
 
         <TextView
             android:id="@+id/tv_user_signture"
-            style="@style/text_style_match"
+            style="@style/text_style_wrap"
             android:gravity="center_horizontal"
             android:text="@string/user_info_hint_enjoy_life"
-            android:textColor="@color/white"
-            android:textSize="@dimen/textSizeMediu" />
+            android:textColor="@color/white" />
     </LinearLayout>
 
 

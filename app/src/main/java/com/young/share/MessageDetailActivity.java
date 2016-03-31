@@ -131,13 +131,13 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     @InjectView(R.id.rl_share_video_layout)
     RelativeLayout videoLayout;
     @InjectView(R.id.vv_share_preview_video)
-   private VideoView videoView ;
+    private VideoView videoView;
     @InjectView(R.id.im_share_video_priview)
-    private ImageView videoPrevideo ;
+    private ImageView videoPrevideo;
     @InjectView(R.id.im_share_start_btn)
-   private ImageView playvideo;
+    private ImageView playvideo;
     @InjectView(R.id.pb_share_loading)
-    private ProgressBar videoDownloadPb ;
+    private ProgressBar videoDownloadPb;
 
     private String superTagClazz;
     private CommRemoteModel commModel = new CommRemoteModel();//存放分享信息的具体内容
@@ -160,6 +160,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private int DURATION = 500;
     private int totalOffset = 0;//动画总的偏移量
     private int lastIndex = 0;//上一个页面的position
+    private boolean initVideo = false;//是否已经初始化videoView
 
     // TODO: 2016-03-23 下方的操作bar，部分事件需要重新定义，需要进行刷新
     @Override
@@ -335,7 +336,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         /**
          * 分享才需要判断是否有视频信息
          */
-        if (commModel.getType() ==  Contants.DATA_MODEL_SHARE_MESSAGES){
+        if (commModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES) {
             setVideo();
         }
 
@@ -405,23 +406,24 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
     /**
      * 设置视频
-     *
      */
     private void setVideo() {
-//        RelativeLayout videoLayout = holder.getView(R.id.rl_share_video_layout);
-//        final VideoView videoView = holder.getView(R.id.vv_share_preview_video);
-//        final ImageView videoPrevideo = holder.getView(R.id.im_share_video_priview);
-//        ImageView playvideo = holder.getView(R.id.im_share_start_btn);
-//        final ProgressBar videoDownloadPb = holder.getView(R.id.pb_share_loading);
 
         if (commModel.getVideo() != null
                 && !TextUtils.isEmpty(commModel.getVideo().getFileUrl(this))) {
 
             final String videoUrl = commModel.getVideo().getFileUrl(this);
-
+            initVideo = true;
             videoLayout.setVisibility(View.VISIBLE);
             videoPrevideo.setVisibility(View.VISIBLE);
-            playvideo.setVisibility(View.VISIBLE);
+            videoDownloadPb.setVisibility(View.VISIBLE);
+
+/*判断视频预览图有没有*/
+            if (commModel.getVideoPreview() != null) {
+                ImageHandlerUtils.loadIamge(this, commModel.getVideoPreview().getFileUrl(this), videoPrevideo);
+            } else {
+                videoPrevideo.setBackgroundColor(this.getResources().getColor(R.color.gray_lighter));
+            }
 
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
@@ -438,47 +440,37 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 }
             });
 
-/*判断视频有没有*/
-            if (commModel.getVideoPreview() != null) {
-                ImageHandlerUtils.loadIamge(this, commModel.getVideoPreview().getFileUrl(this), videoPrevideo);
-            } else {
-                videoPrevideo.setBackgroundColor(this.getResources().getColor(R.color.gray_lighter));
-            }
 
-            playvideo.setOnClickListener(new View.OnClickListener() {
+            videoView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View view) {
-                    videoDownloadPb.setVisibility(View.VISIBLE);
-                    videoDownloadPb.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View view, MotionEvent motionEvent) {
+                public boolean onTouch(View view, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        Intent intent = new Intent(mActivity, VideoplayerActivity.class);
+                        intent.putExtra(Contants.INTENT_KEY_VIDEO_PATH, shareMessage.getVideo().getFileUrl(mActivity));
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
 
-                            return false;
-                        }
-                    });
-                    //下载并且播放视频
-                    downloadVideo(videoUrl, videoView, videoPrevideo, videoDownloadPb);
+                    }
+
+                    return false;
                 }
             });
 
-        } else {
-            videoLayout.setVisibility(View.GONE);
-            videoView.setVisibility(View.GONE);
-            videoPrevideo.setVisibility(View.GONE);
-            playvideo.setVisibility(View.GONE);
-            videoDownloadPb.setVisibility(View.GONE);
-        }
+            //下载并且播放视频
+            downloadVideo(videoUrl, videoView, videoPrevideo, videoDownloadPb);
 
+
+        }
 
     }
 
     /**
      * 下载视频并且播放
      *
-     * @param url getfileurl
-     * @param videoView 播放器
+     * @param url           getfileurl
+     * @param videoView     播放器
      * @param videoPrevideo 视频预览图片
-     * @param pb 进度条
+     * @param pb            进度条
      */
     private void downloadVideo(final String url, final VideoView videoView, final ImageView videoPrevideo, final ProgressBar pb) {
         String filePath = Environment.getExternalStorageDirectory().getPath() + Contants.FILE_PAHT_DOWNLOAD + url.substring(url.lastIndexOf('/') + 1);
@@ -500,11 +492,11 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 @Override
                 public void onSuccess(String videoPath) {
 //                    LogUtils.E("response Filepath = " + object);
-                        videoView.setVideoPath(videoPath);
-                        pb.setVisibility(View.GONE);
-                        videoPrevideo.setVisibility(View.GONE);
-                        videoView.setVisibility(View.VISIBLE);
-                        videoView.start();
+                    videoView.setVideoPath(videoPath);
+                    pb.setVisibility(View.GONE);
+                    videoPrevideo.setVisibility(View.GONE);
+                    videoView.setVisibility(View.VISIBLE);
+                    videoView.start();
                 }
 
                 @Override
@@ -518,6 +510,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
 
     }
+
     /**
      * 查看用户资料
      *
@@ -606,6 +599,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
         return super.dispatchKeyEvent(event);
     }
+
     @Override
     public void mBack() {
 
@@ -695,7 +689,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
     /**
      * sharemessage
-     * <p/>
+     * <p>
      * 处理数据
      *
      * @param serializableExtra
@@ -1046,5 +1040,26 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 //        LogUtils.e(" translationX = "+totalOffset);
         ViewPropertyAnimator.animate(indexIm).translationX(totalOffset)
                 .setInterpolator(overshootInterpolator).setDuration(DURATION);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (initVideo) {
+            if (videoView!=null){
+                videoView.start();
+            }
+
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (initVideo){
+            if (videoView!=null&&videoView.isPlaying()){
+                videoView.pause();
+            }
+        }
     }
 }

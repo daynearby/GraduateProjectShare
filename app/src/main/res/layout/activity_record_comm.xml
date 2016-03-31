@@ -2,17 +2,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-<android.support.v4.widget.SwipeRefreshLayout
-    android:id="@+id/sw_record_comm_refresh"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/lv_record_comm"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_record_com"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_puple" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/sw_record_comm_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="@dimen/paddingHit"
-        android:scrollbars="none"
-        android:overScrollMode="never"/>
-</android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_below="@+id/tb_record_com">
+
+        <ListView
+            android:id="@+id/lv_record_comm"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="@dimen/paddingHit"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <ImageView
+        android:id="@+id/im_record_content_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/icon_conten_empty"
+        android:visibility="gone"/>
 </RelativeLayout>

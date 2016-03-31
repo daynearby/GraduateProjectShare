@@ -163,5 +163,9 @@
     <string name="txt_identify_code_lenght">6位验证码</string>
     <string name="html_pwd_not_equal"><![CDATA[<font color=\'white\'>两次输入密码不相符</font>]]></string>
     <string name="toast_user_not_vail">该用户不存在</string>
+    <string name="toast_had_verif_phone_number">已经验证过手机号了</string>
+    <string name="txt_video_click_exit">点击退出</string>
+    <string name="toast_edit_nicke_name">请完善昵称</string>
+    <string name="toast_phone_verif_failure">手机号验证失败</string>
 
 </resources>

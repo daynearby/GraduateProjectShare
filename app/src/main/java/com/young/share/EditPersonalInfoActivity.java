@@ -50,6 +50,8 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
     private TextView age_tv;
     @InjectView(R.id.popupwin_edit_personnal_info_hometown)
     private TextView hometown_tv;
+    @InjectView(R.id.et_edit_personal_signture)
+    private EditText signtureEdt;
 
     @InjectView(R.id.confirm_pwd_bt)
     private TextView save_tv;
@@ -60,9 +62,9 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
     private PopupWinListView gender_popupList;
     private PopupWinListView age_popupList;
     private CitySelectPopupWin hometown_popupList;
-    private boolean phoneVerific = false;//手机号验证结果
+    private boolean phoneVerific = true;//手机号验证结果
     private boolean phoneFormateVerific = true;//手机号格式验证结果,默认没有进行信息修改
-    private boolean nameVerific = false;//用户名长度验证结果
+    private boolean nameVerific = true;//用户名长度验证结果
 
 
     private long allTime = 60;//60秒
@@ -122,7 +124,7 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
                         nickname_et.setError(Html.fromHtml("<font color='white'>长度不多于12位</font>"));
                         nameVerific = false;
                     } else {
-                        nameVerific = false;
+                        nameVerific = true;
                     }
                 }
             }
@@ -222,15 +224,19 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
 /**
  * 验证通过，EditText进入不可编辑状态，反之
  */
-                mobilePhone_et.setEnabled(phoneVerific = identifyCodeDialog.isMobilePhoneVerified());
-                LogUtils.d(" phoneVerific = " + phoneVerific);
+                phoneVerific = identifyCodeDialog.isMobilePhoneVerified();
+                LogUtils.ts(" phoneVerific = " + phoneVerific);
+
                 if (phoneVerific) {
-                    mobilePhone_et.setTextColor(getResources().getColor(R.color.gray));
-////                        // 提交用户信息
+                    mobilePhone_et.setEnabled(false);
+                    mobilePhone_et.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+                    // 提交用户信息
                     cuser.setMobilePhoneNumber(mobilePhone_et.getText().toString());
-//                    cuser.setEmailVerified(true);
-//
+//更新用户资料
                     updateUserInfo();
+                } else {
+
+                    mToast(R.string.toast_phone_verif_failure);
                 }
             }
         });
@@ -312,6 +318,7 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
         age_tv.setText(cuser.getAge() == 0 ? String.valueOf(20) : String.valueOf(cuser.getAge()));
         email_et.setText(cuser.getEmail() == null ? "" : cuser.getEmail());
         mobilePhone_et.setText(cuser.getMobilePhoneNumber() == null ? "" : cuser.getMobilePhoneNumber());
+        signtureEdt.setText(cuser.getSignture() == null ? "" : cuser.getSignture());
         hometown_tv.setText(cuser.getAddress() != null && !TextUtils.isEmpty(cuser.getAddress()) ? getString(R.string.gd_hz) : cuser.getAddress());
 
     }
@@ -337,9 +344,16 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
         switch (v.getId()) {
             case R.id.confirm_pwd_bt://保存修改
 //验证用户名
-                if (nameVerific && phoneFormateVerific) {
+                if (nameVerific) {//昵称
+                    if (phoneFormateVerific) {//手机号格式
 
-                    handlerUIDatas();
+                        handlerUIDatas();
+                    } else {
+                        mToast(R.string.toast_phone_number_format_not_correct);
+
+                    }
+                } else {
+                    mToast(R.string.toast_edit_nicke_name);
                 }
                 break;
 
@@ -359,40 +373,33 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
 
     private void handlerUIDatas() {
         //1手机号，邮箱，昵称，qq，家乡，性别，年龄
-        if (!TextUtils.isEmpty(nickname_et.getText().toString())
-                && nickname_et.getText().toString().length() >= Contants.NICKNAME_MIN_LENGHT) {
 
-            if (nickname_et.getText().toString().length() <= Contants.NICKNAME_MAX_LENGHT) {
 //MyUser myUser = new MyUser();
 
-                if (!TextUtils.isEmpty(mobilePhone_et.getText().toString())) {
+        if (!TextUtils.isEmpty(mobilePhone_et.getText().toString())) {
 
-                    //未验证
-                    if (!cuser.getMobilePhoneNumberVerified()) {
+            //未验证,该应用现在使用手机号注册，应该不会有这种情况
+            if (TextUtils.isEmpty(cuser.getMobilePhoneNumber())) {
 
-                        smsVerfied(mobilePhone_et.getText().toString());
+                smsVerfied(mobilePhone_et.getText().toString());
 
-                    } else {//已经验证。验证的手机号和当前验证的手机号不相符。则需要进行验证手机号
+            } else {//已经验证。验证的手机号和当前验证的手机号不相符。则需要进行验证手机号
                         /*修改手机号*/
-                        if (!mobilePhone_et.getText().toString().equals(cuser.getMobilePhoneNumber())) {
-                            smsVerfied(mobilePhone_et.getText().toString());
-                        }
-                    }
-
-
+                if (!mobilePhone_et.getText().toString().equals(cuser.getMobilePhoneNumber())) {
+                    smsVerfied(mobilePhone_et.getText().toString());
                 } else {
-                    cuser.setMobilePhoneNumber("");
-                    cuser.setMobilePhoneNumberVerified(false);
                     updateUserInfo();
                 }
-
-
-            } else {//昵称长度太长
-                SVProgressHUD.showErrorWithStatus(this, String.format(getString(R.string.nickname_lenght_toolong), Contants.NICKNAME_MAX_LENGHT));
             }
-        } else {//昵称长度太短
-            SVProgressHUD.showErrorWithStatus(this, String.format(getString(R.string.nickname_lenght_short), Contants.NICKNAME_MAX_LENGHT));
+
+        } else {
+
+            cuser.setMobilePhoneNumber("");
+            cuser.setMobilePhoneNumberVerified(false);
+            updateUserInfo();
         }
+
+
     }
 
     /**
@@ -400,12 +407,14 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
      */
     private void updateUserInfo() {
 
+        SVProgressHUD.showWithStatus(mActivity, getString(R.string.update_user_info_success));
         cuser.setNickName(nickname_et.getText().toString());
         cuser.setGender(Contants.GENDER_MALE.equals(gender_tv.getText().toString()));
         cuser.setAge(Integer.valueOf(age_tv.getText().toString()));
         cuser.setQq(qq_et.getText().toString());
         cuser.setEmail(email_et.getText().toString());
         cuser.setAddress(hometown_tv.getText().toString());
+        cuser.setSignture(signtureEdt.getText().toString().trim());
 
         cuser.update(this, new UpdateListener() {
             @Override

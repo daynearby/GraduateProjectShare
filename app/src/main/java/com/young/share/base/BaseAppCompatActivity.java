@@ -180,7 +180,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * @param strId 文字id
      */
     public void mToast(int strId) {
-        Toast.makeText(this, strId, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, strId, Toast.LENGTH_LONG).show();
     }
 
     /**

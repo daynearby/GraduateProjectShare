@@ -12,6 +12,7 @@ import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.young.share.R;
 import com.young.share.config.Contants;
@@ -219,7 +220,7 @@ public class StringUtils {
 
             @Override
             public void onClick(View widget) {
-
+                Toast.makeText(context,"地址 locationInfo ",Toast.LENGTH_LONG).show();
                 if (textLink != null) {
                     textLink.onclick(locationInfo);
                 }

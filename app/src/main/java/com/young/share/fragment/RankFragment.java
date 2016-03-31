@@ -14,6 +14,7 @@ import com.young.share.adapter.RankAdapter;
 import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
 import com.young.share.model.RankBean;
+import com.young.share.utils.LogUtils;
 import com.young.share.utils.XmlUtils;
 import com.young.share.views.SpacesItemDecoration;
 
@@ -22,13 +23,15 @@ import java.util.List;
 
 /**
  * 排行榜
- * <p/>
+ * <p>
  * Created by Nearby Yang on 2015-12-09.
  */
 @SuppressLint("ValidFragment")
 public class RankFragment extends BaseFragment {
-
+    private RecyclerView recyclerView;
     private RankAdapter rankAdapter;
+    //瀑布式
+    private StaggeredGridLayoutManager layoutManager;
     private List<RankBean> dataList = new ArrayList<>();
     private List<String> tagList;
 
@@ -60,17 +63,25 @@ public class RankFragment extends BaseFragment {
     // TODO: 2016-03-06 修复拖动多次出现崩溃
     @Override
     public void initView() {
-        RecyclerView recyclerView = $(R.id.recv_rank);
+
+         recyclerView = $(R.id.recv_rank);
         rankAdapter = new RankAdapter(context);
-        //瀑布式
+
         try {
-//            return super.onTouchEvent(event);//StaggeredGridLayoutManager
-            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+            layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            recyclerView.setLayoutManager(layoutManager);
+        } catch (IllegalArgumentException e) {
+            LogUtils.e("viewpager IllegalArgumentException =" + e);
         } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        } catch (Exception e){
-            e.printStackTrace();
+            LogUtils.e("viewpager ArrayIndexOutOfBoundsException =" + e);
         }
+
+
+    }
+
+
+    @Override
+    public void bindData() {
 
         //item之间距离
         recyclerView.addItemDecoration(new SpacesItemDecoration(16));
@@ -89,25 +100,15 @@ public class RankFragment extends BaseFragment {
             }
         });
 
+        rankAdapter.setDataList(dataList);
         recyclerView.setAdapter(rankAdapter);
-
-    }
-
-
-    @Override
-    public void bindData() {
-
     }
 
     @Override
     public void handler(Message msg) {
 
-        switch (msg.what) {
-            case GET_DATA:
-                rankAdapter.setDataList(dataList);
-                break;
-        }
     }
+
 
     /**
      * 从资源文件中获取数据
@@ -136,7 +137,6 @@ public class RankFragment extends BaseFragment {
         mhandler.sendEmptyMessage(GET_DATA);
 
     }
-
 
 
 }

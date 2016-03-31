@@ -23,6 +23,7 @@ import com.young.share.BigPicActivity;
 import com.young.share.MessageDetailActivity;
 import com.young.share.R;
 import com.young.share.RankListActivity;
+import com.young.share.VideoplayerActivity;
 import com.young.share.adapter.baseAdapter.CommAdapter;
 import com.young.share.adapter.baseAdapter.ViewHolder;
 import com.young.share.config.Contants;
@@ -36,6 +37,7 @@ import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.EvaluateUtil;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LocationUtils;
+import com.young.share.utils.LogUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.utils.UserUtils;
 import com.young.share.views.Dialog4Tips;
@@ -204,7 +206,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
      * @param holder
      * @param shareMessage
      */
-    private void setVideo(ViewHolder holder, ShareMessage_HZ shareMessage) {
+    private void setVideo(ViewHolder holder, final ShareMessage_HZ shareMessage) {
         RelativeLayout videoLayout = holder.getView(R.id.rl_share_video_layout);
         final VideoView videoView = holder.getView(R.id.vv_share_preview_video);
         final ImageView videoPrevideo = holder.getView(R.id.im_share_video_priview);
@@ -243,17 +245,26 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                 videoPrevideo.setBackgroundColor(ctx.getResources().getColor(R.color.gray_lighter));
             }
 
+            videoDownloadPb.setVisibility(View.VISIBLE);
+            videoDownloadPb.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        Intent intent = new Intent(ctx, VideoplayerActivity.class);
+                        intent.putExtra(Contants.INTENT_KEY_VIDEO_PATH, shareMessage.getVideo().getFileUrl(ctx));
+                        ctx.startActivity(intent);
+                        ((Activity)ctx).overridePendingTransition(0, 0);
+
+                    }
+
+                    return false;
+                }
+            });
+
             playvideo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    videoDownloadPb.setVisibility(View.VISIBLE);
-                    videoDownloadPb.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                            return false;
-                        }
-                    });
                     //下载并且播放视频
                     downloadVideo(videoUrl, videoView, videoPrevideo, videoDownloadPb);
                 }
@@ -282,6 +293,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         String filePath = Environment.getExternalStorageDirectory().getPath() + Contants.FILE_PAHT_DOWNLOAD + url.substring(url.lastIndexOf('/') + 1);
         File file = new File(filePath);
 //        videoPlayerList.add(view);
+        LogUtils.e("down load filePath = " +filePath);
 
         if (file.exists()) {//视频已经下载了
             videoView.setVideoPath(filePath);

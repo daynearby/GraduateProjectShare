@@ -46,6 +46,7 @@ public class SmallFiledownloadRequest extends Request<String> {
         this.params = new HashMap<>();
         this.mListener = mListener;
     }
+
     /**
      * 下载文件
      * 默认get方法就可以
@@ -70,6 +71,7 @@ public class SmallFiledownloadRequest extends Request<String> {
         this.fileType = fileType;
         this.params = params;
         this.mListener = mListener;
+
     }
 
     @Override
@@ -79,8 +81,9 @@ public class SmallFiledownloadRequest extends Request<String> {
         String filePath = Environment.getExternalStorageDirectory().getPath();
         filePath += fileType == FILE_TYPE_VIDEO ? Contants.FILE_PAHT_DOWNLOAD : Contants.FILE_PAHT_SAVE;
         filePath += url.substring(url.lastIndexOf('/') + 1);
-
+        LogUtils.e("SmallFile　Download  download filePath = " + filePath);
         File file = new File(filePath.substring(0, filePath.lastIndexOf('/')));
+
         //创建文件夹
         if (!file.exists()) {
             boolean created = file.mkdirs();

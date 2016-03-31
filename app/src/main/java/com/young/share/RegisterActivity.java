@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +49,7 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
     @InjectView(R.id.tv_register_btn)
     private TextView registerBtn;
     @InjectView(R.id.txt_reg_get_identify_code)
-    private TextView identifyCodeTx;
+    private Button identifyCodeTx;
 
     private IdentifyCodeDialog identifyCodeDialog;
     private BDLBSUtils bdlbsUtils;
@@ -120,8 +121,7 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
  * 验证通过，EditText进入不可编辑状态，反之
  */
                 registPhone.setEnabled(phoneVerific = identifyCodeDialog.isMobilePhoneVerified());
-                identifyCodeTx.setEnabled(phoneVerific);
-                identifyCodeTx.setClickable(phoneVerific);
+
                 registPhone.setClickable(phoneVerific);
 
                 LogUtils.d(" phoneVerific = " + phoneVerific);
@@ -352,22 +352,37 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                 break;
 
             case R.id.txt_reg_get_identify_code://获取验证码
-/*请求发送验证码*/
-                String phone = registPhone.getText().toString().trim();
-                if (!TextUtils.isEmpty(phone)) {//手机号不为空
-                    if (StringUtils.phoneNumberValid(phone)) {//手机号格式验证
+//获取验证码
+                getIdentifyCodeEvent();
 
-                        requestIdentifyCode(phone);
-                        identifyCodeDialog.setPhoneNumber(phone);
-                /*输入验证码*/
-                        identifyCodeDialog.show();
-                    } else {
-                        Toast.makeText(this, R.string.toast_phone_number_format_not_correct, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(this, R.string.toast_phone_number_empty, Toast.LENGTH_SHORT).show();
-                }
                 break;
+        }
+    }
+
+
+    /**
+     * 获取验证码的逻辑
+     *
+     */
+    private void getIdentifyCodeEvent(){
+        if (!phoneVerific) {//手机号没有验证
+        /*请求发送验证码*/
+            String phone = registPhone.getText().toString().trim();
+            if (!TextUtils.isEmpty(phone)) {//手机号不为空
+                if (StringUtils.phoneNumberValid(phone)) {//手机号格式验证
+
+                    requestIdentifyCode(phone);
+                    identifyCodeDialog.setPhoneNumber(phone);
+                /*输入验证码*/
+                    identifyCodeDialog.show();
+                } else {
+                    Toast.makeText(this, R.string.toast_phone_number_format_not_correct, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, R.string.toast_phone_number_empty, Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            mToast(R.string.toast_had_verif_phone_number);
         }
     }
 

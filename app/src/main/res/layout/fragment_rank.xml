@@ -8,8 +8,7 @@
         android:id="@+id/recv_rank"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
         android:overScrollMode="never"
-        />
+        android:scrollbars="none" />
 
 </LinearLayout>

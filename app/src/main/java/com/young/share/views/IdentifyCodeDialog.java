@@ -68,6 +68,7 @@ public class IdentifyCodeDialog extends BaseDialog implements View.OnClickListen
      * @return
      */
     public boolean isMobilePhoneVerified() {
+        LogUtils.d("dialog mobilePhoneVerified = "+mobilePhoneVerified);
         return mobilePhoneVerified;
     }
 

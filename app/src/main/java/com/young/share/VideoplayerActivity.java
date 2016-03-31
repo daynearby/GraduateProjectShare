@@ -2,12 +2,13 @@ package com.young.share;
 
 import android.content.Intent;
 import android.os.Message;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
+import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
 import com.young.share.model.ShareMessage_HZ;
@@ -22,14 +23,15 @@ import com.young.share.utils.VideoPlayerUtils;
  */
 public class VideoplayerActivity extends BaseAppCompatActivity implements View.OnClickListener {
 
+    @InjectView(R.id.suview_video_player)
+    private SurfaceView videoView;
+    @InjectView(R.id.rllayout_bg)
+    private RelativeLayout parentView;
+
     private String videPath;
     private VideoPlayerUtils videoPlayerUtils;
     private ShareMessage_HZ shareMessage;
-    private boolean isAlbum = false;
     private Intent intent;
-
-    private SurfaceView videoView;
-    private ActionBar actionBar;
     private boolean isLike = false;
 
     private static final int PLAY_VIDEO = 0x01;//延迟加载视频
@@ -49,21 +51,16 @@ public class VideoplayerActivity extends BaseAppCompatActivity implements View.O
         /*由主界面跳转*/
         if (shareMessage == null) {
             videPath = getIntent().getStringExtra(Contants.INTENT_KEY_VIDEO_PATH);
-            isAlbum = false;
         } else {
             videPath = shareMessage.getVideo().getFileUrl(mActivity);
-            isAlbum = true;
 
         }
-//        mHandler.sendEmptyMessage(PLAY_VIDEO);
     }
 
     @Override
     protected void findviewbyid() {
 
-        findViewById(R.id.rllayout_bg).setOnClickListener(this);
-        videoView = $(R.id.suview_video_player);
-
+        parentView.setOnClickListener(this);
 
     }
 
@@ -107,7 +104,6 @@ public class VideoplayerActivity extends BaseAppCompatActivity implements View.O
                 mActivity.finish();
             }
         });
-        actionBar = getSupportActionBar();
     }
 
     @Override
@@ -115,25 +111,14 @@ public class VideoplayerActivity extends BaseAppCompatActivity implements View.O
 
         switch (v.getId()) {
             case R.id.suview_video_player:
-                if (!isAlbum) {
-                    mActivity.finish();
-                } else {
-                    barShowOrHide();
-                }
+                mActivity.finish();
+                break;
+            case R.id.rllayout_bg:
+
+                mActivity.finish();
                 break;
 
 
-        }
-    }
-
-    /**
-     * actionbar 与下方的bar同时出现和隐藏
-     */
-    private void barShowOrHide() {
-        if (actionBar.isShowing()) {
-            actionBar.hide();
-        } else {
-            actionBar.show();
         }
     }
 

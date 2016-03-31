@@ -188,10 +188,11 @@
                 android:textSize="@dimen/textSizeMediu" />
 
             <EditText
+                android:id="@+id/et_edit_personal_signture"
                 style="@style/bar_text"
                 android:layout_weight="1"
                 android:hint="@string/et_activity_edit_personal_info_signature"
-                android:inputType="phone"
+                android:inputType="text"
                 android:singleLine="true"
                 android:textSize="@dimen/textSizeMediu" />
         </LinearLayout>
