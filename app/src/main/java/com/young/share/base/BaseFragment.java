@@ -25,9 +25,6 @@ public abstract class BaseFragment extends Fragment {
     public Context context;
     public ApplicationConfig app;
 
-    public BaseFragment() {
-        app = ApplicationConfig.getInstance();
-    }
     public BaseFragment(Context context) {
         this.context = context;
         app = ApplicationConfig.getInstance();
@@ -36,7 +33,7 @@ public abstract class BaseFragment extends Fragment {
 
 
 
-    public  Handler mhandler = new Handler() {
+    public    Handler mhandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -83,7 +80,7 @@ public abstract class BaseFragment extends Fragment {
     //绑定数据
     public abstract void bindData();
 
-    public abstract void handler(Message msg);
+    public  abstract  void handler(Message msg);
 
     /**
      * 简化findviewbyid

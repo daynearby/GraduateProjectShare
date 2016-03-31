@@ -33,6 +33,7 @@ import java.util.List;
  * 想去区显示的内容
  * Created by Nearby Yang on 2016-03-19.
  */
+@SuppressLint("ValidFragment")
 public class WantToGoFragment extends BaseFragment {
     private TextView avatarTxt;
     private List<String> wantUserId;
@@ -44,9 +45,6 @@ public class WantToGoFragment extends BaseFragment {
     private static final int MESSAGE_GET_USER_INFO = 0x01;//获取了用户信息，需要进行图片加载
     private static final int MESSAGE_CONVERT_USER_INFO = 0x02;//将用户的id转化成对应的用户头像图片
 
-    public WantToGoFragment() {
-        userList = new ArrayList<>();
-    }
 
     @SuppressLint("ValidFragment")
     public WantToGoFragment(Context context, List<String> wantUserId) {

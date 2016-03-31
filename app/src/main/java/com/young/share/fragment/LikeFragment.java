@@ -34,6 +34,7 @@ import java.util.List;
  * Created by Nearby Yang on 2016-03-19.
  */
 
+@SuppressLint("ValidFragment")
 public class LikeFragment extends BaseFragment {
 
     private List<String> userIdList;
@@ -46,9 +47,6 @@ public class LikeFragment extends BaseFragment {
     private static final int MESSAGE_GET_USER_INFO = 0x01;//获取了用户信息，需要进行图片加载
     private static final int MESSAGE_CONVERT_USER_INFO = 0x02;//将用户的id转化成对应的用户头像图片
 
-    public LikeFragment() {
-        userList = new ArrayList<>();
-    }
 
     @SuppressLint("ValidFragment")
     public LikeFragment(Context context, List<String> userIdList) {

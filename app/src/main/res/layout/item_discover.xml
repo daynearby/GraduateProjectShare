@@ -9,15 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/theme_puple"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
     <android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/cardview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/paddingHit"
         android:layout_marginBottom="@dimen/paddingHit"
+        android:layout_marginTop="@dimen/paddingHit"
         android:descendantFocusability="blocksDescendants"
         android:fitsSystemWindows="true"
         app:cardBackgroundColor="@color/white"
@@ -42,8 +41,8 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="3"
-                    android:paddingTop="@dimen/paddingMic"
                     android:paddingBottom="@dimen/paddingMic"
+                    android:paddingTop="@dimen/paddingMic"
                     android:text="@string/defaul_share_text"
                     android:textColor="@android:color/black" />
 
@@ -52,17 +51,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/paddingMic" />
-<!--视频播放布局-->
-                <include layout="@layout/content_video_layout"/>
+                <!--视频播放布局-->
+                <include layout="@layout/content_video_layout" />
 
 
                 <TextView
                     android:id="@+id/tv_item_share_main_location"
                     style="@style/text_style_wrap"
                     android:layout_gravity="right"
+                    android:layout_marginTop="@dimen/maginMicro"
+                    android:background="@drawable/sele_text"
                     android:paddingLeft="@dimen/paddingHit"
                     android:paddingRight="@dimen/paddingHit"
                     android:text="@string/txt_location_info"
+                    android:textColor="@color/color_name"
                     android:visibility="gone" />
 
                 <TextView
@@ -75,13 +77,12 @@
             </LinearLayout>
 
             <include layout="@layout/include_bottom_bar" />
-
             <!--布局文件复用，为了准备显示viewpager-->
             <ViewStub
                 android:id="@+id/vs_share_main_vp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout="@layout/item_viewpager"/>
+                android:layout="@layout/item_viewpager" />
 
         </LinearLayout>
 

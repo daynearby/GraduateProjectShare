@@ -34,6 +34,7 @@ public class ApplicationConfig extends LitePalApplication {
     //单例模式
     private volatile static ApplicationConfig instance;
     private ACache aCache;
+    private Context context;
 
     private ThreadPool threadPool;
 
@@ -47,6 +48,7 @@ public class ApplicationConfig extends LitePalApplication {
      * 应用的基本配置
      */
     private void initConfig() {
+        context = this;
         LitePalApplication.initialize(this);
         //初始化imageloader
         initImageLoader(getApplicationContext());
@@ -117,6 +119,7 @@ public class ApplicationConfig extends LitePalApplication {
 
         return aCache = ACache.get(com.young.share.utils.StorageUtils.createCacheFile(getApplicationContext()));
     }
+
 
 
     /**

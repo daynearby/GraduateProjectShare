@@ -33,6 +33,7 @@ import com.young.share.model.gson.AdvertismentList;
 import com.young.share.model.gson.DiscountMessageList;
 import com.young.share.network.BmobApi;
 import com.young.share.network.NetworkReuqest;
+import com.young.share.thread.MyRunnable;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DisplayUtils;
@@ -77,10 +78,9 @@ public class DiscountFragment extends BaseFragment {
     private boolean isFirstIn = true;//第一次进入该界面
     private static final String tag = "discount";
 
-    public DiscountFragment() {
-        super();
-    }
 
+
+    @SuppressLint("ValidFragment")
     public DiscountFragment(Context context) {
         super(context);
     }
@@ -96,11 +96,16 @@ public class DiscountFragment extends BaseFragment {
         dataList = (List<DiscountMessage_HZ>) app.getCacheInstance().getAsObject(Contants.ACAHE_KEY_DISCOUNT);
         adList = (List<Advertisement>) app.getCacheInstance().getAsObject(Contants.ACAHE_KEY_ADVERTISMENT);
 
-     /*数据*/
-        getRemoteData();
-
+        threadPool.startTask(new MyRunnable() {
+            @Override
+            public void run() {
+          /*数据*/
+                getRemoteData();
         /*广告*/
-        getADInfo();
+                getADInfo();
+            }
+        });
+
 
     }
 
@@ -277,7 +282,9 @@ public class DiscountFragment extends BaseFragment {
                     @Override
                     public void onFailure(int code, String msg) {
                         LogUtils.d("get discountMessage failure. code  = " + code + " message = " + msg);
-                        swipeRefreshLayout.setRefreshing(false);
+                        if (swipeRefreshLayout.isRefreshing()) {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
                     }
                 }
         );

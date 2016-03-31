@@ -4,6 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_share_main_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/theme_puple"
+        android:visibility="gone" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,8 +44,10 @@
             android:layout_gravity="right"
             android:paddingLeft="@dimen/paddingMic"
             android:paddingRight="@dimen/paddingMic"
-            android:paddingTop="@dimen/paddingMic"
+            android:layout_marginTop="@dimen/maginMicro"
             android:text="@string/txt_location_info"
+            android:textColor="@color/color_name"
+            android:background="@drawable/sele_text"
             android:visibility="gone" />
 
         <TextView
@@ -52,8 +61,11 @@
 
     </LinearLayout>
 
-    <include layout="@layout/include_bottom_bar" />
 
+    <!--viewpager 的指示器-->
+    <include layout="@layout/content_detail_indicador"/>
+
+    <include layout="@layout/include_bottom_bar" />
     <!--布局文件复用，为了准备显示viewpager-->
     <ViewStub
         android:id="@+id/vs_share_main_vp"

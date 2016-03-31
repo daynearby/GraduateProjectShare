@@ -2,6 +2,7 @@ package com.young.share;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -9,10 +10,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewStub;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.young.share.adapter.ButtombarPageAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
@@ -47,7 +51,7 @@ import cn.bmob.v3.listener.GetListener;
 /**
  * 优惠信息
  * 详细信息
- * <p/>
+ * <p>
  * Created by Nearby Yang on 2015-12-07.
  */
 public class DiscoutDetailActivity extends BaseAppCompatActivity implements View.OnClickListener {
@@ -70,20 +74,35 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
     private TextView createdAt;//创建时间
     @InjectView(R.id.id_tx_comment)
     private TextView comment_tv;
-    @InjectView(R.id.vs_share_main_vp)
-    private ViewStub viewStub;
+//    @InjectView(R.id.vp_discount_detail)
     private CustomViewPager viewPager;
+    /*三个radioButton 显示标题*/
+    @InjectView(R.id.rb_message_detail_comment)
+    private RadioButton commentRbtn;
+    @InjectView(R.id.rg_msg_detail_gd)
+    private RadioGroup indexRadiog;
+    @InjectView(R.id.rb_message_detail_had_go)
+    private RadioButton hadGoRbtn;
+    @InjectView(R.id.rb_message_detail_want_to)
+    private RadioButton wantToRbtn;
+    @InjectView(R.id.im_msg_detail_index)
+    private ImageView indexIm;// 页面指示器
 
     private ButtombarPageAdapter pageAdapter;
     DiscountMessage_HZ discountMessage;
     private CommRemoteModel commModel;
     private boolean isClick = false;//是否点击过
+    private int tabWidth = 0;
+    private OvershootInterpolator overshootInterpolator;
+    private int DURATION = 500;
+    private int totalOffset = 0;//动画总的偏移量
+    private int lastIndex = 0;//上一个页面的position
 
     private static final int GET_NEW_COUNT = 0x01;//刷新下面两个数量
 
     @Override
     public int getLayoutId() {
-        return R.layout.item_discover;
+        return R.layout.activity_discount_detail;
 
     }
 
@@ -114,7 +133,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
      * 初始化toolbar
      */
     private void initialiToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_share_main_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_deatil_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setVisibility(View.VISIBLE);
         toolbar.setNavigationIcon(R.drawable.icon_menu_back);
@@ -151,9 +170,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
 
     @Override
     public void findviewbyid() {
-        viewStub.inflate();
-        viewPager = $(R.id.vp_viewpager);
-
+        viewPager = $(R.id.vp_discount_detail);
         comment_tv.setVisibility(View.GONE);
         avatar.setOnClickListener(this);
         wanto_tv.setOnClickListener(this);
@@ -162,6 +179,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
 
     @Override
     public void bindData() {
+        commentRbtn.setVisibility(View.GONE);
         String url;
         boolean isLocation;
         MyUser myUser = commModel.getMyUser();
@@ -189,7 +207,22 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         setupImage();
         /*展示viewpager*/
         createdFragments();
+        initAnima();
+    }
 
+    private void initAnima() {
+        indexRadiog.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        tabWidth = indexRadiog.getMeasuredWidth() / 2;
+        ViewGroup.LayoutParams params = indexIm.getLayoutParams();
+        params.width = tabWidth;
+
+        Matrix matrix = new Matrix();
+        matrix.postTranslate(0, 0);
+        indexIm.setImageMatrix(matrix);// 设置动画初始位置
+        overshootInterpolator = new OvershootInterpolator();
+        wantToRbtn.setTextColor(getResources().getColor(R.color.theme_puple));
+        wantToRbtn.setOnClickListener(this);
+        hadGoRbtn.setOnClickListener(this);
     }
 
     /**
@@ -359,18 +392,18 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             if (position == 0) {
-                wanto_tv.setBackgroundColor(getResources().getColor(R.color.gray_lighter));
-                hadgo_tv.setBackgroundColor(Color.WHITE);
+                wantToRbtn.setTextColor(getResources().getColor(R.color.theme_puple));
+                hadGoRbtn.setTextColor(Color.BLACK);
 
             } else {
-                wanto_tv.setBackgroundColor(Color.WHITE);
-                hadgo_tv.setBackgroundColor(getResources().getColor(R.color.gray_lighter));
+                wantToRbtn.setTextColor(Color.BLACK);
+                hadGoRbtn.setTextColor(getResources().getColor(R.color.theme_puple));
             }
         }
 
         @Override
         public void onPageSelected(int position) {
-
+            changeTab(position);
         }
 
         @Override
@@ -378,4 +411,18 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
 
         }
     };
+
+    /**
+     * 动画效果
+     *
+     * @param index
+     */
+    private void changeTab(int index) {
+//        int position = tabWidth*index - tabWidth / 3 - bmpW / 3 - offset;
+        totalOffset = totalOffset + (index - lastIndex) * tabWidth;
+        lastIndex = index;
+//        LogUtils.e(" translationX = "+totalOffset);
+        ViewPropertyAnimator.animate(indexIm).translationX(totalOffset)
+                .setInterpolator(overshootInterpolator).setDuration(DURATION);
+    }
 }

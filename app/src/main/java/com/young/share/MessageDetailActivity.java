@@ -106,8 +106,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private TextView hadgo_tv;//去过数量
     @InjectView(R.id.id_tx_comment)
     private TextView comment_tv;//评论数量
-    @InjectView(R.id.rg_msg_detail_gd)
-    private RadioGroup indexRadiog;
     /*发送评论布局*/
     @InjectView(R.id.edt_message_detail_comment)
     private EditText sendComment_edt;
@@ -123,10 +121,14 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     /*三个radioButton 显示标题*/
     @InjectView(R.id.rb_message_detail_comment)
     private RadioButton commentRbtn;
+    @InjectView(R.id.rg_msg_detail_gd)
+    private RadioGroup indexRadiog;
     @InjectView(R.id.rb_message_detail_had_go)
     private RadioButton hadGoRbtn;
     @InjectView(R.id.rb_message_detail_want_to)
     private RadioButton wantToRbtn;
+    @InjectView(R.id.im_msg_detail_index)
+    private ImageView indexIm;// 页面指示器
     /*视频布局*/
     @InjectView(R.id.rl_share_video_layout)
     RelativeLayout videoLayout;
@@ -136,6 +138,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private ImageView videoPrevideo;
     @InjectView(R.id.im_share_start_btn)
     private ImageView playvideo;
+
     @InjectView(R.id.pb_share_loading)
     private ProgressBar videoDownloadPb;
 
@@ -146,15 +149,14 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private InputMethodManager imm;
     private String receiverId;//接收消息者id
     private int commentClick;//是否是点击评论进去
-    private CommentFragment commentFragment;//评论的界面的对象
 
+    private CommentFragment commentFragment;//评论的界面的对象
     private static final int MESSAGE_SHARE_MESSAGE = 0x01;//显示传过来的sharemessage
     private static final int MESSAGE_BING_MESSAGE = 0x02;//显示传过来的sharemessage
-    private static final int COMMENT_CLICK = 0;//点击事件，是评论
+    private static final int MESSAGE_REFRESH_COMMENT = 0x03;//发送评论之后进行刷新评论列表
 
+    private static final int COMMENT_CLICK = 0;//点击事件，是评论
     private boolean SendMessageFinish = true;//消息是否已经发送
-    /*指示器*/
-    private ImageView indexIm;// 页面指示器
     private int tabWidth = 0;
     private OvershootInterpolator overshootInterpolator;
     private int DURATION = 500;
@@ -201,7 +203,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         /**
          * 初始化动画滚动条
          */
-        indexIm = (ImageView) findViewById(R.id.im_msg_detail_index);
+
 
         indexRadiog.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         tabWidth = indexRadiog.getMeasuredWidth() / 3;
@@ -314,25 +316,12 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         ceatedAt_tv.setText(commModel.getMcreatedAt());
 
         comment_tv.setText(commModel.getComment() > 0 ? String.valueOf(commModel.getComment()) : getString(R.string.tx_comment));
-
-        multiImageView.setList(DataFormateUtils.thumbnailList(this, commModel.getImages()));
-        multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(mActivity, shareMessage.getShImgs());
-
-                EvaluateUtil.setupCoords(mActivity, (ImageView) view, pictureInfoList, position);
-                Intent intent = new Intent(mActivity, BigPicActivity.class);
-                Bundle bundle = new Bundle();
-
-                bundle.putSerializable(Contants.INTENT_IMAGE_INFO_LIST, (Serializable) pictureInfoList);
-                intent.putExtras(bundle);
-                intent.putExtra(Contants.INTENT_CURRENT_ITEM, position);
-
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-            }
-        });
+/**
+ * 设置图片
+ */
+        if (commModel.getImages() != null && commModel.getImages().size() > 0) {
+            setImage();
+        }
         /**
          * 分享才需要判断是否有视频信息
          */
@@ -351,6 +340,30 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         //创建下方的viewpager，显示点赞用户、评论内容
         createdFragments();
 
+    }
+
+    /**
+     * 设置图片
+     */
+    private void setImage() {
+        multiImageView.setList(DataFormateUtils.thumbnailList(this, commModel.getImages()));
+        multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(mActivity, shareMessage.getShImgs());
+
+                EvaluateUtil.setupCoords(mActivity, (ImageView) view, pictureInfoList, position);
+                Intent intent = new Intent(mActivity, BigPicActivity.class);
+                Bundle bundle = new Bundle();
+
+                bundle.putSerializable(Contants.INTENT_IMAGE_INFO_LIST, (Serializable) pictureInfoList);
+                intent.putExtras(bundle);
+                intent.putExtra(Contants.INTENT_CURRENT_ITEM, position);
+
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+            }
+        });
     }
 
 
@@ -382,6 +395,10 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 setupData();
 
 
+                break;
+            case MESSAGE_REFRESH_COMMENT:
+                //刷新数据
+                commentFragment.refreshData();
                 break;
 
         }
@@ -689,7 +706,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
     /**
      * sharemessage
-     * <p>
+     * <p/>
      * 处理数据
      *
      * @param serializableExtra
@@ -736,6 +753,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 break;
 
             case R.id.id_tx_wantogo://想去--数量
+                viewPager.setCurrentItem(0, true);
                 v.setClickable(false);
                 getUser();
 
@@ -752,6 +770,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 break;
 
             case R.id.id_hadgo://去过--数量
+                viewPager.setCurrentItem(1, true);
                 v.setClickable(false);
                 getUser();
 
@@ -767,10 +786,11 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 break;
 
             case R.id.id_tx_comment://评论数量
+                //滑动到评论界面
+                viewPager.setCurrentItem(2, true);
                 getUser();
                 /*显示评论输入面板*/
                 editComment();
-
                 break;
 
             case R.id.id_tx_tab://标签
@@ -960,7 +980,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                             commentIncrement();
                             //清理工作
                             sendFinish();
-
+                            //刷新评论数据
+                            mHandler.sendEmptyMessage(MESSAGE_REFRESH_COMMENT);
                         }
                     });
 
@@ -1046,7 +1067,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     protected void onResume() {
         super.onResume();
         if (initVideo) {
-            if (videoView!=null){
+            if (videoView != null) {
                 videoView.start();
             }
 
@@ -1056,8 +1077,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     @Override
     protected void onPause() {
         super.onPause();
-        if (initVideo){
-            if (videoView!=null&&videoView.isPlaying()){
+        if (initVideo) {
+            if (videoView != null && videoView.isPlaying()) {
                 videoView.pause();
             }
         }

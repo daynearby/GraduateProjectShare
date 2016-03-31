@@ -38,9 +38,6 @@ public class RankFragment extends BaseFragment {
     private static final String tag = "tank";
     private static final int GET_DATA = 101;
 
-    public RankFragment() {
-        super();
-    }
 
     public RankFragment(Context context) {
         super(context);
@@ -75,7 +72,6 @@ public class RankFragment extends BaseFragment {
         } catch (ArrayIndexOutOfBoundsException e) {
             LogUtils.e("viewpager ArrayIndexOutOfBoundsException =" + e);
         }
-
 
     }
 

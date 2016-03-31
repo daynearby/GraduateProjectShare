@@ -5,7 +5,7 @@
     <solid android:color="@color/light_gray" />
     <stroke
         android:width="@dimen/stroke_width"
-        android:color="@color/gray" />
+        android:color="@color/light_gray" />
     <padding
         android:bottom="@dimen/paddingHit"
         android:left="@dimen/paddingHit"

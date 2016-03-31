@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rel_indicador_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/stroke_width"
+        android:background="@color/gray"
+        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <RadioGroup
+            android:id="@+id/rg_msg_detail_gd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_message_detail_want_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:gravity="center"
+                android:paddingBottom="@dimen/paddingHit"
+                android:paddingLeft="@dimen/paddingMic"
+                android:paddingRight="@dimen/paddingMic"
+                android:paddingTop="@dimen/paddingMic"
+                android:text="@string/tx_wantogo" />
+
+            <RadioButton
+                android:id="@+id/rb_message_detail_had_go"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:gravity="center"
+                android:paddingBottom="@dimen/paddingHit"
+                android:paddingLeft="@dimen/paddingMic"
+                android:paddingRight="@dimen/paddingMic"
+                android:paddingTop="@dimen/paddingMic"
+                android:text="@string/hadgo" />
+
+            <RadioButton
+                android:id="@+id/rb_message_detail_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:paddingBottom="@dimen/paddingHit"
+                android:paddingLeft="@dimen/paddingMic"
+                android:paddingRight="@dimen/paddingMic"
+                android:paddingTop="@dimen/paddingMic"
+                android:text="@string/tx_comment" />
+
+        </RadioGroup>
+
+        <ImageView
+            android:id="@+id/im_msg_detail_index"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_width"
+            android:src="@color/theme_puple" />
+    </LinearLayout>
+</RelativeLayout>

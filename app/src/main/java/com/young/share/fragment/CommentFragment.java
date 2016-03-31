@@ -13,6 +13,7 @@ import com.young.share.interfaces.AsyncListener;
 import com.young.share.model.gson.CommentList;
 import com.young.share.model.Comment_HZ;
 import com.young.share.network.BmobApi;
+import com.young.share.thread.MyRunnable;
 import com.young.share.utils.LogUtils;
 import com.young.share.views.CommentListView.CommentAdapter;
 import com.young.share.views.CommentListView.CommentListView;
@@ -20,6 +21,7 @@ import com.young.share.views.CommentListView.CommentListView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,16 +37,20 @@ public class CommentFragment extends BaseFragment {
     private CommentAdapter commentAdapter;
     private List<Comment_HZ> dataList = new ArrayList<>();//数据
     private CommentListView.OnItemClickListener onItemClickListener;
+    private static final String CACHE_KEY = "fragment_get_comment";
 
     private static final int GET_MESSAGE = 0x01;//格式化数据
 
-    public CommentFragment() {
-    }
+
 
     @SuppressLint("ValidFragment")
     public CommentFragment(Context context, String shareMessageId) {
         super(context);
         this.shareMessageId = shareMessageId;
+    }
+
+    public CommentAdapter getCommentAdapter() {
+        return commentAdapter;
     }
 
     @Override
@@ -58,8 +64,16 @@ public class CommentFragment extends BaseFragment {
 
         //提示
         SVProgressHUD.showWithStatus(context, getString(R.string.tips_loading));
+        dataList = (List<Comment_HZ>) app.getCacheInstance().getAsObject(CACHE_KEY + shareMessageId);
+
 /*获取评论内容*/
-        getComment(shareMessageId);
+        app.getThreadInstance().startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+            @Override
+            public void running() {
+                getComment(shareMessageId);
+            }
+        }));
+
 
     }
 
@@ -77,9 +91,15 @@ public class CommentFragment extends BaseFragment {
         commentListView.setOnItemClick(new CommentListView.OnItemClickListener() {
             @Override
             public void onItemClick(Comment_HZ comment, int position) {
-                onItemClickListener.onItemClick(comment,position);
+                onItemClickListener.onItemClick(comment, position);
             }
         });
+
+        if (dataList!=null&&dataList.size()>0){
+            commentAdapter.setDatas(dataList);
+            commentAdapter.notifyDataSetChanged();
+        }
+
     }
 
     @Override
@@ -101,6 +121,7 @@ public class CommentFragment extends BaseFragment {
 
     /**
      * 点击评论的回调
+     *
      * @param onItemClickListener
      */
     public void setOnItemClickListener(CommentListView.OnItemClickListener onItemClickListener) {
@@ -131,13 +152,15 @@ public class CommentFragment extends BaseFragment {
 
                     if (dataList != null && dataList.size() > 0) {
                         dataList.clear();
-                    }else {
-                        dataList = new ArrayList<Comment_HZ>();
+                    } else {
+                        dataList = new ArrayList<>();
                     }
 
                     dataList.addAll(commentList.getCommentList());
                 }
-
+                if (dataList.size() > 0) {
+                    app.getCacheInstance().put(CACHE_KEY + shareMessageId, (Serializable) dataList);
+                }
 //刷新评论列表
                 mhandler.sendEmptyMessage(GET_MESSAGE);
                 //关闭显示的框
@@ -165,5 +188,12 @@ public class CommentFragment extends BaseFragment {
             //提示
             SVProgressHUD.dismiss(context);
         }
+    }
+
+    /**
+     * 发送评论之后进行刷新数据
+     */
+    public void refreshData(){
+        getComment( shareMessageId);
     }
 }

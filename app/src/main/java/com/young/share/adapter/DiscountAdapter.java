@@ -65,6 +65,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         TextView hadgo_tv = holder.getView(R.id.id_hadgo);//去过数量
         RelativeLayout tagLayout = holder.getView(R.id.rl_head_tag_layout);
         LinearLayout bottomBar = holder.getView(R.id.ll_bottom_option_bar);
+        holder.getView(R.id.rel_indicador_layout).setVisibility(View.GONE);
 
         ViewGroup.LayoutParams lp = multiImageView.getLayoutParams();
         lp.width = DisplayUtils.getScreenWidthPixels((Activity) ctx) / 3 * 2;//设置宽度
@@ -89,15 +90,18 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         //地理信息的显示。显示了可以点击查看详细
         if (!TextUtils.isEmpty(discountMessage_hz.getDtLocation())) {
             location.setVisibility(View.VISIBLE);
-//            location.setText(discountMessage_hz.getDtLocation());
-            location.setText(StringUtils.locatiomInfo(ctx, discountMessage_hz.getDtLocation(), new StringUtils.TextLink() {
+            location.setText(discountMessage_hz.getDtLocation());
+
+            location.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onclick(String str) {
+                public void onClick(View view) {
+
+
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT, discountMessage_hz.getGeographic());
                     startActivity(BaiduMapActivity.class, bundle);
                 }
-            }));
+            });
 
         }
 

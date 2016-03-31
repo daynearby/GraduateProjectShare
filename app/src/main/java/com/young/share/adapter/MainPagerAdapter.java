@@ -52,7 +52,6 @@ public class MainPagerAdapter extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
 
-
         container.removeView(fragmentList.get(position).getView());
     }
 
