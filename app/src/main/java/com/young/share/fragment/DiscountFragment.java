@@ -1,8 +1,6 @@
 package com.young.share.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -54,7 +52,6 @@ import java.util.List;
  * <p/>
  * Created by Nearby Yang on 2015-12-09.
  */
-@SuppressLint("ValidFragment")
 public class DiscountFragment extends BaseFragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -79,12 +76,25 @@ public class DiscountFragment extends BaseFragment {
     private static final String tag = "discount";
 
 
+    public DiscountFragment() {
 
-    @SuppressLint("ValidFragment")
-    public DiscountFragment(Context context) {
-        super(context);
     }
 
+
+    @Override
+    protected void onSaveState(Bundle outState) {
+
+    }
+
+    @Override
+    protected void onRestoreState(Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    protected void getDataFromBunlde(Bundle bundle) {
+
+    }
 
     @Override
     public int getLayoutId() {

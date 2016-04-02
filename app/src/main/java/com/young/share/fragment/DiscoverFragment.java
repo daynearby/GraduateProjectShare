@@ -1,7 +1,5 @@
 package com.young.share.fragment;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -19,10 +17,10 @@ import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
 import com.young.share.interfaces.AsyncListener;
 import com.young.share.interfaces.ListViewRefreshListener;
-import com.young.share.model.gson.ShareMessageList;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.dbmodel.ShareMessage;
 import com.young.share.model.dbmodel.User;
+import com.young.share.model.gson.ShareMessageList;
 import com.young.share.network.BmobApi;
 import com.young.share.thread.MyRunnable;
 import com.young.share.utils.CommonUtils;
@@ -42,7 +40,6 @@ import java.util.List;
  * 发现
  * Created by Nearby Yang on 2015-12-09.
  */
-@SuppressLint("ValidFragment")
 public class DiscoverFragment extends BaseFragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -60,16 +57,25 @@ public class DiscoverFragment extends BaseFragment {
     private boolean isGetMore = false;//从远程数据库获取更多数据
 
     private int startRow = 0;//从第一条开始
-
-
-    public DiscoverFragment(Context context) {
-        super(context);
-    }
-
     private boolean isFirstIn = true;//第一次进入该界面
 
+    /**
+     * 默认构造函数
+     */
+    public DiscoverFragment() {
 
-    private static final String tag = "discover";
+    }
+
+    @Override
+    protected void onSaveState(Bundle outState) {
+
+    }
+
+    @Override
+    protected void onRestoreState(Bundle savedInstanceState) {
+
+    }
+
 
     @Override
     public int getLayoutId() {

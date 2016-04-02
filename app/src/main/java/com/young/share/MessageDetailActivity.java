@@ -37,8 +37,8 @@ import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
 import com.young.share.fragment.CommentFragment;
-import com.young.share.fragment.LikeFragment;
 import com.young.share.fragment.WantToGoFragment;
+import com.young.share.fragment.HadGoFragment;
 import com.young.share.interfaces.AsyncListener;
 import com.young.share.model.BaseModel;
 import com.young.share.model.CommRemoteModel;
@@ -257,11 +257,26 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private void createdFragments() {
 
         List<Fragment> fragmentList = new ArrayList<>();
-        commentFragment = new CommentFragment(this, commModel.getObjectId());
+        Bundle bundle = new Bundle();
+/*评论*/
+        commentFragment = new CommentFragment();
+        commentFragment.initizliza(this);
+        bundle.putString(CommentFragment.BUNLDE_SHARE_MESSAGE_ID, commModel.getObjectId());
+        commentFragment.setArguments(bundle);
         commentFragment.setOnItemClickListener(onItemClick);
+/*想去*/
+        WantToGoFragment wantToGoFragment = new WantToGoFragment();
+        wantToGoFragment.initizliza(this);
+        bundle.putStringArrayList(WantToGoFragment.BUNDLE_USERID_LIST, (ArrayList<String>) commModel.getWanted());
+        wantToGoFragment.setArguments(bundle);
+/*去过*/
+        HadGoFragment hadGoFragment = new HadGoFragment();
+        hadGoFragment.initizliza(this);
+        bundle.putStringArrayList(HadGoFragment.BUNDLE_USER_ID_LIST, (ArrayList<String>) commModel.getVisited());
+        hadGoFragment.setArguments(bundle);
 
-        fragmentList.add(new LikeFragment(this, commModel.getWanted()));
-        fragmentList.add(new WantToGoFragment(this, commModel.getVisited()));
+        fragmentList.add(wantToGoFragment);
+        fragmentList.add(hadGoFragment);
         fragmentList.add(commentFragment);
 
         pageAdapter = new ButtombarPageAdapter(fragmentList, getSupportFragmentManager());

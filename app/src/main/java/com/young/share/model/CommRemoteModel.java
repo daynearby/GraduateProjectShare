@@ -9,11 +9,11 @@ import cn.bmob.v3.datatype.BmobGeoPoint;
 
 /**
  * 通用的数据结构，作为详细信息的数据结构
- * <p/>
+ * <p>
  * Created by Nearby Yang on 2015-10-16.
  */
 public class CommRemoteModel implements Serializable {
-    final long serialVersionUID = 1L;
+    private final long serialVersionUID = 3266547265569523L;
     private int id;
     private String objectId;
     private String createdAt;//createdAt
@@ -29,7 +29,7 @@ public class CommRemoteModel implements Serializable {
     private List<String> wanted;
     private List<String> visited;
     private String mcreatedAt;
-    private int comment =0;
+    private int comment = 0;
     private int type;
     private boolean read;
     private ShareMessage_HZ shareMessage;

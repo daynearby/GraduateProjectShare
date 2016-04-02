@@ -374,7 +374,18 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                         shareMessage = (ShareMessage_HZ) o;
                         List<String> shWantedNum = shareMessage.getShWantedNum();
 
-                        LocationUtils.wantToGo(ctx, cuser, UserUtils.isHadCurrentUser(shWantedNum, cuser.getObjectId()), shareMessage, (TextView) v);
+                        LocationUtils.wantToGo(ctx, cuser, UserUtils.isHadCurrentUser(shWantedNum, cuser.getObjectId()),
+                                shareMessage, (TextView) v, new LocationUtils.Callback() {
+                                    @Override
+                                    public void onSuccesss() {
+
+                                    }
+
+                                    @Override
+                                    public void onFailure() {
+
+                                    }
+                                });
                     } else {
                         v.setClickable(true);
                         Dialog4Tips.loginFunction((Activity) ctx);
@@ -391,7 +402,18 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                     if (cuser != null) {
                         shareMessage = (ShareMessage_HZ) o;
                         List<String> shVisitedNum = shareMessage.getShVisitedNum();
-                        LocationUtils.visit(ctx, cuser, UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()), shareMessage, v);
+                        LocationUtils.visit(ctx, cuser, UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()),
+                                shareMessage, v, new LocationUtils.Callback() {
+                                    @Override
+                                    public void onSuccesss() {
+
+                                    }
+
+                                    @Override
+                                    public void onFailure() {
+
+                                    }
+                                });
 
                     } else {
                         v.setClickable(true);

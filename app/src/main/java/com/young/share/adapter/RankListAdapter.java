@@ -221,7 +221,17 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 
                             LocationUtils.wantToGo(ctx, cuser,
                                     UserUtils.isHadCurrentUser(wantedNum, cuser.getObjectId()), shareMessage,
-                                    (TextView) v);
+                                    (TextView) v, new LocationUtils.Callback() {
+                                        @Override
+                                        public void onSuccesss() {
+
+                                        }
+
+                                        @Override
+                                        public void onFailure() {
+
+                                        }
+                                    });
 
                         } else {//优惠信息
 
@@ -231,7 +241,17 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 
                             LocationUtils.discountWanto(ctx, cuser, discountMessage,
                                     UserUtils.isHadCurrentUser(wantedNum, cuser.getObjectId()),
-                                    (TextView) v);
+                                    (TextView) v, new LocationUtils.Callback() {
+                                        @Override
+                                        public void onSuccesss() {
+
+                                        }
+
+                                        @Override
+                                        public void onFailure() {
+
+                                        }
+                                    });
 
                         }
 
@@ -262,7 +282,17 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 
                             LocationUtils.visit(ctx, cuser,
                                     UserUtils.isHadCurrentUser(visitedNum, cuser.getObjectId()),
-                                    shareMessage, v);
+                                    shareMessage, v, new LocationUtils.Callback() {
+                                        @Override
+                                        public void onSuccesss() {
+
+                                        }
+
+                                        @Override
+                                        public void onFailure() {
+
+                                        }
+                                    });
 
                         } else {//优惠信息
 
@@ -272,7 +302,17 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 
                             LocationUtils.discountVisit(ctx, cuser, discountMessage,
                                     UserUtils.isHadCurrentUser(visitedNum, cuser.getObjectId()),
-                                    (TextView) v);
+                                    (TextView) v, new LocationUtils.Callback() {
+                                        @Override
+                                        public void onSuccesss() {
+
+                                        }
+
+                                        @Override
+                                        public void onFailure() {
+
+                                        }
+                                    });
 
                         }
 

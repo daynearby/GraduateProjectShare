@@ -60,10 +60,16 @@ public class MainActivity extends CustomActBarActivity {
         ViewPager viewPager = $(R.id.vp_main);
         mArcMenu = $(R.id.id_menu);
 
+        DiscountFragment discountFragment = new DiscountFragment();
+        DiscoverFragment discoverFragment = new DiscoverFragment();
+        RankFragment rankFragment = new RankFragment();
+        discountFragment.initizliza(this);
+        discoverFragment.initizliza(this);
+        rankFragment.initizliza(this);
 
-        list.add(new DiscountFragment(this));
-        list.add(new DiscoverFragment(this));
-        list.add(new RankFragment(this));
+        list.add(discountFragment);
+        list.add(discoverFragment);
+        list.add(rankFragment);
 
         mArcMenu.setOnMenuItemClickListener(new onitmeListener());
 

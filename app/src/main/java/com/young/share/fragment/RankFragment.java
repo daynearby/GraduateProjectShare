@@ -1,8 +1,8 @@
 package com.young.share.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -39,10 +39,20 @@ public class RankFragment extends BaseFragment {
     private static final int GET_DATA = 101;
 
 
-    public RankFragment(Context context) {
-        super(context);
+    public RankFragment() {
 
     }
+
+    @Override
+    protected void onSaveState(Bundle outState) {
+
+    }
+
+    @Override
+    protected void onRestoreState(Bundle savedInstanceState) {
+
+    }
+
 
 
     @Override

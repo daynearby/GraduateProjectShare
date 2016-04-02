@@ -221,7 +221,17 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
                         List<String> wantedNum = discountMessage.getDtWantedNum();
 
                         LocationUtils.discountWanto(ctx, cuser, discountMessage,
-                                UserUtils.isHadCurrentUser(wantedNum, cuser.getObjectId()), (TextView) v);
+                                UserUtils.isHadCurrentUser(wantedNum, cuser.getObjectId()), (TextView) v, new LocationUtils.Callback() {
+                                    @Override
+                                    public void onSuccesss() {
+
+                                    }
+
+                                    @Override
+                                    public void onFailure() {
+
+                                    }
+                                });
 
                     } else {
                         v.setClickable(true);
@@ -240,7 +250,17 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
                         discountMessage = (DiscountMessage_HZ) o;
                         List<String> shVisitedNum = discountMessage.getDtVisitedNum();
                         LocationUtils.discountVisit(ctx, cuser, discountMessage,
-                                UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()), (TextView) v);
+                                UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()), (TextView) v, new LocationUtils.Callback() {
+                                    @Override
+                                    public void onSuccesss() {
+
+                                    }
+
+                                    @Override
+                                    public void onFailure() {
+
+                                    }
+                                });
 
                     } else {
                         v.setClickable(true);

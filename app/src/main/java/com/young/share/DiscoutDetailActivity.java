@@ -21,8 +21,8 @@ import com.young.share.adapter.ButtombarPageAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
-import com.young.share.fragment.LikeFragment;
 import com.young.share.fragment.WantToGoFragment;
+import com.young.share.fragment.HadGoFragment;
 import com.young.share.model.CommRemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.MyUser;
@@ -51,7 +51,7 @@ import cn.bmob.v3.listener.GetListener;
 /**
  * 优惠信息
  * 详细信息
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-12-07.
  */
 public class DiscoutDetailActivity extends BaseAppCompatActivity implements View.OnClickListener {
@@ -74,7 +74,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
     private TextView createdAt;//创建时间
     @InjectView(R.id.id_tx_comment)
     private TextView comment_tv;
-//    @InjectView(R.id.vp_discount_detail)
+    //    @InjectView(R.id.vp_discount_detail)
     private CustomViewPager viewPager;
     /*三个radioButton 显示标题*/
     @InjectView(R.id.rb_message_detail_comment)
@@ -89,9 +89,12 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
     private ImageView indexIm;// 页面指示器
 
     private ButtombarPageAdapter pageAdapter;
-    DiscountMessage_HZ discountMessage;
+    private DiscountMessage_HZ discountMessage;
     private CommRemoteModel commModel;
+    private WantToGoFragment wantToGoFragment;
+    private HadGoFragment hadGoFragment;
     private boolean isClick = false;//是否点击过
+
     private int tabWidth = 0;
     private OvershootInterpolator overshootInterpolator;
     private int DURATION = 500;
@@ -279,10 +282,20 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
     private void createdFragments() {
 
         List<Fragment> fragmentList = new ArrayList<>();
+        Bundle bundle = new Bundle();
+        /*想去*/
+        wantToGoFragment = new WantToGoFragment();
+        wantToGoFragment.initizliza(this);
+        bundle.putStringArrayList(WantToGoFragment.BUNDLE_USERID_LIST, (ArrayList<String>) commModel.getWanted());
+        wantToGoFragment.setArguments(bundle);
+/*去过*/
+        hadGoFragment = new HadGoFragment();
+        hadGoFragment.initizliza(this);
+        bundle.putStringArrayList(WantToGoFragment.BUNDLE_USERID_LIST, (ArrayList<String>) commModel.getVisited());
+        hadGoFragment.setArguments(bundle);
 
-        fragmentList.add(new LikeFragment(this, commModel.getWanted()));
-        fragmentList.add(new WantToGoFragment(this, commModel.getVisited()));
-//        fragmentList.add(new CommentFragment(this, commModel.getObjectId()));
+        fragmentList.add(wantToGoFragment);
+        fragmentList.add(hadGoFragment);
 
         pageAdapter = new ButtombarPageAdapter(fragmentList, getSupportFragmentManager());
         viewPager.setAdapter(pageAdapter);
@@ -315,40 +328,104 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
                 userInfo(v);
 
                 break;
+            case R.id.rb_message_detail_want_to:/*想去*/
+                viewPager.setCurrentItem(0, true);
+                break;
+            case R.id.rb_message_detail_had_go:/*去过了*/
+                viewPager.setCurrentItem(1, true);
+                break;
 
             case R.id.id_tx_wantogo://想去
-
-                getUser();
-                if (cuser != null) {
-                    LocationUtils.discountWanto(mActivity, cuser, discountMessage,
-                            UserUtils.isHadCurrentUser(commModel.getWanted(), cuser.getObjectId()),
-                            (TextView) v);
-                    isClick = true;
-                } else {
-                    Dialog4Tips.loginFunction(mActivity);
-
-                }
-
+                viewPager.setCurrentItem(0, true);
+                wantTo((TextView) v);
                 break;
 
             case R.id.id_hadgo://去过
-                getUser();
-                if (cuser != null) {
-
-                    LocationUtils.discountVisit(mActivity, cuser, discountMessage,
-                            UserUtils.isHadCurrentUser(commModel.getVisited(), cuser.getObjectId()),
-                            (TextView) v);
-                    isClick = true;
-
-                } else {
-                    Dialog4Tips.loginFunction(mActivity);
-
-                }
+                viewPager.setCurrentItem(1, true);
+                hadGo((TextView) v);
 
 
                 break;
         }
     }
+
+    /**
+     * 去过操作逻辑
+     */
+    private void hadGo(TextView t) {
+        getUser();
+        if (cuser != null) {
+            LocationUtils.discountVisit(mActivity, cuser, discountMessage,
+                    UserUtils.isHadCurrentUser(commModel.getVisited(), cuser.getObjectId()),
+                    t, new LocationUtils.Callback() {
+
+                        @Override
+                        public void onSuccesss() {
+                            updateHadGo();
+                        }
+
+                        @Override
+                        public void onFailure() {
+
+                        }
+                    });
+            isClick = true;
+
+        } else {
+            Dialog4Tips.loginFunction(mActivity);
+
+        }
+
+    }
+
+    /**
+     * 更新想去的用户列表
+     */
+    private void updateHadGo() {
+        hadGoFragment.setWantUserId(commModel.getVisited());
+        hadGoFragment.initData();
+    }
+
+    /**
+     * 想去
+     *
+     * @param t
+     */
+    private void wantTo(TextView t) {
+        getUser();
+        if (cuser != null) {
+            LocationUtils.discountWanto(mActivity, cuser, discountMessage,
+                    UserUtils.isHadCurrentUser(commModel.getWanted(), cuser.getObjectId()),
+                    t, new LocationUtils.Callback() {
+
+                        @Override
+                        public void onSuccesss() {
+                            //更新到显示列表中
+                            updateLike();
+                        }
+
+                        @Override
+                        public void onFailure() {
+
+                        }
+                    });
+            isClick = true;
+        } else {
+            Dialog4Tips.loginFunction(mActivity);
+
+        }
+
+    }
+
+    /**
+     * 更新喜欢的用户
+     */
+    private void updateLike() {
+        wantToGoFragment.setUserIdList(commModel.getWanted());
+        wantToGoFragment.initData();
+
+    }
+
 
     /**
      * 查看用户资料片

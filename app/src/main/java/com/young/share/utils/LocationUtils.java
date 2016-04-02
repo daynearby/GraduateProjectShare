@@ -27,7 +27,7 @@ import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * sharemessage 一些公共方法
- * <p/>
+ * <p>
  * Created by Nearby Yang on 2015-12-03.
  */
 public class LocationUtils {
@@ -37,7 +37,6 @@ public class LocationUtils {
     private static final String MESSAGE_TYPE_DISCOUNT = "2";
     private static final String USER_ID = "userid";
     private static final String COLLECTION_ID = "collectionid";
-
 
 
     /**
@@ -84,7 +83,8 @@ public class LocationUtils {
      * @param shareMessage
      * @param v
      */
-    public static void visit(Context ctx, MyUser cuser, boolean hadGo, ShareMessage_HZ shareMessage, final View v) {
+    public static void visit(Context ctx, MyUser cuser, boolean hadGo, ShareMessage_HZ shareMessage,
+                             final View v,final Callback listener) {
         if (hadGo) {
             shareMessage.getShVisitedNum().remove(cuser.getObjectId());
         } else {
@@ -102,12 +102,18 @@ public class LocationUtils {
             public void onSuccess() {
 
                 v.setClickable(true);
+                if (listener !=null){
+                    listener.onSuccesss();
+                }
 //                mToast(strId);
             }
 
             @Override
             public void onFailure(int i, String s) {
                 v.setClickable(true);
+                if (listener !=null){
+                    listener.onFailure();
+                }
                 LogUtils.d(" wantToGo faile  erro code = " + i + " erro message = " + s);
             }
         });
@@ -123,7 +129,8 @@ public class LocationUtils {
      * @param shareMessage
      * @param v
      */
-    public static void wantToGo(Context ctx, MyUser cuser, boolean hadWant, ShareMessage_HZ shareMessage, final TextView v) {
+    public static void wantToGo(Context ctx, MyUser cuser, boolean hadWant, ShareMessage_HZ shareMessage,
+                                final TextView v,final Callback listener) {
 
         JSONObject jsonObject = new JSONObject();//参数
         try {
@@ -150,9 +157,15 @@ public class LocationUtils {
                     if (baseModel.getCode() == BaseModel.SUCCESS) {
 //                        mToast(R.string.operation_success);
                         LogUtils.d("删除收藏记录 成功  data = " + baseModel.getData());
+                        if (listener !=null){
+                            listener.onSuccesss();
+                        }
                     } else {
 
                         LogUtils.d("删除收藏记录 失败  data = " + baseModel.getData());
+                        if (listener !=null){
+                            listener.onFailure();
+                        }
                     }
                 }
 
@@ -168,7 +181,7 @@ public class LocationUtils {
             BmobApi.saveCollectionShareMessage(ctx, cuser, shareMessage, Contants.MESSAGE_TYPE_SHAREMESSAGE);
         }
 
-         v.setText(String.valueOf(shareMessage.getShWantedNum() == null ?
+        v.setText(String.valueOf(shareMessage.getShWantedNum() == null ?
                 0 : shareMessage.getShWantedNum().size()));
         LocationUtils.leftDrawableWantoGO((v), shareMessage.getShWantedNum(), cuser.getObjectId());
 
@@ -177,12 +190,18 @@ public class LocationUtils {
             public void onSuccess() {
 
                 v.setClickable(true);
+                if (listener !=null){
+                    listener.onSuccesss();
+                }
 //                mToast(strId);
             }
 
             @Override
             public void onFailure(int i, String s) {
                 v.setClickable(true);
+                if (listener !=null){
+                    listener.onFailure();
+                }
                 LogUtils.d(" wantToGo faile  erro code = " + i + " erro message = " + s);
             }
         });
@@ -201,14 +220,15 @@ public class LocationUtils {
 
     /**
      * 商家优惠 "想去"逻辑处理
+     *
      * @param ctx
      * @param cuser
      * @param discountMessage
      * @param hadWant
      * @param v
      */
-    public static void discountWanto(Context ctx,MyUser cuser,DiscountMessage_HZ discountMessage,
-                                     boolean hadWant, final TextView v) {
+    public static void discountWanto(Context ctx, MyUser cuser, DiscountMessage_HZ discountMessage,
+                                     boolean hadWant, final TextView v,final Callback listener) {
 
         JSONObject jsonObject = new JSONObject();//参数
 
@@ -236,7 +256,9 @@ public class LocationUtils {
                     if (baseModel.getCode() == BaseModel.SUCCESS) {
 //                        mToast(R.string.operation_success);
                         LogUtils.d("删除收藏记录 成功  data = " + baseModel.getData());
-
+                        if (listener !=null){
+                            listener.onSuccesss();
+                        }
                     } else {
 
                         LogUtils.d("删除收藏记录 失败  data = " + baseModel.getData());
@@ -246,14 +268,16 @@ public class LocationUtils {
                 @Override
                 public void onFailure(int code, String msg) {
 
-                    LogUtils.d("删除收藏记录 请求 失败  code = " + code+" message = "+msg);
-
+                    LogUtils.d("删除收藏记录 请求 失败  code = " + code + " message = " + msg);
+                    if (listener !=null){
+                        listener.onFailure();
+                    }
                 }
             });
 
         } else {
 //            strId = R.string.collect_success;
-            if (discountMessage.getDtWantedNum()==null){
+            if (discountMessage.getDtWantedNum() == null) {
                 discountMessage.setDtWantedNum(new ArrayList<String>());
             }
             discountMessage.getDtWantedNum().add(cuser.getObjectId());
@@ -266,11 +290,14 @@ public class LocationUtils {
 
         LocationUtils.leftDrawableWantoGO(v, discountMessage.getDtWantedNum(), cuser.getObjectId());
 
-        discountMessage.update(ctx,discountMessage.getObjectId(), new UpdateListener() {
+        discountMessage.update(ctx, discountMessage.getObjectId(), new UpdateListener() {
             @Override
             public void onSuccess() {
 
                 v.setClickable(true);
+                if (listener !=null){
+                    listener.onSuccesss();
+                }
 //                mToast(strId);
             }
 
@@ -278,7 +305,9 @@ public class LocationUtils {
             public void onFailure(int i, String s) {
 
                 v.setClickable(true);
-
+                if (listener !=null){
+                    listener.onFailure();
+                }
                 LogUtils.d(" wantToGo faile  erro code = " + i + " erro message = " + s);
             }
         });
@@ -286,19 +315,20 @@ public class LocationUtils {
 
     /**
      * 商家优惠 “去过”逻辑处理
+     *
      * @param ctx
      * @param cuser
      * @param discountMessage
      * @param hadGo
      * @param v
      */
-    public static void discountVisit(Context ctx,MyUser cuser,DiscountMessage_HZ discountMessage,
-                                     boolean hadGo,final TextView v){
+    public static void discountVisit(Context ctx, MyUser cuser, DiscountMessage_HZ discountMessage,
+                                     boolean hadGo, final TextView v, final Callback listener) {
 
         if (hadGo) {
             discountMessage.getDtVisitedNum().remove(cuser.getObjectId());
         } else {
-            if (discountMessage.getDtVisitedNum()==null){
+            if (discountMessage.getDtVisitedNum() == null) {
                 discountMessage.setDtVisitedNum(new ArrayList<String>());
             }
             discountMessage.getDtVisitedNum().add(cuser.getObjectId());
@@ -315,12 +345,18 @@ public class LocationUtils {
             public void onSuccess() {
 
                 v.setClickable(true);
+                if (listener !=null){
+                    listener.onSuccesss();
+                }
+
             }
 
             @Override
             public void onFailure(int i, String s) {
                 v.setClickable(true);
-
+                if (listener !=null){
+                    listener.onFailure();
+                }
                 LogUtils.d(" wantToGo faile  erro code = " + i + " erro message = " + s);
             }
         });
@@ -333,7 +369,7 @@ public class LocationUtils {
      * @param bundle
      * @param clazz
      */
-    public static void startActivity(Context ctx,Bundle bundle,Class clazz){
+    public static void startActivity(Context ctx, Bundle bundle, Class clazz) {
         Intent intent = new Intent();
         intent.putExtras(bundle);
         intent.setClass(ctx, clazz);
@@ -343,17 +379,25 @@ public class LocationUtils {
     }
 
 
-
     /**
      * 发送广播刷新UI
+     *
      * @param ctx
      * @param refreshType
      */
-    public static void sendBordCast(Context ctx,int refreshType){
+    public static void sendBordCast(Context ctx, int refreshType) {
         Intent intent = new Intent();
-        intent.putExtra(Contants.REFRESH_TYPE,refreshType);
+        intent.putExtra(Contants.REFRESH_TYPE, refreshType);
         intent.setAction(Contants.BORDCAST_REQUEST_REFRESH);
         ctx.sendBroadcast(intent);
     }
 
+    /**
+     * 操作成功失败的回调
+     */
+    public interface Callback {
+        void onSuccesss();
+
+        void onFailure();
+    }
 }

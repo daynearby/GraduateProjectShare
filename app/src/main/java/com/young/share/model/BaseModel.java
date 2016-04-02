@@ -1,11 +1,13 @@
 package com.young.share.model;
 
+import java.io.Serializable;
+
 /**
  * 基本
  * Created by Nearby Yang on 2015-11-16.
  */
-public class BaseModel {
-
+public class BaseModel implements Serializable{
+    private static final long serialVersionUID = 3266547218925569547L;
     private int code;
     private String data;
 

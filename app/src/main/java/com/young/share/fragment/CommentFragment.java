@@ -1,7 +1,6 @@
 package com.young.share.fragment;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
+import android.os.Bundle;
 import android.os.Message;
 import android.widget.Toast;
 
@@ -10,8 +9,8 @@ import com.young.share.R;
 import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
 import com.young.share.interfaces.AsyncListener;
-import com.young.share.model.gson.CommentList;
 import com.young.share.model.Comment_HZ;
+import com.young.share.model.gson.CommentList;
 import com.young.share.network.BmobApi;
 import com.young.share.thread.MyRunnable;
 import com.young.share.utils.LogUtils;
@@ -40,18 +39,39 @@ public class CommentFragment extends BaseFragment {
     private static final String CACHE_KEY = "fragment_get_comment";
 
     private static final int GET_MESSAGE = 0x01;//格式化数据
+    public static final String BUNLDE_SHARE_MESSAGE_ID = "bunlde_share_message_id";//shareMessageId
 
+    public CommentFragment() {
 
+    }
+    @Override
+    protected void getDataFromBunlde(Bundle bundle) {
+        shareMessageId = bundle.getString(BUNLDE_SHARE_MESSAGE_ID);
+    }
 
-    @SuppressLint("ValidFragment")
-    public CommentFragment(Context context, String shareMessageId) {
-        super(context);
-        this.shareMessageId = shareMessageId;
+    /**
+     * 初始化当前fragment的数据
+     * 初始化shareid
+     */
+    private void initFragment() {
+        shareMessageId = getArguments().getString(BUNLDE_SHARE_MESSAGE_ID);
+
     }
 
     public CommentAdapter getCommentAdapter() {
         return commentAdapter;
     }
+
+    @Override
+    protected void onSaveState(Bundle outState) {
+
+    }
+
+    @Override
+    protected void onRestoreState(Bundle savedInstanceState) {
+
+    }
+
 
     @Override
     public int getLayoutId() {
@@ -61,7 +81,8 @@ public class CommentFragment extends BaseFragment {
     @Override
     public void initData() {
         // TODO: 2016-03-20 建立缓存
-
+  /*初始化数据*/
+//        initFragment();
         //提示
         SVProgressHUD.showWithStatus(context, getString(R.string.tips_loading));
         dataList = (List<Comment_HZ>) app.getCacheInstance().getAsObject(CACHE_KEY + shareMessageId);
@@ -95,7 +116,7 @@ public class CommentFragment extends BaseFragment {
             }
         });
 
-        if (dataList!=null&&dataList.size()>0){
+        if (dataList != null && dataList.size() > 0) {
             commentAdapter.setDatas(dataList);
             commentAdapter.notifyDataSetChanged();
         }
@@ -193,7 +214,7 @@ public class CommentFragment extends BaseFragment {
     /**
      * 发送评论之后进行刷新数据
      */
-    public void refreshData(){
-        getComment( shareMessageId);
+    public void refreshData() {
+        getComment(shareMessageId);
     }
 }

@@ -1,8 +1,7 @@
 package com.young.share.fragment;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Message;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
@@ -30,27 +29,60 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 想去区显示的内容
+ * 点赞区,想去显示的内容
  * Created by Nearby Yang on 2016-03-19.
  */
-@SuppressLint("ValidFragment")
+
 public class WantToGoFragment extends BaseFragment {
-    private TextView avatarTxt;
-    private List<String> wantUserId;
+
+    private List<String> userIdList;
     private List<MyUser> userList;
+    private TextView avatarTxt;
 
     /*加载图片的宽高*/
     private static final int imageWidth = 100;
     private static final int imageHeight = 100;
     private static final int MESSAGE_GET_USER_INFO = 0x01;//获取了用户信息，需要进行图片加载
     private static final int MESSAGE_CONVERT_USER_INFO = 0x02;//将用户的id转化成对应的用户头像图片
+    public static final String BUNDLE_USERID_LIST = "bundle_userid_list";
+
+    public WantToGoFragment() {
 
 
-    @SuppressLint("ValidFragment")
-    public WantToGoFragment(Context context, List<String> wantUserId) {
-        super(context);
-        this.wantUserId = wantUserId;
+    }
+
+    @Override
+    protected void getDataFromBunlde(Bundle bundle) {
+
+        userIdList = (List<String>) bundle.getSerializable(BUNDLE_USERID_LIST);
         userList = new ArrayList<>();
+    }
+
+    private void initFragment() {
+        Bundle bundle = getArguments();
+        userIdList = (List<String>) bundle.getSerializable(BUNDLE_USERID_LIST);
+        userList = new ArrayList<>();
+
+    }
+
+    /**
+     * 更新用户数据
+     *
+     * @param userIdList
+     */
+    public void setUserIdList(List<String> userIdList) {
+        this.userIdList = userIdList;
+    }
+
+
+    @Override
+    protected void onSaveState(Bundle outState) {
+
+    }
+
+    @Override
+    protected void onRestoreState(Bundle savedInstanceState) {
+
     }
 
     @Override
@@ -60,19 +92,20 @@ public class WantToGoFragment extends BaseFragment {
 
     @Override
     public void initData() {
+        /*初始化数据*/
+//        initFragment();
 
-        if (wantUserId != null && wantUserId.size() > 0) {
-
+        if (userIdList != null && userIdList.size() > 0) {
             String userIds = "[";
 
-            for (int i = 0; i < wantUserId.size(); i++) {
-                userIds = userIds + "\"" + wantUserId.get(i) + "\",";
+            for (int i = 0; i < userIdList.size(); i++) {
+                userIds = userIds + "\"" + userIdList.get(i) + "\",";
             }
 
             userIds = userIds.substring(0, userIds.length() - 1) + "]";
 
+//            LogUtils.e(" user id array =  " + userIds);
             JSONObject params = new JSONObject();
-
             try {
                 params.put(Contants.PARAMS_USER_OBJECT_IDS, userIds);
             } catch (JSONException e) {
@@ -107,12 +140,12 @@ public class WantToGoFragment extends BaseFragment {
     @Override
     public void initView() {
         avatarTxt = $(R.id.tv_want_to_go_avatar);
+
     }
 
     @Override
     public void bindData() {
-
-  /*可点击*/
+        /*可点击*/
         avatarTxt.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
@@ -131,7 +164,6 @@ public class WantToGoFragment extends BaseFragment {
                 break;
         }
     }
-
 
     /**
      * 根据用户信息进行加载头像
@@ -152,10 +184,10 @@ public class WantToGoFragment extends BaseFragment {
                             avatar.add(loadedImage);
 
                             /*当全部的图片都下载完，或者说是加载完*/
-                            if (wantUserId.size() == avatar.size()) {
+                            if (userIdList.size() == avatar.size()) {
                                 Message message = new Message();
                                 message.what = MESSAGE_CONVERT_USER_INFO;
-                                message.obj = StringUtils.idConver2Bitmap(context, wantUserId, avatar, textLink);
+                                message.obj = StringUtils.idConver2Bitmap(context, userIdList, avatar, textLink);
                                 mhandler.sendMessage(message);
 
                             }
@@ -199,4 +231,5 @@ public class WantToGoFragment extends BaseFragment {
         PopupWinUserInfo userInfo = new PopupWinUserInfo(context, user);
         userInfo.onShow(v);
     }
+
 }
