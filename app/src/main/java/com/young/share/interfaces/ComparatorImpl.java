@@ -1,6 +1,6 @@
 package com.young.share.interfaces;
 
-import com.young.share.model.CommRemoteModel;
+import com.young.share.model.RemoteModel;
 
 import java.util.Comparator;
 
@@ -33,8 +33,8 @@ public class ComparatorImpl implements Comparator<Object> {
         switch (key) {
             case COMPREHENSIVE://最多人想去,综合排序.想去占0.5，去过占0.4，评论占0.1
 
-                CommRemoteModel data1 = (CommRemoteModel) json1;
-                CommRemoteModel data2 = (CommRemoteModel) json2;
+                RemoteModel data1 = (RemoteModel) json1;
+                RemoteModel data2 = (RemoteModel) json2;
                 int data1Compre = (int) ((data1.getWanted() == null ? 0 : data1.getWanted().size()) * 0.5
                         + (data1.getVisited() == null ? 0 : data1.getVisited().size()) * 0.4
                         + (data1.getComment() * 0.1) + 1);
@@ -46,8 +46,8 @@ public class ComparatorImpl implements Comparator<Object> {
                 break;
 
             case COMPREHENSIVE_OTHERS://排序.想去占0.3，去过占0.6，评论占0.1
-                CommRemoteModel data3 = (CommRemoteModel) json1;
-                CommRemoteModel data4 = (CommRemoteModel) json2;
+                RemoteModel data3 = (RemoteModel) json1;
+                RemoteModel data4 = (RemoteModel) json2;
                 int data3Compre = (int) ((data3.getWanted() == null ? 0 : data3.getWanted().size()) * 0.3
                         + (data3.getVisited() == null ? 0 : data3.getVisited().size()) * 0.6
                         + (data3.getComment() * 0.1) + 1);

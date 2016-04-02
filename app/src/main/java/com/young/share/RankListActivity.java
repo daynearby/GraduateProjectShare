@@ -18,7 +18,7 @@ import com.young.share.config.Contants;
 import com.young.share.interfaces.AsyncListener;
 import com.young.share.interfaces.ComparatorImpl;
 import com.young.share.interfaces.ListViewRefreshListener;
-import com.young.share.model.CommRemoteModel;
+import com.young.share.model.RemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.gson.RankList;
@@ -60,7 +60,7 @@ public class RankListActivity extends BaseAppCompatActivity {
     private boolean isGetMore = false;
     private boolean isHadData = false;//本地是否有数据，false --> 没有
 
-    private List<CommRemoteModel> remoteList;
+    private List<RemoteModel> remoteList;
 
     private static final int HANDLER_GET_DATA = 0x01;
     private static final int HANDLER_GET_NO_DATA = 0x02;//没有数据
@@ -79,7 +79,7 @@ public class RankListActivity extends BaseAppCompatActivity {
         key = getString(R.string.tag_manywanttogo).equals(tag) ? ComparatorImpl.COMPREHENSIVE : ComparatorImpl.COMPREHENSIVE_OTHERS;
         setTitle(tag);
 
-        remoteList = (List<CommRemoteModel>) app.getCacheInstance().getAsObject(tag);
+        remoteList = (List<RemoteModel>) app.getCacheInstance().getAsObject(tag);
         if (!(isHadData = remoteList != null && remoteList.size() > 0))
             remoteList = new ArrayList<>();
 
@@ -176,7 +176,7 @@ public class RankListActivity extends BaseAppCompatActivity {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CommRemoteModel comm = remoteList.get(position);
+                RemoteModel comm = remoteList.get(position);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, comm);
 
@@ -279,7 +279,7 @@ public class RankListActivity extends BaseAppCompatActivity {
                 if (sharemessagesList != null) {
                     for (ShareMessage_HZ share : sharemessagesList) {
                           /*格式化数据，通用格式*/
-                        remoteList.add(DataFormateUtils.formateDataDiscover(share, Contants.DATA_MODEL_SHARE_MESSAGES));
+                        remoteList.add(DataFormateUtils.formateDataDiscover(share));
                     }
                 }
 

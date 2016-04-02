@@ -20,7 +20,6 @@ public class RecordAdapter extends CommAdapter<ShareMessage_HZ> {
     public RecordAdapter(Context context) {
         super(context);
 
-
     }
 
     @Override

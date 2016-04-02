@@ -3,7 +3,7 @@ package com.young.share.utils;
 import android.content.Context;
 
 import com.young.share.config.Contants;
-import com.young.share.model.CommRemoteModel;
+import com.young.share.model.RemoteModel;
 import com.young.share.model.Comment_HZ;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.MyUser;
@@ -12,7 +12,6 @@ import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.dbmodel.ShareMessage;
 import com.young.share.model.dbmodel.User;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,16 +62,15 @@ public class DataFormateUtils {
 
 
     /**
-     * sharemessage
+     * 将sharemessage格式化成通用格式
      * <p/>
      * 处理数据
      *
-     * @param serializableExtra
+     * @param shareMessage 要格式化的分享信息
+     * @return 通用格式
      */
-    public static CommRemoteModel formateDataDiscover(Serializable serializableExtra, int type) {
-        CommRemoteModel commModel = new CommRemoteModel();
-
-        ShareMessage_HZ shareMessage = (ShareMessage_HZ) serializableExtra;
+    public static RemoteModel formateDataDiscover( ShareMessage_HZ shareMessage) {
+        RemoteModel commModel = new RemoteModel();
 
         commModel.setContent(shareMessage.getShContent());
         commModel.setImages(shareMessage.getShImgs());
@@ -83,42 +81,24 @@ public class DataFormateUtils {
         commModel.setWanted(shareMessage.getShWantedNum());
         commModel.setObjectId(shareMessage.getObjectId());
         commModel.setComment(shareMessage.getShCommNum());
-        commModel.setMcreatedAt(shareMessage.getCreatedAt());
+        commModel.setCreatedAt(shareMessage.getCreatedAt());
         commModel.setVideo(shareMessage.getVideo());
         commModel.setVideoPreview(shareMessage.getVideoPreview());
-        commModel.setType(type);//属于分享信息Contants.DATA_MODEL_HEAD
-
+        commModel.setType(Contants.DATA_MODEL_SHARE_MESSAGES);//属于分享信息Contants.DATA_MODEL_HEAD
 
         return commModel;
     }
 
-    /**
-     * 将DiscountMessage转换成Sharemessage_HZ
-     *
-     * @param discountMessage
-     * @return
-     */
-    public static ShareMessage_HZ formateDiscover(DiscountMessage_HZ discountMessage) {
-        ShareMessage_HZ shareMessage = new ShareMessage_HZ();
 
-//        shareMessage.setObjectId();
-        shareMessage.setMyUserId(discountMessage.getMyUserId());
-        shareMessage.setShVisitedNum(discountMessage.getDtVisitedNum());
-//        shareMessage.set
-
-        return shareMessage;
-    }
 
     /**
-     * 格式化商家优惠
+     * 商家优惠格式化通用的结构
      *
-     * @param serializableExtra
-     * @return
+     * @param discountMessage 要格式化的商家优惠数据结构
+     * @return 通用结构
      */
-    public static CommRemoteModel formateDataDiscount(Serializable serializableExtra) {
-        CommRemoteModel commModel = new CommRemoteModel();
-
-        DiscountMessage_HZ discountMessage = (DiscountMessage_HZ) serializableExtra;
+    public static RemoteModel formateDataDiscount(DiscountMessage_HZ discountMessage) {
+        RemoteModel commModel = new RemoteModel();
 
         commModel.setContent(discountMessage.getDtContent());
         commModel.setImages(discountMessage.getDtImgs());
@@ -128,14 +108,19 @@ public class DataFormateUtils {
         commModel.setVisited(discountMessage.getDtVisitedNum());
         commModel.setWanted(discountMessage.getDtWantedNum());
         commModel.setObjectId(discountMessage.getObjectId());
-        commModel.setMcreatedAt(discountMessage.getCreatedAt());
+        commModel.setCreatedAt(discountMessage.getCreatedAt());
         commModel.setType(Contants.DATA_MODEL_DISCOUNT_MESSAGES);//属于折扣
 
 
         return commModel;
     }
 
-    public ShareMessage_HZ formateDataCommremoteModel(CommRemoteModel commModel) {
+    /**
+     * 将通用的结构格式化成分享信息结构
+     * @param commModel 通用的格式
+     * @return 分享信息的格式
+     */
+    public ShareMessage_HZ formateDataCommremoteModel(RemoteModel commModel) {
 
         ShareMessage_HZ shareMessageHz = new ShareMessage_HZ();
         shareMessageHz.setShContent(commModel.getContent());
@@ -147,7 +132,6 @@ public class DataFormateUtils {
         shareMessageHz.setShWantedNum(commModel.getWanted());
         shareMessageHz.setObjectId(commModel.getObjectId());
         shareMessageHz.setShCommNum(commModel.getComment());
-//        commModel.setMcreatedAt(shareMessage.getCreatedAt());
 
 
         return shareMessageHz;
@@ -160,19 +144,19 @@ public class DataFormateUtils {
      *
      * @param comm
      */
-    public static CommRemoteModel formateComments(Comment_HZ comm) {
+    public static RemoteModel formateComments(Comment_HZ comm) {
 
-        CommRemoteModel commRemoteModel = new CommRemoteModel();
+        RemoteModel remoteModel = new RemoteModel();
 
-        commRemoteModel.setContent(comm.getMessageId().getCommContent());
-        commRemoteModel.setObjectId(comm.getMessageId().getObjectId());
-        commRemoteModel.setMcreatedAt(comm.getMessageId().getCreatedAt());
-        commRemoteModel.setSender(comm.getSenderId());
-        commRemoteModel.setReceiver(comm.getReveicerId());
+        remoteModel.setContent(comm.getMessageId().getCommContent());
+        remoteModel.setObjectId(comm.getMessageId().getObjectId());
+        remoteModel.setCreatedAt(comm.getMessageId().getCreatedAt());
+        remoteModel.setSender(comm.getSenderId());
+        remoteModel.setReceiver(comm.getReveicerId());
 
-        commRemoteModel.setType(Contants.DATA_MODEL_BODY);//评论内容
+        remoteModel.setType(Contants.DATA_MODEL_BODY);//评论内容
 
-        return commRemoteModel;
+        return remoteModel;
     }
 
     /**

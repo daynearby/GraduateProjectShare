@@ -43,7 +43,7 @@ public class HadGoFragment extends BaseFragment {
     private static final int MESSAGE_GET_USER_INFO = 0x01;//获取了用户信息，需要进行图片加载
     private static final int MESSAGE_CONVERT_USER_INFO = 0x02;//将用户的id转化成对应的用户头像图片
 
-    public  static final String BUNDLE_USER_ID_LIST = "bundle_user_id_list";
+    public static final String BUNDLE_USER_ID_LIST = "bundle_user_id_list";
 
     public HadGoFragment() {
         userList = new ArrayList<>();
@@ -52,9 +52,8 @@ public class HadGoFragment extends BaseFragment {
 
     /**
      * 初始化当前fragment的数据
-     *
      */
-    private void initFragment( ){
+    private void initFragment() {
 
         wantUserId = (List<String>) getArguments().getSerializable(BUNDLE_USER_ID_LIST);
 
@@ -83,6 +82,7 @@ public class HadGoFragment extends BaseFragment {
 
     /**
      * 更新用户id
+     *
      * @param wantUserId
      */
     public void setWantUserId(List<String> wantUserId) {
@@ -134,6 +134,8 @@ public class HadGoFragment extends BaseFragment {
                     LogUtils.e("code = " + code + " msg = " + msg);
                 }
             });
+        } else {
+            avatarTxt.setText("");
         }
     }
 

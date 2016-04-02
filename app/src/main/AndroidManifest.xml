@@ -107,8 +107,10 @@
         <!-- 个人中心-->
         <activity
             android:name=".PersonalCenterActivity"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar" />
-
+        <!--用户收藏记录-->
+        <activity android:name=".WantToGoActivity" />
         <!-- 选择照片-->
         <activity
             android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"
@@ -137,7 +139,7 @@
 
         <!--通用记录查看 -->
         <activity
-            android:name=".RecordCommActivity"
+            android:name=".UserRecordActivity"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />
 

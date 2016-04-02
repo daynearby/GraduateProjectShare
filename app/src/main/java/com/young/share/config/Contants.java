@@ -197,8 +197,8 @@ public class Contants {
 
 
     //************************** 数据model 类型******************************
-    public static final int DATA_MODEL_SHARE_MESSAGES = 1010;//分享信息数据
-    public static final int DATA_MODEL_DISCOUNT_MESSAGES = 1011;//商家数据
+    public static final int DATA_MODEL_SHARE_MESSAGES = 0x1001;//分享信息数据
+    public static final int DATA_MODEL_DISCOUNT_MESSAGES = 0x1002;//商家数据
 
     public static final int DATA_MODEL_HEAD = 1100;//第一条
     public static final int DATA_MODEL_BODY = 1101;//评论与回复

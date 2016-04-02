@@ -21,14 +21,12 @@
             android:id="@+id/id_im_personal_avatar"
             android:layout_width="@dimen/avatar_size_mediu"
             android:layout_height="@dimen/avatar_size_mediu"
-            android:scaleType="centerInside"
-            android:background="@color/gray" />
+            android:scaleType="centerInside" />
 
         <TextView
             android:id="@+id/tv_user_nickname"
             style="@style/text_style_wrap"
             android:layout_gravity="center"
-            android:text="@string/user_name_defual"
             android:textColor="@color/white"
             android:textSize="@dimen/textSizeMediu" />
 
@@ -36,7 +34,6 @@
             android:id="@+id/tv_user_signture"
             style="@style/text_style_wrap"
             android:gravity="center_horizontal"
-            android:text="@string/user_info_hint_enjoy_life"
             android:textColor="@color/white" />
     </LinearLayout>
 

@@ -2,7 +2,6 @@ package com.young.share;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -25,8 +24,8 @@ import com.soundcloud.android.crop.ActivityResult;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
-import com.young.share.model.MyUser;
 import com.young.share.interfaces.GoToUploadImages;
+import com.young.share.model.MyUser;
 import com.young.share.network.BmobApi;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.ImageHandlerUtils;
@@ -136,9 +135,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 mActivity.finish();
-
 
             }
         });
@@ -209,14 +206,12 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
 //// TODO: 2015-12-07 滑动删除收藏记录
 
                 case 0://<item>我想去</item>
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(Contants.RECORD_TYPE, Contants.RECORD_TYPE_COLLECT);
-                    mStartActivity(RecordCommActivity.class, bundle);
+
+                    mStartActivity(WantToGoActivity.class);
                     break;
                 case 1://<item>分享记录</item>
-                    Bundle bundle_share = new Bundle();
-                    bundle_share.putInt(Contants.RECORD_TYPE, Contants.RECORD_TYPE_SHARE);
-                    mStartActivity(RecordCommActivity.class, bundle_share);
+
+                    mStartActivity(UserRecordActivity.class);
 
                     break;
                 case 2:// <item>修改资料</item>

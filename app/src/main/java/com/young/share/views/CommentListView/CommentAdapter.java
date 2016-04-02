@@ -120,7 +120,7 @@ public class CommentAdapter {
                 R.layout.item_signal_text, null);
         final TextView commentTv = (TextView) convertView.findViewById(R.id.txt_signal_text);
         /*名字点击，设置颜色*/
-
+        commentTv.setBackgroundResource(R.drawable.sele_text_bg_gray);
         final Comment_HZ comment = mDatas.get(position);
 
         //布局复用，设置不同的样式

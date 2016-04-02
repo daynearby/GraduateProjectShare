@@ -18,7 +18,7 @@ import com.young.share.R;
 import com.young.share.adapter.baseAdapter.CommAdapter;
 import com.young.share.adapter.baseAdapter.ViewHolder;
 import com.young.share.config.Contants;
-import com.young.share.model.CommRemoteModel;
+import com.young.share.model.RemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
@@ -42,7 +42,7 @@ import java.util.List;
  * 排行榜列表的adapter
  * Created by Nearby Yang on 2015-12-26.
  */
-public class RankListAdapter extends CommAdapter<CommRemoteModel> {
+public class RankListAdapter extends CommAdapter<RemoteModel> {
 
 
     public RankListAdapter(Context context) {
@@ -50,9 +50,9 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
     }
 
     @Override
-    public void convert(ViewHolder holder, final CommRemoteModel commRemoteModel, int position) {
+    public void convert(ViewHolder holder, final RemoteModel remoteModel, int position) {
 
-        MyUser myUser = commRemoteModel.getMyUser();
+        MyUser myUser = remoteModel.getMyUser();
 
         ImageView avatar = holder.getView(R.id.id_im_userH);//用户头像
         TextView nickname_tv = holder.getView(R.id.id_userName);//昵称
@@ -64,7 +64,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
         TextView comment_tv = holder.getView(R.id.id_tx_comment);//评论数量
         TextView locationTxt = holder.getView(R.id.tv_item_share_main_location);
                 ((TextView) holder.getView(R.id.tv_item_share_main_created_at))
-                .setText(DateUtils.convertDate2Str(commRemoteModel.getMcreatedAt()));//创建时间
+                .setText(DateUtils.convertDate2Str(remoteModel.getCreatedAt()));//创建时间
         RelativeLayout tagLayout = holder.getView(R.id.rl_head_tag_layout);
         ViewGroup.LayoutParams lp = multiImageView.getLayoutParams();
         lp.width = DisplayUtils.getScreenWidthPixels((Activity) ctx) / 3 * 2;//设置宽度
@@ -74,9 +74,9 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 
 //        StringBuilder sb = new StringBuilder(shareMessage.getShContent());
         // 特殊文字处理,将表情等转换一下
-        if (!TextUtils.isEmpty(commRemoteModel.getContent())) {
+        if (!TextUtils.isEmpty(remoteModel.getContent())) {
             content_tv.setText(StringUtils.getEmotionContent(
-                    ctx, content_tv, commRemoteModel.getContent()));
+                    ctx, content_tv, remoteModel.getContent()));
         } else {
             content_tv.setVisibility(View.GONE);
         }
@@ -86,25 +86,25 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 
         ImageHandlerUtils.loadIamgeThumbnail(ctx,
                 TextUtils.isEmpty(myUser.getAvatar()) ? Contants.DEFAULT_AVATAR : myUser.getAvatar(), avatar);
-        if (TextUtils.isEmpty(commRemoteModel.getTag())) {
+        if (TextUtils.isEmpty(remoteModel.getTag())) {
             tagLayout.setVisibility(View.INVISIBLE);
         } else {
             tagLayout.setVisibility(View.VISIBLE);
-            tag_tv.setText(commRemoteModel.getTag());
+            tag_tv.setText(remoteModel.getTag());
         }
 
-        tag_tv.setText(commRemoteModel.getTag());
+        tag_tv.setText(remoteModel.getTag());
 
         String wanto;
-        if (commRemoteModel.getWanted() != null && commRemoteModel.getWanted().size() > 0) {
-            wanto = String.valueOf(commRemoteModel.getWanted().size());
+        if (remoteModel.getWanted() != null && remoteModel.getWanted().size() > 0) {
+            wanto = String.valueOf(remoteModel.getWanted().size());
         } else {
             wanto = ctx.getString(R.string.tx_wantogo);
         }
 
         String hadgo;
-        if (commRemoteModel.getVisited() != null && commRemoteModel.getVisited().size() > 0) {
-            hadgo = String.valueOf(commRemoteModel.getVisited().size());
+        if (remoteModel.getVisited() != null && remoteModel.getVisited().size() > 0) {
+            hadgo = String.valueOf(remoteModel.getVisited().size());
         } else {
             hadgo = ctx.getString(R.string.hadgo);
         }
@@ -113,13 +113,13 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
         hadgo_tv.setText(hadgo);
 
         //地理信息的显示。显示了可以点击查看详细
-        if (!TextUtils.isEmpty(commRemoteModel.getLocationInfo())) {
+        if (!TextUtils.isEmpty(remoteModel.getLocationInfo())) {
             locationTxt.setVisibility(View.VISIBLE);
-            locationTxt.setText(StringUtils.locatiomInfo(ctx, commRemoteModel.getLocationInfo(), new StringUtils.TextLink() {
+            locationTxt.setText(StringUtils.locatiomInfo(ctx, remoteModel.getLocationInfo(), new StringUtils.TextLink() {
                 @Override
                 public void onclick(String str) {
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT, commRemoteModel.getGeographic());
+                    bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT, remoteModel.getGeographic());
                     startActivity(BaiduMapActivity.class, bundle);
                 }
             }));
@@ -127,22 +127,22 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
         }
 
         if (cuser != null) {
-            LocationUtils.leftDrawableWantoGO(wanto_tv, commRemoteModel.getWanted(), cuser.getObjectId());//设置图标
-            LocationUtils.leftDrawableVisited(hadgo_tv, commRemoteModel.getVisited(), cuser.getObjectId());//设置图标
+            LocationUtils.leftDrawableWantoGO(wanto_tv, remoteModel.getWanted(), cuser.getObjectId());//设置图标
+            LocationUtils.leftDrawableVisited(hadgo_tv, remoteModel.getVisited(), cuser.getObjectId());//设置图标
         }
 
-        comment_tv.setVisibility(commRemoteModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES ? View.VISIBLE : View.GONE);
+        comment_tv.setVisibility(remoteModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES ? View.VISIBLE : View.GONE);
 
-        comment_tv.setText(commRemoteModel.getComment() > 0 ?
-                String.valueOf(commRemoteModel.getComment()) : ctx.getString(R.string.tx_comment));
+        comment_tv.setText(remoteModel.getComment() > 0 ?
+                String.valueOf(remoteModel.getComment()) : ctx.getString(R.string.tx_comment));
 
         //图片显示
-//        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx, commRemoteModel.getImages()));
-        multiImageView.setList(DataFormateUtils.thumbnailList(ctx, commRemoteModel.getImages()));
+//        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx, remoteModel.getImages()));
+        multiImageView.setList(DataFormateUtils.thumbnailList(ctx, remoteModel.getImages()));
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(ctx, commRemoteModel.getImages());
+                List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(ctx, remoteModel.getImages());
 
                 EvaluateUtil.setupCoords(ctx, (ImageView) view, pictureInfoList, position);
                 Intent intent = new Intent(ctx, BigPicActivity.class);
@@ -159,10 +159,10 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 //添加监听事件
         nickname_tv.setOnClickListener(new click(myUser));
         avatar.setOnClickListener(new click(myUser));
-        wanto_tv.setOnClickListener(new click(commRemoteModel));
-        hadgo_tv.setOnClickListener(new click(commRemoteModel));
-        comment_tv.setOnClickListener(new click(commRemoteModel));
-        tag_tv.setOnClickListener(new click(commRemoteModel.getTag()));
+        wanto_tv.setOnClickListener(new click(remoteModel));
+        hadgo_tv.setOnClickListener(new click(remoteModel));
+        comment_tv.setOnClickListener(new click(remoteModel));
+        tag_tv.setOnClickListener(new click(remoteModel.getTag()));
 
 
     }
@@ -179,7 +179,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
     private class click implements View.OnClickListener {
 
         private Object o;
-        private CommRemoteModel commModel;
+        private RemoteModel commModel;
 
         public click(Object o) {
             this.o = o;
@@ -209,7 +209,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 
                     if (cuser != null) {//用户是否登陆
 
-                        commModel = (CommRemoteModel) o;
+                        commModel = (RemoteModel) o;
 
                         List<String> wantedNum = commModel.getWanted();
 
@@ -270,7 +270,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
                     getUser();//用户是否登陆
 
                     if (cuser != null) {
-                        commModel = (CommRemoteModel) o;
+                        commModel = (RemoteModel) o;
                         List<String> visitedNum = commModel.getVisited();
 
                         if (commModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES) {//分享信息
@@ -330,7 +330,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
 
                     if (cuser != null) {//用户已登录
 
-                        comment((CommRemoteModel) o);//评价
+                        comment((RemoteModel) o);//评价
 
                     } else {
 
@@ -358,7 +358,7 @@ public class RankListAdapter extends CommAdapter<CommRemoteModel> {
      *
      * @param commModel
      */
-    private void comment(CommRemoteModel commModel) {
+    private void comment(RemoteModel commModel) {
         Bundle bundle = new Bundle();
 
         bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_RANK_LIST_ACTIVITY);

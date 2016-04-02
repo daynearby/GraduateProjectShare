@@ -58,12 +58,6 @@ public class WantToGoFragment extends BaseFragment {
         userList = new ArrayList<>();
     }
 
-    private void initFragment() {
-        Bundle bundle = getArguments();
-        userIdList = (List<String>) bundle.getSerializable(BUNDLE_USERID_LIST);
-        userList = new ArrayList<>();
-
-    }
 
     /**
      * 更新用户数据
@@ -134,6 +128,11 @@ public class WantToGoFragment extends BaseFragment {
                     LogUtils.e("code = " + code + " msg = " + msg);
                 }
             });
+        } else {
+            /**
+             * 移除，移除为空 的时候
+             */
+            avatarTxt.setText("");
         }
     }
 
@@ -160,7 +159,9 @@ public class WantToGoFragment extends BaseFragment {
                 break;
 
             case MESSAGE_CONVERT_USER_INFO:
-                avatarTxt.setText((CharSequence) msg.obj);
+                if (msg.obj != null) {
+                    avatarTxt.setText((CharSequence) msg.obj);
+                }
                 break;
         }
     }

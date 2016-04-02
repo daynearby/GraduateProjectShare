@@ -18,7 +18,7 @@ import com.young.share.MainActivity;
 import com.young.share.MessageCenterActivity;
 import com.young.share.R;
 import com.young.share.RankListActivity;
-import com.young.share.RecordCommActivity;
+import com.young.share.UserRecordActivity;
 import com.young.share.annotation.Injector;
 import com.young.share.config.ApplicationConfig;
 import com.young.share.config.Contants;
@@ -81,8 +81,6 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * @param clazz 要跳转的类，也就是要传递参数的类
      */
     public void mStartActivity(Class clazz) {
-
-
         mStartActivity(clazz, null, TYPE_DEFUAL, null);
     }
 
@@ -130,7 +128,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
                 break;
             case Contants.CLAZZ_PERSONAL_ACTIVITY:
 
-                clazz = RecordCommActivity.class;
+                clazz = UserRecordActivity.class;
                 break;
             case Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY://消息中心
                 clazz = MessageCenterActivity.class;
@@ -181,6 +179,14 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      */
     public void mToast(int strId) {
         Toast.makeText(this, strId, Toast.LENGTH_LONG).show();
+    }
+    /**
+     * toast
+     *
+     * @param str 文字id
+     */
+    public void toast(String str) {
+        Toast.makeText(this, str, Toast.LENGTH_LONG).show();
     }
 
     /**

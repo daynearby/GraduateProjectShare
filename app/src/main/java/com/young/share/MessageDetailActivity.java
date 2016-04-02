@@ -41,7 +41,7 @@ import com.young.share.fragment.WantToGoFragment;
 import com.young.share.fragment.HadGoFragment;
 import com.young.share.interfaces.AsyncListener;
 import com.young.share.model.BaseModel;
-import com.young.share.model.CommRemoteModel;
+import com.young.share.model.RemoteModel;
 import com.young.share.model.Comment_HZ;
 import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
@@ -143,7 +143,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private ProgressBar videoDownloadPb;
 
     private String superTagClazz;
-    private CommRemoteModel commModel = new CommRemoteModel();//存放分享信息的具体内容
+    private RemoteModel commModel = new RemoteModel();//存放分享信息的具体内容
     private ShareMessage_HZ shareMessage;//直接显示的分享信息
     private ButtombarPageAdapter pageAdapter;
     private InputMethodManager imm;
@@ -151,6 +151,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private int commentClick;//是否是点击评论进去
 
     private CommentFragment commentFragment;//评论的界面的对象
+    private WantToGoFragment wantToGoFragment;//想去或者说是收藏
+    private HadGoFragment hadGoFragment;//去过
     private static final int MESSAGE_SHARE_MESSAGE = 0x01;//显示传过来的sharemessage
     private static final int MESSAGE_BING_MESSAGE = 0x02;//显示传过来的sharemessage
     private static final int MESSAGE_REFRESH_COMMENT = 0x03;//发送评论之后进行刷新评论列表
@@ -203,8 +205,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         /**
          * 初始化动画滚动条
          */
-
-
         indexRadiog.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         tabWidth = indexRadiog.getMeasuredWidth() / 3;
         ViewGroup.LayoutParams params = indexIm.getLayoutParams();
@@ -265,12 +265,12 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         commentFragment.setArguments(bundle);
         commentFragment.setOnItemClickListener(onItemClick);
 /*想去*/
-        WantToGoFragment wantToGoFragment = new WantToGoFragment();
+        wantToGoFragment = new WantToGoFragment();
         wantToGoFragment.initizliza(this);
         bundle.putStringArrayList(WantToGoFragment.BUNDLE_USERID_LIST, (ArrayList<String>) commModel.getWanted());
         wantToGoFragment.setArguments(bundle);
 /*去过*/
-        HadGoFragment hadGoFragment = new HadGoFragment();
+        hadGoFragment = new HadGoFragment();
         hadGoFragment.initizliza(this);
         bundle.putStringArrayList(HadGoFragment.BUNDLE_USER_ID_LIST, (ArrayList<String>) commModel.getVisited());
         hadGoFragment.setArguments(bundle);
@@ -328,7 +328,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
             LocationUtils.leftDrawableVisited(hadgo_tv, commModel.getVisited(), cuser.getObjectId());
         }
 
-        ceatedAt_tv.setText(commModel.getMcreatedAt());
+        ceatedAt_tv.setText(commModel.getCreatedAt());
 
         comment_tv.setText(commModel.getComment() > 0 ? String.valueOf(commModel.getComment()) : getString(R.string.tx_comment));
 /**
@@ -396,22 +396,27 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 //                commAdapter.setData(dataList);
 //
 //                break;
-
-
-            case MESSAGE_SHARE_MESSAGE:
-
-
-                break;
+//
+//
+//            case MESSAGE_SHARE_MESSAGE:
+//
+//
+//                break;
 
             case MESSAGE_BING_MESSAGE://将数据绑定到控件中
 /*
-                这里使用了统一的数据格式，commMedel
+                这里使用了统一的数据格式，shareMessage
 */
                 setupData();
 
 
                 break;
             case MESSAGE_REFRESH_COMMENT:
+
+                //评论数量加1
+                commentIncrement();
+                //清理工作
+                sendFinish();
                 //刷新数据
                 commentFragment.refreshData();
                 break;
@@ -577,7 +582,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 shareMessage = (ShareMessage_HZ) bundle
                         .getSerializable(Contants.BUNDLE_TAG);
 
-
                 break;
 
             case Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY://消息列表
@@ -588,7 +592,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
             case Contants.CLAZZ_RANK_LIST_ACTIVITY://排行榜
 
-                CommRemoteModel commModel = (CommRemoteModel) bundle
+                RemoteModel commModel = (RemoteModel) bundle
                         .getSerializable(Contants.CLAZZ_DATA_MODEL);
 
                 if (commModel != null) {
@@ -700,6 +704,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
      * 准备发送评论工作
      */
     private void startPrepare() {
+        //滑动到评论页面
+        viewPager.setCurrentItem(2, true);
 
         if (SendMessageFinish) {
             sendComment_edt.requestFocus();
@@ -729,8 +735,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private void formateDataDiscover(Serializable serializableExtra) {
 
         commModel = !superTagClazz.equals(Contants.CLAZZ_RANK_LIST_ACTIVITY) ?
-                DataFormateUtils.formateDataDiscover(serializableExtra, Contants.DATA_MODEL_HEAD) :
-                (CommRemoteModel) serializableExtra;
+                DataFormateUtils.formateDataDiscover((ShareMessage_HZ)serializableExtra) :
+                (RemoteModel) serializableExtra;
 
 
         mHandler.sendEmptyMessage(MESSAGE_BING_MESSAGE);
@@ -848,8 +854,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         }
 
 
-        ((TextView) v).setText(String.valueOf(commModel.getVisited() == null ?
-                0 : commModel.getVisited().size()));
+        ((TextView) v).setText(commModel.getVisited() == null ?
+                getString(R.string.hadgo) : String.valueOf(commModel.getVisited().size()));
         ((TextView) v).setCompoundDrawablesWithIntrinsicBounds(leftDrawID, 0, 0, 0);
 
         ShareMessage_HZ shareMessage = new ShareMessage_HZ();
@@ -861,15 +867,27 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
             public void onSuccess() {
 //                mToast(strId);
                 v.setClickable(true);
+                updateHadGo();
+
             }
 
             @Override
             public void onFailure(int i, String s) {
                 v.setClickable(true);
+                toast(getString(R.string.txt_erro_message) + i);
+
                 LogUtils.d(" wantToGo faile  erro code = " + i + " erro message = " + s);
             }
         });
 
+    }
+
+    /**
+     * 更新想去的用户列表
+     */
+    private void updateHadGo() {
+        hadGoFragment.setWantUserId(commModel.getVisited());
+        hadGoFragment.initData();
     }
 
 
@@ -897,9 +915,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         if (hadWant) {
 //            strId = R.string.cancel_collect_success;
             leftDrawID = R.drawable.icon_wantogo;
-
-            commModel.getWanted().remove(cuser.getObjectId());
-
 //操作收藏表
             BmobApi.AsyncFunction(this, jsonObject, BmobApi.REMOVE_COLLECTION, new AsyncListener() {
                 @Override
@@ -909,6 +924,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
                     if (baseModel.getCode() == BaseModel.SUCCESS) {
 //                        mToast(R.string.operation_success);
+                        commModel.getWanted().remove(cuser.getObjectId());
+                        updateWantTo();
                         LogUtils.d("删除收藏记录 成功  data = " + baseModel.getData());
                     } else {
 
@@ -918,7 +935,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
                 @Override
                 public void onFailure(int code, String msg) {
-
+                    toast(getString(R.string.txt_erro_message) + code);
                 }
             });
         } else {
@@ -929,12 +946,13 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
             shareMessage.setObjectId(commModel.getObjectId());
             shareMessage.setMyUserId(commModel.getMyUser());
 
+//MESSAGE_TYPE_SHAREMESSAGE
             BmobApi.saveCollectionShareMessage(this, cuser, shareMessage, Contants.MESSAGE_TYPE_SHAREMESSAGE);
 
         }
 
-        ((TextView) v).setText(String.valueOf(commModel.getWanted() == null ?
-                0 : commModel.getWanted().size()));
+        ((TextView) v).setText(commModel.getWanted() == null ?
+                getString(R.string.tx_wantogo) : String.valueOf(commModel.getWanted().size()));
         ((TextView) v).setCompoundDrawablesWithIntrinsicBounds(leftDrawID, 0, 0, 0);
 
         shareMessage.setShVisitedNum(commModel.getVisited());
@@ -943,14 +961,25 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
             public void onSuccess() {
 //                mToast(strId);
                 v.setClickable(true);
+                updateWantTo();
             }
 
             @Override
             public void onFailure(int i, String s) {
                 v.setClickable(true);
-                LogUtils.d(" wantToGo faile  erro code = " + i + " erro message = " + s);
+                toast(getString(R.string.txt_erro_message) + i);
+                LogUtils.d(" wantToGo failure  erro code = " + i + " erro message = " + s);
             }
         });
+
+    }
+
+    /**
+     * 更新喜欢的用户
+     */
+    private void updateWantTo() {
+        wantToGoFragment.setUserIdList(commModel.getWanted());
+        wantToGoFragment.initData();
 
     }
 
@@ -991,10 +1020,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                         @Override
                         public void onSuccessReflesh() {
 
-                            //评论数量加1
-                            commentIncrement();
-                            //清理工作
-                            sendFinish();
                             //刷新评论数据
                             mHandler.sendEmptyMessage(MESSAGE_REFRESH_COMMENT);
                         }

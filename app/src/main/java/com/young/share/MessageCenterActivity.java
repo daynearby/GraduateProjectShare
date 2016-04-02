@@ -12,7 +12,7 @@ import com.young.share.adapter.MessageCenterAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.ItemActBarActivity;
 import com.young.share.config.Contants;
-import com.young.share.model.CommRemoteModel;
+import com.young.share.model.RemoteModel;
 import com.young.share.model.gson.CommentList;
 import com.young.share.model.Comment_HZ;
 import com.young.share.model.Message_HZ;
@@ -45,7 +45,7 @@ public class MessageCenterActivity extends ItemActBarActivity {
     private MessageCenterAdapter messageAdapter;
 
     private List<Comment_HZ> commentList = new ArrayList<>();
-    private List<CommRemoteModel> dataList = new ArrayList<>();
+    private List<RemoteModel> dataList = new ArrayList<>();
 
     private int starIndex = 0;
     private int endIndex = 20;
@@ -157,7 +157,7 @@ public class MessageCenterActivity extends ItemActBarActivity {
 
             case UPDATE_MESSAGE:
 
-                List<CommRemoteModel> data = messageAdapter.getData();
+                List<RemoteModel> data = messageAdapter.getData();
                 data.get(msg.arg1).setRead(true);
                 messageAdapter.setData(data);
 
@@ -256,16 +256,16 @@ public class MessageCenterActivity extends ItemActBarActivity {
      * @param commentList
      * @return
      */
-    private List<CommRemoteModel> formateData(List<Comment_HZ> commentList) {
+    private List<RemoteModel> formateData(List<Comment_HZ> commentList) {
 
-        List<CommRemoteModel> commList = new ArrayList<>();
+        List<RemoteModel> commList = new ArrayList<>();
         for (Comment_HZ comment : commentList) {
 
-            CommRemoteModel comm = new CommRemoteModel();
+            RemoteModel comm = new RemoteModel();
 
             comm.setObjectId(comment.getMessageId().getObjectId());
             comm.setContent(comment.getMessageId().getCommContent());
-            comm.setMcreatedAt(comment.getMessageId().getCreatedAt());
+            comm.setCreatedAt(comment.getMessageId().getCreatedAt());
             comm.setShareMessage(comment.getShMsgId());
             comm.setReceiver(comment.getReveicerId());
             comm.setSender(comment.getSenderId());

@@ -23,7 +23,7 @@ import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
 import com.young.share.fragment.WantToGoFragment;
 import com.young.share.fragment.HadGoFragment;
-import com.young.share.model.CommRemoteModel;
+import com.young.share.model.RemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
@@ -90,7 +90,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
 
     private ButtombarPageAdapter pageAdapter;
     private DiscountMessage_HZ discountMessage;
-    private CommRemoteModel commModel;
+    private RemoteModel commModel;
     private WantToGoFragment wantToGoFragment;
     private HadGoFragment hadGoFragment;
     private boolean isClick = false;//是否点击过
@@ -114,7 +114,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         initialiToolbar();
         setTitle(R.string.title_body);
 
-        commModel = (CommRemoteModel) getIntent().getExtras().getSerializable(Contants.CLAZZ_DATA_MODEL);
+        commModel = (RemoteModel) getIntent().getExtras().getSerializable(Contants.CLAZZ_DATA_MODEL);
         discountMessage = new DiscountMessage_HZ();
 
         threadPool.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
@@ -203,7 +203,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
 
         tag_tv.setText(commModel.getTag());
         content_tv.setText(commModel.getContent());
-        createdAt.setText(commModel.getMcreatedAt());
+        createdAt.setText(commModel.getCreatedAt());
         initBottomBar(commModel);
 
 /*设置图片*/
@@ -261,7 +261,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
      *
      * @param comm
      */
-    private void initBottomBar(CommRemoteModel comm) {
+    private void initBottomBar(RemoteModel comm) {
         wanto_tv.setText(comm.getWanted() == null ?
                 getString(R.string.tx_wantogo) : String.valueOf(comm.getWanted().size()));
         hadgo_tv.setText(comm.getVisited() == null ?
@@ -366,7 +366,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
 
                         @Override
                         public void onFailure() {
-
+                            toast(getString(R.string.txt_erro_message));
                         }
                     });
             isClick = true;
@@ -401,7 +401,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
                         @Override
                         public void onSuccesss() {
                             //更新到显示列表中
-                            updateLike();
+                            updateWantTo();
                         }
 
                         @Override
@@ -420,7 +420,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
     /**
      * 更新喜欢的用户
      */
-    private void updateLike() {
+    private void updateWantTo() {
         wantToGoFragment.setUserIdList(commModel.getWanted());
         wantToGoFragment.initData();
 

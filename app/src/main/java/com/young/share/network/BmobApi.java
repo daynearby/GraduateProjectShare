@@ -219,6 +219,7 @@ public class BmobApi {
                 ShareMessage_HZ shareMessage = (ShareMessage_HZ) bmobObject;
                 collection.setShUserId(shareMessage.getMyUserId());
                 collection.setShMsgId(shareMessage);
+
                 break;
 
             case Contants.MESSAGE_TYPE_DISCOUNT://商家优惠

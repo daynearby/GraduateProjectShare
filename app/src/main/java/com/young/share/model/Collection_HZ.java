@@ -8,7 +8,7 @@ import cn.bmob.v3.BmobObject;
  */
 public class Collection_HZ extends BmobObject {
 
-    private MyUser shUserId;
+    private MyUser shUserId;//分享用户的字段，没什么用
     private MyUser collUserId;
     private ShareMessage_HZ shMsgId;
     private DiscountMessage_HZ dtMsgId;
