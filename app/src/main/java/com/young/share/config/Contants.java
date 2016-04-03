@@ -167,6 +167,8 @@ public class Contants {
     public static final String CLAZZ_MAINACTIVITY = "clazz_name_mainactivity";//类名
     public static final String CLAZZ_DISCOVER_ACTIVITY = "share_message";//类名
     public static final String CLAZZ_PERSONAL_ACTIVITY = "personal_center";//类名
+    public static final String CLAZZ_WANT_TO_GO_ACTIVITY = "clazz_want_to_go_activity";//类名
+    public static final String CLAZZ_USER_RECORD_ACTIVITY = "user_record_activity";//类名
     public static final String CLAZZ_MESSAGE_CENTER_ACTIVITY = "message_center";//类名
     public static final String CLAZZ_RANK_LIST_ACTIVITY = "rank_list";//类名
 
@@ -187,6 +189,8 @@ public class Contants {
     public static final String INTENT_SELECTOR_POSITION = "intent_selector_position";//intent传输的已经选择postion
     public static final String INTENT_KEY_POST_VIDEO = "intent_key_post_video";
     public static final String INTENT_KEY_VIDEO_PATH = "intent_key_video_path";
+    public static final String INTENT_KEY_DISCOVER = "intent_key_discover";//发现 -- 内容
+    public static final String INTENT_KEY_REMOTE_MODEL = "intent_key_remote_model";//通用的结构 -- 内容
 
     //***********************请求码与结果码*********************
     public static final int REQUSET_CODE_IMAGE_LIST = 0x100;//图片编辑请求码

@@ -9,10 +9,10 @@ import cn.bmob.v3.datatype.BmobGeoPoint;
 
 /**
  * 分享信息，对应的云端的表
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-10-16.
  */
-public class ShareMessage_HZ extends BmobObject{
+public class ShareMessage_HZ extends BmobObject {
 
     private MyUser userId;
     private String shContent;
@@ -121,4 +121,10 @@ public class ShareMessage_HZ extends BmobObject{
     public void setVideoPreview(BmobFile videoPreview) {
         this.videoPreview = videoPreview;
     }
+
+    @Override
+    public void setCreatedAt(String createdAt) {
+        super.setCreatedAt(createdAt);
+    }
+
 }

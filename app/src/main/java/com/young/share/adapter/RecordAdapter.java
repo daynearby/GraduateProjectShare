@@ -3,10 +3,10 @@ package com.young.share.adapter;
 import android.content.Context;
 import android.widget.TextView;
 
+import com.young.share.R;
 import com.young.share.adapter.baseAdapter.CommAdapter;
 import com.young.share.adapter.baseAdapter.ViewHolder;
-import com.young.share.model.ShareMessage_HZ;
-import com.young.share.R;
+import com.young.share.model.RemoteModel;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.StringUtils;
 
@@ -14,7 +14,7 @@ import com.young.share.utils.StringUtils;
  * 记录适配器
  * Created by Nearby Yang on 2015-12-04.
  */
-public class RecordAdapter extends CommAdapter<ShareMessage_HZ> {
+public class RecordAdapter extends CommAdapter<RemoteModel> {
 
 
     public RecordAdapter(Context context) {
@@ -23,13 +23,13 @@ public class RecordAdapter extends CommAdapter<ShareMessage_HZ> {
     }
 
     @Override
-    public void convert(ViewHolder holder, ShareMessage_HZ shareMessage, int position) {
+    public void convert(ViewHolder holder, RemoteModel remoteModel, int position) {
 
-        ((TextView) holder.getView(R.id.tv_record_comm_nickname)).setText(shareMessage.getMyUserId().getNickName());
+        ((TextView) holder.getView(R.id.tv_record_comm_nickname)).setText(remoteModel.getMyUser().getNickName());
         TextView content =  holder.getView(R.id.tv_record_comm_content);
-        content.setText(StringUtils.getEmotionContent(ctx,content,shareMessage.getShContent()));
+        content.setText(StringUtils.getEmotionContent(ctx,content,remoteModel.getContent()));
         ((TextView) holder.getView(R.id.tv_record_comm_created))
-                .setText(DateUtils.convertDate2Str(shareMessage.getCreatedAt()));
+                .setText(DateUtils.convertDate2Str(remoteModel.getCreatedAt()));
 
     }
 

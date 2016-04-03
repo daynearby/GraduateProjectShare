@@ -115,17 +115,13 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         setTitle(R.string.title_body);
 
         commModel = (RemoteModel) getIntent().getExtras().getSerializable(Contants.CLAZZ_DATA_MODEL);
-        discountMessage = new DiscountMessage_HZ();
+        discountMessage =  DataFormateUtils.formateDataDiscount(commModel);
 
         threadPool.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
             @Override
             public void running() {
 
-                discountMessage.setObjectId(commModel.getObjectId());
-                discountMessage.setDtVisitedNum(commModel.getVisited());
-                discountMessage.setDtWantedNum(commModel.getWanted());
-
-                getData(commModel.getObjectId());
+                getData(discountMessage.getObjectId());
             }
         }));
 
@@ -161,7 +157,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         disQuery.getObject(mActivity, objectId, new GetListener<DiscountMessage_HZ>() {
             @Override
             public void onSuccess(DiscountMessage_HZ discountMessage_hz) {
-                initBottomBar(commModel);
+                initBottomBar();
             }
 
             @Override
@@ -185,7 +181,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         commentRbtn.setVisibility(View.GONE);
         String url;
         boolean isLocation;
-        MyUser myUser = commModel.getMyUser();
+        MyUser myUser = discountMessage.getMyUserId();
 
         if (myUser.getAvatar() == null) {
             url = Contants.DEFAULT_AVATAR;
@@ -201,10 +197,10 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         nickname_tv.setText(myUser.getNickName() == null ?
                 getString(R.string.user_name_defual) : myUser.getNickName());
 
-        tag_tv.setText(commModel.getTag());
-        content_tv.setText(commModel.getContent());
-        createdAt.setText(commModel.getCreatedAt());
-        initBottomBar(commModel);
+        tag_tv.setText(discountMessage.getDtTag());
+        content_tv.setText(discountMessage.getDtContent());
+        createdAt.setText(discountMessage.getCreatedAt());
+        initBottomBar();
 
 /*设置图片*/
         setupImage();
@@ -235,11 +231,11 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
 
         ViewGroup.LayoutParams lp = multiImageView.getLayoutParams();
         lp.width = DisplayUtils.getScreenWidthPixels(mActivity) / 3 * 2;//设置宽度
-        multiImageView.setList(DataFormateUtils.thumbnailList(this, commModel.getImages()));
+        multiImageView.setList(DataFormateUtils.thumbnailList(this, discountMessage.getDtImgs()));
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(mActivity, commModel.getImages());
+                List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(mActivity,discountMessage.getDtImgs());
 
                 EvaluateUtil.setupCoords(mActivity, (ImageView) view, pictureInfoList, position);
                 Intent intent = new Intent(mActivity, BigPicActivity.class);
@@ -258,17 +254,15 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
 
     /**
      * 下方数据
-     *
-     * @param comm
      */
-    private void initBottomBar(RemoteModel comm) {
-        wanto_tv.setText(comm.getWanted() == null ?
-                getString(R.string.tx_wantogo) : String.valueOf(comm.getWanted().size()));
-        hadgo_tv.setText(comm.getVisited() == null ?
-                getString(R.string.hadgo) : String.valueOf(comm.getVisited().size()));
+    private void initBottomBar() {
+        wanto_tv.setText(discountMessage.getDtWantedNum() == null ?
+                getString(R.string.tx_wantogo) : String.valueOf(discountMessage.getDtWantedNum().size()));
+        hadgo_tv.setText(discountMessage.getDtVisitedNum() == null ?
+                getString(R.string.hadgo) : String.valueOf(discountMessage.getDtVisitedNum().size()));
 
-        LocationUtils.leftDrawableWantoGO(wanto_tv, comm.getWanted(), cuser.getObjectId());
-        LocationUtils.leftDrawableVisited(hadgo_tv, comm.getVisited(), cuser.getObjectId());
+        LocationUtils.leftDrawableWantoGO(wanto_tv, discountMessage.getDtWantedNum(), cuser.getObjectId());
+        LocationUtils.leftDrawableVisited(hadgo_tv, discountMessage.getDtVisitedNum(), cuser.getObjectId());
 
 
     }
@@ -285,13 +279,13 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         Bundle bundle = new Bundle();
         /*想去*/
         wantToGoFragment = new WantToGoFragment();
-        wantToGoFragment.initizliza(this);
-        bundle.putStringArrayList(WantToGoFragment.BUNDLE_USERID_LIST, (ArrayList<String>) commModel.getWanted());
+//        wantToGoFragment.initizliza(this);
+        bundle.putStringArrayList(WantToGoFragment.BUNDLE_USERID_LIST, (ArrayList<String>) discountMessage.getDtWantedNum());
         wantToGoFragment.setArguments(bundle);
 /*去过*/
         hadGoFragment = new HadGoFragment();
-        hadGoFragment.initizliza(this);
-        bundle.putStringArrayList(WantToGoFragment.BUNDLE_USERID_LIST, (ArrayList<String>) commModel.getVisited());
+//        hadGoFragment.initizliza(this);
+        bundle.putStringArrayList(WantToGoFragment.BUNDLE_USERID_LIST, (ArrayList<String>) discountMessage.getDtWantedNum());
         hadGoFragment.setArguments(bundle);
 
         fragmentList.add(wantToGoFragment);
@@ -356,7 +350,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         getUser();
         if (cuser != null) {
             LocationUtils.discountVisit(mActivity, cuser, discountMessage,
-                    UserUtils.isHadCurrentUser(commModel.getVisited(), cuser.getObjectId()),
+                    UserUtils.isHadCurrentUser(discountMessage.getDtVisitedNum(), cuser.getObjectId()),
                     t, new LocationUtils.Callback() {
 
                         @Override
@@ -382,7 +376,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
      * 更新想去的用户列表
      */
     private void updateHadGo() {
-        hadGoFragment.setWantUserId(commModel.getVisited());
+        hadGoFragment.setWantUserId(discountMessage.getDtVisitedNum());
         hadGoFragment.initData();
     }
 
@@ -395,7 +389,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         getUser();
         if (cuser != null) {
             LocationUtils.discountWanto(mActivity, cuser, discountMessage,
-                    UserUtils.isHadCurrentUser(commModel.getWanted(), cuser.getObjectId()),
+                    UserUtils.isHadCurrentUser(discountMessage.getDtWantedNum(), cuser.getObjectId()),
                     t, new LocationUtils.Callback() {
 
                         @Override
@@ -421,7 +415,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
      * 更新喜欢的用户
      */
     private void updateWantTo() {
-        wantToGoFragment.setUserIdList(commModel.getWanted());
+        wantToGoFragment.setUserIdList(discountMessage.getDtWantedNum());
         wantToGoFragment.initData();
 
     }
@@ -434,7 +428,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
      */
     private void userInfo(View v) {
 
-        PopupWinUserInfo userWindow = new PopupWinUserInfo(mActivity, commModel.getMyUser());
+        PopupWinUserInfo userWindow = new PopupWinUserInfo(mActivity, discountMessage.getMyUserId());
         userWindow.onShow(v);
 
     }
@@ -453,11 +447,11 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
      */
     private void back2superclazz() {
 
-        if (isClick) {
-            LocationUtils.sendBordCast(mActivity, Contants.REFRESH_TYPE_DISCOUNT);
-        }
-
-        mBackStartActivity(MainActivity.class);
+//        if (isClick) {
+//            LocationUtils.sendBordCast(mActivity, Contants.REFRESH_TYPE_DISCOUNT);
+//        }
+//
+//        mBackStartActivity(MainActivity.class);
         this.finish();
     }
 

@@ -143,7 +143,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private ProgressBar videoDownloadPb;
 
     private String superTagClazz;
-    private RemoteModel commModel = new RemoteModel();//存放分享信息的具体内容
+    //    private RemoteModel commModel = new RemoteModel();//存放分享信息的具体内容
     private ShareMessage_HZ shareMessage;//直接显示的分享信息
     private ButtombarPageAdapter pageAdapter;
     private InputMethodManager imm;
@@ -260,19 +260,19 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         Bundle bundle = new Bundle();
 /*评论*/
         commentFragment = new CommentFragment();
-        commentFragment.initizliza(this);
-        bundle.putString(CommentFragment.BUNLDE_SHARE_MESSAGE_ID, commModel.getObjectId());
+//        commentFragment.initizliza(this);
+        bundle.putString(CommentFragment.BUNLDE_SHARE_MESSAGE_ID, shareMessage.getObjectId());
         commentFragment.setArguments(bundle);
         commentFragment.setOnItemClickListener(onItemClick);
 /*想去*/
         wantToGoFragment = new WantToGoFragment();
-        wantToGoFragment.initizliza(this);
-        bundle.putStringArrayList(WantToGoFragment.BUNDLE_USERID_LIST, (ArrayList<String>) commModel.getWanted());
+//        wantToGoFragment.initizliza(this);
+        bundle.putStringArrayList(WantToGoFragment.BUNDLE_USERID_LIST, (ArrayList<String>) shareMessage.getShWantedNum());
         wantToGoFragment.setArguments(bundle);
 /*去过*/
         hadGoFragment = new HadGoFragment();
-        hadGoFragment.initizliza(this);
-        bundle.putStringArrayList(HadGoFragment.BUNDLE_USER_ID_LIST, (ArrayList<String>) commModel.getVisited());
+//        hadGoFragment.initizliza(this);
+        bundle.putStringArrayList(HadGoFragment.BUNDLE_USER_ID_LIST, (ArrayList<String>) shareMessage.getShVisitedNum());
         hadGoFragment.setArguments(bundle);
 
         fragmentList.add(wantToGoFragment);
@@ -292,14 +292,14 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private void setupData() {
 
 
-        MyUser myUser = commModel.getMyUser();
+        MyUser myUser = shareMessage.getMyUserId();
 
-        if (TextUtils.isEmpty(commModel.getContent())) {
+        if (TextUtils.isEmpty(shareMessage.getShContent())) {
             content_tv.setVisibility(View.GONE);
         } else {
             content_tv.setVisibility(View.VISIBLE);
             content_tv.setText(StringUtils.getEmotionContent(
-                    this, content_tv, commModel.getContent()));
+                    this, content_tv, shareMessage.getShContent()));
         }
 
 
@@ -309,40 +309,39 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 TextUtils.isEmpty(myUser.getAvatar()) ? Contants.DEFAULT_AVATAR : myUser.getAvatar(), avatar);
 
 
-        if (TextUtils.isEmpty(commModel.getTag())) {
+        if (TextUtils.isEmpty(shareMessage.getShTag())) {
             tag_tv.setVisibility(View.GONE);
         } else {
             tag_tv.setVisibility(View.VISIBLE);
-            tag_tv.setText(commModel.getTag());
+            tag_tv.setText(shareMessage.getShTag());
         }
 
-        wanto_tv.setText(commModel.getWanted() != null && commModel.getWanted().size() > 0 ?
-                String.valueOf(commModel.getWanted().size()) : getString(R.string.tx_wantogo));
+        wanto_tv.setText(shareMessage.getShWantedNum() != null && shareMessage.getShWantedNum().size() > 0 ?
+                String.valueOf(shareMessage.getShWantedNum().size()) : getString(R.string.tx_wantogo));
 
 
-        hadgo_tv.setText(commModel.getVisited() != null && commModel.getVisited().size() > 0 ?
-                String.valueOf(commModel.getVisited().size()) : getString(R.string.hadgo));
+        hadgo_tv.setText(shareMessage.getShVisitedNum() != null && shareMessage.getShVisitedNum().size() > 0 ?
+                String.valueOf(shareMessage.getShVisitedNum().size()) : getString(R.string.hadgo));
         //判断当前用户是否点赞
         if (cuser != null) {
-            LocationUtils.leftDrawableWantoGO(wanto_tv, commModel.getWanted(), cuser.getObjectId());//设置图标
-            LocationUtils.leftDrawableVisited(hadgo_tv, commModel.getVisited(), cuser.getObjectId());
+            LocationUtils.leftDrawableWantoGO(wanto_tv, shareMessage.getShWantedNum(), cuser.getObjectId());//设置图标
+            LocationUtils.leftDrawableVisited(hadgo_tv, shareMessage.getShVisitedNum(), cuser.getObjectId());
         }
 
-        ceatedAt_tv.setText(commModel.getCreatedAt());
+        ceatedAt_tv.setText(shareMessage.getCreatedAt());
 
-        comment_tv.setText(commModel.getComment() > 0 ? String.valueOf(commModel.getComment()) : getString(R.string.tx_comment));
+        comment_tv.setText(shareMessage.getShCommNum() > 0 ? String.valueOf(shareMessage.getShCommNum()) : getString(R.string.tx_comment));
 /**
  * 设置图片
  */
-        if (commModel.getImages() != null && commModel.getImages().size() > 0) {
+        if (shareMessage.getShImgs() != null && shareMessage.getShImgs().size() > 0) {
             setImage();
         }
         /**
          * 分享才需要判断是否有视频信息
          */
-        if (commModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES) {
-            setVideo();
-        }
+
+        setVideo();
 
 
         nickname_tv.setOnClickListener(this);
@@ -361,7 +360,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
      * 设置图片
      */
     private void setImage() {
-        multiImageView.setList(DataFormateUtils.thumbnailList(this, commModel.getImages()));
+        multiImageView.setList(DataFormateUtils.thumbnailList(this, shareMessage.getShImgs()));
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -446,18 +445,18 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
      */
     private void setVideo() {
 
-        if (commModel.getVideo() != null
-                && !TextUtils.isEmpty(commModel.getVideo().getFileUrl(this))) {
+        if (shareMessage.getVideo() != null
+                && !TextUtils.isEmpty(shareMessage.getVideo().getFileUrl(this))) {
 
-            final String videoUrl = commModel.getVideo().getFileUrl(this);
+            final String videoUrl = shareMessage.getVideo().getFileUrl(this);
             initVideo = true;
             videoLayout.setVisibility(View.VISIBLE);
             videoPrevideo.setVisibility(View.VISIBLE);
             videoDownloadPb.setVisibility(View.VISIBLE);
 
 /*判断视频预览图有没有*/
-            if (commModel.getVideoPreview() != null) {
-                ImageHandlerUtils.loadIamge(this, commModel.getVideoPreview().getFileUrl(this), videoPrevideo);
+            if (shareMessage.getVideoPreview() != null) {
+                ImageHandlerUtils.loadIamge(this, shareMessage.getVideoPreview().getFileUrl(this), videoPrevideo);
             } else {
                 videoPrevideo.setBackgroundColor(this.getResources().getColor(R.color.gray_lighter));
             }
@@ -555,67 +554,32 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
      */
     private void showUserInfo(View v) {
 
-        PopupWinUserInfo userInfo = new PopupWinUserInfo(this, commModel.getMyUser());
+        PopupWinUserInfo userInfo = new PopupWinUserInfo(this, shareMessage.getMyUserId());
         userInfo.onShow(v);
     }
 
 
     /**
-     * 获取信息
+     * 根据启动该类的的activity进行分辨信息格式
+     * 分成两种情况：直接是share格式、另外一个种是remodelModel格式
      *
-     * @param bundle
+     * @param bundle intent中数据
      */
     private void getData(final Bundle bundle) {
 
-
-        switch (superTagClazz) {
-
-            case Contants.CLAZZ_DISCOVER_ACTIVITY://shareMessage详细信息
-
-                shareMessage = (ShareMessage_HZ) bundle
-                        .getSerializable(Contants.CLAZZ_DATA_MODEL);
-
-                break;
-
-            case Contants.CLAZZ_PERSONAL_ACTIVITY://分享消息记录
-
-                shareMessage = (ShareMessage_HZ) bundle
-                        .getSerializable(Contants.BUNDLE_TAG);
-
-                break;
-
-            case Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY://消息列表
-                shareMessage = (ShareMessage_HZ) bundle
-                        .getSerializable(Contants.CLAZZ_DATA_MESSAGE);
-
-                break;
-
-            case Contants.CLAZZ_RANK_LIST_ACTIVITY://排行榜
-
-                RemoteModel commModel = (RemoteModel) bundle
-                        .getSerializable(Contants.CLAZZ_DATA_MODEL);
-
-                if (commModel != null) {
-
-                    formateDataDiscover(commModel);
-
-                }
-                break;
-
+        if (Contants.CLAZZ_DISCOVER_ACTIVITY.equals(superTagClazz)
+                || Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY.equals(superTagClazz)) {
+            shareMessage = (ShareMessage_HZ) bundle
+                    .getSerializable(Contants.INTENT_KEY_DISCOVER);
+        } else {
+    /*将通用格式格式化成discover列表的数据结构*/
+            shareMessage = DataFormateUtils.formateDataRemoteModel((RemoteModel) bundle
+                    .getSerializable(Contants.CLAZZ_DATA_MODEL));
         }
 
-                /*获取最新的评论*/
-        if (superTagClazz.equals(Contants.CLAZZ_DISCOVER_ACTIVITY) ||
-                superTagClazz.equals(Contants.CLAZZ_PERSONAL_ACTIVITY) ||
-                superTagClazz.equals(Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY)
-                ) {
-
-            formateDataDiscover(shareMessage);
-
-        }
-
-
+        mHandler.sendEmptyMessage(MESSAGE_BING_MESSAGE);
     }
+
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -638,7 +602,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
     @Override
     public void mBack() {
-
+        back2superClazz();
 
     }
 
@@ -646,29 +610,15 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
      * 返回上一级
      */
     private void back2superClazz() {
-//LogUtils.logD("tagclazz = "+superTagClazz);
-        switch (superTagClazz) {
-
-            case Contants.CLAZZ_DISCOVER_ACTIVITY://shareMessage详细信息
-// TODO: 2016-03-18 更新信息
-            /*    if (isClick || commAdapter.isClick()) {//点击过则刷新界面
-                    LocationUtils.sendBordCast(mActivity, Contants.REFRESH_TYPE_DISCOVER);
-                }*/
-                backAFinsish();
-                break;
-
-            case Contants.CLAZZ_PERSONAL_ACTIVITY://分析消息记录
-                this.finish();
-                break;
-
-            case Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY://消息列表
-                backAFinsish();
-                break;
-
-            case Contants.CLAZZ_RANK_LIST_ACTIVITY://排行榜
-                backAFinsish();
-                break;
-        }
+//        // TODO: 2016-04-03 使用startActivityForResult实现消息更新，也可以使用finish结束当前activity
+//        if (Contants.CLAZZ_PERSONAL_ACTIVITY.equals(superTagClazz)
+//                || Contants.CLAZZ_WANT_TO_GO_ACTIVITY.equals(superTagClazz)
+//                || Contants.CLAZZ_USER_RECORD_ACTIVITY.equals(superTagClazz)) {//结束当前的Activity就好
+//            finish();
+//        } else {//其他需要跳转？好像也不用，先保持吧
+//            backAFinsish();
+//        }
+finish();
     }
 
     /**
@@ -725,23 +675,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
     }
 
-    /**
-     * sharemessage
-     * <p/>
-     * 处理数据
-     *
-     * @param serializableExtra
-     */
-    private void formateDataDiscover(Serializable serializableExtra) {
-
-        commModel = !superTagClazz.equals(Contants.CLAZZ_RANK_LIST_ACTIVITY) ?
-                DataFormateUtils.formateDataDiscover((ShareMessage_HZ)serializableExtra) :
-                (RemoteModel) serializableExtra;
-
-
-        mHandler.sendEmptyMessage(MESSAGE_BING_MESSAGE);
-    }
-
 
     @Override
     public void onClick(View v) {
@@ -762,7 +695,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
             case R.id.txt_message_detail_tosend://发送消息
                 finishPrepare();
-                receiverId = commModel.getMyUser().getObjectId();
+                receiverId = shareMessage.getMyUserId().getObjectId();
                 sendComment();
 
                 break;
@@ -780,7 +713,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
                 if (cuser != null) {
 
-                    List<String> shWantedNum = commModel.getWanted();
+                    List<String> shWantedNum = shareMessage.getShWantedNum();
 
                     wantToGo(UserUtils.isHadCurrentUser(shWantedNum, cuser.getObjectId()), v);
                 } else {
@@ -797,7 +730,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
                 if (cuser != null) {
 
-                    List<String> shVisitedNum = commModel.getVisited();
+                    List<String> shVisitedNum = shareMessage.getShVisitedNum();
                     visit(UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()), v);
 
                 } else {
@@ -846,23 +779,20 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 //            strId = R.string.not_visit;
             leftDrawID = R.drawable.icon_bottombar_hadgo;
 
-            commModel.getVisited().remove(cuser.getObjectId());
+            shareMessage.getShVisitedNum().remove(cuser.getObjectId());
         } else {
 //            strId = R.string.cancel_collect_success;
             leftDrawID = R.drawable.icon_hadgo;
-            commModel.getVisited().add(cuser.getObjectId());
+            shareMessage.getShVisitedNum().add(cuser.getObjectId());
         }
 
 
-        ((TextView) v).setText(commModel.getVisited() == null ?
-                getString(R.string.hadgo) : String.valueOf(commModel.getVisited().size()));
+        ((TextView) v).setText(shareMessage.getShVisitedNum() == null ?
+                getString(R.string.hadgo) : String.valueOf(shareMessage.getShVisitedNum().size()));
         ((TextView) v).setCompoundDrawablesWithIntrinsicBounds(leftDrawID, 0, 0, 0);
 
-        ShareMessage_HZ shareMessage = new ShareMessage_HZ();
-        shareMessage.setShVisitedNum(commModel.getVisited());
-        shareMessage.setMyUserId(commModel.getMyUser());
 
-        shareMessage.update(this, commModel.getObjectId(), new UpdateListener() {
+        shareMessage.update(this, shareMessage.getObjectId(), new UpdateListener() {
             @Override
             public void onSuccess() {
 //                mToast(strId);
@@ -886,7 +816,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
      * 更新想去的用户列表
      */
     private void updateHadGo() {
-        hadGoFragment.setWantUserId(commModel.getVisited());
+        hadGoFragment.setWantUserId(shareMessage.getShVisitedNum());
         hadGoFragment.initData();
     }
 
@@ -901,11 +831,10 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
         int leftDrawID;//提示图片资源id
         JSONObject jsonObject = new JSONObject();//参数
-        ShareMessage_HZ shareMessage = new ShareMessage_HZ();
         try {
             jsonObject.put("message", "1");
             jsonObject.put("userid", cuser.getObjectId());
-            jsonObject.put("collectionid", commModel.getObjectId());
+            jsonObject.put("collectionid", shareMessage.getObjectId());
 
         } catch (JSONException e) {
 //            e.printStackTrace();
@@ -924,7 +853,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
                     if (baseModel.getCode() == BaseModel.SUCCESS) {
 //                        mToast(R.string.operation_success);
-                        commModel.getWanted().remove(cuser.getObjectId());
+                        shareMessage.getShWantedNum().remove(cuser.getObjectId());
                         updateWantTo();
                         LogUtils.d("删除收藏记录 成功  data = " + baseModel.getData());
                     } else {
@@ -942,20 +871,17 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 //            strId = R.string.collect_success;
             leftDrawID = R.drawable.icon_wantogo_light;
 
-            commModel.getWanted().add(cuser.getObjectId());
-            shareMessage.setObjectId(commModel.getObjectId());
-            shareMessage.setMyUserId(commModel.getMyUser());
+            shareMessage.getShWantedNum().add(cuser.getObjectId());
 
 //MESSAGE_TYPE_SHAREMESSAGE
             BmobApi.saveCollectionShareMessage(this, cuser, shareMessage, Contants.MESSAGE_TYPE_SHAREMESSAGE);
 
         }
 
-        ((TextView) v).setText(commModel.getWanted() == null ?
-                getString(R.string.tx_wantogo) : String.valueOf(commModel.getWanted().size()));
+        ((TextView) v).setText(shareMessage.getShWantedNum() == null ?
+                getString(R.string.tx_wantogo) : String.valueOf(shareMessage.getShWantedNum().size()));
         ((TextView) v).setCompoundDrawablesWithIntrinsicBounds(leftDrawID, 0, 0, 0);
 
-        shareMessage.setShVisitedNum(commModel.getVisited());
         shareMessage.update(this, shareMessage.getObjectId(), new UpdateListener() {
             @Override
             public void onSuccess() {
@@ -978,7 +904,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
      * 更新喜欢的用户
      */
     private void updateWantTo() {
-        wantToGoFragment.setUserIdList(commModel.getWanted());
+        wantToGoFragment.setUserIdList(shareMessage.getShWantedNum());
         wantToGoFragment.initData();
 
     }
@@ -1015,8 +941,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
             bottomOptionBar.setVisibility(View.VISIBLE);
             sendComment_edt.clearFocus();
 
-            BmobApi.sendMessage(mActivity, commModel.getMyUser().getObjectId(), receiverId, sendComment_edt.getText().toString(),
-                    commModel.getObjectId(), new BmobApi.SendMessageCallback() {
+            BmobApi.sendMessage(mActivity, shareMessage.getMyUserId().getObjectId(), receiverId, sendComment_edt.getText().toString(),
+                    shareMessage.getObjectId(), new BmobApi.SendMessageCallback() {
                         @Override
                         public void onSuccessReflesh() {
 
@@ -1037,10 +963,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
      * 增加评论数量
      */
     private void commentIncrement() {
-        ShareMessage_HZ share = new ShareMessage_HZ();
-        share.setObjectId(commModel.getObjectId());
-        share.increment(Contants.PARAMS_SHCOMM_NUM);
-        share.update(mActivity);
+        shareMessage.increment(Contants.PARAMS_SHCOMM_NUM);
+        shareMessage.update(mActivity);
     }
 
     /**

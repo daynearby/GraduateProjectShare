@@ -50,6 +50,7 @@ public class BmobApi {
     public static final String GET_HEAT_MESSAGES = "GetHeatMessages";//获取排行榜热门数据
     public static final String GET_USER_AVATAR = "GetUserAvatar";//获取用户头像的地址，还需要进行编码
     public static final String GET_AD = "GetAd";//获取广告信息
+    public static final String GET_USER_RECORD = "GetUserRecord";//获取用户的全部发送记录
 
 
     private static Gson gson = new Gson();

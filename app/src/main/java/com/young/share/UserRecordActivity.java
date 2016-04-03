@@ -16,18 +16,24 @@ import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
 import com.young.share.interfaces.AsyncListener;
+import com.young.share.interfaces.ComparatorImpl;
 import com.young.share.interfaces.ListViewRefreshListener;
+import com.young.share.model.DiscountMessage_HZ;
+import com.young.share.model.RemoteModel;
 import com.young.share.model.ShareMessage_HZ;
-import com.young.share.model.gson.ShareMessageList;
+import com.young.share.model.gson.UserRecorderList;
 import com.young.share.network.BmobApi;
 import com.young.share.thread.MyRunnable;
+import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.LocationUtils;
 import com.young.share.utils.LogUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,8 +51,7 @@ public class UserRecordActivity extends BaseAppCompatActivity {
     private ImageView contentEmpty;
 
     private RecordAdapter recAdapter;
-    private List<ShareMessage_HZ> dataList = new ArrayList<>();
-    private List<ShareMessage_HZ> currentList = new ArrayList<>();
+    private List<RemoteModel> dataList = new ArrayList<>();
 
     private int starIndex = 0;
     private int endIndex = 20;
@@ -54,11 +59,10 @@ public class UserRecordActivity extends BaseAppCompatActivity {
     private boolean isGetMore = false;//从远程数据库获取更多数据
     private boolean isEmpty = false;//内容是否为空
 
-    private int RECORD_TYPE;//记录类型
     private int Skip = 0;//跳过的数量
-    private static final int MESSAFE_TYPE_SHARE = 10;//分享信息记录
-
     // TODO: 2015-12-05 线程池多线程并发进行
+    private static final int MESSAFE_TYPE_SHARE = 0x12;
+    private static final String SHARE_RECORD = "share_record";//分享信息记录
 
     @Override
     public int getLayoutId() {
@@ -70,7 +74,6 @@ public class UserRecordActivity extends BaseAppCompatActivity {
         initialiToolbar();
         Bundle bundle = getIntent().getExtras();
 
-        RECORD_TYPE = bundle.getInt(Contants.RECORD_TYPE, Contants.RECORD_TYPE_SHARE);//类型
 //设置标题
         setTitle(R.string.share_record);
 
@@ -82,7 +85,7 @@ public class UserRecordActivity extends BaseAppCompatActivity {
                 getShareRec();//获取数据
             }
         }));
-        dataList = (List<ShareMessage_HZ>) app.getCacheInstance().getAsObject(RECORD_TYPE + cuser.getObjectId());
+        dataList = (List<RemoteModel>) app.getCacheInstance().getAsObject(SHARE_RECORD + cuser.getObjectId());
     }
 
     @Override
@@ -205,7 +208,6 @@ public class UserRecordActivity extends BaseAppCompatActivity {
     }
 
 
-
     /**
      * 分享记录
      */
@@ -220,25 +222,61 @@ public class UserRecordActivity extends BaseAppCompatActivity {
             LogUtils.d("add params failure 　" + e.toString());
         }
 
-        BmobApi.AsyncFunction(mActivity, params, BmobApi.GET_SHARE_RECROD, ShareMessageList.class, new AsyncListener() {
+        BmobApi.AsyncFunction(mActivity, params, BmobApi.GET_USER_RECORD, UserRecorderList.class, new AsyncListener() {
             @Override
             public void onSuccess(Object object) {
-                ShareMessageList sharemessageList = (ShareMessageList) object;
+                UserRecorderList userRecorderList = (UserRecorderList) object;
 
                 if (isGetMore) {
-                    if (sharemessageList.getShareMessageHzList().size() > 0) {
-                        dataList.addAll(sharemessageList.getShareMessageHzList());
+
+                    if (userRecorderList.getShareMessage().size() > 0 || userRecorderList.getDiscountMessage().size() > 0) {
+
+                        for (ShareMessage_HZ sha : userRecorderList.getShareMessage()) {
+                            dataList.add(DataFormateUtils.formateDataDiscover(sha));
+                        }
+
+                        for (DiscountMessage_HZ disc : userRecorderList.getDiscountMessage()) {
+                            dataList.add(DataFormateUtils.formateDataDiscount(disc));
+                        }
+
+                        /*将两个表的数据进行排序*/
+                        if (dataList.size() > 0) {
+                            Collections.sort(dataList, new ComparatorImpl(ComparatorImpl.COMPREHENSIVE_CREATED));
+                            app.getCacheInstance().put(SHARE_RECORD + cuser.getObjectId(), (Serializable) dataList);
+                        }
+
                     } else {
                         mToast(R.string.no_more_messages);
                     }
-                } else {
 
-                    if (dataList==null){
-                        dataList =new ArrayList<>();
+                } else {
+                    if (dataList != null && dataList.size() > 0) {
+                        dataList.clear();
+                    }else {
+                        dataList = new ArrayList<RemoteModel>();
                     }
-//                格式化数据
-                    dataList = sharemessageList.getShareMessageHzList();
+
+                    for (ShareMessage_HZ sha : userRecorderList.getShareMessage()) {
+                        dataList.add(DataFormateUtils.formateDataDiscover(sha));
+                    }
+
+                    for (DiscountMessage_HZ disc : userRecorderList.getDiscountMessage()) {
+                        dataList.add(DataFormateUtils.formateDataDiscount(disc));
+                    }
+
+                        /*将两个表的数据进行排序*/
+                    if (dataList.size() > 0) {
+                        Collections.sort(dataList, new ComparatorImpl(ComparatorImpl.COMPREHENSIVE_CREATED));
+                        app.getCacheInstance().put(SHARE_RECORD + cuser.getObjectId(), (Serializable) dataList);
+                    }
+
+
                     isEmpty = dataList.size() <= 0;
+
+                }
+                //防止保存空数据，下次读取显示的时候报空指针
+                if (dataList.size() > 0) {
+                    app.getCacheInstance().put(SHARE_RECORD + cuser.getObjectId(), (Serializable) dataList);
                 }
 
                 mHandler.sendEmptyMessage(MESSAFE_TYPE_SHARE);
@@ -257,7 +295,6 @@ public class UserRecordActivity extends BaseAppCompatActivity {
         });
 
     }
-
 
 
     /**

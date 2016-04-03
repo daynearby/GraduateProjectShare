@@ -161,7 +161,7 @@ public class DiscoverFragment extends BaseFragment {
                 isFirstIn = true;
                 Bundle bundle = new Bundle();
                 bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_DISCOVER_ACTIVITY);
-                bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, dataList.get(position));
+                bundle.putSerializable(Contants.INTENT_KEY_DISCOVER, dataList.get(position));
 
                 LocationUtils.startActivity(context, bundle, MessageDetailActivity.class);
             }

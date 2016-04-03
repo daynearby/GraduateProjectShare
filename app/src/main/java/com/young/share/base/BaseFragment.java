@@ -21,7 +21,7 @@ import com.young.share.utils.LogUtils;
  */
 public abstract class BaseFragment extends Fragment {
 
-    private View view;
+    public View view;
     public ThreadPool threadPool;
     public Context context;
     public ApplicationConfig app;
@@ -38,8 +38,15 @@ public abstract class BaseFragment extends Fragment {
     public void initizliza(Context context) {
         this.context = context;
         app = ApplicationConfig.getInstance();
+
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        initizliza(context);
+
+    }
 
     public Handler mhandler = new Handler() {
         @Override
@@ -54,7 +61,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        view = inflater.inflate(getLayoutId(), null);
+        view = inflater.inflate(getLayoutId(), container,false);
         ViewGroup vg = (ViewGroup) view.getParent();
 //        view.findViewById(R.id.pb_item_photoview);
         if (vg != null) {
@@ -64,7 +71,7 @@ public abstract class BaseFragment extends Fragment {
         try {
             threadPool = app.getThreadInstance();
         } catch (NullPointerException e) {
-            LogUtils.e("must initBaseFragment() first");
+            LogUtils.e(" must initBaseFragment() first app = null");
         }
         getDataFromBunlde(getArguments());
 
@@ -82,7 +89,7 @@ public abstract class BaseFragment extends Fragment {
             try {
                 onFirstTimeLaunched();
             } catch (NullPointerException e) {
-                LogUtils.e("must initBaseFragment() first");
+                LogUtils.e("must initBaseFragment() first context = null");
             }
         }
 
@@ -192,7 +199,10 @@ public abstract class BaseFragment extends Fragment {
      * 获取传递过来的数据
      * 需要进行获取参数，那么就需要重写
      */
-    protected  void getDataFromBunlde(Bundle bundle){};
+    protected void getDataFromBunlde(Bundle bundle) {
+    }
+
+    ;
 
     public abstract int getLayoutId();
 

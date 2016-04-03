@@ -61,7 +61,7 @@
     </integer-array>
 
     <string-array name="select_option_item">
-        <item>我想去</item>
+        <item>收藏记录</item>
         <item>分享记录</item>
         <item>修改资料</item>
         <item>修改密码</item>

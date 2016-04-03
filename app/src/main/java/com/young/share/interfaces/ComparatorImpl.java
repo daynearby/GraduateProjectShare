@@ -7,15 +7,16 @@ import java.util.Comparator;
 /**
  * 排序
  * list 数据进行排序，按照一定的数量进行排序
- *
- * <p>
+ * <p/>
+ * <p/>
  * Created by Nearby Yang on 2015-12-19.
  */
 public class ComparatorImpl implements Comparator<Object> {
     private int key;
 
-    public static final int COMPREHENSIVE = 100;//综合排序
-    public static final int COMPREHENSIVE_OTHERS = 101;//其他的排序
+    public static final int COMPREHENSIVE = 0x100;//综合排序
+    public static final int COMPREHENSIVE_OTHERS = 0x101;//其他的排序
+    public static final int COMPREHENSIVE_CREATED = 0x102;//时间排序
 
     public ComparatorImpl(int key) {
         this.key = key;
@@ -58,6 +59,14 @@ public class ComparatorImpl implements Comparator<Object> {
                 result = data4Compre - data3Compre;
 
                 break;
+
+            case COMPREHENSIVE_CREATED:
+                RemoteModel data5 = (RemoteModel) json1;
+                RemoteModel data6 = (RemoteModel) json2;
+                result = (data5.getCreatedAt().compareTo(data6.getCreatedAt())) < 0 ? 1 : -1;
+
+                break;
+
         }
 
         return result;

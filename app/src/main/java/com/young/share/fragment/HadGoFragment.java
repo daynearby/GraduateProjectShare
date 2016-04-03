@@ -33,6 +33,7 @@ import java.util.List;
  * Created by Nearby Yang on 2016-03-19.
  */
 public class HadGoFragment extends BaseFragment {
+
     private TextView avatarTxt;
     private List<String> wantUserId;
     private List<MyUser> userList;
@@ -50,14 +51,6 @@ public class HadGoFragment extends BaseFragment {
 
     }
 
-    /**
-     * 初始化当前fragment的数据
-     */
-    private void initFragment() {
-
-        wantUserId = (List<String>) getArguments().getSerializable(BUNDLE_USER_ID_LIST);
-
-    }
 
     @Override
     protected void onSaveState(Bundle outState) {
@@ -93,6 +86,8 @@ public class HadGoFragment extends BaseFragment {
     public void initData() {
         /*初始化数据*/
 //        initFragment();
+        LogUtils.d("had go context = " + context);
+        avatarTxt = $(R.id.tv_want_to_go_avatar);
 
         if (wantUserId != null && wantUserId.size() > 0) {
 
@@ -142,6 +137,7 @@ public class HadGoFragment extends BaseFragment {
     @Override
     public void initView() {
         avatarTxt = $(R.id.tv_want_to_go_avatar);
+        LogUtils.e("init view ");
     }
 
     @Override
@@ -162,7 +158,8 @@ public class HadGoFragment extends BaseFragment {
                 break;
 
             case MESSAGE_CONVERT_USER_INFO:
-                avatarTxt.setText((CharSequence) msg.obj);
+//avatarTxt null
+                avatarTxt.setText(msg.obj !=null?(CharSequence) msg.obj:"");
                 break;
         }
     }

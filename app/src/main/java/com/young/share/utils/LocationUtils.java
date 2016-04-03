@@ -335,8 +335,8 @@ public class LocationUtils {
         }
 
 
-        v.setText(String.valueOf(discountMessage.getDtVisitedNum() == null ?
-                0 : discountMessage.getDtVisitedNum().size()));
+        v.setText(discountMessage.getDtVisitedNum() == null ?
+                ctx.getString(R.string.hadgo) : String.valueOf(discountMessage.getDtVisitedNum().size()));
 
         LocationUtils.leftDrawableVisited(v, discountMessage.getDtVisitedNum(), cuser.getObjectId());
 

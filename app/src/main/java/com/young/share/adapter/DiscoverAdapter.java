@@ -453,7 +453,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 
         bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_DISCOVER_ACTIVITY);
         bundle.putInt(Contants.EXPEND_OPTION_ONE, Contants.EXPEND_START_INPUT);
-        bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, shareMessage);
+        bundle.putSerializable(Contants.INTENT_KEY_DISCOVER, shareMessage);
 
         startActivity(MessageDetailActivity.class, bundle);
 

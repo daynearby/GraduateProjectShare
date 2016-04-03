@@ -1,8 +1,10 @@
 package com.young.share;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -10,14 +12,13 @@ import android.widget.ListView;
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.share.adapter.MessageCenterAdapter;
 import com.young.share.annotation.InjectView;
-import com.young.share.base.ItemActBarActivity;
+import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
-import com.young.share.model.RemoteModel;
-import com.young.share.model.gson.CommentList;
-import com.young.share.model.Comment_HZ;
-import com.young.share.model.Message_HZ;
 import com.young.share.interfaces.AsyncListener;
 import com.young.share.interfaces.ListViewRefreshListener;
+import com.young.share.model.Comment_HZ;
+import com.young.share.model.Message_HZ;
+import com.young.share.model.gson.CommentList;
 import com.young.share.network.BmobApi;
 import com.young.share.thread.MyRunnable;
 import com.young.share.utils.LocationUtils;
@@ -35,7 +36,7 @@ import cn.bmob.v3.listener.UpdateListener;
  * 消息中心
  * Created by Nearby Yang on 2015-12-06.
  */
-public class MessageCenterActivity extends ItemActBarActivity {
+public class MessageCenterActivity extends BaseAppCompatActivity {
 
     @InjectView(R.id.sw_message_center_refresh)
     private SwipeRefreshLayout swipeRefresh;
@@ -45,7 +46,7 @@ public class MessageCenterActivity extends ItemActBarActivity {
     private MessageCenterAdapter messageAdapter;
 
     private List<Comment_HZ> commentList = new ArrayList<>();
-    private List<RemoteModel> dataList = new ArrayList<>();
+    private List<Comment_HZ> dataList = new ArrayList<>();
 
     private int starIndex = 0;
     private int endIndex = 20;
@@ -64,21 +65,9 @@ public class MessageCenterActivity extends ItemActBarActivity {
 
     @Override
     public void initData() {
-        super.initData();
+        initialiToolbar();
+        setTitle(R.string.messages_center);
 
-        setBarItemVisible(true, false);
-        setTvTitle(R.string.messages_center);
-        setItemListener(new BarItemOnClick() {
-            @Override
-            public void leftClick(View v) {
-                back2superclazz();
-            }
-
-            @Override
-            public void rightClivk(View v) {
-
-            }
-        });
 
         SVProgressHUD.showWithStatus(mActivity, getString(R.string.tips_loading));
         //获取数据
@@ -144,6 +133,24 @@ public class MessageCenterActivity extends ItemActBarActivity {
 
     }
 
+    /**
+     * 初始化toolbar
+     */
+    private void initialiToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_message_center);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.icon_menu_back);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                back2superclazz();
+            }
+        });
+
+    }
+
+
     @Override
     public void handerMessage(Message msg) {
 
@@ -156,10 +163,9 @@ public class MessageCenterActivity extends ItemActBarActivity {
                 break;
 
             case UPDATE_MESSAGE:
-
-                List<RemoteModel> data = messageAdapter.getData();
-                data.get(msg.arg1).setRead(true);
-                messageAdapter.setData(data);
+//更新状态
+                messageAdapter.getData().get(msg.arg1).getMessageId().setRead(true);
+                messageAdapter.notifyDataSetChanged();
 
                 break;
         }
@@ -219,14 +225,14 @@ public class MessageCenterActivity extends ItemActBarActivity {
 
                 if (isGetMore) {
                     if (commentList.getCommentList().size() > 0) {
-                        dataList.addAll(formateData(commentList.getCommentList()));
+                        dataList.addAll(commentList.getCommentList());
                     } else {
                         mToast(R.string.no_more_messages);
                     }
                 } else {
-                    dataList.clear();
+
 //                格式化数据
-                    dataList = formateData(commentList.getCommentList());
+                    dataList = commentList.getCommentList();
 
                 }
 
@@ -250,33 +256,6 @@ public class MessageCenterActivity extends ItemActBarActivity {
 
     }
 
-    /**
-     * 将该类转换成通用的object
-     *
-     * @param commentList
-     * @return
-     */
-    private List<RemoteModel> formateData(List<Comment_HZ> commentList) {
-
-        List<RemoteModel> commList = new ArrayList<>();
-        for (Comment_HZ comment : commentList) {
-
-            RemoteModel comm = new RemoteModel();
-
-            comm.setObjectId(comment.getMessageId().getObjectId());
-            comm.setContent(comment.getMessageId().getCommContent());
-            comm.setCreatedAt(comment.getMessageId().getCreatedAt());
-            comm.setShareMessage(comment.getShMsgId());
-            comm.setReceiver(comment.getReveicerId());
-            comm.setSender(comment.getSenderId());
-            comm.setRead(comment.getMessageId().isRead());
-
-            commList.add(comm);
-        }
-
-        return commList;
-    }
-
 
     /**
      * 点击事件
@@ -287,10 +266,9 @@ public class MessageCenterActivity extends ItemActBarActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //将消息标记为已读
             updateMessage(position);
-
             Bundle bundle = new Bundle();
             bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY);
-            bundle.putSerializable(Contants.CLAZZ_DATA_MESSAGE, dataList.get(position).getShareMessage());
+            bundle.putSerializable(Contants.INTENT_KEY_DISCOVER, dataList.get(position).getShMsgId());
 
             mStartActivity(MessageDetailActivity.class, bundle);
 

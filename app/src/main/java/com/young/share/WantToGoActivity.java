@@ -27,6 +27,7 @@ import com.young.share.utils.LogUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,21 +66,21 @@ public class WantToGoActivity extends BaseAppCompatActivity {
     }
 
     @Override
+    protected void initData() {
+        initialiToolbar();
+        setTitle(R.string.collection_record);
+        dataList = (List<RemoteModel>) app.getCacheInstance().getAsObject(getString(R.string.collection_record) + cuser.getObjectId());
+
+        getCollectionRec();
+
+    }
+
+    @Override
     protected void findviewbyid() {
         wantAdapter = new WantToGoAdapter(mActivity);
         listview.setAdapter(wantAdapter);
         listview.setOnItemClickListener(new itemClick());
 
-        if (dataList != null && dataList.size() > 0) {
-            mHandler.sendEmptyMessage(MESSAFE_TYPE_MODEL);
-        }
-
-    }
-
-    @Override
-    protected void initData() {
-        initialiToolbar();
-        setTitle(R.string.collection_record);
 
     }
 
@@ -123,6 +124,11 @@ public class WantToGoActivity extends BaseAppCompatActivity {
 
             }
         });
+
+        if (dataList != null && dataList.size() > 0) {
+            mHandler.sendEmptyMessage(MESSAFE_TYPE_MODEL);
+        }
+
     }
 
     /**
@@ -222,6 +228,12 @@ public class WantToGoActivity extends BaseAppCompatActivity {
                     }
 
                 }
+/**
+ * 保存数据到本地
+ */
+                if (dataList.size() > 0) {
+                    app.getCacheInstance().put(getString(R.string.collection_record) + cuser.getObjectId(), (Serializable) dataList);
+                }
 
                 mHandler.sendEmptyMessage(MESSAFE_TYPE_MODEL);
             }
@@ -270,12 +282,18 @@ public class WantToGoActivity extends BaseAppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Bundle bundle = new Bundle();
-            bundle.putSerializable(Contants.BUNDLE_TAG, dataList.get(position));
-// TODO: 2016-04-02 区分类型，跳转到不同的界面
+            RemoteModel remoteModel = dataList.get(position);
+            bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, remoteModel);
             bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_PERSONAL_ACTIVITY);//shareMessage
 
+// TODO: 2016-04-02 区分类型，跳转到不同的界面
+            if (remoteModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES) {//分享信息
+                mStartActivity(MessageDetailActivity.class, bundle);
+            } else {//折扣信息
+                mStartActivity(DiscoutDetailActivity.class, bundle);
+            }
 
-            mStartActivity(MessageDetailActivity.class, bundle);
+
         }
     }
 

@@ -20,9 +20,6 @@ public class DiscountMessage_HZ extends BmobObject {
     private List<String> dtWantedNum;
     private List<String> dtVisitedNum;
 
-
-
-
     public MyUser getMyUserId() {
         return userId;
     }
@@ -85,5 +82,10 @@ public class DiscountMessage_HZ extends BmobObject {
 
     public void setDtVisitedNum(List<String> dtVisitedNum) {
         this.dtVisitedNum = dtVisitedNum;
+    }
+
+    @Override
+    public void setCreatedAt(String createdAt) {
+        super.setCreatedAt(createdAt);
     }
 }

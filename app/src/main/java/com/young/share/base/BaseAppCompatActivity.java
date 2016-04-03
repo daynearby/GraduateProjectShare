@@ -19,6 +19,7 @@ import com.young.share.MessageCenterActivity;
 import com.young.share.R;
 import com.young.share.RankListActivity;
 import com.young.share.UserRecordActivity;
+import com.young.share.WantToGoActivity;
 import com.young.share.annotation.Injector;
 import com.young.share.config.ApplicationConfig;
 import com.young.share.config.Contants;
@@ -130,6 +131,14 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
                 clazz = UserRecordActivity.class;
                 break;
+            case Contants.CLAZZ_WANT_TO_GO_ACTIVITY://用户收藏，或者定义为：想去
+                clazz = WantToGoActivity.class;
+                break;
+            case Contants.CLAZZ_USER_RECORD_ACTIVITY://用户分享记录
+                clazz = UserRecordActivity.class;
+                break;
+
+
             case Contants.CLAZZ_MESSAGE_CENTER_ACTIVITY://消息中心
                 clazz = MessageCenterActivity.class;
 
@@ -180,6 +189,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public void mToast(int strId) {
         Toast.makeText(this, strId, Toast.LENGTH_LONG).show();
     }
+
     /**
      * toast
      *

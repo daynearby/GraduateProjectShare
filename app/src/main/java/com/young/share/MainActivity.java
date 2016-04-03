@@ -63,9 +63,9 @@ public class MainActivity extends CustomActBarActivity {
         DiscountFragment discountFragment = new DiscountFragment();
         DiscoverFragment discoverFragment = new DiscoverFragment();
         RankFragment rankFragment = new RankFragment();
-        discountFragment.initizliza(this);
-        discoverFragment.initizliza(this);
-        rankFragment.initizliza(this);
+//        discountFragment.initizliza(this);
+//        discoverFragment.initizliza(this);
+//        rankFragment.initizliza(this);
 
         list.add(discountFragment);
         list.add(discoverFragment);

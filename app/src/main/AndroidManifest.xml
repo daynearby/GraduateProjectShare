@@ -109,8 +109,12 @@
             android:name=".PersonalCenterActivity"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar" />
+        
         <!--用户收藏记录-->
-        <activity android:name=".WantToGoActivity" />
+        <activity
+            android:name=".WantToGoActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <!-- 选择照片-->
         <activity
             android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"
@@ -144,7 +148,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <!--消息中心 -->
-        <activity android:name=".MessageCenterActivity" />
+        <activity
+            android:name=".MessageCenterActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- 详细优惠信息 -->
         <activity
@@ -155,7 +161,7 @@
         <!--排行榜的列表-->
         <activity
             android:name=".RankListActivity"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <!--百度地图 -->

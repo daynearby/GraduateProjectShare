@@ -3,11 +3,11 @@ package com.young.share.utils;
 import android.content.Context;
 
 import com.young.share.config.Contants;
-import com.young.share.model.RemoteModel;
 import com.young.share.model.Comment_HZ;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
+import com.young.share.model.RemoteModel;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.dbmodel.ShareMessage;
 import com.young.share.model.dbmodel.User;
@@ -69,7 +69,7 @@ public class DataFormateUtils {
      * @param shareMessage 要格式化的分享信息
      * @return 通用格式
      */
-    public static RemoteModel formateDataDiscover( ShareMessage_HZ shareMessage) {
+    public static RemoteModel formateDataDiscover(ShareMessage_HZ shareMessage) {
         RemoteModel commModel = new RemoteModel();
 
         commModel.setContent(shareMessage.getShContent());
@@ -89,6 +89,32 @@ public class DataFormateUtils {
         return commModel;
     }
 
+    /**
+     * 将sharemessage格式化成通用格式
+     * <p/>
+     * 处理数据
+     *
+     * @param remoteModel 要格式化的分享信息
+     * @return 通用格式
+     */
+    public static ShareMessage_HZ formateDataRemoteModel(RemoteModel remoteModel) {
+        ShareMessage_HZ shareMessage = new ShareMessage_HZ();
+        shareMessage.setShContent(remoteModel.getContent());
+
+        shareMessage.setShImgs(remoteModel.getImages());
+        shareMessage.setShLocation(remoteModel.getLocationInfo());
+        shareMessage.setShTag(remoteModel.getTag());
+        shareMessage.setMyUserId(remoteModel.getMyUser());
+        shareMessage.setShVisitedNum(remoteModel.getVisited());
+        shareMessage.setShWantedNum(remoteModel.getWanted());
+        shareMessage.setObjectId(remoteModel.getObjectId());
+        shareMessage.setShCommNum(remoteModel.getComment());
+        shareMessage.setCreatedAt(remoteModel.getCreatedAt());
+        shareMessage.setVideo(remoteModel.getVideo());
+        shareMessage.setVideoPreview(remoteModel.getVideoPreview());
+
+        return shareMessage;
+    }
 
 
     /**
@@ -116,7 +142,30 @@ public class DataFormateUtils {
     }
 
     /**
+     * 通用的结构转化成商家优惠
+     *
+     * @param remoteModel 要格式化的通用数据结构
+     * @return 折扣数据结构
+     */
+    public static DiscountMessage_HZ formateDataDiscount(RemoteModel remoteModel) {
+        DiscountMessage_HZ discountMessage = new DiscountMessage_HZ();
+
+        discountMessage.setDtContent(remoteModel.getContent());
+        discountMessage.setDtImgs(remoteModel.getImages());
+        discountMessage.setDtLocation(remoteModel.getLocationInfo());
+        discountMessage.setDtTag(remoteModel.getTag());
+        discountMessage.setMyUserId(remoteModel.getMyUser());
+        discountMessage.setDtVisitedNum(remoteModel.getVisited());
+        discountMessage.setDtWantedNum(remoteModel.getWanted());
+        discountMessage.setObjectId(remoteModel.getObjectId());
+        discountMessage.setCreatedAt(remoteModel.getCreatedAt());
+
+        return discountMessage;
+    }
+
+    /**
      * 将通用的结构格式化成分享信息结构
+     *
      * @param commModel 通用的格式
      * @return 分享信息的格式
      */
@@ -165,7 +214,7 @@ public class DataFormateUtils {
      * @param share
      * @return
      */
-    public static ShareMessage formateShareMessae(ShareMessage_HZ share){
+    public static ShareMessage formateShareMessae(ShareMessage_HZ share) {
         ShareMessage shareMessage = new ShareMessage();
         shareMessage.setObjectId(share.getObjectId());
         shareMessage.setShImgs(String.valueOf(share.getShImgs()));
