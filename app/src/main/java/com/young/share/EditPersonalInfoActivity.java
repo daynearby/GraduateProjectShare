@@ -9,6 +9,8 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -91,6 +93,8 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
         save_tv.setOnClickListener(this);
 //        cancel_tv.setOnClickListener(this);
         gender_tv.setOnClickListener(this);
+
+
         age_tv.setOnClickListener(this);
         hometown_tv.setOnClickListener(this);
         identifyCodeDialog = new IdentifyCodeDialog(this);
@@ -101,6 +105,50 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
         gender_popupList = new PopupWinListView(this, XmlUtils.getSelectGender(this), false);
         age_popupList = new PopupWinListView(this, XmlUtils.getSelectAge(this), false);
         hometown_popupList = new CitySelectPopupWin(this, XmlUtils.getSelectCities(this));
+/*输入框监听*/
+        setTextChangListener();
+/*context menu */
+        setContextMenuCreatListener();
+
+        gender_popupList.setItemClick(new PopupWinListView.onItemClick() {
+            @Override
+            public void onClick(View view, String str, int position, long id) {
+//                LogUtils.logD("性别 = "+ str +" position = "+position);
+                gender_tv.setText(str);
+                gender = str;
+            }
+        });
+
+        age_popupList.setItemClick(new PopupWinListView.onItemClick() {
+            @Override
+            public void onClick(View view, String str, int position, long id) {
+//                LogUtils.logD("年龄 = "+ str +" position = "+position);
+                age_tv.setText(str);
+                age = str;
+            }
+        });
+
+        hometown_popupList.setResultListener(new CitySelectPopupWin.ResultListener() {
+            @Override
+            public void result(String str) {
+//                LogUtils.logD("城市 = "+ str);
+                hometown_tv.setText(str);
+                hometown = str;
+            }
+        });
+//
+        getUserDatas();
+        //初始化计时器
+        timeCount();
+
+        /*dialog*/
+        dialogSetDismiss();
+    }
+
+    /**
+     * 输入框输入监听
+     */
+    private void setTextChangListener() {
         nickname_et.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -159,45 +207,57 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
                 }
             }
         });
+    }
 
-        gender_popupList.setItemClick(new PopupWinListView.onItemClick() {
-            @Override
-            public void onClick(View view, String str, int position, long id) {
-//                LogUtils.logD("性别 = "+ str +" position = "+position);
-                gender_tv.setText(str);
-                gender = str;
+    /**
+     * contextmenu
+     */
+    private void setContextMenuCreatListener() {
+//性别
+        gender_tv.setOnCreateContextMenuListener(contextMenuListener);
+        //年龄
+        age_tv.setOnCreateContextMenuListener(contextMenuListener);
+
+    }
+
+    /**
+     * contextMenu
+     */
+    private View.OnCreateContextMenuListener contextMenuListener = new View.OnCreateContextMenuListener() {
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            int menuViewId = 0;
+            switch (view.getId()) {
+
+                case R.id.popupwin_edit_personnal_info_gender://性别选择
+                    menuViewId = R.menu.menu_context_gender;
+
+                    break;
+                case R.id.popupwin_edit_personnal_info_age:
+                    menuViewId = R.menu.menu_context_age;
+                    addMenu(contextMenu);
+                    break;
             }
-        });
 
-        age_popupList.setItemClick(new PopupWinListView.onItemClick() {
-            @Override
-            public void onClick(View view, String str, int position, long id) {
-//                LogUtils.logD("年龄 = "+ str +" position = "+position);
-                age_tv.setText(str);
-                age = str;
-            }
-        });
 
-        hometown_popupList.setResultListener(new CitySelectPopupWin.ResultListener() {
-            @Override
-            public void result(String str) {
-//                LogUtils.logD("城市 = "+ str);
-                hometown_tv.setText(str);
-                hometown = str;
-            }
-        });
-//
-        getUserDatas();
-        //初始化计时器
-        timeCount();
+            getMenuInflater().inflate(menuViewId, contextMenu);
+        }
+    };
 
-        /*dialog*/
-        dialogSetDismiss();
+    /**
+     * 添加菜单内容
+     */
+    private void addMenu(ContextMenu contextMenu) {
+
+        for (int i = 16; i <= 60; i++) {
+            contextMenu.add(0, i, Menu.NONE, String.valueOf(i));
+        }
+
     }
 
 
     /**
-     * 初始化toolbar
+     * 初始化oolbar
      */
     private void initialiToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tb_edit_personal_info);
@@ -358,10 +418,13 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
                 break;
 
             case R.id.popupwin_edit_personnal_info_gender://性别
-                gender_popupList.onShow(v);
+//                gender_popupList.onShow(v);
+
+                openContextMenu(v);
                 break;
             case R.id.popupwin_edit_personnal_info_age://年龄
-                age_popupList.onShow(v);
+//                age_popupList.onShow(v);
+                openContextMenu(v);
                 break;
             case R.id.popupwin_edit_personnal_info_hometown://城市
                 hometown_popupList.setDatas(XmlUtils.getSelectCities(this));

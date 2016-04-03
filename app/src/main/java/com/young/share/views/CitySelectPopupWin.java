@@ -21,11 +21,10 @@ public class CitySelectPopupWin extends PopupWinListView {
     private boolean isCity = true;
     private String city;
     private String areas;
-    private Context ctx;
 
+    // TODO: 2016-04-03 编辑样式大小、位置使之更合理
     public CitySelectPopupWin(final Context ctx, List<String> datas) {
         super(ctx, datas, true);
-        this.ctx = ctx;
 
         setItemClick(new onItemClick() {
             @Override
@@ -65,12 +64,12 @@ public class CitySelectPopupWin extends PopupWinListView {
     @Override
     public void onShow(View v) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            int offsetPx = (DisplayUtils.getScreenWidthPixels((Activity) ctx) - v.getWidth()) / 2;
-            int offsetPx2dp = DisplayUtils.px2dip(ctx, offsetPx);
+            int offsetPx = (DisplayUtils.getScreenWidthPixels((Activity) context) - v.getWidth()) / 2;
+            int offsetPx2dp = DisplayUtils.px2dip(context, offsetPx);
             showAsDropDown(v, -offsetPx2dp, 0, Gravity.TOP);
         } else {
 
-            int widthDp = DisplayUtils.px2dip(ctx, v.getWidth()) / 2;
+            int widthDp = DisplayUtils.px2dip(context, v.getWidth()) / 2;
             showAtLocation(v, Gravity.TOP, -widthDp, 0);
         }
 

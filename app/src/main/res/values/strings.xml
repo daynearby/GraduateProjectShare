@@ -168,5 +168,10 @@
     <string name="toast_edit_nicke_name">请完善昵称</string>
     <string name="toast_phone_verif_failure">手机号验证失败</string>
     <string name="txt_erro_message">"服务器异常 code = "</string>
+    <string name="txt_serve_erro">"服务器异常"</string>
+    <string name="menu_copy">复制</string>
+    <string name="menu_female">女</string>
+    <string name="menu_male">男</string>
+    <string name="txt_min_age">15</string>
 
 </resources>

@@ -360,7 +360,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
 
                         @Override
                         public void onFailure() {
-                            toast(getString(R.string.txt_erro_message));
+                            toast(getString(R.string.txt_serve_erro));
                         }
                     });
             isClick = true;
