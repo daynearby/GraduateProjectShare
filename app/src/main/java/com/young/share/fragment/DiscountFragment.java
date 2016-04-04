@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -59,6 +60,7 @@ public class DiscountFragment extends BaseFragment {
     private DiscountAdapter discAdapter;
     private FlashView flashView;
     private View headerView;
+    private ImageView tipsIm;
 
     private int startIndex = 0;
     private int endIndex = 20;
@@ -126,6 +128,8 @@ public class DiscountFragment extends BaseFragment {
         flashView = (FlashView) headerView.findViewById(R.id.flash_view);
         swipeRefreshLayout = $(R.id.sw_discount_refresh);
         listview = $(R.id.list_discount);
+        tipsIm = $(R.id.im_discount_tips);
+
         discAdapter = new DiscountAdapter(context);
 
 
@@ -276,13 +280,15 @@ public class DiscountFragment extends BaseFragment {
                             }
 
                         } else {
-                            if (dataList != null && dataList.size() > 0) {
-                                dataList.clear();
-                            }
-                            dataList = disMessageList.getDiscountList();
-                            if (dataList != null && dataList.size() > 0) {
+
+                            if ( disMessageList.getDiscountList().size() > 0) {
+                                tipsIm.setVisibility(View.GONE);
+                                dataList = disMessageList.getDiscountList();
                                 app.getCacheInstance().put(Contants.ACAHE_KEY_DISCOUNT, (Serializable) dataList);
                                 mhandler.sendEmptyMessage(MESSAGES_NEW_MESSAGE);
+                            } else {
+                                tipsIm.setVisibility(View.VISIBLE);
+                                tipsIm.setImageResource(R.drawable.icon_conten_empty);
                             }
                         }
 

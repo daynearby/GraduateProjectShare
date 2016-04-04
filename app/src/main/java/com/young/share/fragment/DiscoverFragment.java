@@ -5,7 +5,7 @@ import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -45,7 +45,8 @@ public class DiscoverFragment extends BaseFragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private DiscoverAdapter listviewAdapter;
     private List<ShareMessage_HZ> dataList = new ArrayList<>();
-
+    private ImageView tipsIm;
+    private ListView listView;
 
     private static final int FIRST_GETDATA = 0x1001;
     private static final int GET_LOACTIOPN_DATA = 0x1002;
@@ -108,11 +109,40 @@ public class DiscoverFragment extends BaseFragment {
     public void initView() {
         listviewAdapter = new DiscoverAdapter(context);
 
-        ListView listView = $(R.id.list_discover);
+         listView = $(R.id.list_discover);
         swipeRefreshLayout = $(R.id.sw_refresh_pager_discover);
+        tipsIm = $(R.id.im_discover_tips);
 
         listView.setAdapter(listviewAdapter);
 
+
+
+
+    }
+
+    @Override
+    public void bindData() {
+        //下拉上拉，点击
+        setListPullAndClickListener();
+
+        swipeRefreshLayout.setRefreshing(true);
+
+        if (isFirstIn) {
+            swipeRefreshLayout.setRefreshing(true);
+            isFirstIn = false;
+        }
+
+        if (dataList != null && dataList.size() > 0) {
+            mhandler.sendEmptyMessage(HANDLER_GET_DATA);
+        }
+
+    }
+
+    /**
+     * 下拉刷新、上拉加载更多
+     * 点击事件
+     */
+    private void setListPullAndClickListener(){
         //ListView的上拉、下拉刷新
         new ListViewRefreshListener(listView, swipeRefreshLayout,
                 new ListViewRefreshListener.RefreshListener() {
@@ -166,24 +196,7 @@ public class DiscoverFragment extends BaseFragment {
                 LocationUtils.startActivity(context, bundle, MessageDetailActivity.class);
             }
         });
-
-
     }
-
-    @Override
-    public void bindData() {
-        swipeRefreshLayout.setRefreshing(true);
-        if (isFirstIn) {
-            swipeRefreshLayout.setRefreshing(true);
-            isFirstIn = false;
-        }
-
-        if (dataList != null && dataList.size() > 0) {
-            mhandler.sendEmptyMessage(HANDLER_GET_DATA);
-        }
-
-    }
-
     @Override
     public void handler(Message msg) {
         switch (msg.what) {
@@ -196,12 +209,13 @@ public class DiscoverFragment extends BaseFragment {
 //                LogUtils.d("获取数据");
 //                break;
             case HANDLER_GET_DATA:
-                if (dataList != null && dataList.size() > 0) {
 
+                if (dataList != null && dataList.size() > 0) {
+                    tipsIm.setVisibility(View.GONE);
                     refreshUI();
                 } else {
-                    LinearLayout linearLayout = $(R.id.llayout_disvocer_bg);
-                    linearLayout.setBackgroundResource(R.drawable.icon_conten_empty);
+                     tipsIm.setVisibility(View.VISIBLE);
+                    tipsIm.setImageResource(R.drawable.icon_conten_empty);
                 }
                 break;
 
@@ -238,15 +252,13 @@ public class DiscoverFragment extends BaseFragment {
                             }
 
                         } else {
-                            if (dataList != null && dataList.size() > 0) {
-                                dataList.clear();
-                            }
-                            dataList = shareMessageList.getShareMessageHzList();
-                            //保存数据到本地数据库
+                            if (shareMessageList.getShareMessageHzList().size() > 0) {
+                                dataList = shareMessageList.getShareMessageHzList();
+                                //保存数据到本地数据库
 //                            saveData(dataList);
-                            if (dataList != null && dataList.size() > 0) {
                                 app.getCacheInstance().put(Contants.ACAHE_KEY_DISCOVER, (Serializable) dataList);
                             }
+
                         }
                         mhandler.sendEmptyMessage(HANDLER_GET_DATA);
                     }

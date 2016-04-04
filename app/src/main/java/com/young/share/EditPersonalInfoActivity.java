@@ -13,6 +13,7 @@ import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import com.young.share.utils.StringUtils;
 import com.young.share.utils.XmlUtils;
 import com.young.share.views.CitySelectPopupWin;
 import com.young.share.views.IdentifyCodeDialog;
+import com.young.share.views.PopupMenuHub;
 import com.young.share.views.PopupWinListView;
 
 import cn.bmob.sms.BmobSMS;
@@ -64,6 +66,7 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
     private PopupWinListView gender_popupList;
     private PopupWinListView age_popupList;
     private CitySelectPopupWin hometown_popupList;
+    private  PopupMenu popupMenu;
     private boolean phoneVerific = true;//手机号验证结果
     private boolean phoneFormateVerific = true;//手机号格式验证结果,默认没有进行信息修改
     private boolean nameVerific = true;//用户名长度验证结果
@@ -136,6 +139,8 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
                 hometown = str;
             }
         });
+
+         popupMenu = PopupMenuHub.citySelectMenu(mActivity, hometown_tv);
 //
         getUserDatas();
         //初始化计时器
@@ -234,7 +239,7 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
 
                     break;
                 case R.id.popupwin_edit_personnal_info_age:
-                    menuViewId = R.menu.menu_context_age;
+                    menuViewId = R.menu.menu_context_empty;
                     addMenu(contextMenu);
                     break;
             }
@@ -427,8 +432,9 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
                 openContextMenu(v);
                 break;
             case R.id.popupwin_edit_personnal_info_hometown://城市
-                hometown_popupList.setDatas(XmlUtils.getSelectCities(this));
-                hometown_popupList.onShow(v);
+//                hometown_popupList.setDatas(XmlUtils.getSelectCities(this));
+//                hometown_popupList.onShow(v);
+                 popupMenu.show();
                 break;
         }
     }
