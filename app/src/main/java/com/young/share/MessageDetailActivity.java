@@ -230,8 +230,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
             @Override
             public void onFocusChange(View view, boolean focus) {
 
-                LogUtils.e("focus = " + focus);
-
                 if (focus) {
                     imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 } else {
@@ -329,7 +327,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
         ceatedAt_tv.setText(shareMessage.getCreatedAt());
 
-        comment_tv.setText(shareMessage.getShCommNum() > 0 ? String.valueOf(shareMessage.getShCommNum()) : getString(R.string.tx_comment));
+        comment_tv.setText(shareMessage.getShCommNum() > 0 ?
+                String.valueOf(shareMessage.getShCommNum()) : getString(R.string.tx_comment));
 /**
  * 设置图片
  */
@@ -617,7 +616,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 //        } else {//其他需要跳转？好像也不用，先保持吧
 //            backAFinsish();
 //        }
-finish();
+        finish();
     }
 
     /**
@@ -815,6 +814,10 @@ finish();
      * 更新想去的用户列表
      */
     private void updateHadGo() {
+
+
+        hadgo_tv.setText(shareMessage.getShVisitedNum() != null && shareMessage.getShVisitedNum().size() > 0 ?
+                String.valueOf(shareMessage.getShVisitedNum().size()) : getString(R.string.hadgo));
         hadGoFragment.setWantUserId(shareMessage.getShVisitedNum());
         hadGoFragment.initData();
     }
@@ -903,6 +906,10 @@ finish();
      * 更新喜欢的用户
      */
     private void updateWantTo() {
+
+        wanto_tv.setText(shareMessage.getShWantedNum() != null && shareMessage.getShWantedNum().size() > 0 ?
+                String.valueOf(shareMessage.getShWantedNum().size()) : getString(R.string.tx_wantogo));
+
         wantToGoFragment.setUserIdList(shareMessage.getShWantedNum());
         wantToGoFragment.initData();
 
@@ -962,8 +969,11 @@ finish();
      * 增加评论数量
      */
     private void commentIncrement() {
+
         shareMessage.increment(Contants.PARAMS_SHCOMM_NUM);
         shareMessage.update(mActivity);
+        comment_tv.setText(shareMessage.getShCommNum() > 0 ?
+                String.valueOf(shareMessage.getShCommNum()) : getString(R.string.tx_comment));
     }
 
     /**

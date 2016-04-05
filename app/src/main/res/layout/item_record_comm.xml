@@ -3,10 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardview"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/paddingHit"
-    android:layout_marginLeft="@dimen/paddingMic"
-    android:layout_marginRight="@dimen/paddingMic"
     android:layout_marginTop="@dimen/paddingHit"
     android:descendantFocusability="blocksDescendants"
     app:cardBackgroundColor="@color/white"
@@ -30,11 +28,6 @@
             android:ellipsize="end"
             android:maxLines="3"
             android:text="@string/defaul_share_text" />
-
-        <TextView
-            style="@style/text_style_match"
-            android:gravity="center"
-            android:text="@string/click_get_more" />
 
         <TextView
             android:id="@+id/tv_record_comm_created"

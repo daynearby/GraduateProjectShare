@@ -3,6 +3,7 @@ package com.young.share.fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.TextView;
@@ -159,10 +160,10 @@ public class WantToGoFragment extends BaseFragment {
                 break;
 
             case MESSAGE_CONVERT_USER_INFO:
-                if (avatarTxt ==null){
+                if (avatarTxt == null) {
                     avatarTxt = $(R.id.tv_want_to_go_avatar);
                 }
-                    avatarTxt.setText(msg.obj != null?(CharSequence) msg.obj:"");
+                avatarTxt.setText(msg.obj != null ? (CharSequence) msg.obj : "");
                 break;
         }
     }
@@ -176,7 +177,9 @@ public class WantToGoFragment extends BaseFragment {
 
         for (MyUser u : userList) {
 
-            ImageLoader.getInstance().loadImage(NetworkUtils.getRealUrl(context, u.getAvatar()),
+            ImageLoader.getInstance().loadImage(TextUtils.isEmpty(u.getAvatar()) ?
+                            Contants.DEFAULT_AVATAR : NetworkUtils.getRealUrl(context,
+                            u.getAvatar()),
                     mImageSize,
                     new SimpleImageLoadingListener() {
                         @Override

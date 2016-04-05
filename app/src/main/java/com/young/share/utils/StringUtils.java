@@ -89,21 +89,22 @@ public class StringUtils {
 
         return val;
     }
+
     /**
      * 手机号验证
      *
-     * @param  phoneNumberStr
+     * @param phoneNumberStr
      * @return 验证通过返回true
      */
-    public static boolean phoneNumberValid(String phoneNumberStr){
+    public static boolean phoneNumberValid(String phoneNumberStr) {
 
-            Pattern p = null;
-            Matcher m = null;
-            boolean b = false;
-            p = Pattern.compile("^[1][3,4,5,8][0-9]{9}$"); // 验证手机号
-            m = p.matcher(phoneNumberStr);
-            b = m.matches();
-            return b;
+        Pattern p = null;
+        Matcher m = null;
+        boolean b = false;
+        p = Pattern.compile("^[1][3,4,5,8][0-9]{9}$"); // 验证手机号
+        m = p.matcher(phoneNumberStr);
+        b = m.matches();
+        return b;
 
     }
 
@@ -116,32 +117,35 @@ public class StringUtils {
      * @return
      */
     public static SpannableStringBuilder idConver2Bitmap(final Context context,
-                                                         List<String> userIds,
-                                                         List<Bitmap> avatarList, final TextLink textLink) {
+                                                         final List<String> userIds,
+                                                         List<Bitmap> avatarList,
+                                                         final TextLink textLink) {
 
         String text = "";
         for (String id : userIds) {
-            text = text + id + "  ";
+            text += id + " ";
         }
 
         SpannableStringBuilder ssb = new SpannableStringBuilder(text);
-
-        ClickableSpan click_span = new ClickableSpan() {
-
-            @Override
-            public void onClick(View widget) {
-                TextView tx = (TextView) widget;
-
-                if (textLink!=null){
-                    textLink.onclick(tx.getText().toString().trim());
-                }
+/**
+ * 点击事件
+ */
+//        ClickableSpan click_span = new ClickableSpan() {
+//
+//            @Override
+//            public void onClick(View widget) {
+//                TextView tx = (TextView) widget;
+//
+//                if (textLink != null) {
+//                    textLink.onclick(tx.getText().toString().trim());
+//                }
 //                Toast.makeText(context,
 //                        "Image Clicked " + widget.getId() + " text " + tx.getText(),
 //                        Toast.LENGTH_SHORT).show();
-
-            }
-
-        };
+//
+//            }
+//
+//        };
 
         for (int i = 0; i < userIds.size(); i++) {
             Pattern pattern = Pattern.compile(userIds.get(i));
@@ -153,12 +157,28 @@ public class StringUtils {
                         , matcher.start(), matcher
                         .end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-
-            int start = ssb.getSpanStart(imageSpan);
-            int end = ssb.getSpanEnd(imageSpan);
+            //SPAN_EXCLUSIVE_EXCLUSIVE
+                int start = ssb.getSpanStart(imageSpan);
+                int end = ssb.getSpanEnd(imageSpan);
 
 /*设置监听*/
-            ssb.setSpan(click_span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            final int finalI = i;
+            ssb.setSpan(new ClickableSpan() {
+
+                    @Override
+                    public void onClick(View widget) {
+//                        TextView tx = (TextView) widget;
+
+                        if (textLink != null) {
+                            textLink.onclick(userIds.get(finalI));
+                        }
+//                        Toast.makeText(context,
+//                                "Image Clicked " + widget.getId() + " text " + tx.getText(),
+//                                Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         }
 
@@ -206,6 +226,7 @@ public class StringUtils {
 
     /**
      * 地理信息的点击事件
+     *
      * @param context
      * @param locationInfo
      * @param textLink
@@ -213,14 +234,14 @@ public class StringUtils {
      */
     public static SpannableStringBuilder locatiomInfo(final Context context,
                                                       final String locationInfo,
-                                                      final TextLink textLink){
+                                                      final TextLink textLink) {
         SpannableStringBuilder ssb = new SpannableStringBuilder(locationInfo);
 
         ssb.setSpan(new ClickableSpan() {
 
             @Override
             public void onClick(View widget) {
-                Toast.makeText(context,"地址 locationInfo ",Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "地址 locationInfo ", Toast.LENGTH_LONG).show();
                 if (textLink != null) {
                     textLink.onclick(locationInfo);
                 }

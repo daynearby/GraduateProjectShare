@@ -2,15 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/paddingMic"
+    android:paddingRight="@dimen/paddingMic">
 
-    <TextView
-        android:id="@+id/tv_want_to_go_avatar"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:lineSpacingMultiplier="1.3"
-        style="?android:attr/textAppearanceMedium"
-        android:padding="@dimen/paddingMic"/>
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
+        <TextView
+            android:id="@+id/tv_want_to_go_avatar"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.3" />
+    </ScrollView>
 
 </LinearLayout>

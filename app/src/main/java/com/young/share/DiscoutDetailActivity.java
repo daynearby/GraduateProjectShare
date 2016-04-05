@@ -209,6 +209,9 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         initAnima();
     }
 
+    /**
+     * 指示器
+     */
     private void initAnima() {
         indexRadiog.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         tabWidth = indexRadiog.getMeasuredWidth() / 2;
@@ -256,10 +259,10 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
      * 下方数据
      */
     private void initBottomBar() {
-        wanto_tv.setText(discountMessage.getDtWantedNum() == null ?
-                getString(R.string.tx_wantogo) : String.valueOf(discountMessage.getDtWantedNum().size()));
-        hadgo_tv.setText(discountMessage.getDtVisitedNum() == null ?
-                getString(R.string.hadgo) : String.valueOf(discountMessage.getDtVisitedNum().size()));
+        wanto_tv.setText(discountMessage.getDtWantedNum() != null && discountMessage.getDtWantedNum().size() > 0 ?
+                String.valueOf(discountMessage.getDtWantedNum().size()) : getString(R.string.tx_wantogo));
+        hadgo_tv.setText(discountMessage.getDtVisitedNum() != null && discountMessage.getDtVisitedNum().size() > 0 ?
+                String.valueOf(discountMessage.getDtVisitedNum().size()) : getString(R.string.hadgo));
 
         LocationUtils.leftDrawableWantoGO(wanto_tv, discountMessage.getDtWantedNum(), cuser.getObjectId());
         LocationUtils.leftDrawableVisited(hadgo_tv, discountMessage.getDtVisitedNum(), cuser.getObjectId());
@@ -376,6 +379,10 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
      * 更新想去的用户列表
      */
     private void updateHadGo() {
+
+
+        hadgo_tv.setText(discountMessage.getDtVisitedNum() != null && discountMessage.getDtVisitedNum().size() > 0 ?
+                String.valueOf(discountMessage.getDtVisitedNum().size()) : getString(R.string.hadgo));
         hadGoFragment.setWantUserId(discountMessage.getDtVisitedNum());
         hadGoFragment.initData();
     }
@@ -415,6 +422,9 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
      * 更新喜欢的用户
      */
     private void updateWantTo() {
+        wanto_tv.setText(discountMessage.getDtWantedNum() != null && discountMessage.getDtWantedNum().size() > 0 ?
+                String.valueOf(discountMessage.getDtWantedNum().size()) : getString(R.string.tx_wantogo));
+
         wantToGoFragment.setUserIdList(discountMessage.getDtWantedNum());
         wantToGoFragment.initData();
 

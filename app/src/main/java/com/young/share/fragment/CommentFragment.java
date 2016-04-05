@@ -168,7 +168,7 @@ public class CommentFragment extends BaseFragment {
             public void onSuccess(Object object) {
                 CommentList commentList = (CommentList) object;
 
-                if (commentList.getCommentList() != null && commentList.getCommentList().size() > 0) {
+                if (commentList.getCommentList().size() > 0) {
 
                     if (dataList != null && dataList.size() > 0) {
                         dataList.clear();
@@ -177,6 +177,8 @@ public class CommentFragment extends BaseFragment {
                     }
 
                     dataList.addAll(commentList.getCommentList());
+                }else {
+                    dataList = new ArrayList<>();
                 }
                 if (dataList.size() > 0) {
                     app.getCacheInstance().put(CACHE_KEY + shareMessageId, (Serializable) dataList);

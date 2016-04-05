@@ -3,7 +3,7 @@ package com.young.share.fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
-import android.text.method.LinkMovementMethod;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.young.share.R;
 import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
+import com.young.share.config.TextMovementMethod;
 import com.young.share.interfaces.AsyncListener;
 import com.young.share.model.MyUser;
 import com.young.share.model.UserList;
@@ -144,7 +145,9 @@ public class HadGoFragment extends BaseFragment {
     public void bindData() {
 
   /*可点击*/
-        avatarTxt.setMovementMethod(LinkMovementMethod.getInstance());
+
+//        avatarTxt.setMovementMethod(LinkMovementMethod.getInstance());
+        avatarTxt.setMovementMethod(new TextMovementMethod());
     }
 
     @Override
@@ -158,12 +161,15 @@ public class HadGoFragment extends BaseFragment {
                 break;
 
             case MESSAGE_CONVERT_USER_INFO:
-//avatarTxt null
-                avatarTxt.setText(msg.obj !=null?(CharSequence) msg.obj:"");
+                if (avatarTxt == null) {
+                    avatarTxt = $(R.id.tv_want_to_go_avatar);
+                }
+                avatarTxt.setText(msg.obj != null ? (CharSequence) msg.obj : "");
                 break;
         }
     }
 
+// TODO: 2016-04-05 头像点击，单个准确，多个不准确，只有最后一个能点击
 
     /**
      * 根据用户信息进行加载头像
@@ -174,7 +180,10 @@ public class HadGoFragment extends BaseFragment {
 
         for (MyUser u : userList) {
 
-            ImageLoader.getInstance().loadImage(NetworkUtils.getRealUrl(context, u.getAvatar()),
+            ImageLoader.getInstance().loadImage(TextUtils.isEmpty(u.getAvatar()) ? Contants.DEFAULT_AVATAR :
+                            NetworkUtils.getRealUrl(context,
+                                    u.getAvatar()
+                            ),
                     mImageSize,
                     new SimpleImageLoadingListener() {
                         @Override
@@ -208,6 +217,7 @@ public class HadGoFragment extends BaseFragment {
         public void onclick(String str) {
 //            LogUtils.ts(str);
             for (int i = 0; i < userList.size(); i++) {
+                LogUtils.d(" click str = " + str + " userList ObjectId() " + userList.get(i).getObjectId());
 
                 if (str.equals(userList.get(i).getObjectId())) {
 
