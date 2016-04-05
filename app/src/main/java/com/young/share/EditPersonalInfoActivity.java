@@ -11,9 +11,10 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,10 +25,9 @@ import com.young.share.config.Contants;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.utils.XmlUtils;
-import com.young.share.views.CitySelectPopupWin;
 import com.young.share.views.IdentifyCodeDialog;
-import com.young.share.views.PopupMenuHub;
-import com.young.share.views.PopupWinListView;
+
+import java.util.List;
 
 import cn.bmob.sms.BmobSMS;
 import cn.bmob.sms.exception.BmobException;
@@ -63,20 +63,19 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
 //    private TextView cancel_tv;
     private IdentifyCodeDialog identifyCodeDialog;
     private CountDownTimer timer;
-    private PopupWinListView gender_popupList;
-    private PopupWinListView age_popupList;
-    private CitySelectPopupWin hometown_popupList;
-    private  PopupMenu popupMenu;
     private boolean phoneVerific = true;//手机号验证结果
     private boolean phoneFormateVerific = true;//手机号格式验证结果,默认没有进行信息修改
     private boolean nameVerific = true;//用户名长度验证结果
-
+    private int contextMenuType = 0;//contextMenu的类型
 
     private long allTime = 60;//60秒
     private long intevel = 1000 - 10;//一秒,计时会有10ms误差
-    private String hometown;
-    private String gender;
-    private String age;
+    private int homeTownClick = 0;//城镇,两次点击
+
+    private static final int CONTEXT_MENU_GENDER = 0x01;//性别
+    private static final int CONTEXT_MENU_AGE = 0x02;//年龄
+    private static final int CONTEXT_MENU_HOME_TOWN = 0x03;//家乡
+
 
     @Override
     public int getLayoutId() {
@@ -105,42 +104,10 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
 
     @Override
     public void bindData() {
-        gender_popupList = new PopupWinListView(this, XmlUtils.getSelectGender(this), false);
-        age_popupList = new PopupWinListView(this, XmlUtils.getSelectAge(this), false);
-        hometown_popupList = new CitySelectPopupWin(this, XmlUtils.getSelectCities(this));
 /*输入框监听*/
         setTextChangListener();
 /*context menu */
         setContextMenuCreatListener();
-
-        gender_popupList.setItemClick(new PopupWinListView.onItemClick() {
-            @Override
-            public void onClick(View view, String str, int position, long id) {
-//                LogUtils.logD("性别 = "+ str +" position = "+position);
-                gender_tv.setText(str);
-                gender = str;
-            }
-        });
-
-        age_popupList.setItemClick(new PopupWinListView.onItemClick() {
-            @Override
-            public void onClick(View view, String str, int position, long id) {
-//                LogUtils.logD("年龄 = "+ str +" position = "+position);
-                age_tv.setText(str);
-                age = str;
-            }
-        });
-
-        hometown_popupList.setResultListener(new CitySelectPopupWin.ResultListener() {
-            @Override
-            public void result(String str) {
-//                LogUtils.logD("城市 = "+ str);
-                hometown_tv.setText(str);
-                hometown = str;
-            }
-        });
-
-         popupMenu = PopupMenuHub.citySelectMenu(mActivity, hometown_tv);
 //
         getUserDatas();
         //初始化计时器
@@ -223,6 +190,7 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
         //年龄
         age_tv.setOnCreateContextMenuListener(contextMenuListener);
 
+        hometown_tv.setOnCreateContextMenuListener(contextMenuListener);
     }
 
     /**
@@ -236,11 +204,18 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
 
                 case R.id.popupwin_edit_personnal_info_gender://性别选择
                     menuViewId = R.menu.menu_context_gender;
-
+                    contextMenuType = CONTEXT_MENU_GENDER;
                     break;
                 case R.id.popupwin_edit_personnal_info_age:
                     menuViewId = R.menu.menu_context_empty;
                     addMenu(contextMenu);
+                    contextMenuType = CONTEXT_MENU_AGE;
+                    break;
+
+                case R.id.popupwin_edit_personnal_info_hometown:
+                    menuViewId = R.menu.menu_context_empty;
+                    addCityMenu(contextMenu);
+                    contextMenuType = CONTEXT_MENU_HOME_TOWN;
                     break;
             }
 
@@ -248,6 +223,59 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
             getMenuInflater().inflate(menuViewId, contextMenu);
         }
     };
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch (contextMenuType) {
+            case CONTEXT_MENU_GENDER:
+                gender_tv.setText(item.getTitle());
+                break;
+            case CONTEXT_MENU_AGE:
+                age_tv.setText(item.getTitle());
+                break;
+
+            case CONTEXT_MENU_HOME_TOWN:
+
+                if (homeTownClick == 0) {
+                    hometown_tv.setText(item.getTitle());
+                    homeTownClick++;
+                } else if (homeTownClick == 1) {
+                    hometown_tv.append(item.getTitle());
+                    homeTownClick = 0;
+                }
+                break;
+
+        }
+
+
+        return super.onContextItemSelected(item);
+    }
+
+    /**
+     * 添加城市选择的菜单
+     *
+     * @param contextMenu
+     */
+    private void addCityMenu(ContextMenu contextMenu) {
+
+        int cityId = 0x100;
+
+        int base = Menu.FIRST;
+        List<String> cityList = XmlUtils.getSelectCities(this);
+
+        for (int i = 0; i < cityList.size(); i++) {
+//            contextMenu.add(0, cityId + i, Menu.NONE, cityList.get(i));
+            int groundId = 2;
+            SubMenu subMenu = contextMenu.addSubMenu(base, cityId + i, Menu.NONE, cityList.get(i));
+            for (String area : XmlUtils.getSelectArea(this, i)) {
+
+                subMenu.add(groundId, cityId + i, groundId, area);
+                groundId++;
+            }
+            base++;
+        }
+    }
 
     /**
      * 添加菜单内容
@@ -423,18 +451,16 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
                 break;
 
             case R.id.popupwin_edit_personnal_info_gender://性别
-//                gender_popupList.onShow(v);
 
                 openContextMenu(v);
                 break;
+
             case R.id.popupwin_edit_personnal_info_age://年龄
-//                age_popupList.onShow(v);
                 openContextMenu(v);
                 break;
+
             case R.id.popupwin_edit_personnal_info_hometown://城市
-//                hometown_popupList.setDatas(XmlUtils.getSelectCities(this));
-//                hometown_popupList.onShow(v);
-                 popupMenu.show();
+                openContextMenu(v);
                 break;
         }
     }
@@ -442,8 +468,6 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
 
     private void handlerUIDatas() {
         //1手机号，邮箱，昵称，qq，家乡，性别，年龄
-
-//MyUser myUser = new MyUser();
 
         if (!TextUtils.isEmpty(mobilePhone_et.getText().toString())) {
 

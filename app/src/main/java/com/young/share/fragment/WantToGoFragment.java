@@ -159,9 +159,10 @@ public class WantToGoFragment extends BaseFragment {
                 break;
 
             case MESSAGE_CONVERT_USER_INFO:
-                if (msg.obj != null) {
-                    avatarTxt.setText((CharSequence) msg.obj);
+                if (avatarTxt ==null){
+                    avatarTxt = $(R.id.tv_want_to_go_avatar);
                 }
+                    avatarTxt.setText(msg.obj != null?(CharSequence) msg.obj:"");
                 break;
         }
     }
