@@ -211,7 +211,7 @@ public class WantToGoActivity extends BaseAppCompatActivity {
                         dataList.addAll(formateData(collectionList.getCollecList()));
 
                     } else {
-                        mToast(R.string.no_more_messages);
+                        toast(R.string.no_more_messages);
                     }
                 } else {
 
@@ -243,7 +243,7 @@ public class WantToGoActivity extends BaseAppCompatActivity {
                 isEmpty = dataList.size() <= 0;
                 //提示框处理
                 LocationUtils.processDialog(mActivity);
-                mToast(R.string.tips_loading_faile);
+                toast(R.string.tips_loading_faile);
                 LogUtils.d("get share messages failure. code = " + code + " message = " + msg);
 
             }
@@ -286,7 +286,6 @@ public class WantToGoActivity extends BaseAppCompatActivity {
             bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, remoteModel);
             bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_PERSONAL_ACTIVITY);//shareMessage
 
-// TODO: 2016-04-02 区分类型，跳转到不同的界面
             if (remoteModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES) {//分享信息
                 mStartActivity(MessageDetailActivity.class, bundle);
             } else {//折扣信息

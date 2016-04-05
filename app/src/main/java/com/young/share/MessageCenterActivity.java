@@ -108,7 +108,7 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
                     Skip = dataList.size();
                     //获取数据
                     getRemoteData();
-//                        mToast(R.string.no_more_messages);
+//                        toast(R.string.no_more_messages);
                 }
 
 
@@ -227,7 +227,7 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
                     if (commentList.getCommentList().size() > 0) {
                         dataList.addAll(commentList.getCommentList());
                     } else {
-                        mToast(R.string.no_more_messages);
+                        toast(R.string.no_more_messages);
                     }
                 } else {
 
@@ -248,7 +248,7 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
 //提示框处理
                 LocationUtils.processDialog(mActivity);
 
-                mToast(R.string.tips_loading_faile);
+                toast(R.string.tips_loading_faile);
                 LogUtils.d("get share messages failure. code = " + code + " message = " + msg);
 
             }

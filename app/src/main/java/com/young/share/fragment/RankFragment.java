@@ -67,7 +67,7 @@ public class RankFragment extends BaseFragment {
 
     }
 
-    // TODO: 2016-03-06 修复拖动多次出现崩溃
+    // TODO: 2016-03-06 修复拖动多次出现崩溃,recyclerView
     @Override
     public void initView() {
 

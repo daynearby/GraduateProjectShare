@@ -166,7 +166,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private int lastIndex = 0;//上一个页面的position
     private boolean initVideo = false;//是否已经初始化videoView
 
-    // TODO: 2016-03-23 下方的操作bar，部分事件需要重新定义，需要进行刷新
     @Override
     public int getLayoutId() {
         return R.layout.activity_message_detail;

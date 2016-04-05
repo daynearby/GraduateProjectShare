@@ -329,7 +329,7 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
                     updateUserInfo();
                 } else {
 
-                    mToast(R.string.toast_phone_verif_failure);
+                    toast(R.string.toast_phone_verif_failure);
                 }
             }
         });
@@ -442,11 +442,11 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
 
                         handlerUIDatas();
                     } else {
-                        mToast(R.string.toast_phone_number_format_not_correct);
+                        toast(R.string.toast_phone_number_format_not_correct);
 
                     }
                 } else {
-                    mToast(R.string.toast_edit_nicke_name);
+                    toast(R.string.toast_edit_nicke_name);
                 }
                 break;
 
@@ -500,30 +500,33 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
      */
     private void updateUserInfo() {
 
-        SVProgressHUD.showWithStatus(mActivity, getString(R.string.update_user_info_success));
-        cuser.setNickName(nickname_et.getText().toString());
-        cuser.setGender(Contants.GENDER_MALE.equals(gender_tv.getText().toString()));
-        cuser.setAge(Integer.valueOf(age_tv.getText().toString()));
-        cuser.setQq(qq_et.getText().toString());
-        cuser.setEmail(email_et.getText().toString());
-        cuser.setAddress(hometown_tv.getText().toString());
-        cuser.setSignture(signtureEdt.getText().toString().trim());
+        if (!TextUtils.isEmpty(nickname_et.getText().toString())) {
+            cuser.setNickName(nickname_et.getText().toString());
+            cuser.setGender(Contants.GENDER_MALE.equals(gender_tv.getText().toString()));
+            cuser.setAge(Integer.valueOf(age_tv.getText().toString()));
+            cuser.setQq(qq_et.getText().toString());
+            cuser.setEmail(email_et.getText().toString());
+            cuser.setAddress(hometown_tv.getText().toString());
+            cuser.setSignture(signtureEdt.getText().toString().trim());
+            SVProgressHUD.showWithStatus(mActivity, getString(R.string.updating));
+            cuser.update(this, new UpdateListener() {
+                @Override
+                public void onSuccess() {
+                    LogUtils.d("更新信息成功");
+                    mHandler.sendEmptyMessageDelayed(101, Contants.ONE_SECOND);
 
-        cuser.update(this, new UpdateListener() {
-            @Override
-            public void onSuccess() {
-                LogUtils.d("更新信息成功");
-                mHandler.sendEmptyMessageDelayed(101, Contants.ONE_SECOND);
+                    SVProgressHUD.showSuccessWithStatus(mActivity, getString(R.string.update_user_info_success));
+                }
 
-                SVProgressHUD.showSuccessWithStatus(mActivity, getString(R.string.update_user_info_success));
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-                LogUtils.d("更新失败 code = " + i + " message = " + s);
-                SVProgressHUD.showErrorWithStatus(mActivity, getString(R.string.update_user_info_faile));
-            }
-        });
+                @Override
+                public void onFailure(int i, String s) {
+                    LogUtils.d("更新失败 code = " + i + " message = " + s);
+                    SVProgressHUD.showErrorWithStatus(mActivity, getString(R.string.update_user_info_faile));
+                }
+            });
+        } else {
+            toast(R.string.email_not_empty);
+        }
     }
 
 

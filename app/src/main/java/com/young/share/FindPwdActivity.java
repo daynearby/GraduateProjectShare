@@ -264,12 +264,5 @@ public class FindPwdActivity extends BaseAppCompatActivity implements View.OnCli
 
     }
 
-    /**
-     * @param strId
-     */
-    private void toast(int strId) {
-
-        Toast.makeText(this, strId, Toast.LENGTH_LONG).show();
-    }
 
 }

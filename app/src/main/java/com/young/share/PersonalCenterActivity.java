@@ -252,7 +252,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
 
         if (finish) {
             //开始上传照片
-            mToast(R.string.star_upload_avatar);
+            toast(R.string.star_upload_avatar);
 
             avatar_bg_im.setImageURI(ActivityResult.getImguri());
 
@@ -276,12 +276,12 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
                             cuser.update(mActivity, new UpdateListener() {
                                 @Override
                                 public void onSuccess() {
-                                    mToast(R.string.reset_avatar_success);
+                                    toast(R.string.reset_avatar_success);
                                 }
 
                                 @Override
                                 public void onFailure(int i, String s) {
-                                    mToast(R.string.reset_avatar_failure);
+                                    toast(R.string.reset_avatar_failure);
                                 }
                             });
                         }

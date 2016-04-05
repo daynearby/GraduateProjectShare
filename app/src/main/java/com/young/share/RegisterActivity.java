@@ -382,7 +382,7 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                 Toast.makeText(this, R.string.toast_phone_number_empty, Toast.LENGTH_SHORT).show();
             }
         }else {
-            mToast(R.string.toast_had_verif_phone_number);
+            toast(R.string.toast_had_verif_phone_number);
         }
     }
 

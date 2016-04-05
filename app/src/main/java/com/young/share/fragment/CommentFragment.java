@@ -80,7 +80,6 @@ public class CommentFragment extends BaseFragment {
 
     @Override
     public void initData() {
-        // TODO: 2016-03-20 建立缓存
   /*初始化数据*/
 //        initFragment();
         //提示

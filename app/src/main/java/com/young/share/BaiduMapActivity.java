@@ -65,7 +65,6 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
     private static final int HANDLER_PLACE_SUGGEST = 0x01;
     private static final int HANDLER_PLACE_TEXT_CHANGE = 0x02;
 
-    // TODO: 2016-02-19 分享信息，拖拽实现定位
 
     @Override
     public int getLayoutId() {

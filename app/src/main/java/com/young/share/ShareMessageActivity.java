@@ -124,7 +124,6 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     private PlaceSearch.ResultsEntity placeResult;
     private static final int REQUEST_CODE_RECORD_VIDEO = 0x01;//录制视频requestCode
 
-    // TODO: 2015-12-05 移除item而不需要刷新整个ListView
     // TODO: 2016-02-27 删除图片的操作
     @Override
     public int getLayoutId() {
@@ -670,7 +669,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
         if (!TextUtils.isEmpty(content) || lists.size() > 0) {//信息或者图片不为空
 
-            mToast(R.string.sending);
+            toast(R.string.sending);
             mBackStartActivity(MainActivity.class);
 
             //发送信息
@@ -839,13 +838,13 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         discountMessage.save(mActivity, new SaveListener() {
             @Override
             public void onSuccess() {
-                mToast(R.string.share_messages_success);
+                toast(R.string.share_messages_success);
                 mHandler.sendEmptyMessageDelayed(Contants.REFRESH_TYPE_DISCOUNT, Contants.ONE_SECOND);
             }
 
             @Override
             public void onFailure(int i, String s) {
-                mToast(R.string.share_message_fail);
+                toast(R.string.share_message_fail);
                 saveDarft();
                 mHandler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Contants.ONE_SECOND);
             }
@@ -865,14 +864,14 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         shareMessage_hz.save(mActivity, new SaveListener() {
             @Override
             public void onSuccess() {
-                mToast(R.string.share_messages_success);
+                toast(R.string.share_messages_success);
 //                LogUtils.logI("share messages success ");
                 mHandler.sendEmptyMessageDelayed(Contants.REFRESH_TYPE_DISCOVER, Contants.ONE_SECOND);
             }
 
             @Override
             public void onFailure(int i, String s) {
-                mToast(R.string.share_message_fail);
+                toast(R.string.share_message_fail);
 //                LogUtils.logI("share messages faile ");
                 saveDarft();
 
