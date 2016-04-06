@@ -107,7 +107,6 @@
         <!-- 个人中心-->
         <activity
             android:name=".PersonalCenterActivity"
-            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar" />
         
         <!--用户收藏记录-->
@@ -137,14 +136,12 @@
         <!-- 信息详细页面 -->
         <activity
             android:name=".MessageDetailActivity"
-            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!--通用记录查看 -->
         <activity
             android:name=".UserRecordActivity"
-            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <!--消息中心 -->
@@ -155,13 +152,11 @@
         <!-- 详细优惠信息 -->
         <activity
             android:name=".DiscoutDetailActivity"
-            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <!--排行榜的列表-->
         <activity
             android:name=".RankListActivity"
-            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <!--百度地图 -->

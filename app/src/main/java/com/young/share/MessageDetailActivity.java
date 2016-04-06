@@ -32,6 +32,7 @@ import android.widget.VideoView;
 import com.android.volley.VolleyError;
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.nineoldandroids.view.ViewPropertyAnimator;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.young.share.adapter.ButtombarPageAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
@@ -54,6 +55,7 @@ import com.young.share.utils.EvaluateUtil;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LocationUtils;
 import com.young.share.utils.LogUtils;
+import com.young.share.utils.NetworkUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.utils.UserUtils;
 import com.young.share.views.CommentListView.CommentListView;
@@ -89,6 +91,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private TextView nickname_tv;//昵称
     @InjectView(R.id.id_tx_tab)
     private TextView tag_tv;//标签
+    @InjectView(R.id.im_tx_tab_icon)
+    private ImageView tagIconIm;//标签的图标
     @InjectView(R.id.tx_message_detail_content)
     private TextView content_tv;//分享的文本内容
     @InjectView(R.id.miv_message_detail)
@@ -97,6 +101,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private CustomViewPager viewPager;
     @InjectView(R.id.tv_item_message_detail_createdat)
     private TextView ceatedAt_tv;
+    @InjectView(R.id.tv_item_message_detail_location_info)
+    private TextView loactioInfoTx;
     /*下面三个bar*/
     @InjectView(R.id.ll_bottom_option_bar)
     private LinearLayout bottomOptionBar;//下面三个三个选项的布局
@@ -302,14 +308,17 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
         nickname_tv.setText(TextUtils.isEmpty(myUser.getNickName()) ? "" : myUser.getNickName());
 /*用户头像*/
-        ImageHandlerUtils.loadIamgeThumbnail(this,
-                TextUtils.isEmpty(myUser.getAvatar()) ? Contants.DEFAULT_AVATAR : myUser.getAvatar(), avatar);
+        ImageLoader.getInstance().displayImage(
+                        TextUtils.isEmpty(myUser.getAvatar()) ?
+                                Contants.DEFAULT_AVATAR :
+                                NetworkUtils.getRealUrl(this, myUser.getAvatar()),
+                        avatar);
 
 
         if (TextUtils.isEmpty(shareMessage.getShTag())) {
             tag_tv.setVisibility(View.GONE);
+            tagIconIm.setVisibility(View.GONE);
         } else {
-            tag_tv.setVisibility(View.VISIBLE);
             tag_tv.setText(shareMessage.getShTag());
         }
 
@@ -329,6 +338,14 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
         comment_tv.setText(shareMessage.getShCommNum() > 0 ?
                 String.valueOf(shareMessage.getShCommNum()) : getString(R.string.tx_comment));
+
+        //位置信息
+        if (!TextUtils.isEmpty(shareMessage.getShContent())) {
+            loactioInfoTx.setVisibility(View.VISIBLE);
+            loactioInfoTx.setText(shareMessage.getShContent());
+            loactioInfoTx.setOnClickListener(this);
+        }
+
 /**
  * 设置图片
  */
@@ -759,6 +776,27 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
             case R.id.rb_message_detail_comment://评论
                 viewPager.setCurrentItem(2);
                 break;
+
+            case R.id.tv_item_message_detail_location_info://位置信息
+                showOnMap();
+                break;
+        }
+
+    }
+
+    /**
+     * 在地图上面显示位置
+     * 或者导航
+     */
+    private void showOnMap() {
+
+        if (shareMessage.getGeographic() != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT, shareMessage.getGeographic());
+            mStartActivity(BaiduMapActivity.class, bundle);
+
+        } else {
+            toast(R.string.toastP_location_info_empty);
         }
 
     }

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.android.volley.VolleyError;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.young.share.BaiduMapActivity;
 import com.young.share.BigPicActivity;
 import com.young.share.MessageDetailActivity;
@@ -38,6 +39,7 @@ import com.young.share.utils.EvaluateUtil;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LocationUtils;
 import com.young.share.utils.LogUtils;
+import com.young.share.utils.NetworkUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.utils.UserUtils;
 import com.young.share.views.Dialog4Tips;
@@ -107,8 +109,9 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 
         nickname_tv.setText(TextUtils.isEmpty(myUser.getNickName()) ? "" : myUser.getNickName());
 
-        ImageHandlerUtils.loadIamgeThumbnail(ctx,
-                TextUtils.isEmpty(myUser.getAvatar()) ? Contants.DEFAULT_AVATAR : myUser.getAvatar(), avatar);
+        ImageLoader.getInstance().displayImage(
+                TextUtils.isEmpty(myUser.getAvatar()) ? Contants.DEFAULT_AVATAR :
+                        NetworkUtils.getRealUrl(ctx,myUser.getAvatar()), avatar);
 
         if (TextUtils.isEmpty(shareMessage.getShTag())) {
             tagLayout.setVisibility(View.INVISIBLE);

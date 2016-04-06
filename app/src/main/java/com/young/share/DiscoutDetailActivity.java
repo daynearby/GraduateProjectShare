@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
@@ -17,23 +18,25 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.nineoldandroids.view.ViewPropertyAnimator;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.young.share.adapter.ButtombarPageAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
-import com.young.share.fragment.WantToGoFragment;
 import com.young.share.fragment.HadGoFragment;
-import com.young.share.model.RemoteModel;
+import com.young.share.fragment.WantToGoFragment;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
+import com.young.share.model.RemoteModel;
 import com.young.share.thread.MyRunnable;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.EvaluateUtil;
-import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LocationUtils;
 import com.young.share.utils.LogUtils;
+import com.young.share.utils.NetworkUtils;
+import com.young.share.utils.StringUtils;
 import com.young.share.utils.UserUtils;
 import com.young.share.views.CustomViewPager;
 import com.young.share.views.Dialog4Tips;
@@ -62,6 +65,8 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
     private TextView nickname_tv;//昵称
     @InjectView(R.id.id_tx_tab)
     private TextView tag_tv;//标签
+    @InjectView(R.id.im_tx_tab_icon)
+    private ImageView tagIconIm;//标签的图标
     @InjectView(R.id.id_tx_share_content)
     private TextView content_tv;//分享的文本内容
     @InjectView(R.id.miv_share_iamges)
@@ -74,6 +79,8 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
     private TextView createdAt;//创建时间
     @InjectView(R.id.id_tx_comment)
     private TextView comment_tv;
+    @InjectView(R.id.tv_item_share_main_location)
+    private TextView locationInfo;
     //    @InjectView(R.id.vp_discount_detail)
     private CustomViewPager viewPager;
     /*三个radioButton 显示标题*/
@@ -179,27 +186,39 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
     @Override
     public void bindData() {
         commentRbtn.setVisibility(View.GONE);
-        String url;
-        boolean isLocation;
+
         MyUser myUser = discountMessage.getMyUserId();
 
-        if (myUser.getAvatar() == null) {
-            url = Contants.DEFAULT_AVATAR;
-            isLocation = true;
-        } else {
-            url = myUser.getAvatar();
-            isLocation = false;
-        }
-
-/*加载头像*/
-        ImageHandlerUtils.loadIamge(mActivity, url, avatar, isLocation);
+/*用户头像*/
+        ImageLoader.getInstance().displayImage(
+                TextUtils.isEmpty(myUser.getAvatar()) ?
+                        Contants.DEFAULT_AVATAR :
+                        NetworkUtils.getRealUrl(this, myUser.getAvatar()),
+                avatar);
 
         nickname_tv.setText(myUser.getNickName() == null ?
                 getString(R.string.user_name_defual) : myUser.getNickName());
 
         tag_tv.setText(discountMessage.getDtTag());
-        content_tv.setText(discountMessage.getDtContent());
+
+
+        if (TextUtils.isEmpty(discountMessage.getDtTag())) {
+            tag_tv.setVisibility(View.GONE);
+            tagIconIm.setVisibility(View.GONE);
+        } else {
+            tag_tv.setText(discountMessage.getDtTag());
+        }
+        //内容
+        if (TextUtils.isEmpty(discountMessage.getDtContent())) {
+            content_tv.setVisibility(View.GONE);
+        } else {
+            content_tv.setVisibility(View.VISIBLE);
+            content_tv.setText(StringUtils.getEmotionContent(
+                    this, content_tv, discountMessage.getDtContent()));
+        }
+
         createdAt.setText(discountMessage.getCreatedAt());
+
         initBottomBar();
 
 /*设置图片*/

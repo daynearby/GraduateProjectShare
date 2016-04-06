@@ -12,10 +12,11 @@
         android:layout_height="match_parent" />
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/tb_image_brower"
+        android:id="@+id/tb_image_editor"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/theme_puple" />
+
     <LinearLayout
         android:id="@+id/ll_image_brower_index"
         android:layout_width="match_parent"

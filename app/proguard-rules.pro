@@ -29,8 +29,23 @@
 
 #-- start ---添加混淆，app使用到的gson、volley、bmob---
 #如果引用了v4或者v7包
--dontwarn android.support.**
+#-dontwarn android.support.**
+-verbose
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+-dontwarn android.support.v4.**
+-keep class android.support.v4.app.** { *; }
+-keep interface android.support.v4.app.** { *; }
+-keep class com.actionbarsherlock.** { *; }
+-keep interface com.actionbarsherlock.** { *; }
+-keepattributes *Annotation*
+-keep public class * extends android.app.Activity
+-keep public class * extends android.support.v7.AppCompatActivity
+-keep public class * extends android.support.v4.app.Fragment
 
+-keep class android.support.v7.widget.SearchView{*;}
+-keep class android.support.v7.view.SupportMenuInflater{*;}
+-keep class android.support.v4.view.ActionProvider{*;}
+-keep class com.young.share.views.actionProvider.MapSearchProvider{*;}
 -dontwarn com.google.gson.**
 -dontwarn java.nio.file.**
 -dontwarn org.codehaus.mojo.animal_sniffer.**
@@ -49,9 +64,13 @@
 -keep class cn.bmob.v3.** {*;}
 
 # 保证继承自BmobObject、BmobUser类的JavaBean不被混淆
--keep class com.example.model.User{*;}
--keep class com.example.model.ShareMessage{*;}
--keep class com.example.model.Comment{*;}
+-keep class com.young.share.model.MyUser{*;}
+-keep class com.young.share.model.ShareMessage_HZ{*;}
+-keep class com.young.share.model.Comment_HZ{*;}
+-keep class com.young.share.model.Collection_HZ{*;}
+-keep class com.young.share.model.DiscountMessage_HZ{*;}
+-keep class com.young.share.model.Message_HZ{*;}
+-keep class com.young.share.model.MyBmobInstallation{*;}
 
 # 如果你使用了okhttp、okio的包，请添加以下混淆代码
 -dontwarn com.squareup.okhttp.**
@@ -106,6 +125,6 @@
 -keepnames class com.fasterxml.jackson.** { *; }
 
 #百度地图
-#-libraryjars libs/baidumapapi_v2_1_2.jar 替换成自己所用版本的jar包
+#-libraryjars libs/baidumapapi_v2_1_2.jar
 -keep class com.baidu.** { *; }
 -keep class vi.com.gdi.bgl.android.**{*;}

@@ -61,15 +61,13 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
         return R.layout.activity_image_brower;
     }
 
-    @Override
-    public void findviewbyid() {
-    }
 
     @Override
     public void initData() {
         initializeToolbar();
 
         pictureInfoList = (List<PictureInfo>) getIntent().getSerializableExtra(Contants.INTENT_IMAGE_LIST);
+
         currentItem = getIntent().getIntExtra(Contants.INTENT_CURRENT_ITEM, 0);
 
         //格式化数据
@@ -77,8 +75,13 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
     }
 
     @Override
-    public void bindData() {
+    public void findviewbyid() {
         pagerAdapter = new ImageBrowserPagerAdapter(mActivity, pictureInfoList, actionBar, true);
+    }
+
+    @Override
+    public void bindData() {
+
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(currentItem);
         setPagerChangeListener(viewPager);
@@ -363,10 +366,9 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
 //        LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 0; i < pictureInfoList.size(); i++) {
 
-            if (isLocal) {//如果是本地数据，使用universal image loader 需要哦添加文件头，本地文件才能加载
+          //如果是本地数据，使用universal image loader 需要哦添加文件头，本地文件才能加载
                 PictureInfo pictureInfom = pictureInfoList.get(i);
                 pictureInfom.imageUrl = Contants.FILE_HEAD + pictureInfom.imageUrl;
-            }
 
         }
     }

@@ -42,10 +42,21 @@
                 <include layout="@layout/content_video_layout" />
 
                 <TextView
+                    android:id="@+id/tv_item_message_detail_location_info"
+                    style="@style/text_style_wrap"
+                    android:layout_gravity="right"
+                    android:paddingLeft="@dimen/paddingMic"
+                    android:paddingRight="@dimen/paddingMic"
+                    android:textColor="@color/color_name"
+                    android:background="@drawable/sele_text"
+                    android:text="@string/gd_hz"
+                    android:visibility="gone"/>
+                <TextView
                     android:id="@+id/tv_item_message_detail_createdat"
                     style="@style/text_style_wrap"
                     android:layout_gravity="right"
-                    android:padding="@dimen/paddingMic"
+                    android:paddingLeft="@dimen/paddingMic"
+                    android:paddingRight="@dimen/paddingMic"
                     android:text="@string/created_at" />
 
 <!--标题栏-->

@@ -30,7 +30,7 @@ import com.young.share.config.Contants;
 import com.young.share.model.gson.PlaceSearch;
 import com.young.share.model.gson.PlaceSuggestion;
 import com.young.share.network.NetworkReuqest;
-import com.young.share.views.MapSearchProvider;
+import com.young.share.views.actionProvider.MapSearchProvider;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -158,7 +158,7 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
                 adapter.setSelectItem(position);
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(Contants.INTENT_PLACE,  adapter.getData().get(position));
+                bundle.putSerializable(Contants.INTENT_PLACE, adapter.getData().get(position));
                 intent.putExtra(Contants.INTENT_SELECTOR_POSITION, position);
                 intent.putExtras(bundle);
                 mActivity.setResult(Contants.RESULT_CODE_PLACE, intent);
@@ -198,17 +198,17 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
         mBaiduMap.showMapPoi(true);
 
 //这里是直接显示定位
-            //在地图上添加Marker，并显示
-            mBaiduMap.addOverlay(option);
+        //在地图上添加Marker，并显示
+        mBaiduMap.addOverlay(option);
 
-            //定义地图状态
-            MapStatus mMapStatus = new MapStatus.Builder()
-                    .target(point)
-                    .zoom(16)
-                    .build();
-            MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
-            //改变地图状态
-            mBaiduMap.setMapStatus(mMapStatusUpdate);
+        //定义地图状态
+        MapStatus mMapStatus = new MapStatus.Builder()
+                .target(point)
+                .zoom(16)
+                .build();
+        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+        //改变地图状态
+        mBaiduMap.setMapStatus(mMapStatusUpdate);
 
     }
 
@@ -237,27 +237,29 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
         if (isPosition) {
             getMenuInflater().inflate(R.menu.menu_baidumap, menu);
             MenuItem item = menu.findItem(R.id.menu_search_provider);
+
             mapSearch = (MapSearchProvider) MenuItemCompat.getActionProvider(item);
-            mapSearch.setSearchButtonClick(new MapSearchProvider.SearchButtonClick() {
-                @Override
-                public void search(String query) {
+            if (mapSearch != null) {
+                mapSearch.setSearchButtonClick(new MapSearchProvider.SearchButtonClick() {
+                    @Override
+                    public void search(String query) {
 
-                   mapSearch.searchView.clearFocus();
-                    queryPlace(query);
-                }
-            });
-            mapSearch.setTextChangeListener(new MapSearchProvider.TextChangeListener() {
-                @Override
-                public void textChange(String query) {
-                    Message msg = new Message();
-                    msg.obj = query;
-                    msg.what = HANDLER_PLACE_TEXT_CHANGE;
-                    mHandler.sendMessageDelayed(msg, 300L);//延时，防止重复无效搜索
-                }
-            });
-
+                        mapSearch.searchView.clearFocus();
+                        queryPlace(query);
+                    }
+                });
+                mapSearch.setTextChangeListener(new MapSearchProvider.TextChangeListener() {
+                    @Override
+                    public void textChange(String query) {
+                        Message msg = new Message();
+                        msg.obj = query;
+                        msg.what = HANDLER_PLACE_TEXT_CHANGE;
+                        mHandler.sendMessageDelayed(msg, 300L);//延时，防止重复无效搜索
+                    }
+                });
+            }
         } else {
-            getMenuInflater().inflate(R.menu.menu_baidumap2, menu);
+            getMenuInflater().inflate(R.menu.menu_baidu_navition, menu);
 
 
         }

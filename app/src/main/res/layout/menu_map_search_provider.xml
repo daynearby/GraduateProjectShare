@@ -6,7 +6,6 @@
     android:paddingRight="@dimen/paddingMic"
     android:orientation="horizontal">
 
-
     <android.support.v7.widget.SearchView
         android:id="@+id/sv_map_search_place"
         android:layout_width="0dp"
@@ -24,4 +23,5 @@
         android:background="@drawable/sele_btn_green"
         android:text="@string/txt_search"
         android:textColor="@android:color/white" />
+
 </LinearLayout>

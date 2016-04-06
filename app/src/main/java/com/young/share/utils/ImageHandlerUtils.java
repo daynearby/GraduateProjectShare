@@ -8,19 +8,17 @@ import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
-import com.young.share.config.Contants;
 import com.young.share.R;
+import com.young.share.config.Contants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +27,7 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * 图片处理工具类
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-10-25.
  */
 public class ImageHandlerUtils {
@@ -126,16 +124,13 @@ public class ImageHandlerUtils {
                 .considerExifParams(true)  //是否考虑JPEG图像EXIF参数（旋转，翻转）
                 .imageScaleType(ImageScaleType.EXACTLY_STRETCHED)//设置图片以如何的编码方式显示
                 .bitmapConfig(Bitmap.Config.RGB_565)//设置图片的解码类型//
-//                .decodingOptions(android.graphics.BitmapFactory.OptionsdecodingOptions)//设置图片的解码配置
-//.delayBeforeLoading(int delayInMillis)//int delayInMillis为你设置的下载前的延迟时间
 //设置图片加入缓存前，对bitmap进行设置
 //.preProcessor(BitmapProcessor preProcessor)
 //                .resetViewBeforeLoading(true)//设置图片在下载前是否重置，复位
-//                .displayer(new RoundedBitmapDisplayer(20))//是否设置为圆角，弧度为多少
+                .displayer(new RoundedBitmapDisplayer(20))//是否设置为圆角，弧度为多少
                 .displayer(new FadeInBitmapDisplayer(100))//是否图片加载好后渐入的动画时间
                 .build();//构建完成
     }
-
 
 
     /**
@@ -148,8 +143,10 @@ public class ImageHandlerUtils {
 
         ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(ctx, imageUri, isLocation), im);
     }
+
     /**
      * 加载在线资源
+     *
      * @param ctx
      * @param imageUri
      * @param im
@@ -161,79 +158,13 @@ public class ImageHandlerUtils {
 
     /**
      * 缩略图
+     *
      * @param ctx
      * @param imageUri
      * @param im
      */
     public static void loadIamgeThumbnail(Context ctx, String imageUri, ImageView im) {
         ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(ctx, imageUri), im);
-    }
-
-    /**
-     * @param ctx
-     * @param imageUri
-     * @param im
-     * @param isLocation 是否是本地资源，true --> 本地资源
-     */
-    public static void loadIamge2(Context ctx, String imageUri, ImageView im, boolean isLocation) {
-
-        ImageLoader.getInstance().displayImage(imageUri, im);
-    }
-    /**
-     * 缩略图
-     * @param ctx
-     * @param imageUri
-     * @param im
-     */
-    public static void loadIamgeThumbnail2(Context ctx, String imageUri, ImageView im) {
-        ImageLoader.getInstance().displayImage(imageUri, im);
-    }
-
-    /**
-     * image loader 加载图片
-     *
-     * @param uri
-     * @param imageView
-     */
-    public static void loadImage2(String uri,ImageView imageView){
-
-        ImageLoader.getInstance().displayImage(uri,imageView);
-    }
-
-
-    /**
-     * 具有回调，显示状态
-     * @param ctx
-     * @param imageUri
-     * @param im
-     */
-    public static void loadIamgeWithState(final Context ctx, String imageUri, ImageView im) {
-
-
-        ImageLoader.getInstance().displayImage(NetworkUtils.getRealUrl(ctx, imageUri, false), im,  new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String s, View view) {
-                SVProgressHUD.showWithStatus(ctx, ctx.getString(R.string.tips_loading));
-            }
-
-            @Override
-            public void onLoadingFailed(String s, View view, FailReason failReason) {
-                SVProgressHUD.showErrorWithStatus(ctx, ctx.getString(R.string.tips_loading_faile));
-            }
-
-            @Override
-            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-                ((ImageView) view).setImageBitmap(bitmap);
-                SVProgressHUD.dismiss(ctx);
-            }
-
-            @Override
-            public void onLoadingCancelled(String s, View view) {
-                SVProgressHUD.showErrorWithStatus(ctx, ctx.getString(R.string.tips_loading_cancel));
-
-            }
-
-        });
     }
 
 
@@ -245,10 +176,11 @@ public class ImageHandlerUtils {
      *
      * @return
      */
-    public static Bitmap getBitmapFromCache(String uri,ImageLoader imageLoader){//这里的uri一般就是图片网址
+    public static Bitmap getBitmapFromCache(String uri, ImageLoader imageLoader) {//这里的uri一般就是图片网址
         List<String> memCacheKeyNameList = MemoryCacheUtils.findCacheKeysForImageUri(uri, imageLoader.getMemoryCache());
-        if(memCacheKeyNameList != null && memCacheKeyNameList.size() > 0){
-            for(String each:memCacheKeyNameList){
+        if (memCacheKeyNameList != null && memCacheKeyNameList.size() > 0) {
+            for (String each : memCacheKeyNameList) {
+                LogUtils.d("get bitmap memory url = " + each);
             }
             return imageLoader.getMemoryCache().get(memCacheKeyNameList.get(0));
         }

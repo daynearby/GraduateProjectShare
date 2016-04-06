@@ -13,12 +13,12 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.young.share.BigPicActivity;
 import com.young.share.R;
 import com.young.share.config.Contants;
 import com.young.share.model.PictureInfo;
 import com.young.share.utils.DisplayUtils;
-import com.young.share.utils.ImageHandlerUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -157,9 +157,9 @@ public class GridviewAdapter extends BaseAdapter {
         holder.imageView.setOnClickListener(new ImageClickListener(position));
 
         if (isUpload) {
-            ImageHandlerUtils.loadIamge2(mActivity, imageUrl.getImageUrl(), holder.imageView, true);
+            ImageLoader.getInstance().displayImage(imageUrl.getImageUrl(), holder.imageView);
         } else {
-            ImageHandlerUtils.loadIamgeThumbnail2(mActivity, imageUrl.getSmallImageUrl(), holder.imageView);
+            ImageLoader.getInstance().displayImage(imageUrl.getSmallImageUrl(), holder.imageView);
         }
 
 

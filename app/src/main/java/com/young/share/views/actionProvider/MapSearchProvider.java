@@ -1,4 +1,4 @@
-package com.young.share.views;
+package com.young.share.views.actionProvider;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -25,6 +25,11 @@ public class MapSearchProvider extends ActionProvider {
     private String queryTxt;
     public boolean isShow = false;
 
+    /**
+     * Creates a new instance.
+     *
+     * @param context Context for accessing resources.
+     */
     public MapSearchProvider(Context context) {
         super(context);
         view = LayoutInflater.from(context).inflate(R.layout.menu_map_search_provider, null);

@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.young.share.BaiduMapActivity;
 import com.young.share.BigPicActivity;
 import com.young.share.R;
@@ -27,8 +28,8 @@ import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.EvaluateUtil;
-import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LocationUtils;
+import com.young.share.utils.NetworkUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.utils.UserUtils;
 import com.young.share.views.Dialog4Tips;
@@ -105,8 +106,10 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
         }
 
-        ImageHandlerUtils.loadIamgeThumbnail(ctx,
-                TextUtils.isEmpty(myUser.getAvatar()) ? Contants.DEFAULT_AVATAR : myUser.getAvatar(), avatar);
+        ImageLoader.getInstance().displayImage(
+                TextUtils.isEmpty(myUser.getAvatar()) ? Contants.DEFAULT_AVATAR :
+                        NetworkUtils.getRealUrl(ctx,myUser.getAvatar()), avatar);
+
         if (TextUtils.isEmpty(discountMessage_hz.getDtTag())) {
             tagLayout.setVisibility(View.INVISIBLE);
         } else {

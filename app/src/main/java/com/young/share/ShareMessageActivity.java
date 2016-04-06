@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -48,7 +49,6 @@ import com.young.share.utils.cache.ACache;
 import com.young.share.utils.cache.DarftUtils;
 import com.young.share.views.Dialog4Tips;
 import com.young.share.views.MultiImageView.MultiImageView;
-import com.young.share.views.PopupWinListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -98,22 +98,16 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     @InjectView(R.id.vdv_share_video)
     private VideoView videoPreview;//视频
 
-    //    private GridviewAdapter gridViewAdapter;
     private InputMethodManager imm;
     private final EditorCreateInfo createInfo = new EditorCreateInfo();//录制的时候，参数设置
-    private PopupWinListView popupWinListView;
-    //    private boolean isResgiter = false;
     private String locationInfo;//定位信息
     private String tagInfo = null;//标签信息
     private double latitude;//纬度
     private double longitude;//经度
-    //    private boolean addLocation = false;//是否添加地理信息
-//    private boolean isGotLocationInfo = false;//是否已经获取地理信息
-//    private String locationInfoString;//位置信息
     private ACache acache;//缓存
     private Dialog4Tips dialog;//保存草稿的提示框
     private DarftUtils darftUtils;//草稿
-    private static final int FINISH_ACTIVITY = 0;
+
     private boolean currentIsDiscount;//当前页面是否为商家优惠
     private String draftType;//草稿类型
     private String imageFilePath;//图片的地址
@@ -123,6 +117,13 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     private int placeSelect = 0;//选择的地点的position
     private PlaceSearch.ResultsEntity placeResult;
     private static final int REQUEST_CODE_RECORD_VIDEO = 0x01;//录制视频requestCode
+    private static final int FINISH_ACTIVITY = 0;//结束程序
+    private static final int MESSAGE_TOAST=0x02;//toast
+    private static final int MESSAGE_UPLOAD_IMAGE_FAILURE=0x03;//上传图片失败
+    private static final int MESSAGE_UPLOAD_VIDEO_FAILURE=0x04;//上传视频失败
+    private static final int MESSAGE_CLEAR=0x05;//清理工作
+    private static final int MESSAGE_SHARE_SUCCESS=0x06;//分享失败
+    private static final int MESSAGE_SHARE_FAILURE=0x07;//分享成功
 
     // TODO: 2016-02-27 删除图片的操作
     @Override
@@ -161,20 +162,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     @Override
     public void findviewbyid() {
 
-        shareLocation_tv.setOnClickListener(this);
-        emotion_im.setOnClickListener(this);
-        addimg_im.setOnClickListener(this);
-        addVideo.setOnClickListener(this);
-        tagLl.setOnClickListener(this);
-        lactionInfoLl.setOnClickListener(this);
 
-
-        content_et.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                emotionPanel_bg.setVisibility(View.GONE);
-            }
-        });
         /**
          * 创建文件地址
          */
@@ -198,10 +186,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     public void bindData() {
 
 
-        List<String> tagList = XmlUtils.getSelectTag(this);
-        tagList.remove(0);
-
-        popupWinListView = new PopupWinListView(this, tagList, false);
+//        popupWinListView = new PopupWinListView(this, tagList, false);
 
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
@@ -222,17 +207,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
             }
         });
 
-        popupWinListView.setItemClick(new PopupWinListView.onItemClick() {
-            @Override
-            public void onClick(View view, String str, int position, long id) {
-                if (str != null) {
-                    tagInfo = str;
-                    tag_tv.setText(tagInfo);
-                }
-
-
-            }
-        });
+        tagLl.setOnCreateContextMenuListener(contextMenuListener);
         //表情
         new EmotionUtils(mActivity, vp_emotion_dashboard, content_et);
         acache = ACache.get(mActivity);
@@ -240,6 +215,21 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         dialog = new Dialog4Tips(mActivity);
 //恢复草稿
         resetDraft();
+
+        shareLocation_tv.setOnClickListener(this);
+        emotion_im.setOnClickListener(this);
+        addimg_im.setOnClickListener(this);
+        addVideo.setOnClickListener(this);
+        tagLl.setOnClickListener(this);
+        lactionInfoLl.setOnClickListener(this);
+
+
+        content_et.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emotionPanel_bg.setVisibility(View.GONE);
+            }
+        });
 
     }
 
@@ -367,6 +357,47 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     }
 
 
+    /**
+     * contextMenu
+     */
+    private View.OnCreateContextMenuListener contextMenuListener = new View.OnCreateContextMenuListener() {
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            int menuViewId = 0;
+            switch (view.getId()) {
+
+                case R.id.ll_share_select_tag://选择标签
+                    menuViewId = R.menu.menu_context_empty;
+                    addTagMenu(contextMenu);
+                    break;
+
+                case R.id.popupwin_edit_personnal_info_age:
+
+                    break;
+
+            }
+
+
+            getMenuInflater().inflate(menuViewId, contextMenu);
+        }
+    };
+
+    /**
+     * 添加标签选择的选择contextMenu
+     *
+     * @param contextMenu
+     */
+    private void addTagMenu(ContextMenu contextMenu) {
+        List<String> tagList = XmlUtils.getSelectTag(this);
+        tagList.remove(0);
+        tagList.add(0, getString(R.string.txt_tag_invisible));
+
+        for (int i = 0; i < tagList.size(); i++) {
+            contextMenu.add(0, i, Menu.NONE, tagList.get(i));
+        }
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_share_send, menu);
@@ -377,17 +408,37 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.menu_send) {
+            final List<String> lists = multiImageView.getImagesList();
+            final String content = content_et.getText().toString();
+
+            if (!TextUtils.isEmpty(content) || lists != null && lists.size() > 0 || !TextUtils.isEmpty(videoPath)) {//信息或者图片不为空
             /*发送*/
-            // TODO: 2016-03-28 使用线程进行分享
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    send();
-                }
-            });
+                // TODO: 2016-03-28 使用线程进行分享
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        send(content, lists);
+                    }
+                }).start();
+
+            }
+        } else {//信息或者图片为空
+
+            SVProgressHUD.showErrorWithStatus(mActivity, getString(R.string.share_messages_empty));
 
         }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        tag_tv.setText(item.getTitle());
+        tagInfo = !TextUtils.isEmpty(item.getTitle()) && !getString(R.string.txt_tag_invisible).equals(item.getTitle()) ?
+                String.valueOf(item.getTitle()) : "";
+
+        return super.onContextItemSelected(item);
     }
 
     @Override
@@ -412,6 +463,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                         l.add(pictureInfo.getImageUrl());
                     }
                 }
+                //选择图片
                 ImageHandlerUtils.starSelectImages(mActivity, l);
 
                 break;
@@ -428,8 +480,8 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
             case R.id.ll_share_select_tag://标签选择
 
-                popupWinListView.onShow(tagLl);
-
+//                popupWinListView.onShow(tagLl);
+                openContextMenu(v);
                 break;
 
             case R.id.im_activity_share_message_add_video:/*录制视频*/
@@ -481,8 +533,11 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
             if (placeSelect != 0) {
                 shareLocation_tv.setText(placeResult.getName());
                 locationInfo = placeResult.getName();
-                longitude = placeResult.getLocation().getLng();
-                latitude = placeResult.getLocation().getLat();
+                // 在现实市级的时候，没有返回经纬度
+                longitude = placeResult.getLocation() != null ? placeResult.getLocation().getLng() : 114.424984;
+                latitude = placeResult.getLocation() != null ? placeResult.getLocation().getLat() : 23.043472;
+
+
             }
 
 
@@ -575,15 +630,43 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     @Override
     public void handerMessage(Message msg) {
 //        LogUtils.logI("handler = "+msg);
+        switch (msg.what) {
+            case FINISH_ACTIVITY:
+                intents.setAction(Contants.BORDCAST_REQUEST_REFRESH);
+                intents.putExtra(Contants.REFRESH_TYPE, msg.what);
+                sendBroadcast(intents);
+                mActivity.finish();
+                break;
 
-        if (msg.what != FINISH_ACTIVITY) {
-            intents.setAction(Contants.BORDCAST_REQUEST_REFRESH);
-            intents.putExtra(Contants.REFRESH_TYPE, msg.what);
-            sendBroadcast(intents);
+            case MESSAGE_TOAST://发送分享的吐司
+                toast(R.string.sending);
+                break;
+
+            case MESSAGE_UPLOAD_IMAGE_FAILURE://上传照片失败
+                SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.upload_images_fail));
+                break;
+
+            case MESSAGE_UPLOAD_VIDEO_FAILURE://上传视频失败
+
+                SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.upload_video_fail));
+                break;
+
+            case MESSAGE_CLEAR://发送完成之后进行clear工作
+
+                clean();
+                break;
+            case MESSAGE_SHARE_SUCCESS://分享成功
+                toast(R.string.share_messages_success);
+                break;
+            case MESSAGE_SHARE_FAILURE://分享失败,并且保存草稿
+                toast(R.string.share_message_fail);
+                saveDarft();
+                break;
         }
 
-        mActivity.finish();
+
     }
+
 
     @Override
     public void mBack() {
@@ -653,39 +736,21 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     /**
      * 发送
      * 分享信息或者是商家优惠
+     *
+     * @param content
+     * @param lists
      */
-    private void send() {
-        String content = content_et.getText().toString();
-//
-//        List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(this, multiImageView.getImagesList());
-//
-//        ArrayList<String> lists = new ArrayList<>();
-//        if (pictureInfoList != null && pictureInfoList.size() > 0) {
-//            for (PictureInfo pictureInfo : pictureInfoList) {
-//                lists.add(pictureInfo.getImageUrl());
-//            }
-//        }
-        List<String> lists = multiImageView.getImagesList();
+    private void send(String content, List<String> lists) {
 
-        if (!TextUtils.isEmpty(content) || lists.size() > 0) {//信息或者图片不为空
 
-            toast(R.string.sending);
-            mBackStartActivity(MainActivity.class);
+        mBackStartActivity(MainActivity.class);
 
-            //发送信息
-            if (currentIsDiscount) {//商家优惠
-                shareDiscount(lists, content);
-            } else {
-                shareDicover(lists, content);
-            }
-
-        } else {//信息或者图片为空
-
-            SVProgressHUD.showErrorWithStatus(mActivity, getString(R.string.share_messages_empty));
-
+        //发送信息
+        if (currentIsDiscount) {//商家优惠
+            shareDiscount(lists, content);
+        } else {
+            shareDicover(lists, content);
         }
-
-
     }
 
     /**
@@ -726,11 +791,12 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
                 @Override
                 public void onError(int statuscode, String errormsg) {
-                    SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.upload_images_fail));
+
+                    mHandler.sendEmptyMessage(MESSAGE_UPLOAD_IMAGE_FAILURE);
                 }
             });
 
-        } else if (!TextUtils.isEmpty(videoPath)) {
+        } else if (!TextUtils.isEmpty(videoPath)) {//视频
 
             String[] file = new String[]{videoPath, imageFilePath};
             BmobApi.UploadFiles(mActivity, file, Contants.FILE_TYPE_MULTI, new GoToUploadImages() {
@@ -753,7 +819,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
                 @Override
                 public void onError(int statuscode, String errormsg) {
-                    SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.upload_video_fail));
+                    mHandler.sendEmptyMessage(MESSAGE_UPLOAD_VIDEO_FAILURE);
                 }
             });
         } else {//没有上传图片的
@@ -803,16 +869,13 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                     disMessages.setDtImgs(list);
                     //保存分享信息到云端
                     shareDiscountMessage(disMessages);
-//                            else {
-//
-//                                LogUtils.e("回调第一次，isfinish = " + isFinish);
-//                                SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.some_images_maybe_miss));
-//                            }
+
                 }
 
                 @Override
                 public void onError(int statuscode, String errormsg) {
-                    SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.upload_images_fail));
+//                    SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.upload_images_fail));
+                    mHandler.sendEmptyMessage(MESSAGE_UPLOAD_IMAGE_FAILURE);
                 }
             });
 
@@ -833,19 +896,22 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
      */
     private void shareDiscountMessage(DiscountMessage_HZ discountMessage) {
         //清理工作
-        clean();
+//        clean();
+        mHandler.sendEmptyMessage(MESSAGE_CLEAR);
         //保存
         discountMessage.save(mActivity, new SaveListener() {
             @Override
             public void onSuccess() {
-                toast(R.string.share_messages_success);
+//                toast(R.string.share_messages_success);
+                mHandler.sendEmptyMessage(MESSAGE_SHARE_SUCCESS);
                 mHandler.sendEmptyMessageDelayed(Contants.REFRESH_TYPE_DISCOUNT, Contants.ONE_SECOND);
             }
 
             @Override
             public void onFailure(int i, String s) {
-                toast(R.string.share_message_fail);
-                saveDarft();
+//                toast(R.string.share_message_fail);
+//                saveDarft();
+                mHandler.sendEmptyMessage(MESSAGE_SHARE_FAILURE);
                 mHandler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Contants.ONE_SECOND);
             }
         });
@@ -860,20 +926,22 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
      */
     private void shareMessage(ShareMessage_HZ shareMessage_hz) {
 // TODO: 2015-11-13  分享信息后台一直gcc
-        clean();
+     mHandler.sendEmptyMessage(MESSAGE_CLEAR);
+
         shareMessage_hz.save(mActivity, new SaveListener() {
             @Override
             public void onSuccess() {
-                toast(R.string.share_messages_success);
+
+                mHandler.sendEmptyMessage(MESSAGE_SHARE_SUCCESS);
 //                LogUtils.logI("share messages success ");
                 mHandler.sendEmptyMessageDelayed(Contants.REFRESH_TYPE_DISCOVER, Contants.ONE_SECOND);
             }
 
             @Override
             public void onFailure(int i, String s) {
-                toast(R.string.share_message_fail);
+               mHandler.sendEmptyMessage(MESSAGE_SHARE_FAILURE);
 //                LogUtils.logI("share messages faile ");
-                saveDarft();
+
 
 
                 mHandler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Contants.ONE_SECOND);
@@ -911,7 +979,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         shareLocation_tv.setText("");
         tag_tv.setText("");
 //        gridViewAdapter.setDatas(null);
-        multiImageView.setList(null);
+        multiImageView.setList(new ArrayList<String>());
     }
 
 

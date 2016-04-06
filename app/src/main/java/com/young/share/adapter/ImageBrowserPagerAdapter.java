@@ -6,6 +6,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.young.share.R;
 import com.young.share.adapter.baseAdapter.BasePagerAdapter;
 import com.young.share.model.PictureInfo;
@@ -64,7 +65,7 @@ public class ImageBrowserPagerAdapter extends BasePagerAdapter<PictureInfo> {
                     }
                 });
 
-                ImageHandlerUtils.loadIamgeThumbnail2(context, pictureInfo.imageUrl, photo);
+                ImageLoader.getInstance().displayImage( pictureInfo.imageUrl, photo);
 
             } else {//本地图片
                 ImageHandlerUtils.loadIamge(context, pictureInfo.imageUrl, photo, true);
