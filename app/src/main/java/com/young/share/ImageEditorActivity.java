@@ -3,6 +3,7 @@ package com.young.share;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
@@ -17,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.young.share.adapter.ImageBrowserPagerAdapter;
+import com.young.share.adapter.ImageEditorPagerAdapter;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
@@ -39,7 +40,6 @@ import java.util.List;
  */
 public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTreeObserver.OnPreDrawListener {
 
-    private ImageBrowserPagerAdapter pagerAdapter;
     @InjectView(R.id.vp_image_brower)
     private CustomViewPager viewPager;
     @InjectView(R.id.rl_image_brower_root_layout)
@@ -48,6 +48,7 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
     private LinearLayout indexLayout;
 
     private ActionBar actionBar;
+    private ImageEditorPagerAdapter pagerAdapter;
 
     private List<PictureInfo> pictureInfoList;
     private List<View> dotList = new ArrayList<>();
@@ -67,16 +68,16 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
         initializeToolbar();
 
         pictureInfoList = (List<PictureInfo>) getIntent().getSerializableExtra(Contants.INTENT_IMAGE_LIST);
-
+        setTitle(String.format("1/%s", String.valueOf(pictureInfoList.size())));
         currentItem = getIntent().getIntExtra(Contants.INTENT_CURRENT_ITEM, 0);
 
         //格式化数据
-        formateData();
+//        formateData();
     }
 
     @Override
     public void findviewbyid() {
-        pagerAdapter = new ImageBrowserPagerAdapter(mActivity, pictureInfoList, actionBar, true);
+        pagerAdapter = new ImageEditorPagerAdapter(mActivity, pictureInfoList, actionBar);
     }
 
     @Override
@@ -162,9 +163,9 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
      * 初始化toolbar
      */
     private void initializeToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_image_brower);
-        toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_image_editor);
         setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setNavigationIcon(R.drawable.icon_menu_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,12 +187,13 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                setTitle(String.format("%s/%s", String.valueOf(position), String.valueOf(pictureInfoList.size())));
             }
 
             @Override
             public void onPageSelected(int position) {
                 currentItem = position;
+                initDot(position);
             }
 
             @Override
@@ -363,13 +365,10 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
      * 格式化数据
      */
     private void formateData() {
-//        LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 0; i < pictureInfoList.size(); i++) {
-
-          //如果是本地数据，使用universal image loader 需要哦添加文件头，本地文件才能加载
-                PictureInfo pictureInfom = pictureInfoList.get(i);
-                pictureInfom.imageUrl = Contants.FILE_HEAD + pictureInfom.imageUrl;
-
+            //如果是本地数据，使用universal image loader 需要哦添加文件头，本地文件才能加载
+            PictureInfo pictureInfom = pictureInfoList.get(i);
+            pictureInfom.imageUrl = Contants.FILE_HEAD + pictureInfom.imageUrl;
         }
     }
 

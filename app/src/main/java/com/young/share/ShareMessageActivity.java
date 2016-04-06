@@ -192,7 +192,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
             @Override
             public void onItemClick(View view, int position) {
                 List<PictureInfo> pictureInfoList =
-                        DataFormateUtils.formate2PictureInfo(mActivity, multiImageView.getImagesList());
+                        DataFormateUtils.formate2PictureInfo4Local(multiImageView.getImagesList());
 
                 EvaluateUtil.setupCoords(mActivity, (ImageView) view, pictureInfoList, position);
                 Intent intent = new Intent(mActivity, BigPicActivity.class);
@@ -440,6 +440,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
         return super.onContextItemSelected(item);
     }
+    // TODO: 2016-04-06 完善修改图片的功能
 
     @Override
     public void onClick(View v) {
@@ -453,7 +454,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                 break;
 
             case R.id.im_activity_share_message_addimg://添加照片
-
+                emotionPanel_bg.setVisibility(emotionPanel_bg.getVisibility() == View.VISIBLE ? View.GONE : View.GONE);
                 List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(this, multiImageView.getImagesList());
 
                 ArrayList<String> l = new ArrayList<>();

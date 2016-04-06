@@ -78,7 +78,7 @@ public class BigpicturePagerAdapter extends BasePagerAdapter<PictureInfo> implem
             @Override
             public void onLoadingStarted(String s, View view) {
                 startLoad(progressBar);
-                loadImageFromCache(photoView, pictureInfo.getSmallImageUrl());
+                loadImageFromCache(photoView, pictureInfo.getImageUrl());
             }
 
             @Override
@@ -103,11 +103,11 @@ public class BigpicturePagerAdapter extends BasePagerAdapter<PictureInfo> implem
     /**
      * 从内存中读取刚刚的缩略图
      *
-     * @param photoView
-     * @param smallImageUrl
+     * @param photoView 显示图片的imageView
+     * @param imageUrl 图片地址
      */
-    private void loadImageFromCache(PhotoView photoView, String smallImageUrl) {
-        Bitmap bitmap = ImageHandlerUtils.getBitmapFromCache(smallImageUrl, mImageLoader);
+    private void loadImageFromCache(PhotoView photoView, String imageUrl) {
+        Bitmap bitmap = ImageHandlerUtils.getBitmapFromCache(imageUrl, mImageLoader);
         if (bitmap != null) {
             photoView.setImageBitmap(bitmap);
         } else {//内存中没有改缩略图

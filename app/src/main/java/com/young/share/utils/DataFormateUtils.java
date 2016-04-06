@@ -42,6 +42,24 @@ public class DataFormateUtils {
     }
 
     /**
+     * 转化成本地的文件地址
+     *
+     * @param list 要转化的地址
+     * @return
+     */
+    public static List<PictureInfo> formate2PictureInfo4Local( List<String> list) {
+
+        List<PictureInfo> pictureInfoList = new ArrayList<>();
+        if (list != null) {
+            for (String url : list) {
+                PictureInfo pictureInfo = new PictureInfo(url);
+                pictureInfoList.add(pictureInfo);
+            }
+        }
+        return pictureInfoList;
+    }
+
+    /**
      * 批量将网址转化为缩略图地址
      * bmob中需要使用
      *

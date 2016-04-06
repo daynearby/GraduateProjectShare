@@ -126,7 +126,8 @@
         <activity android:name=".AboutActivity" />
 
         <!-- 重置密码 -->
-        <activity android:name=".ResetPwdActivity" />
+        <activity android:name=".ResetPwdActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- 修改个人信息-->
         <activity
@@ -168,7 +169,7 @@
         <activity
             android:name=".BigPicActivity"
             android:theme="@style/AppTheme.Translucent2" />
-
+<!--图片编辑-->
         <activity
             android:name=".ImageEditorActivity"
             android:theme="@style/AppTheme.Translucent2" />
