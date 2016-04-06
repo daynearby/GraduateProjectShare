@@ -173,6 +173,11 @@
         <activity
             android:name=".ImageEditorActivity"
             android:theme="@style/AppTheme.Translucent2" />
+
+        <activity android:name=".VideoplayerActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+
         <!-- 百度定位 services -->
         <service
             android:name="com.baidu.location.f"

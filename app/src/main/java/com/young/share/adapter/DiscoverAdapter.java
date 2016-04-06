@@ -10,7 +10,9 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -70,6 +72,33 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         super(context);
     }
 
+    /**
+     * 绑定ListView 实现监听item显示还是隐藏
+     *
+     * @param listView
+     */
+    public void bindListView(ListView listView) {
+
+        Toast.makeText(ctx, "  listView.getFirstVisiblePosition()  = " + listView.getFirstVisiblePosition()
+                + " listView.getLastVisiblePosition() = " + listView.getLastVisiblePosition(), Toast.LENGTH_LONG).show();
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                Toast.makeText(ctx, " absListView  = " + absListView
+                        + " scrollState = " + scrollState, Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+                Toast.makeText(ctx, " firstVisibleItem  = " + firstVisibleItem
+                        + " visibleItemCount = " + visibleItemCount
+                        + " totalItemCount = " + totalItemCount, Toast.LENGTH_LONG).show();
+
+            }
+        });
+    }
 
     @Override
     public void convert(ViewHolder holder, final ShareMessage_HZ shareMessage, int position) {
@@ -111,7 +140,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 
         ImageLoader.getInstance().displayImage(
                 TextUtils.isEmpty(myUser.getAvatar()) ? Contants.DEFAULT_AVATAR :
-                        NetworkUtils.getRealUrl(ctx,myUser.getAvatar()), avatar);
+                        NetworkUtils.getRealUrl(ctx, myUser.getAvatar()), avatar);
 
         if (TextUtils.isEmpty(shareMessage.getShTag())) {
             tagLayout.setVisibility(View.INVISIBLE);
@@ -213,7 +242,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         RelativeLayout videoLayout = holder.getView(R.id.rl_share_video_layout);
         final VideoView videoView = holder.getView(R.id.vv_share_preview_video);
         final ImageView videoPrevideo = holder.getView(R.id.im_share_video_priview);
-        ImageView playvideo = holder.getView(R.id.im_share_start_btn);
+        final ImageView playvideo = holder.getView(R.id.im_share_start_btn);
         final ProgressBar videoDownloadPb = holder.getView(R.id.pb_share_loading);
 
         if (shareMessage.getVideo() != null
@@ -224,6 +253,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
             videoLayout.setVisibility(View.VISIBLE);
             videoPrevideo.setVisibility(View.VISIBLE);
             playvideo.setVisibility(View.VISIBLE);
+            videoDownloadPb.setVisibility(View.GONE);
             /*设置标识，为了不出现错乱*/
             videoView.setTag(videoUrl);
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -248,19 +278,19 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                 videoPrevideo.setBackgroundColor(ctx.getResources().getColor(R.color.gray_lighter));
             }
 
-            videoDownloadPb.setVisibility(View.VISIBLE);
-            videoDownloadPb.setOnTouchListener(new View.OnTouchListener() {
+//            videoDownloadPb.setVisibility(View.VISIBLE);
+            videoView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent event) {
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
                         Intent intent = new Intent(ctx, VideoplayerActivity.class);
                         intent.putExtra(Contants.INTENT_KEY_VIDEO_PATH, shareMessage.getVideo().getFileUrl(ctx));
                         ctx.startActivity(intent);
-                        ((Activity)ctx).overridePendingTransition(0, 0);
+                        ((Activity) ctx).overridePendingTransition(0, 0);
 
                     }
 
-                    return false;
+                    return true;
                 }
             });
 
@@ -269,7 +299,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                 public void onClick(View view) {
 
                     //下载并且播放视频
-                    downloadVideo(videoUrl, videoView, videoPrevideo, videoDownloadPb);
+                    downloadVideo(videoUrl, videoView, videoPrevideo, videoDownloadPb, playvideo);
                 }
             });
 
@@ -287,16 +317,28 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
     /**
      * 下载视频并且播放
      *
-     * @param url getfileurl
-     * @param videoView 播放器
+     * @param url           getfileurl
+     * @param videoView     播放器
      * @param videoPrevideo 视频预览图片
-     * @param pb 进度条
+     * @param pb            进度条
+     * @param playvideo
      */
-    private void downloadVideo(final String url, final VideoView videoView, final ImageView videoPrevideo, final ProgressBar pb) {
-        String filePath = Environment.getExternalStorageDirectory().getPath() + Contants.FILE_PAHT_DOWNLOAD + url.substring(url.lastIndexOf('/') + 1);
+    private void downloadVideo(final String url,
+                               final VideoView videoView,
+                               final ImageView videoPrevideo,
+                               final ProgressBar pb,
+                               ImageView playvideo) {
+
+        pb.setVisibility(View.VISIBLE);
+        playvideo.setVisibility(View.GONE);
+
+        String filePath = Environment.getExternalStorageDirectory().getPath()
+                + Contants.FILE_PAHT_DOWNLOAD
+                + url.substring(url.lastIndexOf('/') + 1);
+
         File file = new File(filePath);
 //        videoPlayerList.add(view);
-        LogUtils.e("down load filePath = " +filePath);
+        LogUtils.e("down load filePath = " + filePath);
 
         if (file.exists()) {//视频已经下载了
             videoView.setVideoPath(filePath);
@@ -314,9 +356,10 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                 public void onSuccess(String videoPath) {
 //                    LogUtils.E("response Filepath = " + object);
                     if (videoView.getTag().equals(url)) {
-                        videoView.setVideoPath( videoPath);
+                        videoView.setVideoPath(videoPath);
                         pb.setVisibility(View.GONE);
                         videoPrevideo.setVisibility(View.GONE);
+
                         videoView.setVisibility(View.VISIBLE);
                         videoView.start();
                     }

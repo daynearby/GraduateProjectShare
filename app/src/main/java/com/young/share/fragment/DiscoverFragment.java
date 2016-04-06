@@ -108,20 +108,18 @@ public class DiscoverFragment extends BaseFragment {
     @Override
     public void initView() {
         listviewAdapter = new DiscoverAdapter(context);
-
-         listView = $(R.id.list_discover);
+        listView = $(R.id.list_discover);
         swipeRefreshLayout = $(R.id.sw_refresh_pager_discover);
         tipsIm = $(R.id.im_discover_tips);
-
-        listView.setAdapter(listviewAdapter);
-
-
-
 
     }
 
     @Override
     public void bindData() {
+//
+        listView.setAdapter(listviewAdapter);
+        listviewAdapter.bindListView(listView);
+
         //下拉上拉，点击
         setListPullAndClickListener();
 
@@ -142,7 +140,7 @@ public class DiscoverFragment extends BaseFragment {
      * 下拉刷新、上拉加载更多
      * 点击事件
      */
-    private void setListPullAndClickListener(){
+    private void setListPullAndClickListener() {
         //ListView的上拉、下拉刷新
         new ListViewRefreshListener(listView, swipeRefreshLayout,
                 new ListViewRefreshListener.RefreshListener() {
@@ -197,6 +195,7 @@ public class DiscoverFragment extends BaseFragment {
             }
         });
     }
+
     @Override
     public void handler(Message msg) {
         switch (msg.what) {
@@ -214,7 +213,7 @@ public class DiscoverFragment extends BaseFragment {
                     tipsIm.setVisibility(View.GONE);
                     refreshUI();
                 } else {
-                     tipsIm.setVisibility(View.VISIBLE);
+                    tipsIm.setVisibility(View.VISIBLE);
                     tipsIm.setImageResource(R.drawable.icon_conten_empty);
                 }
                 break;

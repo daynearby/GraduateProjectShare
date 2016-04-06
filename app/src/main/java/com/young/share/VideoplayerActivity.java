@@ -1,6 +1,7 @@
 package com.young.share;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.view.SurfaceView;
@@ -95,7 +96,7 @@ public class VideoplayerActivity extends BaseAppCompatActivity implements View.O
      */
     private void initializeToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tb_post_video);
-//        toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+        toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.icon_menu_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

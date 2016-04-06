@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.young.share.BaiduMapActivity;
 import com.young.share.BigPicActivity;
 import com.young.share.MessageDetailActivity;
@@ -18,17 +19,17 @@ import com.young.share.R;
 import com.young.share.adapter.baseAdapter.CommAdapter;
 import com.young.share.adapter.baseAdapter.ViewHolder;
 import com.young.share.config.Contants;
-import com.young.share.model.RemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
+import com.young.share.model.RemoteModel;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.EvaluateUtil;
-import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LocationUtils;
+import com.young.share.utils.NetworkUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.utils.UserUtils;
 import com.young.share.views.Dialog4Tips;
@@ -84,8 +85,11 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
 
         nickname_tv.setText(TextUtils.isEmpty(myUser.getNickName()) ? "" : myUser.getNickName());
 
-        ImageHandlerUtils.loadIamgeThumbnail(ctx,
-                TextUtils.isEmpty(myUser.getAvatar()) ? Contants.DEFAULT_AVATAR : myUser.getAvatar(), avatar);
+        ImageLoader.getInstance().displayImage(
+                TextUtils.isEmpty(myUser.getAvatar()) ?
+                        Contants.DEFAULT_AVATAR :
+                        NetworkUtils.getRealUrl(ctx,myUser.getAvatar()), avatar);
+
         if (TextUtils.isEmpty(remoteModel.getTag())) {
             tagLayout.setVisibility(View.INVISIBLE);
         } else {

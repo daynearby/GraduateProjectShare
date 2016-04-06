@@ -481,7 +481,6 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
             case R.id.ll_share_select_tag://标签选择
 
-//                popupWinListView.onShow(tagLl);
                 openContextMenu(v);
                 break;
 

@@ -11,7 +11,9 @@ import android.widget.BaseAdapter;
 import com.young.share.R;
 import com.young.share.config.ApplicationConfig;
 import com.young.share.model.MyUser;
+import com.young.share.utils.LogUtils;
 
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import cn.bmob.v3.BmobUser;
@@ -53,8 +55,13 @@ public abstract class CommAdapter<T> extends BaseAdapter {
     @Override
     public T getItem(int position) {
 
+        try {
+            return dataList != null && dataList.size() > 0 ? dataList.get(position) : null;
+        } catch (ConcurrentModificationException e) {
+            LogUtils.e(" ConcurrentModificationException = " + e.toString());
+        }
 
-        return null != dataList && dataList.size() > 0 ? dataList.get(position) : null;
+        return null;
     }
 
     @Override

@@ -309,10 +309,10 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         nickname_tv.setText(TextUtils.isEmpty(myUser.getNickName()) ? "" : myUser.getNickName());
 /*用户头像*/
         ImageLoader.getInstance().displayImage(
-                        TextUtils.isEmpty(myUser.getAvatar()) ?
-                                Contants.DEFAULT_AVATAR :
-                                NetworkUtils.getRealUrl(this, myUser.getAvatar()),
-                        avatar);
+                TextUtils.isEmpty(myUser.getAvatar()) ?
+                        Contants.DEFAULT_AVATAR :
+                        NetworkUtils.getRealUrl(this, myUser.getAvatar()),
+                avatar);
 
 
         if (TextUtils.isEmpty(shareMessage.getShTag())) {
@@ -340,9 +340,9 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 String.valueOf(shareMessage.getShCommNum()) : getString(R.string.tx_comment));
 
         //位置信息
-        if (!TextUtils.isEmpty(shareMessage.getShContent())) {
+        if (!TextUtils.isEmpty(shareMessage.getShLocation())) {
             loactioInfoTx.setVisibility(View.VISIBLE);
-            loactioInfoTx.setText(shareMessage.getShContent());
+            loactioInfoTx.setText(shareMessage.getShLocation());
             loactioInfoTx.setOnClickListener(this);
         }
 
@@ -355,7 +355,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         /**
          * 分享才需要判断是否有视频信息
          */
-
         setVideo();
 
 
