@@ -189,6 +189,7 @@ public class Contants {
     public static final String INTENT_SELECTOR_POSITION = "intent_selector_position";//intent传输的已经选择postion
     public static final String INTENT_KEY_POST_VIDEO = "intent_key_post_video";
     public static final String INTENT_KEY_VIDEO_PATH = "intent_key_video_path";
+    public static final String INTENT_KEY_VIDEO_PREVIEW_PATH = "intent_key_video_preview_path";
     public static final String INTENT_KEY_DISCOVER = "intent_key_discover";//发现 -- 内容
     public static final String INTENT_KEY_REMOTE_MODEL = "intent_key_remote_model";//通用的结构 -- 内容
 

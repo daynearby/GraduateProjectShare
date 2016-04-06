@@ -111,8 +111,6 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         TextView content_tv = holder.getView(R.id.id_tx_share_content);//分享的文本内容
         TextView location = holder.getView(R.id.tv_item_share_main_location);//分享信息的位置
         MultiImageView multiImageView = holder.getView(R.id.miv_share_iamges);//图片
-        /*视频布局*/
-
 
         TextView wanto_tv = holder.getView(R.id.id_tx_wantogo);//想去数量
         TextView hadgo_tv = holder.getView(R.id.id_hadgo);//去过数量
@@ -285,6 +283,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
                         Intent intent = new Intent(ctx, VideoplayerActivity.class);
                         intent.putExtra(Contants.INTENT_KEY_VIDEO_PATH, shareMessage.getVideo().getFileUrl(ctx));
+                        intent.putExtra(Contants.INTENT_KEY_VIDEO_PREVIEW_PATH, shareMessage.getVideoPreview().getFileUrl(ctx));
                         ctx.startActivity(intent);
                         ((Activity) ctx).overridePendingTransition(0, 0);
 

@@ -594,7 +594,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                     overridePendingTransition(0, 0);
                 }
 
-                return false;
+                return true;
             }
         });
 

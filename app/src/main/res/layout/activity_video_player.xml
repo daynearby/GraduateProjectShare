@@ -6,21 +6,45 @@
     android:background="@android:color/black">
 
 
-    <SurfaceView
-        android:id="@+id/suview_video_player"
+    <!--<SurfaceView-->
+        <!--android:id="@+id/suview_video_player"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:visibility="gone"/>-->
+
+    <!--视频窗口-->
+    <VideoView
+        android:id="@+id/vdv_video"
+        android:layout_width="@dimen/size_video_width"
+        android:layout_height="@dimen/size_video_height"
+        android:layout_margin="@dimen/maginMicro"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/im_video_preview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
-
-    <TextView
+    <!--进度条-->
+    <ProgressBar
+        android:id="@+id/pb_video_loading"
+        style="@android:style/Widget.Holo.ProgressBar.Small"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/suview_video_player"
+        android:layout_centerInParent="true"
+        android:progressDrawable="@drawable/pb_process_bar"
+        android:visibility="gone" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/vdv_video"
         android:layout_centerHorizontal="true"
         android:background="@color/trans_back"
         android:padding="@dimen/paddingMic"
         android:text="@string/txt_video_click_exit"
-        android:textColor="@android:color/white"
-        android:layout_width="wrap_content" />
+        android:textColor="@android:color/white" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tb_post_video"
