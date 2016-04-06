@@ -497,6 +497,6 @@ public class MainActivity extends CustomActBarActivity {
         if (isRegistBordcast) {
             unregisterReceiver(mBroadcastReceiver);
         }
-        app.getThreadInstance().stopAllTask();
+
     }
 }

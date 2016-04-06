@@ -22,7 +22,6 @@ import com.young.share.model.dbmodel.ShareMessage;
 import com.young.share.model.dbmodel.User;
 import com.young.share.model.gson.ShareMessageList;
 import com.young.share.network.BmobApi;
-import com.young.share.thread.MyRunnable;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DBUtils;
 import com.young.share.utils.DataFormateUtils;
@@ -48,9 +47,7 @@ public class DiscoverFragment extends BaseFragment {
     private ImageView tipsIm;
     private ListView listView;
 
-    private static final int FIRST_GETDATA = 0x1001;
-    private static final int GET_LOACTIOPN_DATA = 0x1002;
-    private static final int HANDLER_GET_DATA = 0x1003;
+
 
     private int startIndex = 0;
     private int endIndex = 20;
@@ -59,7 +56,11 @@ public class DiscoverFragment extends BaseFragment {
 
     private int startRow = 0;//从第一条开始
     private boolean isFirstIn = true;//第一次进入该界面
-
+    private static final int FIRST_GETDATA = 0x1001;
+    private static final int GET_LOACTIOPN_DATA = 0x1002;
+    private static final int HANDLER_GET_DATA = 0x1003;
+    private static final int MESSAGE_NO_MORE_DATA = 0x1004;
+    private static final int MESSAGE_LOAD_DATA_FAILURE = 0x1005;
     /**
      * 默认构造函数
      */
@@ -90,19 +91,33 @@ public class DiscoverFragment extends BaseFragment {
         dataList = (List<ShareMessage_HZ>) app.getCacheInstance().getAsObject(Contants.ACAHE_KEY_DISCOVER);
 
         if (CommonUtils.isNetworkAvailable()) {//有网络
-//
-            threadPool.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
-                @Override
-                public void running() {
-                    getDataFromRemote();
-                }
-            }));
+////
+//            threadPool.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+//                @Override
+//                public void running() {
+//                    getDataFromRemote();
+//                }
+//            }));
+            //
+            initDataByThread();
 
         } else {
             SVProgressHUD.showInfoWithStatus(context,
                     getString(R.string.without_network));
         }
 
+    }
+
+    /**
+     * 通过一个新的线程进行获取数据
+     */
+    private void initDataByThread(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getDataFromRemote();
+            }
+        }).start();
     }
 
     @Override
@@ -218,11 +233,19 @@ public class DiscoverFragment extends BaseFragment {
                 }
                 break;
 
+            case MESSAGE_NO_MORE_DATA://上拉刷新，没有更多的信息
+                Toast.makeText(context, R.string.no_more_messages, Toast.LENGTH_SHORT).show();
+                break;
+
+            case MESSAGE_LOAD_DATA_FAILURE://加载数据失败，例如下拉刷新的时候
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(context, R.string.without_network, Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 
     /**
-     *
+     * 从远程数据库获取数据，可以通过上、下拉刷新实现触发
      */
     private void getDataFromRemote() {
 
@@ -247,7 +270,7 @@ public class DiscoverFragment extends BaseFragment {
                             if (shareMessageList.getShareMessageHzList().size() > 0) {
                                 dataList.addAll(shareMessageList.getShareMessageHzList());
                             } else {
-                                Toast.makeText(context, R.string.no_more_messages, Toast.LENGTH_SHORT).show();
+                               mhandler.sendEmptyMessage(MESSAGE_NO_MORE_DATA);
                             }
 
                         } else {
@@ -264,7 +287,8 @@ public class DiscoverFragment extends BaseFragment {
 
                     @Override
                     public void onFailure(int code, String msg) {
-                        swipeRefreshLayout.setRefreshing(false);
+                       mhandler.sendEmptyMessage(MESSAGE_LOAD_DATA_FAILURE);
+                        LogUtils.e("load data failure ! code = "+code+" message = "+msg);
                     }
                 }
         );

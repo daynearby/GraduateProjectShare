@@ -29,7 +29,6 @@ import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
 import com.young.share.model.RemoteModel;
-import com.young.share.thread.MyRunnable;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.EvaluateUtil;
@@ -109,6 +108,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
     private int lastIndex = 0;//上一个页面的position
 
     private static final int GET_NEW_COUNT = 0x01;//刷新下面两个数量
+    private static final int MESSAGE_BOTTOM_BAR_DATA = 0x02;//刷新下面两个数量
 
     @Override
     public int getLayoutId() {
@@ -122,16 +122,22 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         setTitle(R.string.title_body);
 
         commModel = (RemoteModel) getIntent().getExtras().getSerializable(Contants.CLAZZ_DATA_MODEL);
-        discountMessage =  DataFormateUtils.formateDataDiscount(commModel);
+        discountMessage = DataFormateUtils.formateDataDiscount(commModel);
 
-        threadPool.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+    /*获取数据*/
+        initDataByThread();
+    }
+
+    /**
+     * 获取数据，通过线程
+     */
+    private void initDataByThread() {
+        new Thread(new Runnable() {
             @Override
-            public void running() {
-
+            public void run() {
                 getData(discountMessage.getObjectId());
             }
-        }));
-
+        }).start();
     }
 
 
@@ -164,7 +170,9 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         disQuery.getObject(mActivity, objectId, new GetListener<DiscountMessage_HZ>() {
             @Override
             public void onSuccess(DiscountMessage_HZ discountMessage_hz) {
-                initBottomBar();
+                mHandler.sendEmptyMessage(MESSAGE_BOTTOM_BAR_DATA);
+
+
             }
 
             @Override
@@ -257,7 +265,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(mActivity,discountMessage.getDtImgs());
+                List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(mActivity, discountMessage.getDtImgs());
 
                 EvaluateUtil.setupCoords(mActivity, (ImageView) view, pictureInfoList, position);
                 Intent intent = new Intent(mActivity, BigPicActivity.class);
@@ -321,6 +329,13 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
 
     @Override
     public void handerMessage(Message msg) {
+
+        switch (msg.what) {
+            case MESSAGE_BOTTOM_BAR_DATA://初始化下方的数据
+                initBottomBar();
+                break;
+
+        }
 
     }
 

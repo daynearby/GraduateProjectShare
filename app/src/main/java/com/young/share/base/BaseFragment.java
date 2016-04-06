@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.young.share.config.ApplicationConfig;
-import com.young.share.thread.ThreadPool;
 import com.young.share.utils.LogUtils;
 
 /**
@@ -22,7 +21,7 @@ import com.young.share.utils.LogUtils;
 public abstract class BaseFragment extends Fragment {
 
     public View view;
-    public ThreadPool threadPool;
+//    public ThreadPool threadPool;
     public Context context;
     public ApplicationConfig app;
     private Bundle savedState;
@@ -67,12 +66,12 @@ public abstract class BaseFragment extends Fragment {
         if (vg != null) {
             vg.removeAllViewsInLayout();
         }
-        //context maybe null
-        try {
-            threadPool = app.getThreadInstance();
-        } catch (NullPointerException e) {
-            LogUtils.e(" must initBaseFragment() first app = null");
-        }
+//        //context maybe null
+//        try {
+//            threadPool = app.getThreadInstance();
+//        } catch (NullPointerException e) {
+//            LogUtils.e(" must initBaseFragment() first app = null");
+//        }
         getDataFromBunlde(getArguments());
 
         return view;

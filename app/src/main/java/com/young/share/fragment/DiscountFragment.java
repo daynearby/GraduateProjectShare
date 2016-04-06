@@ -32,7 +32,6 @@ import com.young.share.model.gson.AdvertismentList;
 import com.young.share.model.gson.DiscountMessageList;
 import com.young.share.network.BmobApi;
 import com.young.share.network.NetworkReuqest;
-import com.young.share.thread.MyRunnable;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DisplayUtils;
@@ -71,11 +70,13 @@ public class DiscountFragment extends BaseFragment {
     private List<DiscountMessage_HZ> dataList = new ArrayList<>();
     private List<Advertisement> adList = new ArrayList<>();
     private List<String> imageUrlList = new ArrayList<>();
+    private boolean isFirstIn = true;//第一次进入该界面
 
     private static final int MESSAGES_NEW_MESSAGE = 0x01;//最新消息
     private static final int MESSAGES_GET_AD = 0x02;//获取广告信息
-    private boolean isFirstIn = true;//第一次进入该界面
-    private static final String tag = "discount";
+    private static final int MESSAGES_NO_MORE_DATA = 0x03;//上拉刷新，没有更多数据了
+    private static final int MESSAGES_LOAD_DATA_NULL = 0x04;//下拉刷新，没有更多数据了
+    private static final int MESSAGES_LOAD_DATA_FAILURE = 0x05;//加载数据失败
 
 
     public DiscountFragment() {
@@ -108,17 +109,29 @@ public class DiscountFragment extends BaseFragment {
         dataList = (List<DiscountMessage_HZ>) app.getCacheInstance().getAsObject(Contants.ACAHE_KEY_DISCOUNT);
         adList = (List<Advertisement>) app.getCacheInstance().getAsObject(Contants.ACAHE_KEY_ADVERTISMENT);
 
-        threadPool.startTask(new MyRunnable() {
+//        threadPool.startTask(new MyRunnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        });
+
+        initDataByThread();
+    }
+
+    /**
+     * 获取数据
+     */
+    private void initDataByThread() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
-          /*数据*/
+                     /*数据*/
                 getRemoteData();
         /*广告*/
                 getADInfo();
             }
-        });
-
-
+        }).start();
     }
 
     @Override
@@ -179,7 +192,7 @@ public class DiscountFragment extends BaseFragment {
     public void handler(Message msg) {
         switch (msg.what) {
             case MESSAGES_NEW_MESSAGE://最新消息
-
+                tipsIm.setVisibility(View.GONE);
                 refreshUI();
 
                 break;
@@ -187,6 +200,21 @@ public class DiscountFragment extends BaseFragment {
 
                 flashView.setImageUris(imageUrlList);
 
+                break;
+
+            case MESSAGES_NO_MORE_DATA://加载更多数据，没有更多数据
+                Toast.makeText(context, R.string.no_more_messages, Toast.LENGTH_SHORT).show();
+                break;
+
+            case MESSAGES_LOAD_DATA_NULL://第一次加载数据，没有更多的数据
+                tipsIm.setVisibility(View.VISIBLE);
+                tipsIm.setImageResource(R.drawable.icon_conten_empty);
+                break;
+
+            case MESSAGES_LOAD_DATA_FAILURE://加载数据失败，如下拉刷新
+                if (swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
                 break;
         }
     }
@@ -275,21 +303,22 @@ public class DiscountFragment extends BaseFragment {
                                 mhandler.sendEmptyMessage(MESSAGES_NEW_MESSAGE);
 
                             } else {
-                                Toast.makeText(context, R.string.no_more_messages, Toast.LENGTH_SHORT).show();
+                             mhandler.sendEmptyMessage(MESSAGES_NO_MORE_DATA);
 
                             }
 
                         } else {
 
-                            if ( disMessageList.getDiscountList().size() > 0) {
-                                tipsIm.setVisibility(View.GONE);
+                            if (disMessageList.getDiscountList().size() > 0) {
+
                                 dataList = disMessageList.getDiscountList();
                                 app.getCacheInstance().put(Contants.ACAHE_KEY_DISCOUNT, (Serializable) dataList);
                                 mhandler.sendEmptyMessage(MESSAGES_NEW_MESSAGE);
+
                             } else {
-                                tipsIm.setVisibility(View.VISIBLE);
-                                tipsIm.setImageResource(R.drawable.icon_conten_empty);
+                              mhandler.sendEmptyMessage(MESSAGES_LOAD_DATA_NULL);
                             }
+
                         }
 
 
@@ -297,10 +326,9 @@ public class DiscountFragment extends BaseFragment {
 
                     @Override
                     public void onFailure(int code, String msg) {
+                        mhandler.sendEmptyMessage(MESSAGES_LOAD_DATA_FAILURE);
                         LogUtils.d("get discountMessage failure. code  = " + code + " message = " + msg);
-                        if (swipeRefreshLayout.isRefreshing()) {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
+
                     }
                 }
         );
@@ -342,7 +370,6 @@ public class DiscountFragment extends BaseFragment {
                             }
                         }
                     }
-
 
                 });
 

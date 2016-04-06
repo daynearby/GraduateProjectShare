@@ -8,12 +8,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.young.share.R;
-import com.young.share.config.ApplicationConfig;
 import com.young.share.config.Contants;
 import com.young.share.model.gson.Longitude2Location;
 import com.young.share.model.gson.PlaceSearch;
 import com.young.share.model.gson.PlaceSuggestion;
-import com.young.share.thread.MyRunnable;
 import com.young.share.utils.LogUtils;
 
 import org.json.JSONObject;
@@ -404,17 +402,17 @@ public class NetworkReuqest {
                                             final JSONObject params,
                                             final Class<T> clazz,
                                             final SimpleRequestCallback<T> simpleCallback) {
-        ApplicationConfig.getInstance().getThreadInstance().startTask(new MyRunnable() {
-            @Override
-            public void run() {
-                try {
-                    String responseStr = HttpsRequest.postRequest(url, params);
-                    simpleCallback.response(gson.fromJson(responseStr, clazz));
-                } catch (Exception e) {
-                    LogUtils.e("get failure. message = " + e.toString());
-                }
-            }
-        });
+       new Thread(new Runnable() {
+           @Override
+           public void run() {
+               try {
+                   String responseStr = HttpsRequest.postRequest(url, params);
+                   simpleCallback.response(gson.fromJson(responseStr, clazz));
+               } catch (Exception e) {
+                   LogUtils.e("get failure. message = " + e.toString());
+               }
+           }
+       }).start();
 
 
     }

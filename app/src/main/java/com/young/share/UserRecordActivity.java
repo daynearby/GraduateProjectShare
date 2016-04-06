@@ -23,7 +23,6 @@ import com.young.share.model.RemoteModel;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.gson.UserRecorderList;
 import com.young.share.network.BmobApi;
-import com.young.share.thread.MyRunnable;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.LocationUtils;
 import com.young.share.utils.LogUtils;
@@ -63,6 +62,9 @@ public class UserRecordActivity extends BaseAppCompatActivity {
     // TODO: 2015-12-05 线程池多线程并发进行
     private static final int MESSAFE_TYPE_SHARE = 0x12;
     private static final String SHARE_RECORD = "share_record";//分享信息记录
+    private static final int MESSAGE_NO_MORE_DATA = 0x01;//获取不了更多数据
+    private static final int MESSAGE_LOAD_DATA_FAILURE = 0x02;//获取不了更多数据,加载失败
+
 
     @Override
     public int getLayoutId() {
@@ -79,13 +81,27 @@ public class UserRecordActivity extends BaseAppCompatActivity {
 
         //下载数据
         SVProgressHUD.showWithStatus(mActivity, getString(R.string.tips_loading));
-        threadPool.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+//        threadPool.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+//            @Override
+//            public void running() {
+//
+//            }
+//        }));
+        initDataByThread();
+        dataList = (List<RemoteModel>) app.getCacheInstance().getAsObject(SHARE_RECORD + cuser.getObjectId());
+    }
+
+    /**
+     * 通过线程进行获取数据
+     */
+    private void initDataByThread() {
+
+        new Thread(new Runnable() {
             @Override
-            public void running() {
+            public void run() {
                 getShareRec();//获取数据
             }
-        }));
-        dataList = (List<RemoteModel>) app.getCacheInstance().getAsObject(SHARE_RECORD + cuser.getObjectId());
+        }).start();
     }
 
     @Override
@@ -165,19 +181,31 @@ public class UserRecordActivity extends BaseAppCompatActivity {
 
     @Override
     public void handerMessage(Message msg) {
-//提示框处理
-        LocationUtils.processDialog(mActivity);
-        if (!isEmpty) {
-            switch (msg.what) {
-                case MESSAFE_TYPE_SHARE://分享信息记录
+
+        switch (msg.what) {
+            case MESSAFE_TYPE_SHARE://分享信息记录，获取数据
+                //提示框处理
+                LocationUtils.processDialog(mActivity);
+                if (!isEmpty) {
                     refreshUI();
-                    break;
+                } else {
+                    contentEmpty.setVisibility(View.VISIBLE);
+                }
 
-            }
-        } else {
+                break;
 
-            contentEmpty.setVisibility(View.VISIBLE);
+            case MESSAGE_NO_MORE_DATA://没有更多数据
+                toast(R.string.no_more_messages);
+                break;
+            case MESSAGE_LOAD_DATA_FAILURE://加载数据失败
+                //提示框处理
+                LocationUtils.processDialog(mActivity);
+
+                toast(R.string.tips_loading_faile);
+                break;
         }
+
+
     }
 
     /**
@@ -246,14 +274,14 @@ public class UserRecordActivity extends BaseAppCompatActivity {
                         }
 
                     } else {
-                        toast(R.string.no_more_messages);
+                        mHandler.sendEmptyMessage(MESSAGE_NO_MORE_DATA);
                     }
 
                 } else {
                     if (dataList != null && dataList.size() > 0) {
                         dataList.clear();
-                    }else {
-                        dataList = new ArrayList<RemoteModel>();
+                    } else {
+                        dataList = new ArrayList<>();
                     }
 
                     for (ShareMessage_HZ sha : userRecorderList.getShareMessage()) {
@@ -285,10 +313,8 @@ public class UserRecordActivity extends BaseAppCompatActivity {
             @Override
             public void onFailure(int code, String msg) {
                 isEmpty = dataList.size() <= 0;
-                //提示框处理
-                LocationUtils.processDialog(mActivity);
 
-                toast(R.string.tips_loading_faile);
+                mHandler.sendEmptyMessage(MESSAGE_LOAD_DATA_FAILURE);
                 LogUtils.d("get share messages failure. code = " + code + " message = " + msg);
 
             }

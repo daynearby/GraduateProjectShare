@@ -12,7 +12,6 @@ import com.young.share.interfaces.AsyncListener;
 import com.young.share.model.Comment_HZ;
 import com.young.share.model.gson.CommentList;
 import com.young.share.network.BmobApi;
-import com.young.share.thread.MyRunnable;
 import com.young.share.utils.LogUtils;
 import com.young.share.views.CommentListView.CommentAdapter;
 import com.young.share.views.CommentListView.CommentListView;
@@ -40,6 +39,7 @@ public class CommentFragment extends BaseFragment {
 
     private static final int GET_MESSAGE = 0x01;//格式化数据
     public static final String BUNLDE_SHARE_MESSAGE_ID = "bunlde_share_message_id";//shareMessageId
+    public static final int MESSAGE_LOAD_DATA_FAILURE =0x002;//加载数据失败
 
     public CommentFragment() {
 
@@ -87,14 +87,26 @@ public class CommentFragment extends BaseFragment {
         dataList = (List<Comment_HZ>) app.getCacheInstance().getAsObject(CACHE_KEY + shareMessageId);
 
 /*获取评论内容*/
-        app.getThreadInstance().startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+//        app.getThreadInstance().startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
+//            @Override
+//            public void running() {
+//
+//            }
+//        }));
+
+        initDataByThread();
+    }
+
+    /**
+     *  获取远程数据，通过线程
+     */
+    private void initDataByThread(){
+        new Thread(new Runnable() {
             @Override
-            public void running() {
+            public void run() {
                 getComment(shareMessageId);
             }
-        }));
-
-
+        }).start();
     }
 
     @Override
@@ -128,14 +140,19 @@ public class CommentFragment extends BaseFragment {
         switch (msg.what) {
             case GET_MESSAGE:
                 /*评论数据，显示到linearLayout*/
-
-                // TODO: 2016-03-20 评论、回复，向上滚动
+                //关闭显示的框
+                processDialogDismisson();
 
                 commentAdapter.setDatas(dataList);
                 commentAdapter.notifyDataSetChanged();
 
                 break;
+            case MESSAGE_LOAD_DATA_FAILURE://加载数据失败
 
+                processDialogDismisson();
+                Toast.makeText(context, R.string.tips_loading_faile, Toast.LENGTH_SHORT).show();
+
+                break;
         }
     }
 
@@ -169,7 +186,7 @@ public class CommentFragment extends BaseFragment {
                 CommentList commentList = (CommentList) object;
 
                 if (commentList.getCommentList().size() > 0) {
-
+// TODO: 2016-04-06 需要整理逻辑
                     if (dataList != null && dataList.size() > 0) {
                         dataList.clear();
                     } else {
@@ -180,21 +197,20 @@ public class CommentFragment extends BaseFragment {
                 }else {
                     dataList = new ArrayList<>();
                 }
+
                 if (dataList.size() > 0) {
                     app.getCacheInstance().put(CACHE_KEY + shareMessageId, (Serializable) dataList);
                 }
 //刷新评论列表
                 mhandler.sendEmptyMessage(GET_MESSAGE);
-                //关闭显示的框
-                processDialogDismisson();
+
 
             }
 
             @Override
             public void onFailure(int code, String msg) {
-                processDialogDismisson();
+                mhandler.sendEmptyMessage(MESSAGE_LOAD_DATA_FAILURE);
 
-                Toast.makeText(context, R.string.tips_loading_faile, Toast.LENGTH_SHORT).show();
                 LogUtils.d("get comment add params failure.  code = " + code + " message =  " + msg);
             }
         });

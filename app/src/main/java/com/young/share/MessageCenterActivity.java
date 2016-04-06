@@ -20,7 +20,6 @@ import com.young.share.model.Comment_HZ;
 import com.young.share.model.Message_HZ;
 import com.young.share.model.gson.CommentList;
 import com.young.share.network.BmobApi;
-import com.young.share.thread.MyRunnable;
 import com.young.share.utils.LocationUtils;
 import com.young.share.utils.LogUtils;
 
@@ -57,6 +56,8 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
 
     private static final int REFRESHUI = 101;//获取数据，通知刷新UI
     private static final int UPDATE_MESSAGE = 110;//更新消息，通知刷新UI
+    private static final int MESSAGE_NO_DATA = 0x001;//没有更多内容
+    private static final int MESSAGE_LOAD_DATA_FAILURE = 0x002;//加载数据失败
 
     @Override
     public int getLayoutId() {
@@ -71,15 +72,14 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
 
         SVProgressHUD.showWithStatus(mActivity, getString(R.string.tips_loading));
         //获取数据
-        threadPool.startTask(new MyRunnable(new MyRunnable.GotoRunnable() {
-            @Override
-            public void running() {
+        initDataByThread();
+    }
 
-                getRemoteData();
-
-            }
-        }));
-
+    /**
+     * 通过线程进行获取数据
+     */
+    private void initDataByThread() {
+        getRemoteData();
     }
 
     @Override
@@ -157,6 +157,9 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
         switch (msg.what) {
 
             case REFRESHUI://获取数据并且刷新UI
+                //提示框处理
+                LocationUtils.processDialog(mActivity);
+                swipeRefresh.setRefreshing(false);
 
                 refreshUI();
 
@@ -168,6 +171,18 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
                 messageAdapter.notifyDataSetChanged();
 
                 break;
+            case MESSAGE_NO_DATA://没有更多数据
+                toast(R.string.no_more_messages);
+
+                break;
+            case MESSAGE_LOAD_DATA_FAILURE:
+
+                //提示框处理
+                LocationUtils.processDialog(mActivity);
+
+                toast(R.string.tips_loading_faile);
+                break;
+
         }
 
     }
@@ -227,7 +242,7 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
                     if (commentList.getCommentList().size() > 0) {
                         dataList.addAll(commentList.getCommentList());
                     } else {
-                        toast(R.string.no_more_messages);
+                        mHandler.sendEmptyMessage(MESSAGE_NO_DATA);
                     }
                 } else {
 
@@ -236,19 +251,12 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
 
                 }
 
-                swipeRefresh.setRefreshing(false);
-                //提示框处理
-                LocationUtils.processDialog(mActivity);
-
                 mHandler.sendEmptyMessage(REFRESHUI);
             }
 
             @Override
             public void onFailure(int code, String msg) {
-//提示框处理
-                LocationUtils.processDialog(mActivity);
-
-                toast(R.string.tips_loading_faile);
+                mHandler.sendEmptyMessage(MESSAGE_LOAD_DATA_FAILURE);
                 LogUtils.d("get share messages failure. code = " + code + " message = " + msg);
 
             }
