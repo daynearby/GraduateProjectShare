@@ -416,7 +416,7 @@ public class DiscountFragment extends BaseFragment {
                 isFirstIn = true;
                 Bundle bundle = new Bundle();
 
-                bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, DataFormateUtils.formateDataDiscount(dataList.get(position)));
+                bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, DataFormateUtils.formateDataDiscount(dataList.get(position -1)));
                 CommonFunctionUtils.startActivity(context, bundle, DiscoutDetailActivity.class);
 
             }
