@@ -112,12 +112,14 @@ public class DiscoverFragment extends BaseFragment {
      * 通过一个新的线程进行获取数据
      */
     private void initDataByThread(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getDataFromRemote();
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                getDataFromRemote();
+//            }
+//        }).start();
+
+        getDataFromRemote();
     }
 
     @Override

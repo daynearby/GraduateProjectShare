@@ -132,12 +132,13 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
      * 获取数据，通过线程
      */
     private void initDataByThread() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getData(discountMessage.getObjectId());
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                getData(discountMessage.getObjectId());
+//            }
+//        }).start();
+        getData(discountMessage.getObjectId());
     }
 
 

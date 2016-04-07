@@ -123,15 +123,19 @@ public class DiscountFragment extends BaseFragment {
      * 获取数据
      */
     private void initDataByThread() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                     /*数据*/
-                getRemoteData();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                     /*数据*/
+//                getRemoteData();
+//        /*广告*/
+//                getADInfo();
+//            }
+//        }).start();
+                      /*数据*/
+        getRemoteData();
         /*广告*/
-                getADInfo();
-            }
-        }).start();
+        getADInfo();
     }
 
     @Override

@@ -96,12 +96,14 @@ public class UserRecordActivity extends BaseAppCompatActivity {
      */
     private void initDataByThread() {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getShareRec();//获取数据
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                getShareRec();//获取数据
+//            }
+//        }).start();
+
+        getShareRec();//获取数据
     }
 
     @Override

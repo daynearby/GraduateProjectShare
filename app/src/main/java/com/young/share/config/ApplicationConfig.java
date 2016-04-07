@@ -71,11 +71,10 @@ public class ApplicationConfig extends LitePalApplication {
 
     private void initImageLoader(Context ctx) {
 
-//        File cacheFile = new File(Environment.getExternalStorageState(), "uilCache");
         File cacheFile = StorageUtils.getOwnCacheDirectory(ctx, Contants.DOWNLOAD_PATH);
 
         ImageLoaderConfiguration imConfig = new ImageLoaderConfiguration.Builder(ctx)
-                .memoryCacheExtraOptions(Contants.IAMGE_MAX_WIDTH, Contants.IAMGE_MAX_HEIGHT) // max width, max height，即保存的每个缓存文件的最大长宽
+//                .memoryCacheExtraOptions(Contants.IAMGE_MAX_WIDTH, Contants.IAMGE_MAX_HEIGHT) // max width, max height，即保存的每个缓存文件的最大长宽
                 .threadPoolSize(3) //线程池内线程的数量
                 .threadPriority(Thread.NORM_PRIORITY - 2)
                 .denyCacheImageMultipleSizesInMemory()

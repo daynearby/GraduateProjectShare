@@ -101,12 +101,14 @@ public class CommentFragment extends BaseFragment {
      *  获取远程数据，通过线程
      */
     private void initDataByThread(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getComment(shareMessageId);
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                getComment(shareMessageId);
+//            }
+//        }).start();
+
+        getComment(shareMessageId);
     }
 
     @Override
