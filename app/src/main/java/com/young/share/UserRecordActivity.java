@@ -23,8 +23,8 @@ import com.young.share.model.RemoteModel;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.gson.UserRecorderList;
 import com.young.share.network.BmobApi;
+import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.DataFormateUtils;
-import com.young.share.utils.LocationUtils;
 import com.young.share.utils.LogUtils;
 
 import org.json.JSONException;
@@ -187,7 +187,7 @@ public class UserRecordActivity extends BaseAppCompatActivity {
         switch (msg.what) {
             case MESSAFE_TYPE_SHARE://分享信息记录，获取数据
                 //提示框处理
-                LocationUtils.processDialog(mActivity);
+                CommonFunctionUtils.processDialog(mActivity);
                 if (!isEmpty) {
                     refreshUI();
                 } else {
@@ -201,7 +201,7 @@ public class UserRecordActivity extends BaseAppCompatActivity {
                 break;
             case MESSAGE_LOAD_DATA_FAILURE://加载数据失败
                 //提示框处理
-                LocationUtils.processDialog(mActivity);
+                CommonFunctionUtils.processDialog(mActivity);
 
                 toast(R.string.tips_loading_faile);
                 break;

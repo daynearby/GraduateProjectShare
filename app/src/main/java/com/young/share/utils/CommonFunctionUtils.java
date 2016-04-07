@@ -30,7 +30,7 @@ import cn.bmob.v3.listener.UpdateListener;
  * <p>
  * Created by Nearby Yang on 2015-12-03.
  */
-public class LocationUtils {
+public class CommonFunctionUtils {
 
     private static final String MESSAGE_TYPE = "message";//类型
     private static final String MESSAGE_TYPE_DISCOVER = "1";
@@ -95,7 +95,7 @@ public class LocationUtils {
         ((TextView) v).setText(String.valueOf(shareMessage.getShVisitedNum() == null ?
                 0 : shareMessage.getShVisitedNum().size()));
 
-        LocationUtils.leftDrawableVisited(((TextView) v), shareMessage.getShVisitedNum(), cuser.getObjectId());
+        CommonFunctionUtils.leftDrawableVisited(((TextView) v), shareMessage.getShVisitedNum(), cuser.getObjectId());
 
         shareMessage.update(ctx, shareMessage.getObjectId(), new UpdateListener() {
             @Override
@@ -183,7 +183,7 @@ public class LocationUtils {
 
         v.setText(String.valueOf(shareMessage.getShWantedNum() == null ?
                 0 : shareMessage.getShWantedNum().size()));
-        LocationUtils.leftDrawableWantoGO((v), shareMessage.getShWantedNum(), cuser.getObjectId());
+        CommonFunctionUtils.leftDrawableWantoGO((v), shareMessage.getShWantedNum(), cuser.getObjectId());
 
         shareMessage.update(ctx, shareMessage.getObjectId(), new UpdateListener() {
             @Override
@@ -288,7 +288,7 @@ public class LocationUtils {
         v.setText(String.valueOf(discountMessage.getDtWantedNum() == null ?
                 0 : discountMessage.getDtWantedNum().size()));
 
-        LocationUtils.leftDrawableWantoGO(v, discountMessage.getDtWantedNum(), cuser.getObjectId());
+        CommonFunctionUtils.leftDrawableWantoGO(v, discountMessage.getDtWantedNum(), cuser.getObjectId());
 
         discountMessage.update(ctx, discountMessage.getObjectId(), new UpdateListener() {
             @Override
@@ -338,7 +338,7 @@ public class LocationUtils {
         v.setText(discountMessage.getDtVisitedNum() == null ?
                 ctx.getString(R.string.hadgo) : String.valueOf(discountMessage.getDtVisitedNum().size()));
 
-        LocationUtils.leftDrawableVisited(v, discountMessage.getDtVisitedNum(), cuser.getObjectId());
+        CommonFunctionUtils.leftDrawableVisited(v, discountMessage.getDtVisitedNum(), cuser.getObjectId());
 
         discountMessage.update(ctx, discountMessage.getObjectId(), new UpdateListener() {
             @Override

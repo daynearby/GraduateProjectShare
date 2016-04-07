@@ -35,7 +35,7 @@ import com.young.share.network.NetworkReuqest;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DisplayUtils;
-import com.young.share.utils.LocationUtils;
+import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.views.Dialog4Tips;
 
@@ -417,7 +417,7 @@ public class DiscountFragment extends BaseFragment {
                 Bundle bundle = new Bundle();
 
                 bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, DataFormateUtils.formateDataDiscount(dataList.get(position)));
-                LocationUtils.startActivity(context, bundle, DiscoutDetailActivity.class);
+                CommonFunctionUtils.startActivity(context, bundle, DiscoutDetailActivity.class);
 
             }
         }

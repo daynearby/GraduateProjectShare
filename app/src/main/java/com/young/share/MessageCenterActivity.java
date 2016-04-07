@@ -20,7 +20,7 @@ import com.young.share.model.Comment_HZ;
 import com.young.share.model.Message_HZ;
 import com.young.share.model.gson.CommentList;
 import com.young.share.network.BmobApi;
-import com.young.share.utils.LocationUtils;
+import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.LogUtils;
 
 import org.json.JSONException;
@@ -158,7 +158,7 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
 
             case REFRESHUI://获取数据并且刷新UI
                 //提示框处理
-                LocationUtils.processDialog(mActivity);
+                CommonFunctionUtils.processDialog(mActivity);
                 swipeRefresh.setRefreshing(false);
 
                 refreshUI();
@@ -178,7 +178,7 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
             case MESSAGE_LOAD_DATA_FAILURE:
 
                 //提示框处理
-                LocationUtils.processDialog(mActivity);
+                CommonFunctionUtils.processDialog(mActivity);
 
                 toast(R.string.tips_loading_faile);
                 break;

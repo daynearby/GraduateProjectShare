@@ -24,11 +24,11 @@ import com.young.share.config.Contants;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
+import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.EvaluateUtil;
-import com.young.share.utils.LocationUtils;
 import com.young.share.utils.NetworkUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.utils.UserUtils;
@@ -137,8 +137,8 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
 
         if (cuser != null) {
-            LocationUtils.leftDrawableWantoGO(wanto_tv, discountMessage_hz.getDtWantedNum(), cuser.getObjectId());//设置图标
-            LocationUtils.leftDrawableVisited(hadgo_tv, discountMessage_hz.getDtVisitedNum(), cuser.getObjectId());//设置图标
+            CommonFunctionUtils.leftDrawableWantoGO(wanto_tv, discountMessage_hz.getDtWantedNum(), cuser.getObjectId());//设置图标
+            CommonFunctionUtils.leftDrawableVisited(hadgo_tv, discountMessage_hz.getDtVisitedNum(), cuser.getObjectId());//设置图标
         }
 
 
@@ -223,8 +223,8 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
                         discountMessage = (DiscountMessage_HZ) o;
                         List<String> wantedNum = discountMessage.getDtWantedNum();
 
-                        LocationUtils.discountWanto(ctx, cuser, discountMessage,
-                                UserUtils.isHadCurrentUser(wantedNum, cuser.getObjectId()), (TextView) v, new LocationUtils.Callback() {
+                        CommonFunctionUtils.discountWanto(ctx, cuser, discountMessage,
+                                UserUtils.isHadCurrentUser(wantedNum, cuser.getObjectId()), (TextView) v, new CommonFunctionUtils.Callback() {
                                     @Override
                                     public void onSuccesss() {
 
@@ -252,8 +252,8 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
                     if (cuser != null) {
                         discountMessage = (DiscountMessage_HZ) o;
                         List<String> shVisitedNum = discountMessage.getDtVisitedNum();
-                        LocationUtils.discountVisit(ctx, cuser, discountMessage,
-                                UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()), (TextView) v, new LocationUtils.Callback() {
+                        CommonFunctionUtils.discountVisit(ctx, cuser, discountMessage,
+                                UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()), (TextView) v, new CommonFunctionUtils.Callback() {
                                     @Override
                                     public void onSuccesss() {
 

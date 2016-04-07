@@ -33,12 +33,12 @@ import com.young.share.model.PictureInfo;
 import com.young.share.model.RemoteModel;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.network.NetworkReuqest;
+import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.EvaluateUtil;
 import com.young.share.utils.ImageHandlerUtils;
-import com.young.share.utils.LocationUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.NetworkUtils;
 import com.young.share.utils.StringUtils;
@@ -143,8 +143,8 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
         }
 
         if (cuser != null) {
-            LocationUtils.leftDrawableWantoGO(wanto_tv, remoteModel.getWanted(), cuser.getObjectId());//设置图标
-            LocationUtils.leftDrawableVisited(hadgo_tv, remoteModel.getVisited(), cuser.getObjectId());//设置图标
+            CommonFunctionUtils.leftDrawableWantoGO(wanto_tv, remoteModel.getWanted(), cuser.getObjectId());//设置图标
+            CommonFunctionUtils.leftDrawableVisited(hadgo_tv, remoteModel.getVisited(), cuser.getObjectId());//设置图标
         }
 
         comment_tv.setVisibility(remoteModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES ? View.VISIBLE : View.GONE);
@@ -382,9 +382,9 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
                             shareMessage.setObjectId(commModel.getObjectId());
                             shareMessage.setShWantedNum(commModel.getWanted());
 
-                            LocationUtils.wantToGo(ctx, cuser,
+                            CommonFunctionUtils.wantToGo(ctx, cuser,
                                     UserUtils.isHadCurrentUser(wantedNum, cuser.getObjectId()), shareMessage,
-                                    (TextView) v, new LocationUtils.Callback() {
+                                    (TextView) v, new CommonFunctionUtils.Callback() {
                                         @Override
                                         public void onSuccesss() {
 
@@ -402,9 +402,9 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
                             discountMessage.setObjectId(commModel.getObjectId());
                             discountMessage.setDtWantedNum(commModel.getWanted());
 
-                            LocationUtils.discountWanto(ctx, cuser, discountMessage,
+                            CommonFunctionUtils.discountWanto(ctx, cuser, discountMessage,
                                     UserUtils.isHadCurrentUser(wantedNum, cuser.getObjectId()),
-                                    (TextView) v, new LocationUtils.Callback() {
+                                    (TextView) v, new CommonFunctionUtils.Callback() {
                                         @Override
                                         public void onSuccesss() {
 
@@ -440,12 +440,12 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
 
                             ShareMessage_HZ shareMessage = new ShareMessage_HZ();
                             shareMessage.setObjectId(commModel.getObjectId());
-                            shareMessage.setShWantedNum(commModel.getWanted());
+                            shareMessage.setShVisitedNum(commModel.getVisited());
 
 
-                            LocationUtils.visit(ctx, cuser,
+                            CommonFunctionUtils.visit(ctx, cuser,
                                     UserUtils.isHadCurrentUser(visitedNum, cuser.getObjectId()),
-                                    shareMessage, v, new LocationUtils.Callback() {
+                                    shareMessage, v, new CommonFunctionUtils.Callback() {
                                         @Override
                                         public void onSuccesss() {
 
@@ -463,9 +463,9 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
                             discountMessage.setObjectId(commModel.getObjectId());
                             discountMessage.setDtWantedNum(commModel.getWanted());
 
-                            LocationUtils.discountVisit(ctx, cuser, discountMessage,
+                            CommonFunctionUtils.discountVisit(ctx, cuser, discountMessage,
                                     UserUtils.isHadCurrentUser(visitedNum, cuser.getObjectId()),
-                                    (TextView) v, new LocationUtils.Callback() {
+                                    (TextView) v, new CommonFunctionUtils.Callback() {
                                         @Override
                                         public void onSuccesss() {
 

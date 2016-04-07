@@ -29,10 +29,10 @@ import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
 import com.young.share.model.RemoteModel;
+import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.EvaluateUtil;
-import com.young.share.utils.LocationUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.NetworkUtils;
 import com.young.share.utils.StringUtils;
@@ -292,8 +292,8 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         hadgo_tv.setText(discountMessage.getDtVisitedNum() != null && discountMessage.getDtVisitedNum().size() > 0 ?
                 String.valueOf(discountMessage.getDtVisitedNum().size()) : getString(R.string.hadgo));
 
-        LocationUtils.leftDrawableWantoGO(wanto_tv, discountMessage.getDtWantedNum(), cuser.getObjectId());
-        LocationUtils.leftDrawableVisited(hadgo_tv, discountMessage.getDtVisitedNum(), cuser.getObjectId());
+        CommonFunctionUtils.leftDrawableWantoGO(wanto_tv, discountMessage.getDtWantedNum(), cuser.getObjectId());
+        CommonFunctionUtils.leftDrawableVisited(hadgo_tv, discountMessage.getDtVisitedNum(), cuser.getObjectId());
 
 
     }
@@ -387,9 +387,9 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
     private void hadGo(TextView t) {
         getUser();
         if (cuser != null) {
-            LocationUtils.discountVisit(mActivity, cuser, discountMessage,
+            CommonFunctionUtils.discountVisit(mActivity, cuser, discountMessage,
                     UserUtils.isHadCurrentUser(discountMessage.getDtVisitedNum(), cuser.getObjectId()),
-                    t, new LocationUtils.Callback() {
+                    t, new CommonFunctionUtils.Callback() {
 
                         @Override
                         public void onSuccesss() {
@@ -430,9 +430,9 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
     private void wantTo(TextView t) {
         getUser();
         if (cuser != null) {
-            LocationUtils.discountWanto(mActivity, cuser, discountMessage,
+            CommonFunctionUtils.discountWanto(mActivity, cuser, discountMessage,
                     UserUtils.isHadCurrentUser(discountMessage.getDtWantedNum(), cuser.getObjectId()),
-                    t, new LocationUtils.Callback() {
+                    t, new CommonFunctionUtils.Callback() {
 
                         @Override
                         public void onSuccesss() {
@@ -493,7 +493,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
     private void back2superclazz() {
 
 //        if (isClick) {
-//            LocationUtils.sendBordCast(mActivity, Contants.REFRESH_TYPE_DISCOUNT);
+//            CommonFunctionUtils.sendBordCast(mActivity, Contants.REFRESH_TYPE_DISCOUNT);
 //        }
 //
 //        mBackStartActivity(MainActivity.class);

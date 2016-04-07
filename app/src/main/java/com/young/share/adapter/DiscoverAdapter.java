@@ -34,12 +34,12 @@ import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.network.NetworkReuqest;
+import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DateUtils;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.EvaluateUtil;
 import com.young.share.utils.ImageHandlerUtils;
-import com.young.share.utils.LocationUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.NetworkUtils;
 import com.young.share.utils.StringUtils;
@@ -166,8 +166,8 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         hadgo_tv.setText(hadgo);
 
         if (cuser != null) {
-            LocationUtils.leftDrawableWantoGO(wanto_tv, shareMessage.getShWantedNum(), cuser.getObjectId());//设置图标
-            LocationUtils.leftDrawableVisited(hadgo_tv, shareMessage.getShVisitedNum(), cuser.getObjectId());//设置图标
+            CommonFunctionUtils.leftDrawableWantoGO(wanto_tv, shareMessage.getShWantedNum(), cuser.getObjectId());//设置图标
+            CommonFunctionUtils.leftDrawableVisited(hadgo_tv, shareMessage.getShVisitedNum(), cuser.getObjectId());//设置图标
         }
 
         comment_tv.setText(shareMessage.getShCommNum() > 0 ?
@@ -419,8 +419,8 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                         shareMessage = (ShareMessage_HZ) o;
                         List<String> shWantedNum = shareMessage.getShWantedNum();
 
-                        LocationUtils.wantToGo(ctx, cuser, UserUtils.isHadCurrentUser(shWantedNum, cuser.getObjectId()),
-                                shareMessage, (TextView) v, new LocationUtils.Callback() {
+                        CommonFunctionUtils.wantToGo(ctx, cuser, UserUtils.isHadCurrentUser(shWantedNum, cuser.getObjectId()),
+                                shareMessage, (TextView) v, new CommonFunctionUtils.Callback() {
                                     @Override
                                     public void onSuccesss() {
 
@@ -447,8 +447,8 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                     if (cuser != null) {
                         shareMessage = (ShareMessage_HZ) o;
                         List<String> shVisitedNum = shareMessage.getShVisitedNum();
-                        LocationUtils.visit(ctx, cuser, UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()),
-                                shareMessage, v, new LocationUtils.Callback() {
+                        CommonFunctionUtils.visit(ctx, cuser, UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()),
+                                shareMessage, v, new CommonFunctionUtils.Callback() {
                                     @Override
                                     public void onSuccesss() {
 

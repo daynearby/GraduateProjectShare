@@ -33,9 +33,7 @@ public class ApplicationConfig extends LitePalApplication {
 
     //单例模式
     private volatile static ApplicationConfig instance;
-    private ACache aCache;
-    private Context context;
-
+    private static Context context;
     private ThreadPool threadPool;
 
     @Override
@@ -50,7 +48,7 @@ public class ApplicationConfig extends LitePalApplication {
      */
     private void initConfig() {
         context = this;
-        LitePalApplication.initialize(this);
+//        LitePalApplication.initialize(this);
         //初始化imageloader
         initImageLoader(getApplicationContext());
         //百度基础地图定位
@@ -68,7 +66,15 @@ public class ApplicationConfig extends LitePalApplication {
         return threadPool;
     }
 
+    public static Context getContext() {
+        return context;
+    }
 
+    /**
+     * 图片加载
+     *
+     * @param ctx
+     */
     private void initImageLoader(Context ctx) {
 
         File cacheFile = StorageUtils.getOwnCacheDirectory(ctx, Contants.DOWNLOAD_PATH);
@@ -103,7 +109,7 @@ public class ApplicationConfig extends LitePalApplication {
         if (instance == null) {
             synchronized (ApplicationConfig.class) {
                 if (instance == null) {
-                    instance = (ApplicationConfig) getContext();
+                    instance = new ApplicationConfig();
                 }
             }
         }
@@ -117,9 +123,8 @@ public class ApplicationConfig extends LitePalApplication {
      */
     public ACache getCacheInstance() {
 
-        return aCache = ACache.get(com.young.share.utils.StorageUtils.createCacheFile(getApplicationContext()));
+        return ACache.get(com.young.share.utils.StorageUtils.createCacheFile(context));
     }
-
 
 
     /**
@@ -128,7 +133,7 @@ public class ApplicationConfig extends LitePalApplication {
      * @return
      */
     public MyUser getCUser() {
-        MyUser cuser = BmobUser.getCurrentUser(getContext(), MyUser.class);
+        MyUser cuser = BmobUser.getCurrentUser(context, MyUser.class);
         if (cuser != null) {
             return cuser;
         } else {

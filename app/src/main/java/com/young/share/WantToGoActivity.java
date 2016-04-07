@@ -21,7 +21,7 @@ import com.young.share.model.RemoteModel;
 import com.young.share.model.gson.CollectionList;
 import com.young.share.network.BmobApi;
 import com.young.share.utils.DataFormateUtils;
-import com.young.share.utils.LocationUtils;
+import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.LogUtils;
 
 import org.json.JSONException;
@@ -242,7 +242,7 @@ public class WantToGoActivity extends BaseAppCompatActivity {
             public void onFailure(int code, String msg) {
                 isEmpty = dataList.size() <= 0;
                 //提示框处理
-                LocationUtils.processDialog(mActivity);
+                CommonFunctionUtils.processDialog(mActivity);
                 toast(R.string.tips_loading_faile);
                 LogUtils.d("get share messages failure. code = " + code + " message = " + msg);
 

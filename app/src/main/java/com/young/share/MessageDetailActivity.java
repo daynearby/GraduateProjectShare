@@ -53,7 +53,7 @@ import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.EmotionUtils;
 import com.young.share.utils.EvaluateUtil;
 import com.young.share.utils.ImageHandlerUtils;
-import com.young.share.utils.LocationUtils;
+import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.NetworkUtils;
 import com.young.share.utils.StringUtils;
@@ -330,8 +330,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 String.valueOf(shareMessage.getShVisitedNum().size()) : getString(R.string.hadgo));
         //判断当前用户是否点赞
         if (cuser != null) {
-            LocationUtils.leftDrawableWantoGO(wanto_tv, shareMessage.getShWantedNum(), cuser.getObjectId());//设置图标
-            LocationUtils.leftDrawableVisited(hadgo_tv, shareMessage.getShVisitedNum(), cuser.getObjectId());
+            CommonFunctionUtils.leftDrawableWantoGO(wanto_tv, shareMessage.getShWantedNum(), cuser.getObjectId());//设置图标
+            CommonFunctionUtils.leftDrawableVisited(hadgo_tv, shareMessage.getShVisitedNum(), cuser.getObjectId());
         }
 
         ceatedAt_tv.setText(shareMessage.getCreatedAt());

@@ -25,7 +25,7 @@ import com.young.share.network.BmobApi;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DBUtils;
 import com.young.share.utils.DataFormateUtils;
-import com.young.share.utils.LocationUtils;
+import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.LogUtils;
 
 import org.json.JSONException;
@@ -208,7 +208,7 @@ public class DiscoverFragment extends BaseFragment {
                 bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_DISCOVER_ACTIVITY);
                 bundle.putSerializable(Contants.INTENT_KEY_DISCOVER, dataList.get(position));
 
-                LocationUtils.startActivity(context, bundle, MessageDetailActivity.class);
+                CommonFunctionUtils.startActivity(context, bundle, MessageDetailActivity.class);
             }
         });
     }
