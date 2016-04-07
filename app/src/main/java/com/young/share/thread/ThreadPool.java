@@ -123,6 +123,20 @@ public class ThreadPool {
     }
 
     /**
+     * runnable的tag,停止指定的线程
+     *
+     * @param tag
+     */
+    public void stopByTag(String tag){
+
+        for (MyRunnable runnable : taskMap.values()) {
+            if (runnable.getTag().equals(tag) ){
+                runnable.setCancleTaskUnit(true);
+            }
+        }
+    }
+
+    /**
      * 添加任务到线程池中
      *
      * @param mr MyRunnable对象

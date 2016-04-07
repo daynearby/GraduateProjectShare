@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.young.share.config.ApplicationConfig;
+import com.young.share.thread.ThreadPool;
 import com.young.share.utils.LogUtils;
 
 /**
@@ -21,7 +22,7 @@ import com.young.share.utils.LogUtils;
 public abstract class BaseFragment extends Fragment {
 
     public View view;
-//    public ThreadPool threadPool;
+    public ThreadPool threadPool;
     public Context context;
     public ApplicationConfig app;
     private Bundle savedState;
@@ -37,6 +38,7 @@ public abstract class BaseFragment extends Fragment {
     public void initizliza(Context context) {
         this.context = context;
         app = ApplicationConfig.getInstance();
+        threadPool = app.getThreadInstance();
 
     }
 
@@ -60,18 +62,14 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        view = inflater.inflate(getLayoutId(), container,false);
+        view = inflater.inflate(getLayoutId(), container, false);
         ViewGroup vg = (ViewGroup) view.getParent();
 //        view.findViewById(R.id.pb_item_photoview);
         if (vg != null) {
             vg.removeAllViewsInLayout();
         }
 //        //context maybe null
-//        try {
-//            threadPool = app.getThreadInstance();
-//        } catch (NullPointerException e) {
-//            LogUtils.e(" must initBaseFragment() first app = null");
-//        }
+
         getDataFromBunlde(getArguments());
 
         return view;

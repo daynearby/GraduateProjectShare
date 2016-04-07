@@ -12,6 +12,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.young.share.model.MyUser;
+import com.young.share.thread.ThreadPool;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.cache.ACache;
@@ -35,13 +36,14 @@ public class ApplicationConfig extends LitePalApplication {
     private ACache aCache;
     private Context context;
 
-//    private ThreadPool threadPool;
+    private ThreadPool threadPool;
 
     @Override
     public void onCreate() {
         super.onCreate();
         initConfig();
     }
+
 
     /**
      * 应用的基本配置
@@ -57,14 +59,14 @@ public class ApplicationConfig extends LitePalApplication {
 
 
     /**
-     * 可回收线程池
+     * 并发线程池，可并发四个线程
      *
      * @return
      */
-//    public ThreadPool getThreadInstance() {
-//        threadPool = new ThreadPool();
-//        return threadPool;
-//    }
+    public ThreadPool getThreadInstance() {
+        threadPool = new ThreadPool();
+        return threadPool;
+    }
 
 
     private void initImageLoader(Context ctx) {

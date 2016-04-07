@@ -16,44 +16,44 @@ import com.young.share.utils.LogUtils;
  * 线程
  * 运行
  */
-public class MyRunnable implements Runnable {
-
-    public  boolean cancelTask = false;
+public abstract class MyRunnable implements Runnable {
 
 
-    private GotoRunnable gotoRunnable;
+    public boolean cancelTask = false;
+    private String tag;//作为判断标识
 
     public MyRunnable() {
-    }
 
-    public MyRunnable(GotoRunnable gotoRunnable) {
-        this.gotoRunnable = gotoRunnable;
     }
 
 
     @Override
     public void run() {
-        LogUtils.d(" running is cancel " +cancelTask);
+        LogUtils.d(" running is cancel " + cancelTask);
         if (!cancelTask) {
             LogUtils.d("running");
-            if (gotoRunnable != null)
-                gotoRunnable.running();
-
+            runnabele();
         }
 
     }
 
-
+    /**
+     * 停止运行
+     *
+     * @param cancelTask
+     */
     public void setCancleTaskUnit(boolean cancelTask) {
         this.cancelTask = cancelTask;
     }
 
 
-    /**
-     * 回调函数
-     */
-    public interface GotoRunnable {
-        void running();
+    public abstract void runnabele();
+
+    public String getTag() {
+        return tag;
     }
 
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 }

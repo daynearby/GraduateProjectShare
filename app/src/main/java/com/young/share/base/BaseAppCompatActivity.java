@@ -24,6 +24,7 @@ import com.young.share.annotation.Injector;
 import com.young.share.config.ApplicationConfig;
 import com.young.share.config.Contants;
 import com.young.share.model.MyUser;
+import com.young.share.thread.ThreadPool;
 
 /**
  * 基类 v7 兼容activity
@@ -40,7 +41,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public IntentFilter myIntentFilter = new IntentFilter();
     public ApplicationConfig app;
     public MyUser cuser;
-//    public ThreadPool threadPool;
+    public ThreadPool threadPool;
 
 
     public final static String BUNDLE_BROADCAST = "sendBroadcast";
@@ -58,10 +59,9 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
         mActivity = this;
         app = ApplicationConfig.getInstance();
-//        threadPool = app.getThreadInstance();
+        threadPool = app.getThreadInstance();
         cuser = app.getCUser();
 
-//        initActionBar();
         initData();
         findviewbyid();
         bindData();

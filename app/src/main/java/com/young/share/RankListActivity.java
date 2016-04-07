@@ -64,6 +64,8 @@ public class RankListActivity extends BaseAppCompatActivity {
 
     private static final int HANDLER_GET_DATA = 0x01;
     private static final int HANDLER_GET_NO_DATA = 0x02;//没有数据
+    private static final int HANDLER_LOAD_DATA_FAILURE = 0x03;//加载数据失败
+    private static final int HANDLER_LOAD_MORE_DATA_FAILURE = 0x04;//加载更多数据失败
 
     @Override
     public int getLayoutId() {
@@ -208,6 +210,14 @@ public class RankListActivity extends BaseAppCompatActivity {
                 bgLayout.setVisibility(View.VISIBLE);
                 bgLayout.setImageResource(R.drawable.icon_conten_empty);
                 break;
+
+            case HANDLER_LOAD_DATA_FAILURE://加载数据失败
+                toast(R.string.tips_loading_faile);
+                break;
+
+            case HANDLER_LOAD_MORE_DATA_FAILURE://加载更多数据，为空
+                toast(R.string.no_more_messages);
+                break;
         }
 
     }
@@ -271,38 +281,69 @@ public class RankListActivity extends BaseAppCompatActivity {
 
                 List<ShareMessage_HZ> sharemessagesList = rankLists.getSharemessages();
                 List<DiscountMessage_HZ> discountMessagesList = rankLists.getDiscountMessages();
-/*分享信息的数据*/
-                if (remoteList != null && remoteList.size() > 0) {
-                    remoteList.clear();
-                }
 
-                if (sharemessagesList != null) {
-                    for (ShareMessage_HZ share : sharemessagesList) {
+                if (isGetMore) {
+                    if (sharemessagesList.size() > 0 || discountMessagesList.size() > 0) {
+
+                        for (ShareMessage_HZ share : sharemessagesList) {
                           /*格式化数据，通用格式*/
-                        remoteList.add(DataFormateUtils.formateDataDiscover(share));
-                    }
-                }
+                            remoteList.add(DataFormateUtils.formateDataDiscover(share));
+                        }
 
-                if (discountMessagesList != null) {
-                    for (DiscountMessage_HZ discountMessage : discountMessagesList) {
+                        for (DiscountMessage_HZ discountMessage : discountMessagesList) {
                         /*格式化数据，通用格式*/
-                        remoteList.add(DataFormateUtils.formateDataDiscount(discountMessage));
+                            remoteList.add(DataFormateUtils.formateDataDiscount(discountMessage));
+                        }
+
+                        //排序
+                        if (remoteList != null && remoteList.size() > 0) {
+                            Collections.sort(remoteList, new ComparatorImpl(key));
+                            app.getCacheInstance().put(tag, (Serializable) remoteList);
+                            mHandler.sendEmptyMessage(HANDLER_GET_DATA);
+                        }
+
+                    }else {
+                        mHandler.sendEmptyMessage(HANDLER_LOAD_MORE_DATA_FAILURE);
                     }
-                }
+
+
+                } else {
+
+/*分享信息的数据*/
+                    if (sharemessagesList.size() > 0 || discountMessagesList.size() > 0) {
+                        //清空原来的数据
+                        if (remoteList != null && remoteList.size() > 0) {
+                            remoteList.clear();
+                        }
+
+
+                        for (ShareMessage_HZ share : sharemessagesList) {
+                          /*格式化数据，通用格式*/
+                            remoteList.add(DataFormateUtils.formateDataDiscover(share));
+                        }
+
+                        for (DiscountMessage_HZ discountMessage : discountMessagesList) {
+                        /*格式化数据，通用格式*/
+                            remoteList.add(DataFormateUtils.formateDataDiscount(discountMessage));
+                        }
 
 //进行排序
-                if (remoteList != null && remoteList.size() > 0) {
-                    Collections.sort(remoteList, new ComparatorImpl(key));
-                    app.getCacheInstance().put(tag, (Serializable) remoteList);
-                    mHandler.sendEmptyMessage(HANDLER_GET_DATA);
-                } else {
-                    mHandler.sendEmptyMessage(HANDLER_GET_NO_DATA);
+                        if (remoteList != null && remoteList.size() > 0) {
+                            Collections.sort(remoteList, new ComparatorImpl(key));
+                            app.getCacheInstance().put(tag, (Serializable) remoteList);
+                            mHandler.sendEmptyMessage(HANDLER_GET_DATA);
+                        }
+                    } else {
+                        mHandler.sendEmptyMessage(HANDLER_GET_NO_DATA);
+                    }
                 }
+
 
             }
 
             @Override
             public void onFailure(int code, String msg) {
+                mHandler.sendEmptyMessage(HANDLER_LOAD_DATA_FAILURE);
                 LogUtils.d("get rank data failure. code = " + code + " message = " + msg);
             }
         });
