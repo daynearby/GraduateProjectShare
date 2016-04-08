@@ -7,10 +7,10 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.view.ContextMenu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -54,10 +54,10 @@ import java.util.List;
 
 /**
  * 实例化
- * <p/>
+ * <p>
  * 父类中setdata并且刷新
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * Created by yangfujing on 15/10/10.
  */
 public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
@@ -78,26 +78,26 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
      * @param listView
      */
     public void bindListView(ListView listView) {
-
-        Toast.makeText(ctx, "  listView.getFirstVisiblePosition()  = " + listView.getFirstVisiblePosition()
-                + " listView.getLastVisiblePosition() = " + listView.getLastVisiblePosition(), Toast.LENGTH_LONG).show();
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-                Toast.makeText(ctx, " absListView  = " + absListView
-                        + " scrollState = " + scrollState, Toast.LENGTH_LONG).show();
-
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem,
-                                 int visibleItemCount, int totalItemCount) {
-                Toast.makeText(ctx, " firstVisibleItem  = " + firstVisibleItem
-                        + " visibleItemCount = " + visibleItemCount
-                        + " totalItemCount = " + totalItemCount, Toast.LENGTH_LONG).show();
-
-            }
-        });
+//
+//        Toast.makeText(ctx, "  listView.getFirstVisiblePosition()  = " + listView.getFirstVisiblePosition()
+//                + " listView.getLastVisiblePosition() = " + listView.getLastVisiblePosition(), Toast.LENGTH_LONG).show();
+//        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+//                Toast.makeText(ctx, " absListView  = " + absListView
+//                        + " scrollState = " + scrollState, Toast.LENGTH_LONG).show();
+//
+//            }
+//
+//            @Override
+//            public void onScroll(AbsListView absListView, int firstVisibleItem,
+//                                 int visibleItemCount, int totalItemCount) {
+//                Toast.makeText(ctx, " firstVisibleItem  = " + firstVisibleItem
+//                        + " visibleItemCount = " + visibleItemCount
+//                        + " totalItemCount = " + totalItemCount, Toast.LENGTH_LONG).show();
+//
+//            }
+//        });
     }
 
     @Override
@@ -130,6 +130,10 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         if (!TextUtils.isEmpty(shareMessage.getShContent())) {
             content_tv.setText(StringUtils.getEmotionContent(
                     ctx, content_tv, shareMessage.getShContent()));
+
+            ((Activity)ctx).registerForContextMenu(content_tv);
+            content_tv.setOnCreateContextMenuListener( new OnContextMenuCreat());
+
         } else {
             content_tv.setVisibility(View.GONE);
         }
@@ -200,7 +204,6 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         hadgo_tv.setOnClickListener(new click(shareMessage));
         comment_tv.setOnClickListener(new click(shareMessage));
         tag_tv.setOnClickListener(new click(shareMessage.getShTag()));
-
     }
 
     /**
@@ -210,6 +213,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
      * @param shareMessage
      */
     private void setImages(MultiImageView multiImageView, final ShareMessage_HZ shareMessage) {
+        multiImageView.setRegisterForContextMenu(true);
         multiImageView.setList(DataFormateUtils.thumbnailList(ctx, shareMessage.getShImgs()));
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
@@ -228,6 +232,8 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                 ((Activity) ctx).overridePendingTransition(0, 0);
             }
         });
+
+
     }
 
     /**
@@ -382,6 +388,17 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         return R.layout.item_discover;
     }
 
+    /**
+     * context menu 创建
+     *
+     */
+    private class OnContextMenuCreat implements View.OnCreateContextMenuListener{
+
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            ((Activity)ctx).getMenuInflater().inflate(R.menu.menu_context_content,contextMenu);
+        }
+    }
 
     /**
      * 点击事件
@@ -484,9 +501,13 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 
                     break;
 
+
+
             }
         }
     }
+
+
 
     /**
      * 编辑发送评论
@@ -503,5 +524,6 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         startActivity(MessageDetailActivity.class, bundle);
 
     }
+
 
 }

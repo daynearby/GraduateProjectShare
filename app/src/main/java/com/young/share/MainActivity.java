@@ -9,11 +9,12 @@ import android.os.Bundle;
 import android.os.Message;
 import android.os.Process;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.umeng.socialize.UMShareAPI;
 import com.young.share.adapter.MainPagerAdapter;
 import com.young.share.base.CustomActBarActivity;
 import com.young.share.config.Contants;
@@ -26,6 +27,7 @@ import com.young.share.utils.BDLBSUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.XmlUtils;
 import com.young.share.views.ArcMenu;
+import com.young.share.views.CustomViewPager;
 import com.young.share.views.Dialog4Tips;
 
 import java.util.ArrayList;
@@ -57,7 +59,7 @@ public class MainActivity extends CustomActBarActivity {
     public void findviewbyid() {
 
         List<Fragment> list = new ArrayList<>();
-        ViewPager viewPager = $(R.id.vp_main);
+        CustomViewPager viewPager = $(R.id.vp_main);
         mArcMenu = $(R.id.id_menu);
 
         DiscountFragment discountFragment = new DiscountFragment();
@@ -138,7 +140,37 @@ public class MainActivity extends CustomActBarActivity {
 
     }
 
-//    /**
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.menu_content_copy ://复制文本
+
+            break;
+
+            case R.id.menu_content_share://分享文本
+
+                break;
+            case R.id.menu_image_save://保存图片
+
+                break;
+
+            case R.id.menu_iamge_share://分享图片
+
+                break;
+
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    //    /**
 //     * recycleview 多次点击出错，点击事件未处理完，再一次新的点击事件
 //     *
 //     * @param event

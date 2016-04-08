@@ -18,14 +18,10 @@ import com.young.share.config.Contants;
 import com.young.share.interfaces.AsyncListener;
 import com.young.share.interfaces.ListViewRefreshListener;
 import com.young.share.model.ShareMessage_HZ;
-import com.young.share.model.dbmodel.ShareMessage;
-import com.young.share.model.dbmodel.User;
 import com.young.share.model.gson.ShareMessageList;
 import com.young.share.network.BmobApi;
-import com.young.share.utils.CommonUtils;
-import com.young.share.utils.DBUtils;
-import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.CommonFunctionUtils;
+import com.young.share.utils.CommonUtils;
 import com.young.share.utils.LogUtils;
 
 import org.json.JSONException;
@@ -298,35 +294,35 @@ public class DiscoverFragment extends BaseFragment {
 
     }
 
-    /**
-     * 格式化数据
-     * 存储到本地
-     *
-     * @param shareList
-     */
-    private void saveData(final List<ShareMessage_HZ> shareList) {
-
-
-        for (ShareMessage_HZ share : shareList) {
-
-            //分享信息
-            ShareMessage shareMessageHZ = DataFormateUtils.formateShareMessae(share);
-
-            //用户信息
-            User u = DataFormateUtils.formateUser(share.getMyUserId());
-//保存
-            u.save();
-
-            shareMessageHZ.setUserId(u);
-
-            DBUtils.saveShMessages(shareMessageHZ);
-
-
-        }
-
-//                mhandler.sendEmptyMessage(FIRST_GETDATA);
-
-    }
+//    /**
+//     * 格式化数据
+//     * 存储到本地
+//     *
+//     * @param shareList
+//     */
+//    private void saveData(final List<ShareMessage_HZ> shareList) {
+//
+//
+//        for (ShareMessage_HZ share : shareList) {
+//
+//            //分享信息
+//            ShareMessage shareMessageHZ = DataFormateUtils.formateShareMessae(share);
+//
+//            //用户信息
+//            User u = DataFormateUtils.formateUser(share.getMyUserId());
+////保存
+//            u.save();
+//
+//            shareMessageHZ.setUserId(u);
+//
+//            DBUtils.saveShMessages(shareMessageHZ);
+//
+//
+//        }
+//
+////                mhandler.sendEmptyMessage(FIRST_GETDATA);
+//
+//    }
 
     /**
      * 刷新列表，最新数据
@@ -352,17 +348,17 @@ public class DiscoverFragment extends BaseFragment {
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    /**
-     * 从本地获取数据
-     */
-    private void getDataFromLocat() {
-
-        dataList = DBUtils.getShareMessages();
-        if (dataList != null && dataList.size() > 0)
-            mhandler.sendEmptyMessage(GET_LOACTIOPN_DATA);
-
-
-    }
+//    /**
+//     * 从本地获取数据
+//     */
+//    private void getDataFromLocat() {
+//
+//        dataList = DBUtils.getShareMessages();
+//        if (dataList != null && dataList.size() > 0)
+//            mhandler.sendEmptyMessage(GET_LOACTIOPN_DATA);
+//
+//
+//    }
 
 
 }

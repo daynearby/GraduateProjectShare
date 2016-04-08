@@ -1,0 +1,50 @@
+[
+    {
+        "merged": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\messenger_bubble_small_white.png",
+        "source": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\messenger_bubble_small_white.png"
+    },
+    {
+        "merged": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\messenger_bubble_large_white.png",
+        "source": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\messenger_bubble_large_white.png"
+    },
+    {
+        "merged": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\umeng_socialize_share_music.png",
+        "source": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\umeng_socialize_share_music.png"
+    },
+    {
+        "merged": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\umeng_socialize_nav_bar_bg_pad.9.png",
+        "source": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\umeng_socialize_nav_bar_bg_pad.9.png"
+    },
+    {
+        "merged": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\umeng_socialize_oauth_check_off.png",
+        "source": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\umeng_socialize_oauth_check_off.png"
+    },
+    {
+        "merged": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\umeng_socialize_light_bar_bg_pad.9.png",
+        "source": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\umeng_socialize_light_bar_bg_pad.9.png"
+    },
+    {
+        "merged": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\umeng_socialize_share_video.png",
+        "source": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\umeng_socialize_share_video.png"
+    },
+    {
+        "merged": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\messenger_bubble_large_blue.png",
+        "source": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\messenger_bubble_large_blue.png"
+    },
+    {
+        "merged": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\messenger_button_send_round_shadow.png",
+        "source": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\messenger_button_send_round_shadow.png"
+    },
+    {
+        "merged": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\messenger_bubble_small_blue.png",
+        "source": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\messenger_bubble_small_blue.png"
+    },
+    {
+        "merged": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\umeng_socialize_oauth_check_on.png",
+        "source": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\umeng_socialize_oauth_check_on.png"
+    },
+    {
+        "merged": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\umeng_socialize_share_pic.png",
+        "source": "D:\\AS workSpace\\share\\social_sdk_library\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\umeng_socialize_share_pic.png"
+    }
+]

@@ -1,5 +1,6 @@
 package com.young.share.config;
 
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.young.share.R;
 
 /**
@@ -244,7 +245,7 @@ public class Contants {
     public static final String PARAMS_MESSAGE_ID = "messageID";//参数名
     public static final String PARAMS_SHCOMM_NUM = "shCommNum";//参数名
 
-
+//百度
     public static final String MCODE = "A9:5B:FA:94:1E:DC:5E:FB:22:16:CA:54:FA:C3:F6:2D:99:36:22:6A;com.young.share";
     public static final String AK = "e5U9Be7dwzr3ElKMWkGdrXri";
 
@@ -254,7 +255,15 @@ public class Contants {
     public static final String ACAHE_KEY_CITY = "acahe_key_city";//城市
     public static final String ACAHE_KEY_DISCOVER = "acahe_key_discover";//发现前面那部分
     public static final String ACAHE_KEY_DISCOUNT = "acahe_key_discount";//商家优惠前面那部分
-    public static final String ACAHE_KEY_USER= "acahe_key_user";//用户信息
-    public static final String ACAHE_KEY_ADVERTISMENT= "acahe_key_advertisment";//广告信息
+    public static final String ACAHE_KEY_USER = "acahe_key_user";//用户信息
+    public static final String ACAHE_KEY_ADVERTISMENT = "acahe_key_advertisment";//广告信息
+
+    //******************************友盟***************************************
+    public static final SHARE_MEDIA[] displaylist = new SHARE_MEDIA[]
+            {
+
+                    SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE,
+                    SHARE_MEDIA.RENREN, SHARE_MEDIA.EMAIL, SHARE_MEDIA.SMS
+            };
 
 }

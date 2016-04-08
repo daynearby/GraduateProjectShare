@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Toast;
 
 import com.young.share.R;
 import com.young.share.config.ApplicationConfig;
@@ -117,6 +118,14 @@ public abstract class CommAdapter<T> extends BaseAdapter {
      * @return
      */
     public abstract int getlayoutid(int position);
+
+    public void toast(String msg){
+        Toast.makeText(ctx,msg,Toast.LENGTH_LONG).show();
+    }
+
+    public void toast(int msg){
+        Toast.makeText(ctx,msg,Toast.LENGTH_LONG).show();
+    }
 
 
 }

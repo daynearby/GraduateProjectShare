@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">share</string>
+    <string name="app_name">分享生活</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -170,6 +170,8 @@
     <string name="txt_erro_message">"服务器异常 code = "</string>
     <string name="txt_serve_erro">"服务器异常"</string>
     <string name="menu_copy">复制</string>
+    <string name="menu_image_save">保存到手机中</string>
+    <string name="menu_share">分享</string>
     <string name="menu_female">女</string>
     <string name="menu_male">男</string>
     <string name="txt_min_age">15</string>

@@ -18,6 +18,8 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        // Enabling multidex support.
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -36,12 +38,19 @@ android {
 //        exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+
+    }
+    dexOptions {
+        javaMaxHeapSize "5g"
     }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:multidex:1.0.0'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
@@ -63,5 +72,5 @@ dependencies {
     compile project(':Minisdk-release')
     compile project(':flashview')
     compile 'com.hynnet:httpclient:4.5.1'
-    compile 'org.apache.httpcomponents:httpmime:4.5.2'
+    compile project(':social_sdk_library')
 }

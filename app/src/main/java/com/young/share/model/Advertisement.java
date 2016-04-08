@@ -9,7 +9,7 @@ import cn.bmob.v3.datatype.BmobFile;
  * Created by Nearby Yang on 2016-03-27.
  */
 public class Advertisement extends BmobObject {
-
+    private static final long serialVersionUID = 6140566514872585L;
     private BmobFile adImage;
     private String adLink;
     private String adPubUser;

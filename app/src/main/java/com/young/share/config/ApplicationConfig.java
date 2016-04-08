@@ -1,6 +1,7 @@
 package com.young.share.config;
 
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
@@ -11,17 +12,20 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.umeng.socialize.Config;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.utils.Log;
 import com.young.share.model.MyUser;
 import com.young.share.thread.ThreadPool;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.cache.ACache;
 
-import org.litepal.LitePalApplication;
-
 import java.io.File;
 
 import cn.bmob.v3.BmobUser;
+
+//import org.litepal.LitePalApplication;
 
 
 /**
@@ -29,7 +33,7 @@ import cn.bmob.v3.BmobUser;
  * <p/>
  * Created by Nearby Yang on 2015-07-02.
  */
-public class ApplicationConfig extends LitePalApplication {
+public class ApplicationConfig extends MultiDexApplication {
 
     //单例模式
     private volatile static ApplicationConfig instance;
@@ -39,7 +43,10 @@ public class ApplicationConfig extends LitePalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
         initConfig();
+        initUmeng();
+
     }
 
 
@@ -53,8 +60,20 @@ public class ApplicationConfig extends LitePalApplication {
         initImageLoader(getApplicationContext());
         //百度基础地图定位
         SDKInitializer.initialize(getApplicationContext());
+
     }
 
+    /**
+     * 友盟初始化
+     */
+    private void initUmeng() {
+        //友盟
+        Config.OpenEditor = true;
+        Log.LOG = false;
+        Config.IsToastTip = false;
+        // QQ和Qzone appid appkey
+        PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
+    }
 
     /**
      * 并发线程池，可并发四个线程

@@ -5,12 +5,9 @@ import android.content.Context;
 import com.young.share.config.Contants;
 import com.young.share.model.Comment_HZ;
 import com.young.share.model.DiscountMessage_HZ;
-import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
 import com.young.share.model.RemoteModel;
 import com.young.share.model.ShareMessage_HZ;
-import com.young.share.model.dbmodel.ShareMessage;
-import com.young.share.model.dbmodel.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -232,21 +229,21 @@ public class DataFormateUtils {
      * @param share
      * @return
      */
-    public static ShareMessage formateShareMessae(ShareMessage_HZ share) {
-        ShareMessage shareMessage = new ShareMessage();
-        shareMessage.setObjectId(share.getObjectId());
-        shareMessage.setShImgs(String.valueOf(share.getShImgs()));
-        shareMessage.setShContent(share.getShContent());
-        shareMessage.setCreatedAt(share.getCreatedAt());
-        shareMessage.setShLocation(share.getShLocation());
-        shareMessage.setShVisitedNum(String.valueOf(share.getShVisitedNum()));
-        shareMessage.setShCommNum(share.getShCommNum());
-        shareMessage.setShWantedNum(String.valueOf(share.getShWantedNum()));
-        shareMessage.setShTag(share.getShTag());
-        shareMessage.setUpdatedAt(share.getUpdatedAt());
-
-        return shareMessage;
-    }
+//    public static ShareMessage formateShareMessae(ShareMessage_HZ share) {
+//        ShareMessage shareMessage = new ShareMessage();
+//        shareMessage.setObjectId(share.getObjectId());
+//        shareMessage.setShImgs(String.valueOf(share.getShImgs()));
+//        shareMessage.setShContent(share.getShContent());
+//        shareMessage.setCreatedAt(share.getCreatedAt());
+//        shareMessage.setShLocation(share.getShLocation());
+//        shareMessage.setShVisitedNum(String.valueOf(share.getShVisitedNum()));
+//        shareMessage.setShCommNum(share.getShCommNum());
+//        shareMessage.setShWantedNum(String.valueOf(share.getShWantedNum()));
+//        shareMessage.setShTag(share.getShTag());
+//        shareMessage.setUpdatedAt(share.getUpdatedAt());
+//
+//        return shareMessage;
+//    }
 
     /**
      * 将远程数据库的数据格式化本地数据库格式
@@ -254,28 +251,28 @@ public class DataFormateUtils {
      * @param myUser
      * @return
      */
-    public static User formateUser(MyUser myUser) {
-        User u = new User();
-
-        u.setCreatedAt(myUser.getCreatedAt());
-        u.setUpdatedAt(myUser.getUpdatedAt());
-        u.setAddress(myUser.getAddress());
-        u.setGender(myUser.isGender());
-        u.setAge(myUser.getAge());
-        u.setQq(myUser.getQq());
-        u.setAvatar(myUser.getAvatar());
-        u.setSignture(myUser.getSignture());
-        u.setEmail(myUser.getEmail());
-        u.setMobilePhoneNumber(myUser.getMobilePhoneNumber());
-        u.setNickName(myUser.getNickName());
-        u.setMobilePhoneNumberVerified(myUser.getMobilePhoneNumberVerified());
-        u.setEmailVerified(myUser.getEmailVerified());
-        u.setObjectId(myUser.getObjectId());
-        u.setAccessToken(myUser.getSessionToken());
-        u.setUsername(myUser.getUsername());
-
-        return u;
-    }
+//    public static User formateUser(MyUser myUser) {
+//        User u = new User();
+//
+//        u.setCreatedAt(myUser.getCreatedAt());
+//        u.setUpdatedAt(myUser.getUpdatedAt());
+//        u.setAddress(myUser.getAddress());
+//        u.setGender(myUser.isGender());
+//        u.setAge(myUser.getAge());
+//        u.setQq(myUser.getQq());
+//        u.setAvatar(myUser.getAvatar());
+//        u.setSignture(myUser.getSignture());
+//        u.setEmail(myUser.getEmail());
+//        u.setMobilePhoneNumber(myUser.getMobilePhoneNumber());
+//        u.setNickName(myUser.getNickName());
+//        u.setMobilePhoneNumberVerified(myUser.getMobilePhoneNumberVerified());
+//        u.setEmailVerified(myUser.getEmailVerified());
+//        u.setObjectId(myUser.getObjectId());
+//        u.setAccessToken(myUser.getSessionToken());
+//        u.setUsername(myUser.getUsername());
+//
+//        return u;
+//    }
 
 
     /**

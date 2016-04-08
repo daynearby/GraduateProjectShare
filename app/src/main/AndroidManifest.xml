@@ -25,6 +25,12 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.SET_DEBUG_APP" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
 
     <!-- end -->
     <!--趣拍使用的权限-->
@@ -108,7 +114,7 @@
         <activity
             android:name=".PersonalCenterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        
+
         <!--用户收藏记录-->
         <activity
             android:name=".WantToGoActivity"
@@ -126,8 +132,9 @@
         <activity android:name=".AboutActivity" />
 
         <!-- 重置密码 -->
-        <activity android:name=".ResetPwdActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ResetPwdActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- 修改个人信息-->
         <activity
@@ -169,14 +176,53 @@
         <activity
             android:name=".BigPicActivity"
             android:theme="@style/AppTheme.Translucent2" />
-<!--图片编辑-->
+        <!--图片编辑-->
         <activity
             android:name=".ImageEditorActivity"
             android:theme="@style/AppTheme.Translucent2" />
+<!--视频播放-->
+        <activity
+            android:name=".VideoplayerActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".VideoplayerActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+
+        <!--友盟分享-->
+        <!--start-->
+        <activity
+            android:name="com.umeng.socialize.editorpage.ShareActivity"
+            android:theme="@style/Theme.UMDefault"
+            android:excludeFromRecents="true"/>
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="56f4a9dce0f55ae0e1000d8d" >
+        </meta-data>
+
+<!--腾讯-->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="tencent100424468" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+
+        <!-- renren need -->
+        <activity
+            android:name="com.renn.rennsdk.oauth.OAuthActivity"
+            android:configChanges="orientation|navigation|keyboardHidden" />
+
+        <!--end-->
 
         <!-- 百度定位 services -->
         <service
