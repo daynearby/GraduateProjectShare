@@ -9,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
@@ -29,6 +31,8 @@ import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
 import com.young.share.model.RemoteModel;
+import com.young.share.network.NetworkReuqest;
+import com.young.share.shareSocial.SocialShareManager;
 import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DisplayUtils;
@@ -106,6 +110,8 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
     private int DURATION = 500;
     private int totalOffset = 0;//动画总的偏移量
     private int lastIndex = 0;//上一个页面的position
+    private String copyContent ;//要复制的文字
+    private String imageUrl;//要分享或者保存的图片
 
     private static final int GET_NEW_COUNT = 0x01;//刷新下面两个数量
     private static final int MESSAGE_BOTTOM_BAR_DATA = 0x02;//刷新下面两个数量
@@ -224,6 +230,9 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
             content_tv.setVisibility(View.VISIBLE);
             content_tv.setText(StringUtils.getEmotionContent(
                     this, content_tv, discountMessage.getDtContent()));
+            copyContent =content_tv.getText().toString();
+            registerForContextMenu(content_tv);
+            content_tv.setOnCreateContextMenuListener(new OnContextMenuCreat());
         }
 
         createdAt.setText(discountMessage.getCreatedAt());
@@ -256,12 +265,24 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
     }
 
     /**
+     * context menu 创建
+     */
+    private class OnContextMenuCreat implements View.OnCreateContextMenuListener {
+
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            getMenuInflater().inflate(R.menu.menu_context_content, contextMenu);
+        }
+    }
+
+    /**
      * 设置图片
      */
     private void setupImage() {
 
         ViewGroup.LayoutParams lp = multiImageView.getLayoutParams();
         lp.width = DisplayUtils.getScreenWidthPixels(mActivity) / 3 * 2;//设置宽度
+        multiImageView.setRegisterForContextMenu(true);
         multiImageView.setList(DataFormateUtils.thumbnailList(this, discountMessage.getDtImgs()));
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
@@ -280,7 +301,13 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
                 overridePendingTransition(0, 0);
             }
         });
-
+        //长按，为了获取文件地址
+        multiImageView.setOnItemLongClickListener(new MultiImageView.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(View view, int position) {
+                imageUrl = multiImageView.getImagesList().get(position);
+            }
+        });
     }
 
     /**
@@ -346,6 +373,29 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         back2superclazz();
     }
 
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menu_content_copy://复制文本
+                StringUtils.CopyText(this, copyContent);
+                break;
+
+            case R.id.menu_content_share://分享文本
+                SocialShareManager.shareText(this,copyContent);
+                break;
+            case R.id.menu_image_save://保存图片
+                NetworkReuqest.call2(this, imageUrl);
+                break;
+
+            case R.id.menu_iamge_share://分享图片
+                SocialShareManager.shareImage(this, imageUrl);
+                break;
+
+        }
+
+        return super.onContextItemSelected(item);
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

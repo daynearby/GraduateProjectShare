@@ -10,7 +10,6 @@ import android.os.Message;
 import android.os.Process;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -146,29 +145,9 @@ public class MainActivity extends CustomActBarActivity {
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
-            case R.id.menu_content_copy ://复制文本
 
-            break;
 
-            case R.id.menu_content_share://分享文本
-
-                break;
-            case R.id.menu_image_save://保存图片
-
-                break;
-
-            case R.id.menu_iamge_share://分享图片
-
-                break;
-
-        }
-
-        return super.onContextItemSelected(item);
-    }
 
     //    /**
 //     * recycleview 多次点击出错，点击事件未处理完，再一次新的点击事件

@@ -77,10 +77,13 @@ public class SmallFiledownloadRequest extends Request<String> {
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         //            String jsonStr = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-
+        LogUtils.e("url = " + url);
         String filePath = Environment.getExternalStorageDirectory().getPath();
         filePath += fileType == FILE_TYPE_VIDEO ? Contants.FILE_PAHT_DOWNLOAD : Contants.FILE_PAHT_SAVE;
-        filePath += url.substring(url.lastIndexOf('/') + 1);
+//        filePath += url.substring(url.lastIndexOf('/') + 1);
+//        filePath += getFileName(url);
+        filePath += System.currentTimeMillis() + Contants.IMAGE_EXTENSION_JPG;
+
         LogUtils.e("SmallFile　Download  download filePath = " + filePath);
         File file = new File(filePath.substring(0, filePath.lastIndexOf('/')));
 
@@ -116,5 +119,13 @@ public class SmallFiledownloadRequest extends Request<String> {
     @Override
     protected Map<String, String> getParams() throws AuthFailureError {
         return params;
+    }
+
+    private String getFileName(String url) {
+        String fileName = null;
+
+        fileName = url.substring(url.lastIndexOf('/') + 1);
+        fileName = fileName.substring(0, fileName.lastIndexOf("?") - 2);
+        return fileName;
     }
 }

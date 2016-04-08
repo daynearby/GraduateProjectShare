@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.view.ContextMenu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,9 +58,27 @@ import java.util.List;
  */
 public class RankListAdapter extends CommAdapter<RemoteModel> {
 
+    private String contentString = null;
+    private String imageUrl = null;//图片签名后的地址
 
     public RankListAdapter(Context context) {
         super(context);
+    }
+
+    /**
+     * 复制内容
+     * @return
+     */
+    public String getContentString() {
+        return contentString;
+    }
+
+    /**
+     * 获取图片的下载地址
+     * @return
+     */
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     @Override
@@ -76,7 +95,7 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
         TextView hadgo_tv = holder.getView(R.id.id_hadgo);//去过数量
         TextView comment_tv = holder.getView(R.id.id_tx_comment);//评论数量
         TextView locationTxt = holder.getView(R.id.tv_item_share_main_location);
-                ((TextView) holder.getView(R.id.tv_item_share_main_created_at))
+        ((TextView) holder.getView(R.id.tv_item_share_main_created_at))
                 .setText(DateUtils.convertDate2Str(remoteModel.getCreatedAt()));//创建时间
         RelativeLayout tagLayout = holder.getView(R.id.rl_head_tag_layout);
         ViewGroup.LayoutParams lp = multiImageView.getLayoutParams();
@@ -90,6 +109,16 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
         if (!TextUtils.isEmpty(remoteModel.getContent())) {
             content_tv.setText(StringUtils.getEmotionContent(
                     ctx, content_tv, remoteModel.getContent()));
+
+            content_tv.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    contentString = remoteModel.getContent();
+                    return false;
+                }
+            });
+            ((Activity) ctx).registerForContextMenu(content_tv);
+            content_tv.setOnCreateContextMenuListener(new OnContextMenuCreat());
         } else {
             content_tv.setVisibility(View.GONE);
         }
@@ -100,7 +129,7 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
         ImageLoader.getInstance().displayImage(
                 TextUtils.isEmpty(myUser.getAvatar()) ?
                         Contants.DEFAULT_AVATAR :
-                        NetworkUtils.getRealUrl(ctx,myUser.getAvatar()), avatar);
+                        NetworkUtils.getRealUrl(ctx, myUser.getAvatar()), avatar);
 
         if (TextUtils.isEmpty(remoteModel.getTag())) {
             tagLayout.setVisibility(View.INVISIBLE);
@@ -156,6 +185,26 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
 
         //图片显示
 //        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx, remoteModel.getImages()));
+        setupImage(multiImageView, remoteModel);
+
+//添加监听事件
+        nickname_tv.setOnClickListener(new click(myUser));
+        avatar.setOnClickListener(new click(myUser));
+        wanto_tv.setOnClickListener(new click(remoteModel));
+        hadgo_tv.setOnClickListener(new click(remoteModel));
+        comment_tv.setOnClickListener(new click(remoteModel));
+        tag_tv.setOnClickListener(new click(remoteModel.getTag()));
+
+    }
+
+    /**
+     * 设置图片
+     * @param multiImageView
+     * @param remoteModel
+     */
+    private void setupImage(final MultiImageView multiImageView,final RemoteModel remoteModel) {
+
+        multiImageView.setRegisterForContextMenu(true);
         multiImageView.setList(DataFormateUtils.thumbnailList(ctx, remoteModel.getImages()));
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
@@ -174,14 +223,13 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
                 ((Activity) ctx).overridePendingTransition(0, 0);
             }
         });
-//添加监听事件
-        nickname_tv.setOnClickListener(new click(myUser));
-        avatar.setOnClickListener(new click(myUser));
-        wanto_tv.setOnClickListener(new click(remoteModel));
-        hadgo_tv.setOnClickListener(new click(remoteModel));
-        comment_tv.setOnClickListener(new click(remoteModel));
-        tag_tv.setOnClickListener(new click(remoteModel.getTag()));
-
+        //长按，为了获取文件地址
+        multiImageView.setOnItemLongClickListener(new MultiImageView.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(View view, int position) {
+                imageUrl = multiImageView.getImagesList().get(position);
+            }
+        });
     }
 
     @Override
@@ -336,6 +384,18 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
 
 
     }
+
+    /**
+     * context menu 创建
+     */
+    private class OnContextMenuCreat implements View.OnCreateContextMenuListener {
+
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            ((Activity) ctx).getMenuInflater().inflate(R.menu.menu_context_content, contextMenu);
+        }
+    }
+
     /**
      * 点击事件
      */
@@ -369,60 +429,9 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
                     v.setClickable(false);
 
                     getUser();
+                    //处理想去的逻辑
+                    wantToGo((RemoteModel) o, (TextView) v);
 
-                    if (cuser != null) {//用户是否登陆
-
-                        commModel = (RemoteModel) o;
-
-                        List<String> wantedNum = commModel.getWanted();
-
-                        if (commModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES) {//分享信息
-
-                            ShareMessage_HZ shareMessage = new ShareMessage_HZ();
-                            shareMessage.setObjectId(commModel.getObjectId());
-                            shareMessage.setShWantedNum(commModel.getWanted());
-
-                            CommonFunctionUtils.wantToGo(ctx, cuser,
-                                    UserUtils.isHadCurrentUser(wantedNum, cuser.getObjectId()), shareMessage,
-                                    (TextView) v, new CommonFunctionUtils.Callback() {
-                                        @Override
-                                        public void onSuccesss() {
-
-                                        }
-
-                                        @Override
-                                        public void onFailure() {
-
-                                        }
-                                    });
-
-                        } else {//优惠信息
-
-                            DiscountMessage_HZ discountMessage = new DiscountMessage_HZ();
-                            discountMessage.setObjectId(commModel.getObjectId());
-                            discountMessage.setDtWantedNum(commModel.getWanted());
-
-                            CommonFunctionUtils.discountWanto(ctx, cuser, discountMessage,
-                                    UserUtils.isHadCurrentUser(wantedNum, cuser.getObjectId()),
-                                    (TextView) v, new CommonFunctionUtils.Callback() {
-                                        @Override
-                                        public void onSuccesss() {
-
-                                        }
-
-                                        @Override
-                                        public void onFailure() {
-
-                                        }
-                                    });
-
-                        }
-
-
-                    } else {
-                        v.setClickable(true);
-                        Dialog4Tips.loginFunction((Activity) ctx);
-                    }
 
                     break;
 
@@ -431,60 +440,8 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
                     v.setClickable(false);
 
                     getUser();//用户是否登陆
-
-                    if (cuser != null) {
-                        commModel = (RemoteModel) o;
-                        List<String> visitedNum = commModel.getVisited();
-
-                        if (commModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES) {//分享信息
-
-                            ShareMessage_HZ shareMessage = new ShareMessage_HZ();
-                            shareMessage.setObjectId(commModel.getObjectId());
-                            shareMessage.setShVisitedNum(commModel.getVisited());
-
-
-                            CommonFunctionUtils.visit(ctx, cuser,
-                                    UserUtils.isHadCurrentUser(visitedNum, cuser.getObjectId()),
-                                    shareMessage, v, new CommonFunctionUtils.Callback() {
-                                        @Override
-                                        public void onSuccesss() {
-
-                                        }
-
-                                        @Override
-                                        public void onFailure() {
-
-                                        }
-                                    });
-
-                        } else {//优惠信息
-
-                            DiscountMessage_HZ discountMessage = new DiscountMessage_HZ();
-                            discountMessage.setObjectId(commModel.getObjectId());
-                            discountMessage.setDtWantedNum(commModel.getWanted());
-
-                            CommonFunctionUtils.discountVisit(ctx, cuser, discountMessage,
-                                    UserUtils.isHadCurrentUser(visitedNum, cuser.getObjectId()),
-                                    (TextView) v, new CommonFunctionUtils.Callback() {
-                                        @Override
-                                        public void onSuccesss() {
-
-                                        }
-
-                                        @Override
-                                        public void onFailure() {
-
-                                        }
-                                    });
-
-                        }
-
-
-                    } else {
-                        v.setClickable(true);
-                        Dialog4Tips.loginFunction((Activity) ctx);
-                    }
-
+//想去的逻辑
+                    hadGo((RemoteModel) o, (TextView) v);
                     break;
 
                 case R.id.id_tx_comment://评论数量
@@ -513,6 +470,127 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
             }
 
 
+        }
+    }
+
+    /**
+     * 去过的逻辑处理
+     *
+     * @param commModel
+     * @param textView
+     */
+    private void hadGo(RemoteModel commModel, TextView textView) {
+        if (cuser != null) {
+//            commModel = (RemoteModel) o;
+            List<String> visitedNum = commModel.getVisited();
+
+            if (commModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES) {//分享信息
+
+                ShareMessage_HZ shareMessage = new ShareMessage_HZ();
+                shareMessage.setObjectId(commModel.getObjectId());
+                shareMessage.setShVisitedNum(commModel.getVisited());
+
+
+                CommonFunctionUtils.visit(ctx, cuser,
+                        UserUtils.isHadCurrentUser(visitedNum, cuser.getObjectId()),
+                        shareMessage, textView, new CommonFunctionUtils.Callback() {
+                            @Override
+                            public void onSuccesss() {
+
+                            }
+
+                            @Override
+                            public void onFailure() {
+
+                            }
+                        });
+
+            } else {//优惠信息
+
+                DiscountMessage_HZ discountMessage = new DiscountMessage_HZ();
+                discountMessage.setObjectId(commModel.getObjectId());
+                discountMessage.setDtWantedNum(commModel.getWanted());
+
+                CommonFunctionUtils.discountVisit(ctx, cuser, discountMessage,
+                        UserUtils.isHadCurrentUser(visitedNum, cuser.getObjectId()),
+                        textView, new CommonFunctionUtils.Callback() {
+                            @Override
+                            public void onSuccesss() {
+
+                            }
+
+                            @Override
+                            public void onFailure() {
+
+                            }
+                        });
+
+            }
+
+
+        } else {
+            textView.setClickable(true);
+            Dialog4Tips.loginFunction((Activity) ctx);
+        }
+
+
+    }
+
+    /**
+     * 想去
+     */
+    private void wantToGo(RemoteModel commModel, TextView textView) {
+        if (cuser != null) {//用户是否登陆
+
+
+            List<String> wantedNum = commModel.getWanted();
+
+            if (commModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES) {//分享信息
+
+                ShareMessage_HZ shareMessage = new ShareMessage_HZ();
+                shareMessage.setObjectId(commModel.getObjectId());
+                shareMessage.setShWantedNum(commModel.getWanted());
+
+                CommonFunctionUtils.wantToGo(ctx, cuser,
+                        UserUtils.isHadCurrentUser(wantedNum, cuser.getObjectId()), shareMessage,
+                        textView, new CommonFunctionUtils.Callback() {
+                            @Override
+                            public void onSuccesss() {
+
+                            }
+
+                            @Override
+                            public void onFailure() {
+
+                            }
+                        });
+
+            } else {//优惠信息
+
+                DiscountMessage_HZ discountMessage = new DiscountMessage_HZ();
+                discountMessage.setObjectId(commModel.getObjectId());
+                discountMessage.setDtWantedNum(commModel.getWanted());
+
+                CommonFunctionUtils.discountWanto(ctx, cuser, discountMessage,
+                        UserUtils.isHadCurrentUser(wantedNum, cuser.getObjectId()),
+                        textView, new CommonFunctionUtils.Callback() {
+                            @Override
+                            public void onSuccesss() {
+
+                            }
+
+                            @Override
+                            public void onFailure() {
+
+                            }
+                        });
+
+            }
+
+
+        } else {
+            textView.setClickable(true);
+            Dialog4Tips.loginFunction((Activity) ctx);
         }
     }
 

@@ -1,5 +1,7 @@
 package com.young.share.utils;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -260,6 +262,20 @@ public class StringUtils {
 
         return ssb;
     }
+
+    /**
+     * 复制文字
+     * 将要复制的文字放到粘贴板上
+     * @param context
+     * @param str
+     */
+    public static void CopyText(Context context,String str){
+        String label = "moment";
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(label, str);
+        clipboard.setPrimaryClip(clip);
+    }
+
 
 
     public interface TextLink {

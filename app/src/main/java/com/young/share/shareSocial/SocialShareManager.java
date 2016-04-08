@@ -22,6 +22,23 @@ import com.young.share.config.Contants;
 public class SocialShareManager {
 
     /**
+     * 纯文字的分享
+     * @param context
+     * @param content 文字
+     */
+    public static void shareText(Context context, String content){
+        shareShow(context,content,null);
+    }
+
+    /**
+     * 分享纯图片
+     * @param context
+     * @param imageUrl
+     */
+    public static void shareImage(Context context,  String imageUrl){
+        shareShow(context,null,imageUrl);
+    }
+    /**
      * 分享 社会化，只能分享一张图片或者是一句话，不能多图
      */
     public static void shareShow(Context context, String content, String imageUrl) {

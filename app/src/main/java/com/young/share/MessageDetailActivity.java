@@ -12,7 +12,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +51,7 @@ import com.young.share.model.PictureInfo;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.network.BmobApi;
 import com.young.share.network.NetworkReuqest;
+import com.young.share.shareSocial.SocialShareManager;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.EmotionUtils;
 import com.young.share.utils.EvaluateUtil;
@@ -155,6 +158,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private InputMethodManager imm;
     private String receiverId;//接收消息者id
     private int commentClick;//是否是点击评论进去
+    private String copyContent;//要复制的文字
+    private String imageUrl;//要分享或者保存的图片
 
     private CommentFragment commentFragment;//评论的界面的对象
     private WantToGoFragment wantToGoFragment;//想去或者说是收藏
@@ -288,6 +293,16 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
     }
 
+    /**
+     * context menu 创建
+     */
+    private class OnContextMenuCreat implements View.OnCreateContextMenuListener {
+
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            getMenuInflater().inflate(R.menu.menu_context_content, contextMenu);
+        }
+    }
 
     /**
      * 设置数据
@@ -303,6 +318,9 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
             content_tv.setVisibility(View.VISIBLE);
             content_tv.setText(StringUtils.getEmotionContent(
                     this, content_tv, shareMessage.getShContent()));
+            copyContent = content_tv.getText().toString();
+            registerForContextMenu(content_tv);
+            content_tv.setOnCreateContextMenuListener(new OnContextMenuCreat());
         }
 
 
@@ -374,6 +392,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
      * 设置图片
      */
     private void setImage() {
+        multiImageView.setRegisterForContextMenu(true);
         multiImageView.setList(DataFormateUtils.thumbnailList(this, shareMessage.getShImgs()));
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
@@ -392,6 +411,37 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 overridePendingTransition(0, 0);
             }
         });
+        //长按，为了获取文件地址
+        multiImageView.setOnItemLongClickListener(new MultiImageView.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(View view, int position) {
+                imageUrl = multiImageView.getImagesList().get(position);
+            }
+        });
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menu_content_copy://复制文本
+                StringUtils.CopyText(this, copyContent);
+                break;
+
+            case R.id.menu_content_share://分享文本
+                SocialShareManager.shareText(this, copyContent);
+                break;
+            case R.id.menu_image_save://保存图片
+                NetworkReuqest.call2(this, imageUrl);
+                break;
+
+            case R.id.menu_iamge_share://分享图片
+                SocialShareManager.shareImage(this, imageUrl);
+                break;
+
+        }
+
+        return super.onContextItemSelected(item);
     }
 
 

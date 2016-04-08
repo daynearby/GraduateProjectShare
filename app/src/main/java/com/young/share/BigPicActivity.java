@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.graphics.drawable.Drawable;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -17,6 +18,8 @@ import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
 import com.young.share.model.PictureInfo;
+import com.young.share.network.NetworkReuqest;
+import com.young.share.shareSocial.SocialShareManager;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.EvaluateUtil;
 import com.young.share.views.CustomViewPager;
@@ -51,16 +54,16 @@ public class BigPicActivity extends BaseAppCompatActivity implements ViewTreeObs
         return  R.layout.activity_bigpic;
     }
 
-    @Override
-    protected void findviewbyid() {
-
-    }
 
     @Override
     protected void initData() {
         pictureInfoList = (List<PictureInfo>) getIntent().getSerializableExtra(Contants.INTENT_IMAGE_INFO_LIST);
         currentItem = getIntent().getIntExtra(Contants.INTENT_CURRENT_ITEM, 0);
 
+
+    }
+    @Override
+    protected void findviewbyid() {
 
     }
 
@@ -129,6 +132,23 @@ public class BigPicActivity extends BaseAppCompatActivity implements ViewTreeObs
         super.onBackPressed();
         //返回键
         startActivityAnim();
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menu_image_save://保存图片
+                NetworkReuqest.call2(this, viewpagerAdapter.getImageUrl());
+                break;
+
+            case R.id.menu_iamge_share://分享图片
+                SocialShareManager.shareImage(this, viewpagerAdapter.getImageUrl());
+                break;
+
+        }
+
+        return super.onContextItemSelected(item);
     }
 
     /**

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -32,11 +33,13 @@ import com.young.share.model.gson.AdvertismentList;
 import com.young.share.model.gson.DiscountMessageList;
 import com.young.share.network.BmobApi;
 import com.young.share.network.NetworkReuqest;
+import com.young.share.shareSocial.SocialShareManager;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.LogUtils;
+import com.young.share.utils.StringUtils;
 import com.young.share.views.Dialog4Tips;
 
 import org.json.JSONException;
@@ -223,6 +226,29 @@ public class DiscountFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menu_content_copy://复制文本
+                StringUtils.CopyText(context, discAdapter.getContentString());
+                break;
+
+            case R.id.menu_content_share://分享文本
+                SocialShareManager.shareText(context, discAdapter.getContentString());
+                break;
+            case R.id.menu_image_save://保存图片
+                NetworkReuqest.call2(context, discAdapter.getImageUrl());
+                break;
+
+            case R.id.menu_iamge_share://分享图片
+                SocialShareManager.shareImage(context, discAdapter.getImageUrl());
+                break;
+
+        }
+
+        return super.onContextItemSelected(item);
+    }
     /**
      * 上拉刷新
      */

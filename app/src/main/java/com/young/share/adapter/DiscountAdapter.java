@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.ContextMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -45,10 +46,28 @@ import java.util.List;
  * Created by Nearby Yang on 2015-12-07.
  */
 public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
+    private String contentString = null;
+    private String imageUrl = null;//图片签名后的地址
 
 
     public DiscountAdapter(Context context) {
         super(context);
+    }
+
+    /**
+     * 复制内容
+     * @return
+     */
+    public String getContentString() {
+        return contentString;
+    }
+
+    /**
+     * 获取图片的下载地址
+     * @return
+     */
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     @Override
@@ -83,6 +102,15 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         if (!TextUtils.isEmpty(discountMessage_hz.getDtContent())) {
             content_tv.setText(StringUtils.getEmotionContent(
                     ctx, content_tv, discountMessage_hz.getDtContent()));
+            content_tv.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    contentString =discountMessage_hz.getDtContent();
+                    return false;
+                }
+            });
+            ((Activity) ctx).registerForContextMenu(content_tv);
+            content_tv.setOnCreateContextMenuListener(new OnContextMenuCreat());
         } else {
             content_tv.setVisibility(View.GONE);
         }
@@ -144,6 +172,25 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
         //图片显示
 //        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx,discountMessage_hz.getDtImgs()));
+        setupImage(multiImageView,discountMessage_hz);
+
+//添加监听事件
+        nickname_tv.setOnClickListener(new click(myUser));
+        avatar.setOnClickListener(new click(myUser));
+        wanto_tv.setOnClickListener(new click(discountMessage_hz));
+        hadgo_tv.setOnClickListener(new click(discountMessage_hz));
+        tag_tv.setOnClickListener(new click(discountMessage_hz.getDtTag()));
+
+
+    }
+
+    /**
+     * 设置图片显示
+     * @param multiImageView
+     */
+    private void setupImage(final MultiImageView multiImageView,final DiscountMessage_HZ discountMessage_hz) {
+
+        multiImageView.setRegisterForContextMenu(true);
         multiImageView.setList(DataFormateUtils.thumbnailList(ctx, discountMessage_hz.getDtImgs()));
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
@@ -162,13 +209,13 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
                 ((Activity) ctx).overridePendingTransition(0, 0);
             }
         });
-//添加监听事件
-        nickname_tv.setOnClickListener(new click(myUser));
-        avatar.setOnClickListener(new click(myUser));
-        wanto_tv.setOnClickListener(new click(discountMessage_hz));
-        hadgo_tv.setOnClickListener(new click(discountMessage_hz));
-        tag_tv.setOnClickListener(new click(discountMessage_hz.getDtTag()));
-
+        //长按，为了获取文件地址
+        multiImageView.setOnItemLongClickListener(new MultiImageView.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(View view, int position) {
+                imageUrl = multiImageView.getImagesList().get(position);
+            }
+        });
 
     }
 
@@ -177,7 +224,16 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         return R.layout.item_discount;
     }
 
+    /**
+     * context menu 创建
+     */
+    private class OnContextMenuCreat implements View.OnCreateContextMenuListener {
 
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            ((Activity) ctx).getMenuInflater().inflate(R.menu.menu_context_content, contextMenu);
+        }
+    }
     /**
      * 点击事件
      */

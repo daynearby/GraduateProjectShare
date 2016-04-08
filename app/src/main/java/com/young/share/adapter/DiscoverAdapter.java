@@ -54,13 +54,15 @@ import java.util.List;
 
 /**
  * 实例化
- * <p>
+ * <p/>
  * 父类中setdata并且刷新
- * <p>
- * <p>
+ * <p/>
+ * <p/>
  * Created by yangfujing on 15/10/10.
  */
 public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
+    private String contentString = null;
+    private String imageUrl = null;//图片签名后的地址
 
 
     /**
@@ -100,6 +102,25 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 //        });
     }
 
+    /**
+     * 复制内容
+     *
+     * @return
+     */
+    public String getContentString() {
+        return contentString;
+    }
+
+    /**
+     * 获取图片的下载地址
+     *
+     * @return
+     */
+    public String getImageUrl() {
+        LogUtils.e(" adapter = " + imageUrl);
+        return imageUrl;
+    }
+
     @Override
     public void convert(ViewHolder holder, final ShareMessage_HZ shareMessage, int position) {
 //        this.shareMessage = shareMessage;
@@ -130,9 +151,15 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         if (!TextUtils.isEmpty(shareMessage.getShContent())) {
             content_tv.setText(StringUtils.getEmotionContent(
                     ctx, content_tv, shareMessage.getShContent()));
-
-            ((Activity)ctx).registerForContextMenu(content_tv);
-            content_tv.setOnCreateContextMenuListener( new OnContextMenuCreat());
+            content_tv.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    contentString = shareMessage.getShContent();
+                    return false;
+                }
+            });
+            ((Activity) ctx).registerForContextMenu(content_tv);
+            content_tv.setOnCreateContextMenuListener(new OnContextMenuCreat());
 
         } else {
             content_tv.setVisibility(View.GONE);
@@ -212,7 +239,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
      * @param multiImageView
      * @param shareMessage
      */
-    private void setImages(MultiImageView multiImageView, final ShareMessage_HZ shareMessage) {
+    private void setImages(final MultiImageView multiImageView, final ShareMessage_HZ shareMessage) {
         multiImageView.setRegisterForContextMenu(true);
         multiImageView.setList(DataFormateUtils.thumbnailList(ctx, shareMessage.getShImgs()));
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
@@ -230,6 +257,14 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 
                 ctx.startActivity(intent);
                 ((Activity) ctx).overridePendingTransition(0, 0);
+            }
+        });
+
+        //长按，为了获取文件地址
+        multiImageView.setOnItemLongClickListener(new MultiImageView.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(View view, int position) {
+                imageUrl = multiImageView.getImagesList().get(position);
             }
         });
 
@@ -390,13 +425,12 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 
     /**
      * context menu 创建
-     *
      */
-    private class OnContextMenuCreat implements View.OnCreateContextMenuListener{
+    private class OnContextMenuCreat implements View.OnCreateContextMenuListener {
 
         @Override
         public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-            ((Activity)ctx).getMenuInflater().inflate(R.menu.menu_context_content,contextMenu);
+            ((Activity) ctx).getMenuInflater().inflate(R.menu.menu_context_content, contextMenu);
         }
     }
 
@@ -502,11 +536,9 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                     break;
 
 
-
             }
         }
     }
-
 
 
     /**

@@ -3,6 +3,7 @@ package com.young.share.fragment;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -20,9 +21,12 @@ import com.young.share.interfaces.ListViewRefreshListener;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.gson.ShareMessageList;
 import com.young.share.network.BmobApi;
+import com.young.share.network.NetworkReuqest;
+import com.young.share.shareSocial.SocialShareManager;
 import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.LogUtils;
+import com.young.share.utils.StringUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +48,6 @@ public class DiscoverFragment extends BaseFragment {
     private ListView listView;
 
 
-
     private int startIndex = 0;
     private int endIndex = 20;
     private int PUSH_TIMES = 0;//下拉次数
@@ -57,6 +60,7 @@ public class DiscoverFragment extends BaseFragment {
     private static final int HANDLER_GET_DATA = 0x1003;
     private static final int MESSAGE_NO_MORE_DATA = 0x1004;
     private static final int MESSAGE_LOAD_DATA_FAILURE = 0x1005;
+
     /**
      * 默认构造函数
      */
@@ -107,7 +111,7 @@ public class DiscoverFragment extends BaseFragment {
     /**
      * 通过一个新的线程进行获取数据
      */
-    private void initDataByThread(){
+    private void initDataByThread() {
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {
@@ -209,6 +213,31 @@ public class DiscoverFragment extends BaseFragment {
         });
     }
 
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menu_content_copy://复制文本
+                StringUtils.CopyText(context, listviewAdapter.getContentString());
+                break;
+
+            case R.id.menu_content_share://分享文本
+                SocialShareManager.shareText(context, listviewAdapter.getContentString());
+                break;
+            case R.id.menu_image_save://保存图片
+                NetworkReuqest.call2(context, listviewAdapter.getImageUrl());
+                break;
+
+            case R.id.menu_iamge_share://分享图片
+                SocialShareManager.shareImage(context, listviewAdapter.getImageUrl());
+                break;
+
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
     @Override
     public void handler(Message msg) {
         switch (msg.what) {
@@ -268,7 +297,7 @@ public class DiscoverFragment extends BaseFragment {
                             if (shareMessageList.getShareMessageHzList().size() > 0) {
                                 dataList.addAll(shareMessageList.getShareMessageHzList());
                             } else {
-                               mhandler.sendEmptyMessage(MESSAGE_NO_MORE_DATA);
+                                mhandler.sendEmptyMessage(MESSAGE_NO_MORE_DATA);
                             }
 
                         } else {
@@ -285,8 +314,8 @@ public class DiscoverFragment extends BaseFragment {
 
                     @Override
                     public void onFailure(int code, String msg) {
-                       mhandler.sendEmptyMessage(MESSAGE_LOAD_DATA_FAILURE);
-                        LogUtils.e("load data failure ! code = "+code+" message = "+msg);
+                        mhandler.sendEmptyMessage(MESSAGE_LOAD_DATA_FAILURE);
+                        LogUtils.e("load data failure ! code = " + code + " message = " + msg);
                     }
                 }
         );

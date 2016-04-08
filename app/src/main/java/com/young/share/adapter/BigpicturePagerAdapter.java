@@ -1,8 +1,10 @@
 package com.young.share.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.view.ContextMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -27,10 +29,15 @@ public class BigpicturePagerAdapter extends BasePagerAdapter<PictureInfo> implem
 
     private ImageLoader mImageLoader = ImageLoader.getInstance();
     private View mCurrentView;
+    private String imageUrl;
 
     public BigpicturePagerAdapter(Context context) {
         super(context);
 
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     @Override
@@ -50,19 +57,41 @@ public class BigpicturePagerAdapter extends BasePagerAdapter<PictureInfo> implem
     }
 
     @Override
-    protected void instanceItem(View v, PictureInfo pictureInfo, int position) {
+    protected void instanceItem(View v, final PictureInfo pictureInfo, int position) {
 
         PhotoView photoView = (PhotoView) v.findViewById(R.id.pv_item_photoview);
         ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.pb_item_photoview);
         photoView.setOnPhotoTapListener(this);
 
         if (pictureInfo != null && !TextUtils.isEmpty(pictureInfo.getImageUrl())) {
+            ((Activity) context).registerForContextMenu(photoView);
+            photoView.setOnCreateContextMenuListener(new OnContextMenuCreat());
             setNetImage(photoView, progressBar, pictureInfo);
+
+            photoView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    imageUrl = pictureInfo.getImageUrl();
+                    return false;
+                }
+            });
+
         } else {//图片不存在
             photoView.setImageResource(R.drawable.icon_iamge_uri_empty);
         }
 
+    }
 
+    /**
+     * context menu 创建
+     *
+     */
+    private class OnContextMenuCreat implements View.OnCreateContextMenuListener{
+
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            ((Activity)context).getMenuInflater().inflate(R.menu.menu_context_image_option,contextMenu);
+        }
     }
 
     /**
@@ -104,7 +133,7 @@ public class BigpicturePagerAdapter extends BasePagerAdapter<PictureInfo> implem
      * 从内存中读取刚刚的缩略图
      *
      * @param photoView 显示图片的imageView
-     * @param imageUrl 图片地址
+     * @param imageUrl  图片地址
      */
     private void loadImageFromCache(PhotoView photoView, String imageUrl) {
         Bitmap bitmap = ImageHandlerUtils.getBitmapFromCache(imageUrl, mImageLoader);
@@ -138,6 +167,6 @@ public class BigpicturePagerAdapter extends BasePagerAdapter<PictureInfo> implem
 
     @Override
     public void onPhotoTap(View view, float x, float y) {
-        ((BigPicActivity)context).startActivityAnim();
+        ((BigPicActivity) context).startActivityAnim();
     }
 }

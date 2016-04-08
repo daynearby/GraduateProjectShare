@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -23,9 +24,12 @@ import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.gson.RankList;
 import com.young.share.network.BmobApi;
+import com.young.share.network.NetworkReuqest;
+import com.young.share.shareSocial.SocialShareManager;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.LogUtils;
+import com.young.share.utils.StringUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -226,6 +230,30 @@ public class RankListActivity extends BaseAppCompatActivity {
     public void mBack() {
         mBackStartActivity(MainActivity.class);
 
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menu_content_copy://复制文本
+                StringUtils.CopyText(this, rankAdapter.getContentString());
+                break;
+
+            case R.id.menu_content_share://分享文本
+                SocialShareManager.shareText(this, rankAdapter.getContentString());
+                break;
+            case R.id.menu_image_save://保存图片
+                NetworkReuqest.call2(this, rankAdapter.getImageUrl());
+                break;
+
+            case R.id.menu_iamge_share://分享图片
+                SocialShareManager.shareImage(this, rankAdapter.getImageUrl());
+                break;
+
+        }
+
+        return super.onContextItemSelected(item);
     }
 
     /**
