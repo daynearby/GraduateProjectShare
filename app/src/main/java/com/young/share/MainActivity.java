@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.os.Process;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import com.umeng.socialize.UMShareAPI;
 import com.young.share.adapter.MainPagerAdapter;
 import com.young.share.base.CustomActBarActivity;
+import com.young.share.bmobPush.MessageNotification;
 import com.young.share.config.Contants;
 import com.young.share.fragment.DiscountFragment;
 import com.young.share.fragment.DiscoverFragment;
@@ -350,8 +352,11 @@ public class MainActivity extends CustomActBarActivity {
                     LogUtils.e("main acitivity bmob ：" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
 //                    LogUtils.ts("mian activity" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
 /*更新界面数据*/
-                    initMessagesIcon(true);
+                    if (!TextUtils.isEmpty(intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING))){
 
+                        initMessagesIcon(true);
+                        MessageNotification.showReceiveComment(mActivity, intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
+                    }
 
                     break;
                 case Contants.BORDCAST_REQUEST_LOCATIONINFO://使用百度定位
