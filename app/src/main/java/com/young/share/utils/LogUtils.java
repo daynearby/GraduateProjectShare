@@ -67,7 +67,7 @@ public class LogUtils {
      */
     public static void ts(String msg){
         if (BuildConfig.DEBUG){
-            Toast.makeText(ApplicationConfig.getInstance(),ms+msg,Toast.LENGTH_LONG).show();
+            Toast.makeText(ApplicationConfig.getContext(),ms+msg,Toast.LENGTH_LONG).show();
         }
     }
 

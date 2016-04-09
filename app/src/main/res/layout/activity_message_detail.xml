@@ -9,12 +9,16 @@
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/theme_puple" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tb_message_detail">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:orientation="vertical"
-            android:layout_below="@+id/tb_message_detail"
             android:padding="@dimen/paddingMic">
 
             <LinearLayout
@@ -45,12 +49,13 @@
                     android:id="@+id/tv_item_message_detail_location_info"
                     style="@style/text_style_wrap"
                     android:layout_gravity="right"
+                    android:background="@drawable/sele_text"
                     android:paddingLeft="@dimen/paddingMic"
                     android:paddingRight="@dimen/paddingMic"
-                    android:textColor="@color/color_name"
-                    android:background="@drawable/sele_text"
                     android:text="@string/gd_hz"
-                    android:visibility="gone"/>
+                    android:textColor="@color/color_name"
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/tv_item_message_detail_createdat"
                     style="@style/text_style_wrap"
@@ -59,7 +64,7 @@
                     android:paddingRight="@dimen/paddingMic"
                     android:text="@string/created_at" />
 
-<!--标题栏-->
+                <!--标题栏-->
                 <include layout="@layout/content_detail_indicador" />
 
 
@@ -73,7 +78,7 @@
 
         </RelativeLayout>
 
-
+    </ScrollView>
     <!--底部功能-->
     <include
         layout="@layout/include_bottom_bar"

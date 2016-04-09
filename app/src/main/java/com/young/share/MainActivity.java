@@ -37,7 +37,8 @@ import cn.bmob.push.PushConstants;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 
-// TODO: 2016-02-27 做缓存,百度地图的循环调用，添加一个时间延迟，连续定位没用
+// TODO: 2016-02-27 百度地图的循环调用，添加一个时间延迟，连续定位没用
+// TODO: 2016-04-09 当消息发送成功的进行刷新界面 ，使用startavtivityForResult
 public class MainActivity extends CustomActBarActivity {
 
     private ArcMenu mArcMenu;
@@ -48,6 +49,9 @@ public class MainActivity extends CustomActBarActivity {
     private static final int callbackTimes = 10;//回调10次
     private boolean isRegistBordcast = false;//是否注册了广播接收者
     private boolean isDiscount = false;//当前是否为商家优惠界面。true -->是
+
+    private static final int MESSAGE_BAIDU_MAP_DELAY = 0x001;//百度地图
+    private static final long DELAYED = 6000L;
 
     @Override
     public int getLayoutId() {
@@ -64,9 +68,6 @@ public class MainActivity extends CustomActBarActivity {
         DiscountFragment discountFragment = new DiscountFragment();
         DiscoverFragment discoverFragment = new DiscoverFragment();
         RankFragment rankFragment = new RankFragment();
-//        discountFragment.initizliza(this);
-//        discoverFragment.initizliza(this);
-//        rankFragment.initizliza(this);
 
         list.add(discountFragment);
         list.add(discoverFragment);
@@ -131,7 +132,12 @@ public class MainActivity extends CustomActBarActivity {
 
     @Override
     public void handerMessage(Message msg) {
+        switch (msg.what) {
 
+            case MESSAGE_BAIDU_MAP_DELAY://启动百度地图定位
+                bdlbsUtils.startLocation();
+                break;
+        }
     }
 
     @Override
@@ -145,29 +151,6 @@ public class MainActivity extends CustomActBarActivity {
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
-
-
-
-
-    //    /**
-//     * recycleview 多次点击出错，点击事件未处理完，再一次新的点击事件
-//     *
-//     * @param event
-//     * @return
-//     */
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//
-//        try {
-//            return super.onTouchEvent(event);
-//        } catch (ArrayIndexOutOfBoundsException e) {
-//            e.printStackTrace();
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//
-//        return true;
-//    }
 
     private class pageChangeListener implements MainPagerAdapter.OnPageSelected {
 
@@ -340,14 +323,12 @@ public class MainActivity extends CustomActBarActivity {
 //                LogUtils.i("定位成功 定位信息 发送广播 ");
 
                 bdlbsUtils.stopLocation();
-            }
-//            try {
-//                wait(60000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-            if (times >= callbackTimes) {
+            } else {//没有定位成功
                 bdlbsUtils.stopLocation();
+                //如果不够十次的话继续定位
+                if (times <= callbackTimes) {
+                    mHandler.sendEmptyMessageDelayed(MESSAGE_BAIDU_MAP_DELAY, DELAYED);
+                }
             }
         }
     }
@@ -356,18 +337,19 @@ public class MainActivity extends CustomActBarActivity {
      * 消息的广播接收者
      * 处理说到的广播信息
      */
-    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+    public BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 
 
         @Override
         public void onReceive(Context context, Intent intent) {
 
             LogUtils.d("Intent getAction = " + intent.getAction());
-
+//
             switch (intent.getAction()) {
                 case Contants.BMOB_PUSH_MESSAGES://"Bmob  信息
-
-                    LogUtils.e("Bmob 收到信息" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
+                    LogUtils.e("main acitivity bmob ：" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
+//                    LogUtils.ts("mian activity" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
+/*更新界面数据*/
                     initMessagesIcon(true);
 
 

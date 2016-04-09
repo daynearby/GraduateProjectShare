@@ -23,12 +23,24 @@ public class MyPushMessageReceiver extends BroadcastReceiver {
         if (intent.getAction().equals(PushConstants.ACTION_MESSAGE)) {
 
             LogUtils.e("bmob", "客户端收到推送内容：" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
-            LogUtils.ts("接受到消息了" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
+//            LogUtils.ts("接受到消息了" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
 
             intent.setAction(Contants.BMOB_PUSH_MESSAGES);
+            notifiMainActivity(context, intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
             context.sendBroadcast(intent);
         }
     }
 
+    /**
+     * 发送通知给MainActivity
+     *
+     * @param context
+     * @param message
+     */
+    private void notifiMainActivity(Context context, String message) {
+        Intent intent = new Intent(Contants.BMOB_PUSH_MESSAGES);
+        intent.putExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING, message);
+        context.sendBroadcast(intent);
+    }
 
 }

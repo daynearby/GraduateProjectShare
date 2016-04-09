@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
@@ -41,6 +42,8 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
     private SwipeRefreshLayout swipeRefresh;
     @InjectView(R.id.lv_message_center)
     private ListView listView;
+    @InjectView(R.id.im_content_tips)
+    private ImageView tipsIm;
 
     private MessageCenterAdapter messageAdapter;
 
@@ -87,8 +90,21 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
         messageAdapter = new MessageCenterAdapter(mActivity);
         listView.setAdapter(messageAdapter);
         listView.setOnItemClickListener(new itemClick());
+/*上拉、下拉刷新listener*/
+        setPullListener();
+
+    }
+
+    @Override
+    public void bindData() {
+
+    }
 
 
+    /**
+     * 上下来刷新 监听
+     */
+    private void setPullListener() {
         new ListViewRefreshListener(listView, swipeRefresh, new ListViewRefreshListener.RefreshListener() {
             @Override
             public void pushToRefresh() {
@@ -124,13 +140,6 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
                 getRemoteData();
             }
         });
-
-
-    }
-
-    @Override
-    public void bindData() {
-
     }
 
     /**
@@ -250,8 +259,13 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
                     dataList = commentList.getCommentList();
 
                 }
-
-                mHandler.sendEmptyMessage(REFRESHUI);
+                //刷新机制
+                if (dataList != null && dataList.size() > 0) {
+                    tipsIm.setVisibility(View.GONE);
+                    mHandler.sendEmptyMessage(REFRESHUI);
+                } else {
+                    tipsIm.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override

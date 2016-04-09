@@ -8,13 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/theme_puple" />
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/tb_deatil_toolbar">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:layout_below="@+id/tb_deatil_toolbar"
         android:orientation="vertical"
         android:padding="@dimen/paddingMic">
 
@@ -66,7 +68,7 @@
             android:layout_height="wrap_content"
             android:overScrollMode="never" />
     </LinearLayout>
-
+</ScrollView>
     <include layout="@layout/include_bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
