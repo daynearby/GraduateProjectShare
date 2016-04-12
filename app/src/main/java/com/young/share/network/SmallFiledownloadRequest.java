@@ -82,7 +82,7 @@ public class SmallFiledownloadRequest extends Request<String> {
         filePath += fileType == FILE_TYPE_VIDEO ? Contants.FILE_PAHT_DOWNLOAD : Contants.FILE_PAHT_SAVE;
 //        filePath += url.substring(url.lastIndexOf('/') + 1);
 //        filePath += getFileName(url);
-        filePath += System.currentTimeMillis() + Contants.IMAGE_EXTENSION_JPG;
+        filePath += getFileName(url) + FILE_TYPE_VIDEO ? Contants.VIDEO_EXTENSION : Contants.IMAGE_EXTENSION_JPG;
 
         LogUtils.e("SmallFile　Download  download filePath = " + filePath);
         File file = new File(filePath.substring(0, filePath.lastIndexOf('/')));

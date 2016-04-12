@@ -38,7 +38,8 @@ _ _ _
 15.使用gridview显示等长宽的图片，但是在listview显示的时候，存在计算延迟，考虑进行自定义控件，在gridview的adapter进行数据显示、计算宽高有点浪费，应该使用其他更节约资源的方法，看了其他应用是使用自定义控件，简单的控件进行图片的显示，增加点击监听就好。
 -	想到使用relativeLayout进行自定义，但是需要计算宽高，看高的计算可以使用一次计算，接着放在本地，每次使用就读取，读取也是放在内存中直接进行使用，不需要重新计算，更快，更节约资源，考虑怎么实现这个控件。
 
+16.分享信息到其他平台，使用系统的应用，通过Intent启动。分享图片 --> 下载图片 --> intent启动应用分享 ，分享文件可以直接传递
 _ _ _
 
-关键技术：gson，volley，litepal（sqlite3），Acache，UIL（universal image loader），百度LBS
+关键技术：gson，volley，~~litepal（sqlite3）~~，Acache，UIL（universal image loader），百度LBS
 
