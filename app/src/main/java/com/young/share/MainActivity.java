@@ -5,18 +5,23 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Process;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.umeng.socialize.UMShareAPI;
 import com.young.share.adapter.MainPagerAdapter;
-import com.young.share.base.CustomActBarActivity;
+import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.bmobPush.MessageNotification;
 import com.young.share.config.Contants;
 import com.young.share.fragment.DiscountFragment;
@@ -26,10 +31,10 @@ import com.young.share.model.MyBmobInstallation;
 import com.young.share.model.MyUser;
 import com.young.share.utils.BDLBSUtils;
 import com.young.share.utils.LogUtils;
-import com.young.share.utils.XmlUtils;
 import com.young.share.views.ArcMenu;
 import com.young.share.views.CustomViewPager;
 import com.young.share.views.Dialog4Tips;
+import com.young.share.views.actionProvider.MainActyProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,11 +46,13 @@ import cn.bmob.v3.BmobUser;
 
 // TODO: 2016-02-27 百度地图的循环调用，添加一个时间延迟，连续定位没用
 // TODO: 2016-04-09 当消息发送成功的进行刷新界面 ，使用startavtivityForResult
-public class MainActivity extends CustomActBarActivity {
+public class MainActivity extends BaseAppCompatActivity {
 
     private ArcMenu mArcMenu;
     private BDLBSUtils bdlbsUtils;
     private MainPagerAdapter pagerAdapter;
+    private MainActyProvider mainActyProvider;//ActionProvider
+    private String currentCity;//当前用户所在城市
 
     private int times = 0;
     private static final int callbackTimes = 10;//回调10次
@@ -59,6 +66,19 @@ public class MainActivity extends CustomActBarActivity {
     public int getLayoutId() {
         return R.layout.activity_main;
     }
+
+    @Override
+    public void initData() {
+        //toolbar
+        initialiToolbar();
+        //初始化Bmob的消息推送
+        configBmob();
+
+        bdlbsUtils = BDLBSUtils.builder(this, new locationListener());
+        bdlbsUtils.startLocation();
+        registerBoradcastReceiverRefreshUI();
+    }
+
 
     @Override
     public void findviewbyid() {
@@ -85,15 +105,31 @@ public class MainActivity extends CustomActBarActivity {
 
     }
 
-    @Override
-    public void initData() {
-        super.initData();
-        //初始化Bmob的消息推送
-        configBmob();
 
-        bdlbsUtils = BDLBSUtils.builder(this, new locationListener());
-        bdlbsUtils.startLocation();
-        registerBoradcastReceiverRefreshUI();
+    /**
+     * 初始化toolbar
+     */
+    private void initialiToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_main_activity);
+        setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        MenuItem item = menu.findItem(R.id.menu_mian_city);
+        mainActyProvider = (MainActyProvider) MenuItemCompat.getActionProvider(item);
+        mainActyProvider.setOnPopupMenuitemListener(new MainActyProvider.OnPopupMenuitemListener() {
+            @Override
+            public void clickItem(String city) {
+                currentCity = city;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     /**
@@ -114,21 +150,14 @@ public class MainActivity extends CustomActBarActivity {
     @Override
     public void bindData() {
 
-        settitle(R.string.discover);
-        setBarVisibility(true, false);
-        setCity(XmlUtils.getSelectCities(this).get(8));
+        setTitle(R.string.discover);
+
+//        setCity(XmlUtils.getSelectCities(this).get(8));
+
         if (cuser == null) {
             loginFunction();
         }
 
-        //选择城市的回调
-        setItemResult(new itemClickResult() {
-            @Override
-            public void result(View view, String s, int position) {
-
-                LogUtils.i("选择城市 = " + s + " position = " + position);
-            }
-        });
 
     }
 
@@ -163,7 +192,7 @@ public class MainActivity extends CustomActBarActivity {
             switch (position) {
 
                 case 0:
-                    settitle(R.string.discount);
+                    setTitle(R.string.discount);
                     mArcMenu.setVisibility(View.VISIBLE);
                     isDiscount = true;
 
@@ -171,14 +200,14 @@ public class MainActivity extends CustomActBarActivity {
 
                 case 1:
 
-                    settitle(R.string.discover);
+                    setTitle(R.string.discover);
                     mArcMenu.setVisibility(View.VISIBLE);
                     isDiscount = false;
 
                     break;
 
                 case 2:
-                    settitle(R.string.rank);
+                    setTitle(R.string.rank);
                     mArcMenu.setVisibility(View.GONE);
 
                     break;
@@ -307,7 +336,7 @@ public class MainActivity extends CustomActBarActivity {
 
             if (Province != null) {
 
-                getCity_tv().setText(City);
+                mainActyProvider.getCityTx().setText(City);
 
                 Bundle bundle = new Bundle();
                 bundle.putDouble(Contants.LATITUDE, latitude);
@@ -352,7 +381,7 @@ public class MainActivity extends CustomActBarActivity {
                     LogUtils.e("main acitivity bmob ：" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
 //                    LogUtils.ts("mian activity" + intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
 /*更新界面数据*/
-                    if (!TextUtils.isEmpty(intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING))){
+                    if (!TextUtils.isEmpty(intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING))) {
 
                         initMessagesIcon(true);
                         MessageNotification.showReceiveComment(mActivity, intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));

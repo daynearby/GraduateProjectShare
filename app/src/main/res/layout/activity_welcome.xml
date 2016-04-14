@@ -9,6 +9,7 @@
         android:scaleType="centerInside"
         android:src="@drawable/bg_welcome_logo"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/maginMediu"/>
 
 </RelativeLayout>

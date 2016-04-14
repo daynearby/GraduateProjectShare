@@ -178,4 +178,5 @@
     <string name="toastP_location_info_empty">位置信息不存在!</string>
     <string name="txt_tag_invisible">不显示</string>
 
+    <string name="txt_about_contect">联系作者：daynearby@hotmail.com</string>
 </resources>

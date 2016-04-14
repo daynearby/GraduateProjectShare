@@ -1,23 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <ImageView
         android:id="@+id/im_about_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/icon_avatar"
-        android:scaleType="centerCrop"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/paddingMediu"
-        android:textSize="@dimen/textSizeMediu"
-        android:text="@string/huizhou"
-        android:scrollbars="vertical"
-        android:singleLine="false"
-        android:overScrollMode="never"/>
+        android:scaleType="centerInside"
+        android:src="@mipmap/ic_launcher" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/txt_about_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/im_about_head"
+        android:layout_centerHorizontal="true"
+        android:padding="@dimen/paddingHit"
+        android:text="版本 1.0"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/textSizeMediu" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/im_about_head"
+        android:background="@android:color/white"
+        android:padding="@dimen/paddingMediu"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/txt_instruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+
+            android:scrollbars="vertical"
+            android:singleLine="false"
+            android:textSize="@dimen/textSizeMediu" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

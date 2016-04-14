@@ -53,19 +53,17 @@
 
 
     <application
-
         android:name=".config.ApplicationConfig"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/mAppTheme"
+        android:theme="@style/AppTheme.NoActionBar"
         tools:replace="android:theme">
 
         <!-- 主界面 -->
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
             android:launchMode="singleTask">
 
         </activity>
@@ -90,87 +88,76 @@
 
         <!-- 登录 -->
         <activity
-            android:name=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".LoginActivity" />
 
         <!-- 注册 -->
         <activity
-            android:name=".RegisterActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".RegisterActivity" />
 
         <!-- 找回密码 -->
         <activity
-            android:name=".FindPwdActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".FindPwdActivity" />
 
         <!-- 分享信息 -->
         <activity
             android:name=".ShareMessageActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
 
 
         <!-- 个人中心-->
         <activity
-            android:name=".PersonalCenterActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".PersonalCenterActivity"/>
 
         <!--用户收藏记录-->
         <activity
             android:name=".WantToGoActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+          />
 
         <!-- 选择照片-->
         <activity
             android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/mAppTheme" />
 
         <!-- 裁剪头像 -->
-        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity"
+            android:theme="@style/mAppTheme" />
 
         <!-- 关于 -->
         <activity android:name=".AboutActivity" />
 
         <!-- 重置密码 -->
         <activity
-            android:name=".ResetPwdActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".ResetPwdActivity" />
 
         <!-- 修改个人信息-->
         <activity
-            android:name=".EditPersonalInfoActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".EditPersonalInfoActivity" />
 
         <!-- 信息详细页面 -->
         <activity
             android:name=".MessageDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!--通用记录查看 -->
         <activity
-            android:name=".UserRecordActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".UserRecordActivity" />
 
         <!--消息中心 -->
         <activity
-            android:name=".MessageCenterActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".MessageCenterActivity"/>
 
         <!-- 详细优惠信息 -->
         <activity
-            android:name=".DiscoutDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".DiscoutDetailActivity" />
 
         <!--排行榜的列表-->
         <activity
-            android:name=".RankListActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".RankListActivity" />
 
         <!--百度地图 -->
         <activity
-            android:name=".BaiduMapActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".BaiduMapActivity" />
 
         <!--高清大图浏览-->
         <activity
@@ -180,33 +167,33 @@
         <activity
             android:name=".ImageEditorActivity"
             android:theme="@style/AppTheme.Translucent2" />
-<!--视频播放-->
+        <!--视频播放-->
         <activity
-            android:name=".VideoplayerActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".VideoplayerActivity" />
 
 
         <!--友盟分享-->
         <!--start-->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
-            android:theme="@style/Theme.UMDefault"
-            android:excludeFromRecents="true"/>
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.UMDefault" />
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="56f4a9dce0f55ae0e1000d8d" >
-        </meta-data>
+            android:value="56f4a9dce0f55ae0e1000d8d"/>
 
-<!--腾讯-->
+        <!--腾讯-->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
-            android:noHistory="true" >
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tencent100424468" />
             </intent-filter>
         </activity>

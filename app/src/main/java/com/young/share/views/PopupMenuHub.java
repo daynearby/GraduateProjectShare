@@ -28,7 +28,7 @@ public class PopupMenuHub {
      * @param context 对象
      * @return
      */
-    public static PopupMenu citySelectMenu(Context context, View v, final SelectResult selectResult) {
+    public static PopupMenu areaSelectMenu(Context context, View v, final SelectResult selectResult) {
         PopupMenu cityMenu = new PopupMenu(context, v);
         cityMenu.inflate(R.menu.menu_context_empty);
         List<String> cityList = XmlUtils.getSelectCities(context);
@@ -62,7 +62,7 @@ public class PopupMenuHub {
                     cityString.append(menuItem.getTitle());
                     selectNumber = 0;
                     if (selectResult != null) {
-                        selectResult.reslut(cityString);
+                        selectResult.reslut(String.valueOf(cityString));
                     }
 
                 }
@@ -74,7 +74,48 @@ public class PopupMenuHub {
         return cityMenu;
     }
 
+
+
+    /**
+     * 城市选择的popupmenu
+     *
+     * @param context 对象
+     * @return
+     */
+    public static PopupMenu citySelectMenu(Context context, View v, final SelectResult selectResult) {
+        PopupMenu cityMenu = new PopupMenu(context, v);
+        cityMenu.inflate(R.menu.menu_context_empty);
+        List<String> cityList = XmlUtils.getSelectCities(context);
+
+
+        Menu menu = cityMenu.getMenu();
+
+        for (int i = 0; i < cityList.size(); i++) {
+            // 0,id,顺序，内容
+            menu.addSubMenu(0,  i, Menu.NONE, cityList.get(i));
+        }
+        /**
+         * popupMenu 监听
+         *
+         */
+        cityMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+
+
+                if (selectResult != null){
+                    selectResult.reslut((String) menuItem.getTitle());
+                }
+                return false;
+            }
+        });
+
+        return cityMenu;
+    }
+
+
+
     public interface SelectResult {
-        void reslut(StringBuilder stringBuilder);
+        void reslut(String selectResult);
     }
 }

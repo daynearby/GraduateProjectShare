@@ -231,7 +231,7 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                     registPwd.setError(Html.fromHtml("<font color='white'>密码长度不少于6位</font>"));
                 } else {
 
-                    registPwd.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.icon_checked,0);
+                    registPwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
 
                 }
                 /*两次密码相同否*/
@@ -252,7 +252,7 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
 
                 pwdVaild = pwdVaild && pwdEqual;
                 /*更新注册按钮的状态*/
-                registerBtn.setEnabled(phoneVerific&&phoneNumberVaild && pwdVaild && comfPwdVaild);
+                registerBtn.setEnabled(phoneVerific && phoneNumberVaild && pwdVaild && comfPwdVaild);
             }
         });
 /*确认密码*/
@@ -280,11 +280,11 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
 
                     registConfigPwd.setError(Html.fromHtml("<font color='white'>两次输入密码不相符</font>"));
                 } else {
-                    registConfigPwd.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.icon_checked, 0);
+                    registConfigPwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
                     pwdVaild = true;
                 }
 
-                registerBtn.setEnabled(phoneVerific&&phoneNumberVaild && pwdVaild && comfPwdVaild);
+                registerBtn.setEnabled(phoneVerific && phoneNumberVaild && pwdVaild && comfPwdVaild);
             }
         });
     }
@@ -319,7 +319,7 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
 
     @Override
     public void mBack() {
-
+        mActivity.finish();
     }
 
 
@@ -362,9 +362,8 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
 
     /**
      * 获取验证码的逻辑
-     *
      */
-    private void getIdentifyCodeEvent(){
+    private void getIdentifyCodeEvent() {
         if (!phoneVerific) {//手机号没有验证
         /*请求发送验证码*/
             String phone = registPhone.getText().toString().trim();
@@ -381,7 +380,7 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
             } else {
                 Toast.makeText(this, R.string.toast_phone_number_empty, Toast.LENGTH_SHORT).show();
             }
-        }else {
+        } else {
             toast(R.string.toast_had_verif_phone_number);
         }
     }
@@ -468,7 +467,7 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
 
         startActivity(intents);
 
-        this.finish();
+        finish();
     }
 
     private class locationListener implements BDLBSUtils.LocationInfoListener {

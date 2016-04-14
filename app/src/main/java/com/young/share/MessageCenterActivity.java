@@ -264,6 +264,8 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
                     tipsIm.setVisibility(View.GONE);
                     mHandler.sendEmptyMessage(REFRESHUI);
                 } else {
+                    //提示框处理
+                    CommonFunctionUtils.processDialog(mActivity);
                     tipsIm.setVisibility(View.VISIBLE);
                 }
             }
