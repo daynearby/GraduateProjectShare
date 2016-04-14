@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="theme_puple">#9D55B8</color>
-    <color name="theme_puple_dark">#7b00a9</color>
-    <color name="trans_theme_puple">#a09D55B8</color>
+    <color name="theme_puple">#006682</color>
+    <color name="theme_puple_dark">#005b76</color>
+    <color name="trans_theme_puple">#a0006682</color>
     <color name="white">#ffffff</color>
     <color name="transparent">#00000000</color>
     <color name="translucent">#80ffffff</color>
@@ -15,7 +15,7 @@
     <color name="lake_blue">#1E90FF</color>
     <color name="link_text_color">#9d55b8</color>
 
-    <color name="theme_pupleDark">#8b51b3</color>
+    <color name="theme_pupleDark">#005b76</color>
     <color name="colorAccent">#FF4081</color>
     <color name="cherry_red">#fd495a</color>
     <color name="cherry_red_light">#befd495a</color>
