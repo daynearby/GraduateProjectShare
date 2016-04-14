@@ -187,7 +187,6 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     public void bindData() {
 
 
-//        popupWinListView = new PopupWinListView(this, tagList, false);
 
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override

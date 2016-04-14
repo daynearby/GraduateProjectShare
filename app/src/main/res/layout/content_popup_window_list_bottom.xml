@@ -3,13 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/paddingHit"
-    >
+    android:padding="@dimen/paddingHit">
 
     <ListView
         android:id="@+id/lsv_contnet_popupwindow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:background="@drawable/bg_popoupwindow_bottom"></ListView>
+        android:background="@drawable/bg_popoupwindow_bottom"
+        android:overScrollMode="never" />
 </LinearLayout>

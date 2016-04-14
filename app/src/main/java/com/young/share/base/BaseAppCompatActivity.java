@@ -1,9 +1,11 @@
 package com.young.share.base;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,8 +14,11 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.young.share.MainActivity;
 import com.young.share.MessageCenterActivity;
 import com.young.share.R;
@@ -60,10 +65,45 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         app = ApplicationConfig.getInstance();
 //        threadPool = app.getThreadInstance();
         cuser = app.getCUser();
+        //沉浸式
+        setTranslucentStatus();
 
         initData();
         findviewbyid();
         bindData();
+    }
+
+
+    /**
+     * 沉浸式
+     */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void setTranslucentStatus() {
+        boolean on = false;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            on = true;
+        }
+
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+
+        win.setAttributes(winParams);
+
+
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        tintManager.setStatusBarTintEnabled(true);
+//设置沉浸的颜色
+        tintManager.setStatusBarTintResource(R.color.theme_puple);
+
+
     }
 
     /**

@@ -30,8 +30,6 @@ public class PopupWinListView extends BasePopupWin {
     private ListView listview;
     private mAdapter adapter;
     private onItemClick listener;
-//    public boolean selectHometown = false;
-//    public List<String> datas;
 
     public PopupWinListView(Context ctx, List<String> datas, boolean selectHometown) {
        super(ctx,datas,selectHometown);

@@ -303,10 +303,6 @@ public class DiscoverFragment extends BaseFragment {
 
                         } else {
 
-                            if (dataList == null) {
-                                dataList = new ArrayList<>();
-                            }
-                            LogUtils.d(" dataList = " + dataList);
                             if (shareMessageList.getShareMessageHzList().size() > 0) {
                                 dataList = shareMessageList.getShareMessageHzList();
                                 //保存数据到本地数据库

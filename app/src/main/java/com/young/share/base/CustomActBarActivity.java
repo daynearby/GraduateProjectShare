@@ -30,7 +30,6 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
     private boolean showTag = false;
 
     private TextView title_tv;
-    private TextView tag_tv;
     private TextView city_tv;
     private itemClickResult itemResult;
 
@@ -61,9 +60,7 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
         setTranslucentStatus();
 
         title_tv = (TextView) mActionbar.getCustomView().findViewById(R.id.tv_actionbar_titile);
-        tag_tv = (TextView) mActionbar.getCustomView().findViewById(R.id.tv_actionbar_tag);
         city_tv = (TextView) mActionbar.getCustomView().findViewById(R.id.tv_actionbar_city);
-        tag_tv.setOnClickListener(new tvOnclick());
         city_tv.setOnClickListener(new tvOnclick());
     }
 
@@ -127,11 +124,7 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
             city_tv.setVisibility(View.GONE);
         }
 
-        if (showTag) {
-            tag_tv.setVisibility(View.VISIBLE);
-        } else {
-            tag_tv.setVisibility(View.GONE);
-        }
+
     }
 
     /**
@@ -144,16 +137,6 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
         refreshActionBar();
     }
 
-    /**
-     * 设置标签的数据
-     *
-     * @param tagStr 标签
-     */
-    public void setTag(String tagStr) {
-
-        tag_tv.setText(tagStr);
-
-    }
 
     /**
      * 设置城市数据源
@@ -165,10 +148,6 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
         city_tv.setText(cityStr);
     }
 
-
-    public TextView getTag_tv() {
-        return tag_tv;
-    }
 
     public TextView getCity_tv() {
         return city_tv;
@@ -190,12 +169,7 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
 
 
             switch (v.getId()) {
-                case R.id.tv_actionbar_tag://标签
-                    popupWindows = new PopupWinListView(CustomActBarActivity.this, XmlUtils.getSelectTag(CustomActBarActivity.this),false);
 
-                    isTag = 1;
-
-                    break;
 
                 case R.id.tv_actionbar_city://城市
 
@@ -213,9 +187,7 @@ public abstract class CustomActBarActivity extends BaseAppCompatActivity {
                 public void onClick(View view, String s, int position, long id) {
 
                     switch (isTag) {
-                        case 1:
-                            getTag_tv().setText(s);
-                            break;
+
                         case 2:
                             getCity_tv().setText(s);
                             break;

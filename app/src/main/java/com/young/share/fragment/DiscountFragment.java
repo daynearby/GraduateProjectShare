@@ -339,9 +339,7 @@ public class DiscountFragment extends BaseFragment {
                             }
 
                         } else {
-                            if (dataList == null) {
-                                dataList = new ArrayList<>();
-                            }
+
                             if (disMessageList.getDiscountList().size() > 0) {
 
                                 dataList = disMessageList.getDiscountList();
