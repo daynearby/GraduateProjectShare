@@ -78,7 +78,8 @@ public class BmobApi {
 /*在json解析出现错误的时候，这里会显示两次*/
                         LogUtils.i("data clazz = " + clazz);
                         LogUtils.i("data string =　" + object.toString());
-//                        Object obj =gson.fromJson(object.toString(), clazz);
+
+                        Object obj =gson.fromJson(object.toString(), clazz);
 //                        LogUtils.i("返回JSON数据:" + obj.toString());
                         listener.onSuccess(gson.fromJson(object.toString(), clazz));
 

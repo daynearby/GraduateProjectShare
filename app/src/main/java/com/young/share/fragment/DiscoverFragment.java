@@ -1,5 +1,6 @@
 package com.young.share.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -49,7 +50,7 @@ public class DiscoverFragment extends BaseFragment {
 
 
     private int startIndex = 0;
-    private int endIndex = 20;
+    private int endIndex = 15;
     private int PUSH_TIMES = 0;//下拉次数
     private boolean isGetMore = false;//从远程数据库获取更多数据
 
@@ -301,6 +302,11 @@ public class DiscoverFragment extends BaseFragment {
                             }
 
                         } else {
+
+                            if (dataList == null) {
+                                dataList = new ArrayList<>();
+                            }
+                            LogUtils.d(" dataList = " + dataList);
                             if (shareMessageList.getShareMessageHzList().size() > 0) {
                                 dataList = shareMessageList.getShareMessageHzList();
                                 //保存数据到本地数据库
@@ -390,4 +396,51 @@ public class DiscoverFragment extends BaseFragment {
 //    }
 
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LogUtils.d("onCreate");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        LogUtils.d("onAttach");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        LogUtils.d("onDetach");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LogUtils.d("onDestroy");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LogUtils.d("onDestroyView");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LogUtils.d("onResume");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        LogUtils.d("onResume");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LogUtils.d("onStop");
+    }
 }

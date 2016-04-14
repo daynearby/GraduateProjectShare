@@ -249,6 +249,7 @@ public class DiscountFragment extends BaseFragment {
 
         return super.onContextItemSelected(item);
     }
+
     /**
      * 上拉刷新
      */
@@ -333,12 +334,14 @@ public class DiscountFragment extends BaseFragment {
                                 mhandler.sendEmptyMessage(MESSAGES_NEW_MESSAGE);
 
                             } else {
-                             mhandler.sendEmptyMessage(MESSAGES_NO_MORE_DATA);
+                                mhandler.sendEmptyMessage(MESSAGES_NO_MORE_DATA);
 
                             }
 
                         } else {
-
+                            if (dataList == null) {
+                                dataList = new ArrayList<>();
+                            }
                             if (disMessageList.getDiscountList().size() > 0) {
 
                                 dataList = disMessageList.getDiscountList();
@@ -346,7 +349,7 @@ public class DiscountFragment extends BaseFragment {
                                 mhandler.sendEmptyMessage(MESSAGES_NEW_MESSAGE);
 
                             } else {
-                              mhandler.sendEmptyMessage(MESSAGES_LOAD_DATA_NULL);
+                                mhandler.sendEmptyMessage(MESSAGES_LOAD_DATA_NULL);
                             }
 
                         }
@@ -442,7 +445,7 @@ public class DiscountFragment extends BaseFragment {
                 isFirstIn = true;
                 Bundle bundle = new Bundle();
 
-                bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, DataFormateUtils.formateDataDiscount(dataList.get(position -1)));
+                bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, DataFormateUtils.formateDataDiscount(dataList.get(position - 1)));
                 CommonFunctionUtils.startActivity(context, bundle, DiscoutDetailActivity.class);
 
             }

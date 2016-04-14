@@ -28,7 +28,7 @@ public class Contants {
     public static final int NICKNAME_MAX_LENGHT = 12;
 
     //一页显示的数据条数
-    public static final int PAGE_SIZE = 20;
+    public static final int PAGE_SIZE = 15;
 
     //*************************** Bmob key *****************
 
@@ -41,9 +41,6 @@ public class Contants {
     public static final String BMOB_MESSAGE_TEMPLE = "custom";//短信模板
 
 
-    //******************************Mob key*******************************
-    public static final String SMS_APP_KEY = "b63b43f91a14";
-    public static final String SMS_APP_SECRET = "78a2317bbf261f05ebb6c62be8262bb7";
     //**********************小视频 趣拍*************正式发布的时候应该使用jni装起来吧**
 
     //******************************趣拍 key*******************************
