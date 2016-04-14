@@ -42,4 +42,5 @@ public class NetworkUtils {
 
         return getRealUrl(context,url + "_" + Contants.MODEL_ID,false);
     }
+
 }

@@ -22,6 +22,7 @@ import com.young.share.config.Contants;
 import com.young.share.network.NetworkReuqest;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.LogUtils;
+import com.young.share.utils.StorageUtils;
 import com.young.share.utils.VideoPlayerUtils;
 
 import java.io.File;
@@ -130,7 +131,17 @@ public class VideoplayerActivity extends BaseAppCompatActivity implements View.O
                 mp.start();
             }
         });
-        downloadVideo();
+
+//        if () {
+            downloadVideo();
+//        } else {
+//            videoView.setVideoPath(filePath);
+//            progressBar.setVisibility(View.GONE);
+//            videoPreView.setVisibility(View.GONE);
+//            videoView.setVisibility(View.VISIBLE);
+//            videoView.start();
+//        }
+
 
     }
 
@@ -169,16 +180,14 @@ public class VideoplayerActivity extends BaseAppCompatActivity implements View.O
     private void downloadVideo() {
 
 
-        String filePath = Environment.getExternalStorageDirectory().getPath()
-                + Contants.FILE_PAHT_DOWNLOAD
-                + videoPath.substring(videoPath.lastIndexOf('/') + 1);
 
-        File file = new File(filePath);
+
+        File file = new File(videoPath);
 //        videoPlayerList.add(view);
-        LogUtils.e("down load filePath = " + filePath);
+        LogUtils.e("down load filePath = " + videoPath);
 
         if (file.exists()) {//视频已经下载了
-            videoView.setVideoPath(filePath);
+            videoView.setVideoPath(videoPath);
             progressBar.setVisibility(View.GONE);
             videoPreView.setVisibility(View.GONE);
             videoView.setVisibility(View.VISIBLE);
@@ -186,6 +195,10 @@ public class VideoplayerActivity extends BaseAppCompatActivity implements View.O
 
 
         } else {//视频未下载，进行下载
+
+            String filePath = Environment.getExternalStorageDirectory().getPath()
+                    + Contants.FILE_PAHT_DOWNLOAD
+                    + StorageUtils.getFileName(videoPath);
 
             //下载完成之后进行播放
             NetworkReuqest.call(this, videoPath, new NetworkReuqest.JsonRequstCallback<String>() {

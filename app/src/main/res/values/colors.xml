@@ -13,6 +13,7 @@
     <color name="tran_gray">#c8dddddd</color>
     <color name="gray_lighter">#eee</color>
     <color name="lake_blue">#1E90FF</color>
+    <color name="link_text_color">#9d55b8</color>
 
     <color name="theme_pupleDark">#8b51b3</color>
     <color name="colorAccent">#FF4081</color>

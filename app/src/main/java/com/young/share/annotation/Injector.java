@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 
 /**
  * 实例化对象，使用注释的形式
- * Created by hc2014 on 2015/10/11.
+ * Created by  on 2015/10/11.
  */
 public class Injector {
 

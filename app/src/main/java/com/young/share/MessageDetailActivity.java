@@ -574,6 +574,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
      */
     private void downloadVideo(final String url, final VideoView videoView, final ImageView videoPrevideo, final ProgressBar pb) {
         String filePath = Environment.getExternalStorageDirectory().getPath() + Contants.FILE_PAHT_DOWNLOAD + url.substring(url.lastIndexOf('/') + 1);
+
         File file = new File(filePath);
 //        videoPlayerList.add(view);
 

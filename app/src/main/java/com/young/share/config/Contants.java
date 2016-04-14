@@ -139,6 +139,8 @@ public class Contants {
     public static final String DRAFT_TAG = "draft_tag";
     public static final String DRAFT_LOCATION_INFO = "draft_location_info";
     public static final String DRAFT_IMAGES_LIST = "draft_images_list";
+    public static final String DRAFT_VIDEO = "draft_video";
+    public static final String DRAFT_VIDEO_PREVIEW = "draft_video_preview";
 
     public static final String ACACHE_PLACE_SERVE = "acache_place_serve";//搜索的地点
 

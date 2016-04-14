@@ -245,6 +245,8 @@ public class UserRecordActivity extends BaseAppCompatActivity {
 
         JSONObject params = new JSONObject();
 
+        LogUtils.d("  cuser.getObjectId() = " + cuser.getObjectId());
+
         try {
             params.put(Contants.PARAM_USERID, cuser.getObjectId());
             params.put(Contants.PARAM_SKIP, String.valueOf(Skip));

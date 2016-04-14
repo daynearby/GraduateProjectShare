@@ -112,7 +112,7 @@ public class WantToGoFragment extends BaseFragment {
                 @Override
                 public void onSuccess(Object object) {
                     UserList userLists = (UserList) object;
-
+                    LogUtils.d("userList size = " + userList.size());
                     for (MyUser user : userLists.getUserList()) {
                         userList.add(user);
                     }

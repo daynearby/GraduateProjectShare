@@ -42,6 +42,7 @@ import com.young.share.utils.EvaluateUtil;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.NetworkUtils;
+import com.young.share.utils.StorageUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.utils.UserUtils;
 import com.young.share.views.Dialog4Tips;
@@ -374,7 +375,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 
         String filePath = Environment.getExternalStorageDirectory().getPath()
                 + Contants.FILE_PAHT_DOWNLOAD
-                + url.substring(url.lastIndexOf('/') + 1);
+                + StorageUtils.getFileName(url);
 
         File file = new File(filePath);
 //        videoPlayerList.add(view);

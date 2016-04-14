@@ -11,6 +11,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.young.share.config.Contants;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.NetworkUtils;
+import com.young.share.utils.StorageUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -79,10 +80,14 @@ public class SmallFiledownloadRequest extends Request<String> {
         //            String jsonStr = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
         LogUtils.e("url = " + url);
         String filePath = Environment.getExternalStorageDirectory().getPath();
-        filePath += fileType == FILE_TYPE_VIDEO ? Contants.FILE_PAHT_DOWNLOAD : Contants.FILE_PAHT_SAVE;
+
+        if (fileType == FILE_TYPE_VIDEO) {
+            filePath += Contants.FILE_PAHT_DOWNLOAD + StorageUtils.getFileName(url);
+        } else {
+            filePath += Contants.FILE_PAHT_SAVE + StorageUtils.getImageName(url) ;
+        }
 //        filePath += url.substring(url.lastIndexOf('/') + 1);
 //        filePath += getFileName(url);
-        filePath += getFileName(url) + FILE_TYPE_VIDEO ? Contants.VIDEO_EXTENSION : Contants.IMAGE_EXTENSION_JPG;
 
         LogUtils.e("SmallFile　Download  download filePath = " + filePath);
         File file = new File(filePath.substring(0, filePath.lastIndexOf('/')));
@@ -121,11 +126,5 @@ public class SmallFiledownloadRequest extends Request<String> {
         return params;
     }
 
-    private String getFileName(String url) {
-        String fileName = null;
 
-        fileName = url.substring(url.lastIndexOf('/') + 1);
-        fileName = fileName.substring(0, fileName.lastIndexOf("?") - 2);
-        return fileName;
-    }
 }

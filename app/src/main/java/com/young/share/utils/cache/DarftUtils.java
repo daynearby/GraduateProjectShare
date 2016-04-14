@@ -44,16 +44,20 @@ public class DarftUtils {
      * 保存草稿
      */
 
-    public  void saveDraft(String draftType,String content, String locationInfo, String tagLable, List<String> list) {
+    public void saveDraft(String draftType, String content, String videoPath,
+                          String videoPreview,
+                          String locationInfo, String tagLable, List<String> list) {
         //文字，位置，图片，标签
 
         JSONArray imagesJsonArray = new JSONArray(list);
 
-        acache.put(Contants.DRAFT_TYPE,draftType, Contants.DARFT_LIVE_TIME);
+        acache.put(Contants.DRAFT_TYPE, draftType, Contants.DARFT_LIVE_TIME);
         acache.put(Contants.DRAFT_CONTENT, content, Contants.DARFT_LIVE_TIME);
         acache.put(Contants.DRAFT_LOCATION_INFO, locationInfo, Contants.DARFT_LIVE_TIME);
         acache.put(Contants.DRAFT_TAG, tagLable, Contants.DARFT_LIVE_TIME);
         acache.put(Contants.DRAFT_IMAGES_LIST, imagesJsonArray, Contants.DARFT_LIVE_TIME);
+        acache.put(Contants.DRAFT_VIDEO, videoPath, Contants.DARFT_LIVE_TIME);
+        acache.put(Contants.DRAFT_VIDEO_PREVIEW, videoPreview, Contants.DARFT_LIVE_TIME);
 
         Toast.makeText(activity, R.string.save_draft_success, Toast.LENGTH_SHORT).show();
 

@@ -44,6 +44,7 @@ import com.young.share.utils.EvaluateUtil;
 import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.StorageUtils;
+import com.young.share.utils.StringUtils;
 import com.young.share.utils.XmlUtils;
 import com.young.share.utils.cache.ACache;
 import com.young.share.utils.cache.DarftUtils;
@@ -118,12 +119,12 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     private PlaceSearch.ResultsEntity placeResult;
     private static final int REQUEST_CODE_RECORD_VIDEO = 0x01;//录制视频requestCode
     private static final int FINISH_ACTIVITY = 0;//结束程序
-    private static final int MESSAGE_TOAST=0x02;//toast
-    private static final int MESSAGE_UPLOAD_IMAGE_FAILURE=0x03;//上传图片失败
-    private static final int MESSAGE_UPLOAD_VIDEO_FAILURE=0x04;//上传视频失败
-    private static final int MESSAGE_CLEAR=0x05;//清理工作
-    private static final int MESSAGE_SHARE_SUCCESS=0x06;//分享失败
-    private static final int MESSAGE_SHARE_FAILURE=0x07;//分享成功
+    private static final int MESSAGE_TOAST = 0x02;//toast
+    private static final int MESSAGE_UPLOAD_IMAGE_FAILURE = 0x03;//上传图片失败
+    private static final int MESSAGE_UPLOAD_VIDEO_FAILURE = 0x04;//上传视频失败
+    private static final int MESSAGE_CLEAR = 0x05;//清理工作
+    private static final int MESSAGE_SHARE_SUCCESS = 0x06;//分享失败
+    private static final int MESSAGE_SHARE_FAILURE = 0x07;//分享成功
 
     // TODO: 2016-02-27 删除图片的操作
     @Override
@@ -219,7 +220,13 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         shareLocation_tv.setOnClickListener(this);
         emotion_im.setOnClickListener(this);
         addimg_im.setOnClickListener(this);
-        addVideo.setOnClickListener(this);
+
+        if (!currentIsDiscount) {
+            addVideo.setOnClickListener(this);
+        } else {
+            addVideo.setVisibility(View.GONE);
+        }
+
         tagLl.setOnClickListener(this);
         lactionInfoLl.setOnClickListener(this);
 
@@ -230,6 +237,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                 emotionPanel_bg.setVisibility(View.GONE);
             }
         });
+
 
     }
 
@@ -307,6 +315,8 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         final List<String> list = new ArrayList<>();
         final String draft_content = acache.getAsString(Contants.DRAFT_CONTENT);
         final JSONArray imgJsArray = acache.getAsJSONArray(Contants.DRAFT_IMAGES_LIST);
+        videoPath = acache.getAsString(Contants.DRAFT_VIDEO);
+        imageFilePath = acache.getAsString(Contants.DRAFT_VIDEO_PREVIEW);
 
         if (draft_content != null || imgJsArray != null) {
 
@@ -318,7 +328,11 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                 @Override
                 public void btnOkListenter() {
 
-                    content_et.setText(draft_content);
+                    if (!TextUtils.isEmpty(draft_content)) {
+                        content_et.setText(StringUtils.getEmotionContent(
+                                mActivity, content_et, draft_content));
+                    }
+
                     tag_tv.setText(acache.getAsString(Contants.DRAFT_TAG));
                     shareLocation_tv.setText(acache.getAsString(Contants.DRAFT_LOCATION_INFO));
 
@@ -335,6 +349,16 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                         multiImageView.setList(list);
 //                        gridViewAdapter.setDatas(DataFormateUtils.formateLocalImage(list));
                     }
+
+                    /**
+                     * 恢复视频播放
+                     */
+                    if (!TextUtils.isEmpty(videoPath)) {
+
+                        videoPlayback();
+
+                    }
+
 
                     //删除草稿
                     darftUtils.deleteDraft();
@@ -567,7 +591,6 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
      */
     private void videoPlayback() {
         videoPreview.setVisibility(View.VISIBLE);
-        videoPreview.setTag(videoPath);//播放器
         videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
@@ -697,6 +720,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                     }
 
                     darftUtils.saveDraft(draftType, content_et.getText().toString(),
+                            videoPath, imageFilePath,
                             shareLocation_tv.getText().toString(),
                             tag_tv.getText().toString(),
                             l
@@ -799,6 +823,8 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         } else if (!TextUtils.isEmpty(videoPath)) {//视频
 
             String[] file = new String[]{videoPath, imageFilePath};
+            LogUtils.d(" videoPath = " + videoPath + " imageFilePath = " + imageFilePath);
+
             BmobApi.UploadFiles(mActivity, file, Contants.FILE_TYPE_MULTI, new GoToUploadImages() {
                 /**
                  * @param urls
@@ -926,7 +952,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
      */
     private void shareMessage(ShareMessage_HZ shareMessage_hz) {
 // TODO: 2015-11-13  分享信息后台一直gcc
-     mHandler.sendEmptyMessage(MESSAGE_CLEAR);
+        mHandler.sendEmptyMessage(MESSAGE_CLEAR);
 
         shareMessage_hz.save(mActivity, new SaveListener() {
             @Override
@@ -939,9 +965,8 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
             @Override
             public void onFailure(int i, String s) {
-               mHandler.sendEmptyMessage(MESSAGE_SHARE_FAILURE);
+                mHandler.sendEmptyMessage(MESSAGE_SHARE_FAILURE);
 //                LogUtils.logI("share messages faile ");
-
 
 
                 mHandler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Contants.ONE_SECOND);
@@ -963,7 +988,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
             l.add(pictureInfo.getImageUrl());
         }
         darftUtils.saveDraft(draftType,
-                content_et.getText().toString(),
+                content_et.getText().toString(), videoPath, imageFilePath,
                 shareLocation_tv.getText().toString(),
                 tag_tv.getText().toString(),
                 l
@@ -983,4 +1008,12 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (videoPreview != null && !TextUtils.isEmpty(videoPath)) {
+            videoPreview.start();
+        }
+    }
 }
