@@ -220,9 +220,8 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
      * 发送广播，修改图标
      */
     private void back2superclazz() {
-        mBackStartActivity(MainActivity.class);
-        intents.setAction(Contants.BORDCAST_CLEAR_MESSAGES);
-        sendBroadcast(intents);
+
+       setResult(Contants.RESULT_MESSAGE_CENTER);
         this.finish();
     }
 

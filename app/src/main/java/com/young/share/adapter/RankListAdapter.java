@@ -170,6 +170,8 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
                 }
             }));
 
+        }else {
+            locationTxt.setVisibility(View.GONE);
         }
 
         if (cuser != null) {

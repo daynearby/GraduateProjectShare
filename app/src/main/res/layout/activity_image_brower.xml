@@ -3,26 +3,28 @@
     android:id="@+id/rl_image_brower_root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black">
+    android:background="@android:color/black"
+    android:fitsSystemWindows="true">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/tb_image_editor"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/theme_puple" />
 
     <com.young.share.views.CustomViewPager
         android:id="@+id/vp_image_brower"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/tb_image_editor" />
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:id="@+id/ll_image_brower_index"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:padding="@dimen/paddingHit"
         android:gravity="center"
         android:orientation="horizontal"
         android:visibility="visible" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_image_editor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/trans_theme_puple"/>
 </RelativeLayout>

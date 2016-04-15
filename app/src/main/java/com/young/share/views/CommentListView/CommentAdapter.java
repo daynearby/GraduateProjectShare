@@ -131,8 +131,8 @@ public class CommentAdapter {
         final TextMovementMethod textMovementMethod = new TextMovementMethod();
         commentTv.setMovementMethod(textMovementMethod);
 
-        String senderName = comment.getSenderId().getUsername();
-        String receiver = comment.getReveicerId().getUsername();
+        String senderName = comment.getSenderId().getNickName();
+        String receiver = comment.getReveicerId().getNickName();
 
         /*发送者用户名点击*/
         commentTv.setText(StringUtils.clickUsername(context, senderName, new StringUtils.TextLink() {

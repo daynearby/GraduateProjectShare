@@ -177,6 +177,9 @@
     <string name="txt_min_age">15</string>
     <string name="toastP_location_info_empty">位置信息不存在!</string>
     <string name="txt_tag_invisible">不显示</string>
+    <string name="txt_current_city">所在城市:</string>
 
     <string name="txt_about_contect">联系作者：daynearby@hotmail.com</string>
+    <string name="txt_share_uploading">正在分享信息</string>
+    <string name="menu_delete">删除</string>
 </resources>

@@ -43,7 +43,7 @@ public class MainActyProvider extends ActionProvider {
             @Override
             public void reslut(String selectResult) {
                 LogUtils.d(" city = " + selectResult);
-                cityTxt.setText(selectResult);
+                cityTxt.setText(context.getString(R.string.txt_current_city) + selectResult);
 
                 if (onPopupMenuitemListener != null) {
                     onPopupMenuitemListener.clickItem(selectResult);
@@ -64,6 +64,7 @@ public class MainActyProvider extends ActionProvider {
 
     /**
      * 获取引用
+     *
      * @return
      */
     public TextView getCityTx() {

@@ -1,6 +1,5 @@
 package com.young.share.fragment;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
@@ -26,7 +25,6 @@ import java.util.List;
  * <p>
  * Created by Nearby Yang on 2015-12-09.
  */
-@SuppressLint("ValidFragment")
 public class RankFragment extends BaseFragment {
     private RecyclerView recyclerView;
     private RankAdapter rankAdapter;
@@ -37,7 +35,7 @@ public class RankFragment extends BaseFragment {
 
     private static final String tag = "tank";
     private static final int GET_DATA = 101;
-
+// TODO: 2016-04-15 打开新的activity闪烁
 
     public RankFragment() {
 
@@ -67,7 +65,6 @@ public class RankFragment extends BaseFragment {
 
     }
 
-    // TODO: 2016-03-06 修复拖动多次出现崩溃,recyclerView
     @Override
     public void initView() {
 

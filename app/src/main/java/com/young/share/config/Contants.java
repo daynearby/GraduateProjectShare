@@ -28,7 +28,7 @@ public class Contants {
     public static final int NICKNAME_MAX_LENGHT = 12;
 
     //一页显示的数据条数
-    public static final int PAGE_SIZE = 15;
+    public static final int PAGE_SIZE = 20;
 
     //*************************** Bmob key *****************
 
@@ -79,6 +79,7 @@ public class Contants {
     public final static String FILE_START_NAME_IMAGE = "IMAGE_";
     public final static String VIDEO_EXTENSION = ".mp4";
     public final static String IMAGE_EXTENSION_JPG = ".jpg";
+    public final static String IMAGE_EXTENSION_JPEG = ".jpeg";
     public final static String IMAGE_EXTENSION_PNG = ".png";
     public static final String LAST_ADD_IMG = "drawable://" + R.drawable.icon_addimg;
     public static final String DEFAULT_AVATAR = "drawable://" + R.drawable.icon_avatar;
@@ -103,7 +104,9 @@ public class Contants {
     //***********************自定 选择 照片请求码*********************
     public static final int REQUEST_IMAGE = 2;
 
-    public static final int IMAGENUMBER = 6;//选择照片的数量
+    public static final int IMAGENUMBER = 9;//选择照片的数量
+    public static final int IMAGE_MAX_SIZE = 1080;//图片最大宽度
+
 
     public static final int[] photoId = new int[]{0x1000, 0x1001, 0x1002, 0x1003, 0x1004, 0x1005,
             0x1006, 0x1007, 0x1008, 0x1009
@@ -192,14 +195,20 @@ public class Contants {
     public static final String INTENT_KEY_VIDEO_PREVIEW_PATH = "intent_key_video_preview_path";
     public static final String INTENT_KEY_DISCOVER = "intent_key_discover";//发现 -- 内容
     public static final String INTENT_KEY_REMOTE_MODEL = "intent_key_remote_model";//通用的结构 -- 内容
+    public static final String INTENT_KEY_REFRESH = "intent_key_refresh";//是否刷新
 
     //***********************请求码与结果码*********************
     public static final int REQUSET_CODE_IMAGE_LIST = 0x100;//图片编辑请求码
-    public static final int REQUSET_CODE_PLACE = 0x100;//定位
+    public static final int REQUSET_CODE_PLACE = 0x101;//定位
+    public static final int REQUSET_SHARE_DISCOVER = 0x102;//分享发现
+    public static final int REQUSET_SHARE_DISCOUNT = 0x103;//分享y优惠
+    public static final int REQUSET_MESSAGE_CENTER = 0x104;//消息中心
 
     public static final int RESULT_CODE_IMAGE_LIST = 0x0001;//图片编辑返回码
     public static final int RESULT_CODE_PLACE = 0x0002;//图片编辑返回码
-
+    public static final int RESULT_SHARE_DISCOVER = 0x0003;//分享发现
+    public static final int RESULT_SHARE_DISCOUNT = 0x0004;//分享y优惠
+    public static final int RESULT_MESSAGE_CENTER = 0x0005;//消息中心
 
     //************************** 数据model 类型******************************
     public static final int DATA_MODEL_SHARE_MESSAGES = 0x1001;//分享信息数据

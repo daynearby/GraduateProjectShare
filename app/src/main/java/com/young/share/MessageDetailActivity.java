@@ -375,7 +375,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
          */
         setVideo();
 
-
         nickname_tv.setOnClickListener(this);
         avatar.setOnClickListener(this);
         wanto_tv.setOnClickListener(this);
@@ -449,7 +448,9 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     public void handerMessage(Message msg) {
 
         if (commentClick == Contants.EXPEND_START_INPUT) {
+            viewPager.setCurrentItem(2, true);
             startPrepare();
+
         }
 
         switch (msg.what) {
@@ -692,6 +693,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private CommentListView.OnItemClickListener onItemClick = new CommentListView.OnItemClickListener() {
         @Override
         public void onItemClick(Comment_HZ comment, int position) {
+            receiverId = comment.getSenderId().getObjectId();
             prepareSend();
         }
     };
@@ -760,7 +762,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
             case R.id.txt_message_detail_tosend://发送消息
                 finishPrepare();
-                receiverId = shareMessage.getMyUserId().getObjectId();
+
                 sendComment();
 
                 break;
@@ -808,6 +810,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 //滑动到评论界面
                 viewPager.setCurrentItem(2, true);
                 getUser();
+                receiverId = shareMessage.getMyUserId().getObjectId();
                 /*显示评论输入面板*/
                 editComment();
                 break;
@@ -1035,7 +1038,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
             bottomOptionBar.setVisibility(View.VISIBLE);
             sendComment_edt.clearFocus();
 
-            BmobApi.sendMessage(mActivity, shareMessage.getMyUserId().getObjectId(), receiverId, sendComment_edt.getText().toString(),
+            BmobApi.sendMessage(mActivity, cuser.getObjectId(), receiverId, sendComment_edt.getText().toString(),
                     shareMessage.getObjectId(), new BmobApi.SendMessageCallback() {
                         @Override
                         public void onSuccessReflesh() {

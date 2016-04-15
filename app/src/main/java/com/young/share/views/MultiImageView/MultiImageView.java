@@ -51,12 +51,12 @@ public class MultiImageView extends LinearLayout {
 
     public MultiImageView(Context context) {
         super(context, null);
-        this.context =context;
+        this.context = context;
     }
 
     public MultiImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context =context;
+        this.context = context;
         imageViewList = new ArrayList<>();
     }
 
@@ -81,6 +81,13 @@ public class MultiImageView extends LinearLayout {
             initImageLayoutParams();
         }
 
+        initView();
+    }
+
+    /**
+     * 刷新数据
+     */
+    public void notificationDataChange() {
         initView();
     }
 
@@ -199,7 +206,7 @@ public class MultiImageView extends LinearLayout {
                 addView(rowLayout);
 
                 int rowOffset = rowCursor * MAX_PER_ROW_COUNT;// 行偏移
-				/*设置每一列中imageview的数量*/
+                /*设置每一列中imageview的数量*/
                 for (int columnCursor = 0; columnCursor < columnCount; columnCursor++) {
                     int position = columnCursor + rowOffset;
                     ImageView im = createImageView(position, true);
@@ -237,7 +244,7 @@ public class MultiImageView extends LinearLayout {
         imageView.setOnLongClickListener(mImageViewOnLongClickListener);
         /*context*/
         if (RegisterForContextMenu) {
-            ((Activity)context).registerForContextMenu(imageView);
+            ((Activity) context).registerForContextMenu(imageView);
             imageView.setOnCreateContextMenuListener(new OnContextMenuCreat());
         }
         ImageLoader.getInstance().displayImage(url, imageView);
@@ -272,15 +279,15 @@ public class MultiImageView extends LinearLayout {
 
     /**
      * context menu 创建
-     *
      */
-    private class OnContextMenuCreat implements View.OnCreateContextMenuListener{
+    private class OnContextMenuCreat implements View.OnCreateContextMenuListener {
 
         @Override
         public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-            ((Activity)context).getMenuInflater().inflate(R.menu.menu_context_image_option,contextMenu);
+            ((Activity) context).getMenuInflater().inflate(R.menu.menu_context_image_option, contextMenu);
         }
     }
+
     /**
      * 获取全部的imageView 控件
      *

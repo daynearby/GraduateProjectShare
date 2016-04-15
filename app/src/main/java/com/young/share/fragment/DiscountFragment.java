@@ -250,6 +250,21 @@ public class DiscountFragment extends BaseFragment {
         return super.onContextItemSelected(item);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        LogUtils.e(" discount " + resultCode);
+
+        if (resultCode == Contants.RESULT_SHARE_DISCOUNT) {
+            //发送成功进行刷新
+            if (data.getBooleanExtra(Contants.INTENT_KEY_REFRESH, false)) {
+                getRemoteData();
+            }
+
+        }
+
+    }
+
     /**
      * 上拉刷新
      */

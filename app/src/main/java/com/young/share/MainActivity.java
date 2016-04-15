@@ -53,6 +53,8 @@ public class MainActivity extends BaseAppCompatActivity {
     private MainPagerAdapter pagerAdapter;
     private MainActyProvider mainActyProvider;//ActionProvider
     private String currentCity;//当前用户所在城市
+    private DiscountFragment discountFragment;
+    private DiscoverFragment discoverFragment;
 
     private int times = 0;
     private static final int callbackTimes = 10;//回调10次
@@ -76,7 +78,6 @@ public class MainActivity extends BaseAppCompatActivity {
 
         bdlbsUtils = BDLBSUtils.builder(this, new locationListener());
         bdlbsUtils.startLocation();
-        registerBoradcastReceiverRefreshUI();
     }
 
 
@@ -87,8 +88,8 @@ public class MainActivity extends BaseAppCompatActivity {
         CustomViewPager viewPager = $(R.id.vp_main);
         mArcMenu = $(R.id.id_menu);
 
-        DiscountFragment discountFragment = new DiscountFragment();
-        DiscoverFragment discoverFragment = new DiscoverFragment();
+        discountFragment = new DiscountFragment();
+        discoverFragment = new DiscoverFragment();
         RankFragment rankFragment = new RankFragment();
 
         list.add(discountFragment);
@@ -176,10 +177,23 @@ public class MainActivity extends BaseAppCompatActivity {
 
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        LogUtils.e(" resultCode = " + resultCode);
+
+        //回调
+        if (isDiscount) {
+//            discountFragment.getRemoteData();
+            discountFragment.onActivityResult(requestCode, resultCode, data);
+        } else {
+            discoverFragment.onActivityResult(requestCode, resultCode, data);
+        }
+
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+
+
     }
 
 
@@ -228,35 +242,8 @@ public class MainActivity extends BaseAppCompatActivity {
 
     }
 
-    //注册广播接收者。Bmob推送消息 更新UI
-    public void registerBoradcastReceiverRequestLocation() {
-        myIntentFilter.addAction(Contants.BORDCAST_REQUEST_LOCATIONINFO);
-        //注册广播
-        registerReceiver(mBroadcastReceiver, myIntentFilter);
 
-        isRegistBordcast = true;
 
-    }
-
-    //注册广播接收者。查看消息
-    public void registerBoradcastReceiverClearMessages() {
-        myIntentFilter.addAction(Contants.BORDCAST_CLEAR_MESSAGES);
-        //注册广播
-        registerReceiver(mBroadcastReceiver, myIntentFilter);
-
-        isRegistBordcast = true;
-
-    }
-
-    //注册广播接收者。在修改了数据后刷新列表
-
-    public void registerBoradcastReceiverRefreshUI() {
-        myIntentFilter.addAction(Contants.BORDCAST_REQUEST_REFRESH);
-        //注册广播
-        registerReceiver(mBroadcastReceiver, myIntentFilter);
-        isRegistBordcast = true;
-
-    }
 
     /**
      * 登录过，才能进行登录
@@ -336,7 +323,9 @@ public class MainActivity extends BaseAppCompatActivity {
 
             if (Province != null) {
 
-                mainActyProvider.getCityTx().setText(City);
+                if (mainActyProvider != null && mainActyProvider.getCityTx() != null) {
+                    mainActyProvider.getCityTx().setText(String.format("%s%s", getString(R.string.txt_current_city), City));
+                }
 
                 Bundle bundle = new Bundle();
                 bundle.putDouble(Contants.LATITUDE, latitude);
@@ -398,12 +387,6 @@ public class MainActivity extends BaseAppCompatActivity {
                     initMessagesIcon(false);
                     break;
 
-                case Contants.BORDCAST_REQUEST_REFRESH://需要进行刷新
-                    pagerAdapter.refreshUI(intent.getIntExtra(Contants.REFRESH_TYPE, 0));
-                    LogUtils.d("get refresh broadcast code = " + intent.getIntExtra(Contants.REFRESH_TYPE, 0));
-                    break;
-
-
             }
 
         }
@@ -449,33 +432,11 @@ public class MainActivity extends BaseAppCompatActivity {
 
             switch (pos) {
                 case 1://分享信息
-
-                    if (cuser != null) {
-
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean(Contants.BUNDLE_CURRENT_IS_DISCOUNT, isDiscount);
-                        //定位信息请求，注册广播接收者
-                        registerBoradcastReceiverRequestLocation();
-                        mStartActivity(ShareMessageActivity.class, bundle);
-
-                    } else {
-
-                        loginFunction();
-                    }
+                    shareActivity();
 
                     break;
                 case 2://消息中心
-
-                    if (cuser != null) {
-                        //注册广播接收者
-                        registerBoradcastReceiverClearMessages();
-                        mStartActivity(MessageCenterActivity.class);
-
-                    } else {
-//用户还没登陆
-                        loginFunction();
-
-                    }
+                    messageCenter();
                     break;
                 case 3://个人中心
 
@@ -494,6 +455,44 @@ public class MainActivity extends BaseAppCompatActivity {
         public void onViewGroundClickListener(View view) {
             itemIm = (ImageView) view;
             itemIm.setImageResource(R.drawable.icon_more);
+        }
+    }
+
+    /**
+     * 进入分享信息界面
+     */
+    private void shareActivity() {
+        if (cuser != null) {
+
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(Contants.BUNDLE_CURRENT_IS_DISCOUNT, isDiscount);
+            //定位信息请求，注册广播接收者
+//            registerBoradcastReceiverRequestLocation();
+            intents = new Intent(this, ShareMessageActivity.class);
+            intents.putExtras(bundle);
+            mActivity.startActivityForResult(intents, Contants.REQUSET_SHARE_DISCOVER);
+
+
+        } else {
+
+            loginFunction();
+        }
+    }
+
+    /**
+     * 进入消息中心
+     */
+    private void messageCenter() {
+
+        if (cuser != null) {
+            //注册广播接收者
+            intents = new Intent(this, MessageCenterActivity.class);
+            mActivity.startActivityForResult(intents, Contants.REQUSET_MESSAGE_CENTER);
+
+        } else {
+//用户还没登陆
+            loginFunction();
+
         }
     }
 

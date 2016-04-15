@@ -79,7 +79,7 @@ public class BmobApi {
                         LogUtils.i("data clazz = " + clazz);
                         LogUtils.i("data string =　" + object.toString());
 
-                        Object obj =gson.fromJson(object.toString(), clazz);
+                        Object obj = gson.fromJson(object.toString(), clazz);
 //                        LogUtils.i("返回JSON数据:" + obj.toString());
                         listener.onSuccess(gson.fromJson(object.toString(), clazz));
 
@@ -126,23 +126,23 @@ public class BmobApi {
      * @param context
      * @param listener 回调
      */
-    public static void UploadFiles(final Context context, String[] file, int type, final GoToUploadImages listener) {
+    public static void UploadFiles(final Context context, String[] file, final int type, final GoToUploadImages listener) {
+//
+//        String[] files = new String[file.length];
+//
+//        switch (type) {
+//            case Contants.FILE_TYPE_MULTI://文件的路径
+//                files = file;
+//                break;
+//            case Contants.IMAGE_TYPE_SHARE://分享信息的照片
+//                for (int i = 0; i < file.length; i++) {
+//                    files[i] = file[i].substring(Contants.FILE_HEAD.length(), file[i].length());
+//                }
+//                break;
+//        }
 
-        String[] files = new String[file.length];
 
-        switch (type) {
-            case Contants.FILE_TYPE_MULTI://文件的路径
-                files = file;
-                break;
-            case Contants.IMAGE_TYPE_SHARE://分享信息的照片
-                for (int i = 0; i < file.length; i++) {
-                    files[i] = file[i].substring(Contants.FILE_HEAD.length(), file[i].length());
-                }
-                break;
-        }
-
-
-        BmobProFile.getInstance(context).uploadBatch(files, new UploadBatchListener() {
+        BmobProFile.getInstance(context).uploadBatch(file, new UploadBatchListener() {
 
             @Override
             public void onSuccess(boolean isFinish, String[] fileNames, String[] urls, BmobFile[] files) {
@@ -152,8 +152,11 @@ public class BmobApi {
                         listener.Result(urls, files);
                     }
 
-                    for (String filename : fileNames) {
-                        setThumbnail(context, filename);
+
+                        for (String filename : fileNames) {
+                            setThumbnail(context, filename);
+
+
                     }
 
                 }
@@ -268,6 +271,7 @@ public class BmobApi {
 
         message.setCommContent(content);
         message.setRead(false);
+        LogUtils.d("senderId = " + senderId + " receiverId = " + receiverId);
 
         message.save(context, new SaveListener() {
             @Override
@@ -277,6 +281,7 @@ public class BmobApi {
                 comment.save(context, new SaveListener() {
                     @Override
                     public void onSuccess() {
+                        LogUtils.d("save message success");
                         //保存信息成功。开始发送信息
                         sendMessage(context, receiverId, content, sendMessageCall);
                     }
@@ -323,6 +328,7 @@ public class BmobApi {
             @Override
             public void onSuccess(Object object) {
                 BaseModel baseModel = (BaseModel) object;
+                LogUtils.d("send message success ");
                 if (baseModel.getCode() == BaseModel.SUCCESS) {
 //刷新前台数据
                     if (sendMessageCall != null) {

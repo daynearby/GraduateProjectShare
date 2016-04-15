@@ -38,6 +38,7 @@ import com.young.share.model.PictureInfo;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.gson.PlaceSearch;
 import com.young.share.network.BmobApi;
+import com.young.share.utils.BitmapCompression;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.EmotionUtils;
 import com.young.share.utils.EvaluateUtil;
@@ -55,6 +56,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -114,6 +116,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     private String imageFilePath;//图片的地址
     private String videoPath;
     private boolean isVideo = false;//上传的内容是否是视频
+    private boolean isRefresh = false;
 
     private int placeSelect = 0;//选择的地点的position
     private PlaceSearch.ResultsEntity placeResult;
@@ -125,6 +128,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     private static final int MESSAGE_CLEAR = 0x05;//清理工作
     private static final int MESSAGE_SHARE_SUCCESS = 0x06;//分享失败
     private static final int MESSAGE_SHARE_FAILURE = 0x07;//分享成功
+
 
     // TODO: 2016-02-27 删除图片的操作
     @Override
@@ -187,7 +191,6 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     public void bindData() {
 
 
-
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -195,14 +198,14 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                         DataFormateUtils.formate2PictureInfo4Local(multiImageView.getImagesList());
 
                 EvaluateUtil.setupCoords(mActivity, (ImageView) view, pictureInfoList, position);
-                Intent intent = new Intent(mActivity, BigPicActivity.class);
+                Intent intent = new Intent(mActivity, ImageEditorActivity.class);
                 Bundle bundle = new Bundle();
 
-                bundle.putSerializable(Contants.INTENT_IMAGE_INFO_LIST, (Serializable) pictureInfoList);
+                bundle.putSerializable(Contants.INTENT_IMAGE_LIST, (Serializable) pictureInfoList);
                 intent.putExtras(bundle);
                 intent.putExtra(Contants.INTENT_CURRENT_ITEM, position);
 
-                startActivity(intent);
+                startActivityForResult(intent, Contants.REQUSET_CODE_IMAGE_LIST);
                 overridePendingTransition(0, 0);
             }
         });
@@ -345,7 +348,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                             }
 
                         }
-                        multiImageView.setList(list);
+                        multiImageView.setList(urlAddHead(list));
 //                        gridViewAdapter.setDatas(DataFormateUtils.formateLocalImage(list));
                     }
 
@@ -353,9 +356,11 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                      * 恢复视频播放
                      */
                     if (!TextUtils.isEmpty(videoPath)) {
-
+                        LogUtils.d(videoPath);
                         videoPlayback();
 
+                    } else {
+                        videoPreview.setVisibility(View.GONE);
                     }
 
 
@@ -436,6 +441,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
             if (!TextUtils.isEmpty(content) || lists != null && lists.size() > 0 || !TextUtils.isEmpty(videoPath)) {//信息或者图片不为空
             /*发送*/
+                toast(R.string.txt_share_uploading);
                 // TODO: 2016-03-28 使用线程进行分享
                 new Thread(new Runnable() {
                     @Override
@@ -464,6 +470,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         return super.onContextItemSelected(item);
     }
     // TODO: 2016-04-06 完善修改图片的功能
+
 
     @Override
     public void onClick(View v) {
@@ -530,7 +537,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
+//        RESULT_CODE_IMAGE_LIST
         if (requestCode == Contants.REQUEST_IMAGE) {
             if (resultCode == RESULT_OK) {
                 if (data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT).size() > 0) {
@@ -579,6 +586,28 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 //                LogUtils.E("file path  video = " + filePath + " iamge = " + thumbnailPath);
 
 
+            }
+
+        } else if (Contants.RESULT_CODE_IMAGE_LIST == resultCode) {
+
+            List<PictureInfo> picList = (List<PictureInfo>) data.getExtras().getSerializable(Contants.INTENT_IMAGE_LIST);
+            List<String> imageList = new ArrayList<>();
+
+            if (picList.size() == 0) {//删除全部的数据
+                multiImageView.setList(new ArrayList<String>());
+            } else if (multiImageView.getImagesList().size() > picList.size()) {
+
+                for (String imgUrl : multiImageView.getImagesList()) {
+                    for (PictureInfo picUrl : picList) {
+                        if (imgUrl.equals(picUrl.getImageUrl())) {
+                            imageList.add(imgUrl);
+                            break;
+                        }
+                    }
+
+
+                }
+                multiImageView.setList(imageList);
             }
         }
 
@@ -654,10 +683,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 //        LogUtils.logI("handler = "+msg);
         switch (msg.what) {
             case FINISH_ACTIVITY:
-                intents.setAction(Contants.BORDCAST_REQUEST_REFRESH);
-                intents.putExtra(Contants.REFRESH_TYPE, msg.what);
-                sendBroadcast(intents);
-                mActivity.finish();
+                setShareResult();
                 break;
 
             case MESSAGE_TOAST://发送分享的吐司
@@ -693,6 +719,19 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
     @Override
     public void mBack() {
         goback();
+    }
+
+    /**
+     * 设置结果
+     */
+    private void setShareResult() {
+//        intents = new Intent();
+//        intents.putExtra(Contants.INTENT_KEY_REFRESH, isRefresh);
+//        LogUtils.e("share end ");
+//        setResult(currentIsDiscount ? Contants.RESULT_SHARE_DISCOUNT : Contants.RESULT_SHARE_DISCOVER,
+//                intents);
+
+        finish();
     }
 
     /**
@@ -767,13 +806,36 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
 
         mBackStartActivity(MainActivity.class);
+        List<String> fileList = new ArrayList<>();
+        //图片压缩
+        if (lists != null && lists.size() > 0) {
+            for (String url : lists) {
 
+                String temp = StorageUtils.createImageFile(mActivity).getAbsolutePath() + "/"
+                        + Contants.FILE_START_NAME_IMAGE
+                        + System.nanoTime() + Contants.IMAGE_EXTENSION_JPEG;
+
+                File tempFile = new File(temp);
+
+                try {
+                    tempFile.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                url = url.substring(Contants.FILE_HEAD.length(), url.length());
+
+                BitmapCompression.compressBitmap(url, temp, Contants.IMAGE_MAX_SIZE);
+                fileList.add(temp);
+            }
+        }
         //发送信息
         if (currentIsDiscount) {//商家优惠
-            shareDiscount(lists, content);
+            shareDiscount(fileList, content);
         } else {
-            shareDicover(lists, content);
+            shareDicover(fileList, content);
         }
+
+
     }
 
     /**
@@ -927,13 +989,15 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         discountMessage.save(mActivity, new SaveListener() {
             @Override
             public void onSuccess() {
+                isRefresh = true;
 //                toast(R.string.share_messages_success);
                 mHandler.sendEmptyMessage(MESSAGE_SHARE_SUCCESS);
-                mHandler.sendEmptyMessageDelayed(Contants.REFRESH_TYPE_DISCOUNT, Contants.ONE_SECOND);
+                mHandler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Contants.ONE_SECOND);
             }
 
             @Override
             public void onFailure(int i, String s) {
+                isRefresh = false;
 //                toast(R.string.share_message_fail);
 //                saveDarft();
                 mHandler.sendEmptyMessage(MESSAGE_SHARE_FAILURE);
@@ -956,14 +1020,15 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         shareMessage_hz.save(mActivity, new SaveListener() {
             @Override
             public void onSuccess() {
-
+                isRefresh = true;
                 mHandler.sendEmptyMessage(MESSAGE_SHARE_SUCCESS);
 //                LogUtils.logI("share messages success ");
-                mHandler.sendEmptyMessageDelayed(Contants.REFRESH_TYPE_DISCOVER, Contants.ONE_SECOND);
+                mHandler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Contants.ONE_SECOND);
             }
 
             @Override
             public void onFailure(int i, String s) {
+                isRefresh = false;
                 mHandler.sendEmptyMessage(MESSAGE_SHARE_FAILURE);
 //                LogUtils.logI("share messages faile ");
 
@@ -1014,5 +1079,16 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         if (videoPreview != null && !TextUtils.isEmpty(videoPath)) {
             videoPreview.start();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        intents = new Intent();
+        intents.putExtra(Contants.INTENT_KEY_REFRESH, isRefresh);
+        LogUtils.e("share end ");
+        setResult(currentIsDiscount ? Contants.RESULT_SHARE_DISCOUNT : Contants.RESULT_SHARE_DISCOVER,
+                intents);
     }
 }

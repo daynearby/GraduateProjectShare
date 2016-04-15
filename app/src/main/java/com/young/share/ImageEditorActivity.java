@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,6 +100,11 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_share_iamge_delete,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
     /**
      * 删除一张图片
@@ -109,9 +115,9 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        viewPager.removeView(pagerAdapter.getPrimaryItem());
+//        viewPager.removeView(pagerAdapter.getPrimaryItem());
 //        viewPager.removeViewAt(pagerAdapter.getItemPosition(pagerAdapter.getPrimaryItem()));
-        pagerAdapter.getDataList().remove(viewPager.getCurrentItem());
+        pagerAdapter.getDataList().remove(currentItem);
         pagerAdapter.notifyDataSetChanged();
         if (pictureInfoList.size() == 0) {
             finisActivity();

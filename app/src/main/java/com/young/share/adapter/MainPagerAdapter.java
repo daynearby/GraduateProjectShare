@@ -8,11 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.young.share.config.Contants;
-import com.young.share.fragment.DiscountFragment;
-import com.young.share.fragment.DiscoverFragment;
 import com.young.share.fragment.RankFragment;
-import com.young.share.utils.LogUtils;
 
 import java.util.List;
 
@@ -81,30 +77,6 @@ public class MainPagerAdapter extends PagerAdapter {
 
 
         return fragment.getView();
-    }
-
-
-    /**
-     * 刷新ui
-     *
-     * @param requestCode 广播得到的请求码
-     *
-     */
-    public void refreshUI(int requestCode) {
-        LogUtils.d("pageAdapter refresh UI .code = " + requestCode);
-
-        DiscountFragment discountFragment;
-        if (requestCode == Contants.REFRESH_TYPE_DISCOUNT) {
-
-            discountFragment = (DiscountFragment) fragmentList.get(0);
-            discountFragment.getRemoteData();
-
-        } else {
-            DiscoverFragment discoverFragment = (DiscoverFragment) fragmentList.get(1);
-            discoverFragment.initData();
-
-        }
-
     }
 
     /**

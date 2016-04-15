@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:gravity="center_horizontal"
+        android:padding="@dimen/paddingHit"
         android:orientation="horizontal" />
 
 </RelativeLayout>

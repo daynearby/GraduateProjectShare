@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:padding="@dimen/paddingMediu"
-        android:text="@string/hz"
         android:textColor="@android:color/white"
         />
 

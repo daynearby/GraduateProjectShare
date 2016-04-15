@@ -63,10 +63,8 @@
 
         <!-- 主界面 -->
         <activity
-            android:name=".MainActivity"
-            android:launchMode="singleTask">
+            android:name=".MainActivity"/>
 
-        </activity>
 
         <!-- 欢迎界面-->
         <activity

@@ -138,7 +138,7 @@
             android:id="@+id/miv_share_message_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/paddingMic" />
+            android:layout_margin="@dimen/paddingMic" />
         <!--视频窗口-->
         <VideoView
             android:id="@+id/vdv_share_video"
