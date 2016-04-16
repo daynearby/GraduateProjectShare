@@ -16,9 +16,9 @@ import com.young.share.R;
 import com.young.share.utils.LogUtils;
 import com.young.share.views.base.BaseDialog;
 
-import cn.bmob.sms.BmobSMS;
-import cn.bmob.sms.exception.BmobException;
-import cn.bmob.sms.listener.VerifySMSCodeListener;
+import cn.bmob.v3.BmobSMS;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.VerifySMSCodeListener;
 
 
 /**

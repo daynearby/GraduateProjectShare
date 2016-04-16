@@ -26,9 +26,9 @@ import com.young.share.utils.LogUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.views.IdentifyCodeDialog;
 
-import cn.bmob.sms.BmobSMS;
-import cn.bmob.sms.exception.BmobException;
-import cn.bmob.sms.listener.RequestSMSCodeListener;
+import cn.bmob.v3.BmobSMS;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.RequestSMSCodeListener;
 import cn.bmob.v3.listener.SaveListener;
 
 /**
@@ -82,9 +82,9 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
         setTitle(R.string.regist);
         bdlbsUtils = new BDLBSUtils(this, new locationListener());
         bdlbsUtils.startLocation();
-
-          /*初始化信息服务*/
-        BmobSMS.initialize(this, Contants.BMOB_APP_KEY);
+//
+//          /*初始化信息服务*/
+//        BmobSMS.initialize(this, Contants.BMOB_APP_KEY);
 //        saveFile2SDCard();
     }
 
@@ -120,12 +120,13 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
 /**
  * 验证通过，EditText进入不可编辑状态，反之
  */
-                registPhone.setEnabled(phoneVerific = identifyCodeDialog.isMobilePhoneVerified());
+                phoneVerific = identifyCodeDialog.isMobilePhoneVerified();
+                registPhone.setEnabled(!phoneVerific);
 
-                registPhone.setClickable(phoneVerific);
+                registPhone.setClickable(!phoneVerific);
 
                 LogUtils.d(" phoneVerific = " + phoneVerific);
-                if (phoneVerific) {
+                if (!phoneVerific) {
                     registPhone.setTextColor(getResources().getColor(R.color.gray));
                 }
             }
@@ -200,9 +201,9 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
 
                 phoneNumberVaild = StringUtils.phoneNumberValid(registPhone.getText().toString().trim());
                 if (phoneNumberVaild) {
-//                    phoneState.setVisibility(View.VISIBLE);
-//                    phoneState.setImageResource(R.drawable.icon_checked);
+
                     registPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+
                 } else {
                     registPhone.setError(Html.fromHtml("<font color='white'>手机号码格式不对</font>"));
                 }
@@ -225,10 +226,15 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
             @Override
             public void afterTextChanged(Editable editable) {
                 boolean minlangth = pwdVaild = !TextUtils.isEmpty(registPwd.getText().toString().trim())
-                        && registPwd.getText().toString().trim().length() >= 6;
+                        && registPwd.getText().toString().trim().length() >= 6
+                        && registPwd.getText().toString().trim().length() <= 16;
                 /*密码长度*/
                 if (!pwdVaild) {
-                    registPwd.setError(Html.fromHtml("<font color='white'>密码长度不少于6位</font>"));
+                    if (registPwd.getText().toString().trim().length() < 6) {
+                        registPwd.setError(Html.fromHtml("<font color='white'>密码长度不少于6位</font>"));
+                    } else if (registPwd.getText().toString().trim().length() > 16) {
+                        registPwd.setError(Html.fromHtml("<font color='white'>密码长度不大于16位</font>"));
+                    }
                 } else {
 
                     registPwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
@@ -244,7 +250,7 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
 
                         registPwd.setError(Html.fromHtml(getString(R.string.html_pwd_not_equal)));
                     } else {
-                        registConfigPwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+                        registPwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
 
                     }
                 }
@@ -271,14 +277,24 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
             public void afterTextChanged(Editable editable) {
 
                 comfPwdVaild = !TextUtils.isEmpty(registConfigPwd.getText().toString().trim())
-                        && registConfigPwd.getText().toString().trim().length() >= 6;
+                        && registConfigPwd.getText().toString().trim().length() >= 6
+                        && registConfigPwd.getText().toString().trim().length() <= 16;
 
 
                 boolean pwdEqual = registPwd.getText().toString().trim()
                         .equals(registConfigPwd.getText().toString().trim());
-                if (!pwdEqual || !comfPwdVaild) {
+                if (!comfPwdVaild) {
+                    if (registConfigPwd.getText().toString().trim().length() < 6) {
+                        registConfigPwd.setError(Html.fromHtml("<font color='white'>密码长度不少于6位</font>"));
+                    } else if (registConfigPwd.getText().toString().trim().length() > 16) {
+                        registConfigPwd.setError(Html.fromHtml("<font color='white'>密码长度不大于16位</font>"));
+                    }
 
-                    registConfigPwd.setError(Html.fromHtml("<font color='white'>两次输入密码不相符</font>"));
+                    if (!pwdEqual) {
+                        registConfigPwd.setError(Html.fromHtml("<font color='white'>两次输入密码不相符</font>"));
+
+                    }
+
                 } else {
                     registConfigPwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
                     pwdVaild = true;
@@ -459,14 +475,7 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
      * 停止定位，回到登陆界面
      */
     private void gotoLoginAndStopLocationServices() {
-
-        intents.setClass(this, LoginActivity.class);
-
         bdlbsUtils.stopLocation();
-
-
-        startActivity(intents);
-
         finish();
     }
 

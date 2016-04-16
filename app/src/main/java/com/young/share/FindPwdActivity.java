@@ -21,12 +21,12 @@ import com.young.share.utils.StringUtils;
 
 import java.util.List;
 
-import cn.bmob.sms.BmobSMS;
-import cn.bmob.sms.exception.BmobException;
-import cn.bmob.sms.listener.RequestSMSCodeListener;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.RequestSMSCodeListener;
 import cn.bmob.v3.listener.ResetPasswordByCodeListener;
 
 /**
@@ -71,7 +71,7 @@ public class FindPwdActivity extends BaseAppCompatActivity implements View.OnCli
         initializeToolbar();
         setTitle(R.string.find_pwd_text);
         /*初始化短信服务的时候出错*/
-        BmobSMS.initialize(this, Contants.BMOB_APP_KEY);
+//        BmobSMS.initialize(this, Contants.BMOB_APP_KEY);
     }
 
     @Override

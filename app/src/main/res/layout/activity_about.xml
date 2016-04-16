@@ -7,13 +7,15 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/tb_about"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/theme_puple"/>
 
     <ImageView
         android:id="@+id/im_about_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="centerInside"
+        android:layout_below="@+id/tb_about"
         android:src="@mipmap/ic_launcher" />
 
     <TextView

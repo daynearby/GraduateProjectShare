@@ -25,6 +25,8 @@ public class ShareMessage_HZ extends BmobObject {
     private int shCommNum;
     private BmobFile video;
     private BmobFile videoPreview;
+    private List<String> shWanted;
+    private List<String> shVisited;
 
     public MyUser getMyUserId() {
         return userId;
@@ -120,6 +122,22 @@ public class ShareMessage_HZ extends BmobObject {
 
     public void setVideoPreview(BmobFile videoPreview) {
         this.videoPreview = videoPreview;
+    }
+
+    public List<String> getShWanted() {
+        return shWanted;
+    }
+
+    public void setShWanted(List<String> shWanted) {
+        this.shWanted = shWanted;
+    }
+
+    public List<String> getShVisited() {
+        return shVisited;
+    }
+
+    public void setShVisited(List<String> shVisited) {
+        this.shVisited = shVisited;
     }
 
     @Override

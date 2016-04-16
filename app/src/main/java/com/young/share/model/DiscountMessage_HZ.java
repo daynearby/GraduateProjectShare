@@ -19,6 +19,8 @@ public class DiscountMessage_HZ extends BmobObject {
     private String dtTag;
     private List<String> dtWantedNum;
     private List<String> dtVisitedNum;
+    private List<String> dtWanted;
+    private List<String> dtVisited;
 
     public MyUser getMyUserId() {
         return userId;
@@ -82,6 +84,30 @@ public class DiscountMessage_HZ extends BmobObject {
 
     public void setDtVisitedNum(List<String> dtVisitedNum) {
         this.dtVisitedNum = dtVisitedNum;
+    }
+
+    public MyUser getUserId() {
+        return userId;
+    }
+
+    public void setUserId(MyUser userId) {
+        this.userId = userId;
+    }
+
+    public List<String> getDtWanted() {
+        return dtWanted;
+    }
+
+    public void setDtWanted(List<String> dtWanted) {
+        this.dtWanted = dtWanted;
+    }
+
+    public List<String> getDtVisited() {
+        return dtVisited;
+    }
+
+    public void setDtVisited(List<String> dtVisited) {
+        this.dtVisited = dtVisited;
     }
 
     @Override

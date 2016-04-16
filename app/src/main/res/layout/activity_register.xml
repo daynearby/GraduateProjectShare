@@ -46,6 +46,8 @@
                 android:id="@+id/txt_reg_get_identify_code"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:minHeight="1dp"
+                android:minWidth="1dp"
                 android:gravity="center"
                 android:textColor="@android:color/black"
                 android:text="@string/txt_get_identify_code"/>
