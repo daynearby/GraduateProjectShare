@@ -105,7 +105,7 @@ public class RankListActivity extends BaseAppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBackStartActivity(MainActivity.class);
+                mActivity.finish();
 
             }
         });
@@ -228,7 +228,7 @@ public class RankListActivity extends BaseAppCompatActivity {
 
     @Override
     public void mBack() {
-        mBackStartActivity(MainActivity.class);
+        mActivity.finish();
 
     }
 
@@ -330,7 +330,7 @@ public class RankListActivity extends BaseAppCompatActivity {
                             mHandler.sendEmptyMessage(HANDLER_GET_DATA);
                         }
 
-                    }else {
+                    } else {
                         mHandler.sendEmptyMessage(HANDLER_LOAD_MORE_DATA_FAILURE);
                     }
 

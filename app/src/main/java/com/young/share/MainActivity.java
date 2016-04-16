@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.umeng.socialize.UMShareAPI;
 import com.young.share.adapter.MainPagerAdapter;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.bmobPush.MessageNotification;
@@ -191,7 +190,6 @@ public class MainActivity extends BaseAppCompatActivity {
             discoverFragment.onActivityResult(requestCode, resultCode, data);
         }
 
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
 
 
     }

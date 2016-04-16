@@ -32,12 +32,12 @@ public class MainActyProvider extends ActionProvider {
         super(context);
         this.context = context;
         view = LayoutInflater.from(context).inflate(R.layout.menu_main_acty_provider, null);
-        cityTxt = (TextView) view.findViewById(R.id.txt_select_city);
+
     }
 
     @Override
     public View onCreateActionView() {
-
+        cityTxt = (TextView) view.findViewById(R.id.txt_select_city);
         final PopupMenu citySelectMenu = PopupMenuHub.citySelectMenu(context, cityTxt, new PopupMenuHub.SelectResult() {
 
             @Override

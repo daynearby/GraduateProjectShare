@@ -11,14 +11,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.young.share.R;
 import com.young.share.base.BasePopupWin;
 import com.young.share.config.Contants;
 import com.young.share.model.MyUser;
-import com.young.share.R;
 import com.young.share.utils.DisplayUtils;
-import com.young.share.utils.ImageHandlerUtils;
+import com.young.share.utils.NetworkUtils;
 
 /**
+ * 用户
  * Created by Nearby Yang on 2015-11-19.
  */
 public class PopupWinUserInfo extends BasePopupWin {
@@ -88,18 +90,21 @@ public class PopupWinUserInfo extends BasePopupWin {
     @Override
     protected void bindData() {
 
-        boolean isLoaction;
-        String url;
+//        boolean isLoaction;
+//        String url;
 
-        if (TextUtils.isEmpty(myUser.getAvatar())) {
-            url = Contants.DEFAULT_AVATAR;
-            isLoaction = true;
-        } else {
-            url = myUser.getAvatar();
-            isLoaction = false;
-        }
+//        if (TextUtils.isEmpty(myUser.getAvatar())) {
+//            url = Contants.DEFAULT_AVATAR;
+//            isLoaction = true;
+//        } else {
+//            url = myUser.getAvatar();
+//            isLoaction = false;
+//        }
 
-        ImageHandlerUtils.loadIamge(context, url, avatar, isLoaction);
+//        ImageHandlerUtils.loadIamge(context, url, avatar, isLoaction);
+        ImageLoader.getInstance().displayImage(
+                TextUtils.isEmpty(myUser.getAvatar()) ? Contants.DEFAULT_AVATAR :
+                        NetworkUtils.getRealUrl(context, myUser.getAvatar(),false), avatar);
 
         nickname.setText(myUser.getNickName() == null ?
                 context.getText(R.string.user_name_defual) : myUser.getNickName());

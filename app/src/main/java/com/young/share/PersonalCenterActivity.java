@@ -115,9 +115,9 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
 
     @Override
     public void mBack() {
-        mBackStartActivity(MainActivity.class);
+        mActivity.finish();
     }
-
+// TODO: 2016-04-16 查看分享记录挂了
     /**
      * toolbar 初始化
      */

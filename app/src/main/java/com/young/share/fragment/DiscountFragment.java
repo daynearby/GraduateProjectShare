@@ -34,10 +34,10 @@ import com.young.share.model.gson.DiscountMessageList;
 import com.young.share.network.BmobApi;
 import com.young.share.network.NetworkReuqest;
 import com.young.share.shareSocial.SocialShareManager;
+import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.DisplayUtils;
-import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.views.Dialog4Tips;
@@ -242,7 +242,11 @@ public class DiscountFragment extends BaseFragment {
                 break;
 
             case R.id.menu_iamge_share://分享图片
-                SocialShareManager.shareImage(context, discAdapter.getImageUrl());
+//下载图片
+                downloadImages();
+//                SocialShareManager.shareImage(context, discAdapter.getImageUrl());
+
+
                 break;
 
         }
@@ -262,6 +266,30 @@ public class DiscountFragment extends BaseFragment {
             }
 
         }
+
+    }
+
+    /**
+     * 下载图片并且分享
+     */
+    private void downloadImages() {
+
+        SVProgressHUD.showWithStatus(context, "正在下载图片");
+
+        NetworkReuqest.call(context, discAdapter.getImagesUri(), new NetworkReuqest.JSONRespond() {
+            @Override
+            public void onSuccess(List<String> response) {
+                SVProgressHUD.dismiss(context);
+                SocialShareManager.shareImagesByIntent(context, response);
+
+            }
+
+            @Override
+            public void onFailure(String erroMsg) {
+                SVProgressHUD.showErrorWithStatus(context, "下载图片失败，请稍后再试");
+            }
+        });
+
 
     }
 

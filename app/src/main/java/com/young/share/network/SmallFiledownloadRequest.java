@@ -95,7 +95,11 @@ public class SmallFiledownloadRequest extends Request<String> {
         //创建文件夹
         if (!file.exists()) {
             boolean created = file.mkdirs();
+        }else {
+            return Response.success(filePath, HttpHeaderParser.parseCacheHeaders(response));
         }
+
+
         try {
             FileOutputStream out = new FileOutputStream(filePath);
             out.write(response.data);

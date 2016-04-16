@@ -29,6 +29,7 @@ public class MultiImageView extends LinearLayout {
     private Context context;
     // 照片的Url列表
     private List<String> imagesList;
+    private List<String> bigImagesList;
     private List<ImageView> imageViewList;
 
     /**
@@ -82,6 +83,18 @@ public class MultiImageView extends LinearLayout {
         }
 
         initView();
+    }
+
+    /**
+     * 传入大图的uri
+     * @param bigImagesList
+     */
+    public void setBigImagesList(List<String> bigImagesList) {
+        this.bigImagesList = bigImagesList;
+    }
+
+    public List<String> getBigImagesList() {
+        return bigImagesList;
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.young.share.config;
 
-import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.young.share.R;
 
 /**
@@ -233,7 +232,7 @@ public class Contants {
     public static final int RECORD_LENGHT = 50;//记录条数
 
     //****************参数名********************
-    public static final String PARAM_USERID = "userID";//参数名
+    public static final String PARAM_USERID = "userId";//参数名
     public static final String PARAM_SKIP = "skip";//参数名
     public static final String PARAM_LIMIT = "limit";//参数名
     public static final String PARAM_CREATED = "createdAt";//参数名
@@ -266,12 +265,5 @@ public class Contants {
     public static final String ACAHE_KEY_USER = "acahe_key_user";//用户信息
     public static final String ACAHE_KEY_ADVERTISMENT = "acahe_key_advertisment";//广告信息
 
-    //******************************友盟***************************************
-    public static final SHARE_MEDIA[] displaylist = new SHARE_MEDIA[]
-            {
-
-                    SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE,
-                    SHARE_MEDIA.RENREN, SHARE_MEDIA.EMAIL, SHARE_MEDIA.SMS
-            };
 
 }

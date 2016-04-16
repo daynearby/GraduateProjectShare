@@ -48,6 +48,7 @@ import java.util.List;
 public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
     private String contentString = null;
     private String imageUrl = null;//图片签名后的地址
+    private List<String> imagesUri;
 
 
     public DiscountAdapter(Context context) {
@@ -56,6 +57,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
     /**
      * 复制内容
+     *
      * @return
      */
     public String getContentString() {
@@ -64,10 +66,20 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
     /**
      * 获取图片的下载地址
+     *
      * @return
      */
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    /**
+     * 获取点击的全部图片的uri
+     *
+     * @return
+     */
+    public List<String> getImagesUri() {
+        return imagesUri;
     }
 
     @Override
@@ -105,7 +117,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
             content_tv.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    contentString =discountMessage_hz.getDtContent();
+                    contentString = discountMessage_hz.getDtContent();
                     return false;
                 }
             });
@@ -136,7 +148,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
         ImageLoader.getInstance().displayImage(
                 TextUtils.isEmpty(myUser.getAvatar()) ? Contants.DEFAULT_AVATAR :
-                        NetworkUtils.getRealUrl(ctx,myUser.getAvatar()), avatar);
+                        NetworkUtils.getRealUrl(ctx, myUser.getAvatar()), avatar);
 
         if (TextUtils.isEmpty(discountMessage_hz.getDtTag())) {
             tagLayout.setVisibility(View.INVISIBLE);
@@ -172,7 +184,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
         //图片显示
 //        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx,discountMessage_hz.getDtImgs()));
-        setupImage(multiImageView,discountMessage_hz);
+        setupImage(multiImageView, discountMessage_hz);
 
 //添加监听事件
         nickname_tv.setOnClickListener(new click(myUser));
@@ -186,12 +198,15 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
     /**
      * 设置图片显示
+     *
      * @param multiImageView
      */
-    private void setupImage(final MultiImageView multiImageView,final DiscountMessage_HZ discountMessage_hz) {
+    private void setupImage(final MultiImageView multiImageView, final DiscountMessage_HZ discountMessage_hz) {
 
         multiImageView.setRegisterForContextMenu(true);
         multiImageView.setList(DataFormateUtils.thumbnailList(ctx, discountMessage_hz.getDtImgs()));
+        multiImageView.setBigImagesList(DataFormateUtils.bigImagesList(ctx, discountMessage_hz.getDtImgs()));
+
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -214,6 +229,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
             @Override
             public void onItemLongClick(View view, int position) {
                 imageUrl = multiImageView.getImagesList().get(position);
+                imagesUri =multiImageView.getBigImagesList();
             }
         });
 
@@ -234,6 +250,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
             ((Activity) ctx).getMenuInflater().inflate(R.menu.menu_context_content, contextMenu);
         }
     }
+
     /**
      * 点击事件
      */

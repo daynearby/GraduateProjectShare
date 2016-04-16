@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.young.share.config.ApplicationConfig;
 import com.young.share.utils.LogUtils;
@@ -177,6 +178,13 @@ public abstract class BaseFragment extends Fragment {
         bindData();
     }
 
+    public void toast(String msg) {
+        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+    }
+
+    public void toast(int msg) {
+        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+    }
     /**
      * 要保持状态的控件的数据、信息
      *

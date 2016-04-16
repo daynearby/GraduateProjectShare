@@ -170,44 +170,7 @@
             android:name=".VideoplayerActivity" />
 
 
-        <!--友盟分享-->
-        <!--start-->
-        <activity
-            android:name="com.umeng.socialize.editorpage.ShareActivity"
-            android:excludeFromRecents="true"
-            android:theme="@style/Theme.UMDefault" />
 
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="56f4a9dce0f55ae0e1000d8d"/>
-
-        <!--腾讯-->
-        <activity
-            android:name="com.tencent.tauth.AuthActivity"
-            android:launchMode="singleTask"
-            android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="tencent100424468" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.tencent.connect.common.AssistActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-
-        <!-- renren need -->
-        <activity
-            android:name="com.renn.rennsdk.oauth.OAuthActivity"
-            android:configChanges="orientation|navigation|keyboardHidden" />
-
-        <!--end-->
 
         <!-- 百度定位 services -->
         <service

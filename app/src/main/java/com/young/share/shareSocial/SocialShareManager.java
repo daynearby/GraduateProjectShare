@@ -1,19 +1,15 @@
 package com.young.share.shareSocial;
 
-import android.app.Activity;
 import android.content.Context;
-import android.text.TextUtils;
+import android.content.Intent;
+import android.net.Uri;
 import android.widget.Toast;
 
-import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.shareboard.SnsPlatform;
-import com.umeng.socialize.utils.ShareBoardlistener;
-import com.young.share.R;
 import com.young.share.config.ApplicationConfig;
-import com.young.share.config.Contants;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 社会化分享
@@ -50,79 +46,46 @@ public class SocialShareManager {
 
          */
 
-        ShareAction shareAction = new ShareAction((Activity) context);
-
-        shareAction.setDisplayList(Contants.displaylist)
-                .withText(!TextUtils.isEmpty(content) ? content : "")
-                .withTitle(context.getString(R.string.app_name))
-//                .withTargetUrl("http://www.baidu.com")
-//                .withMedia(image)
-                .setListenerList(umShareListener, umShareListener)
-                .setShareboardclickCallback(new shareBoardlistener(context, content, imageUrl));
-
-        if (!TextUtils.isEmpty(imageUrl)) {
-            UMImage image = new UMImage(context, imageUrl);
-            shareAction.withMedia(image);
-        }
-
-        shareAction.open();
-
-    }
-
-
-    private static class shareBoardlistener implements ShareBoardlistener {
-        private Context context;
-        private String content;
-        private String imageUrl;
-
-        public shareBoardlistener(Context context, String content, String imageUrl) {
-            this.context = context;
-            this.content = content;
-            this.imageUrl = imageUrl;
-
-        }
-
-        @Override
-        public void onclick(SnsPlatform snsPlatform, SHARE_MEDIA share_media) {
-
-            ShareAction shareAction = new ShareAction((Activity) context);
-            shareAction.setPlatform(share_media).setCallback(umShareListener)
-                    .withTitle(context.getString(R.string.app_name))
-                    .withText(!TextUtils.isEmpty(content) ? content : "");
-
-            if (!TextUtils.isEmpty(imageUrl)) {
-                UMImage image = new UMImage(context, imageUrl);
-                shareAction.withMedia(image);
-            }
-
-            shareAction.share();
-        }
 
 
     }
 
-    ;
+
 
 
     /**
+     * 分享多图
      *
+     * @param context
+     * @param filePathList 文件的地址
      */
-    private static UMShareListener umShareListener = new UMShareListener() {
-        @Override
-        public void onResult(SHARE_MEDIA share_media) {
-//            toast(share_media + "分享成功");
+    public static void shareImagesByIntent(Context context, List<String> filePathList) {
+        ArrayList<Uri> picturesUriArrayList = new ArrayList<Uri>();
+
+//        File pictureFile1=new File
+//                (Environment.getExternalStorageDirectory()+File.separator+"test1.png");
+//        File pictureFile2=new File
+//                (Environment.getExternalStorageDirectory()+File.separator+"test2.png");
+//
+//        Uri pictureUri1=Uri.fromFile(pictureFile1);
+//        Uri pictureUri2=Uri.fromFile(pictureFile2);
+//
+//        picturesUriArrayList.add(pictureUri1);
+//        picturesUriArrayList.add(pictureUri2);
+
+        for (String filePath : filePathList) {
+            Uri pictureUri = Uri.fromFile(new File(filePath));
+            picturesUriArrayList.add(pictureUri);
         }
 
-        @Override
-        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-            toast("分享失败 " + throwable.getMessage());
-        }
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, picturesUriArrayList);
+        intent.setType("image/jpeg");
+        Intent.createChooser(intent, "分享多张图片");
+        context.startActivity(intent);
+    }
 
-        @Override
-        public void onCancel(SHARE_MEDIA share_media) {
-//            toast(share_media + "分享取消");
-        }
-    };
 
     /**
      * toast

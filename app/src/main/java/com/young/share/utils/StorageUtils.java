@@ -89,7 +89,7 @@ public class StorageUtils {
      */
     public static String getImageName(String url) {
         String fileName = url.substring(url.lastIndexOf('/') + 1);
-        fileName = fileName.substring(0, fileName.lastIndexOf("?") - 2);
+        fileName = fileName.substring(0, fileName.lastIndexOf("?") );
         return fileName;
     }
 }

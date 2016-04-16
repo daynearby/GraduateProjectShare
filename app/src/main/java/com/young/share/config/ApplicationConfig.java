@@ -12,9 +12,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
-import com.umeng.socialize.Config;
-import com.umeng.socialize.PlatformConfig;
-import com.umeng.socialize.utils.Log;
 import com.young.share.model.MyUser;
 import com.young.share.thread.ThreadPool;
 import com.young.share.utils.CommonUtils;
@@ -45,7 +42,6 @@ public class ApplicationConfig extends MultiDexApplication {
         super.onCreate();
 
         initConfig();
-        initUmeng();
 
     }
 
@@ -61,18 +57,6 @@ public class ApplicationConfig extends MultiDexApplication {
         //百度基础地图定位
         SDKInitializer.initialize(getApplicationContext());
 
-    }
-
-    /**
-     * 友盟初始化
-     */
-    private void initUmeng() {
-        //友盟
-        Config.OpenEditor = true;
-        Log.LOG = false;
-        Config.IsToastTip = false;
-        // QQ和Qzone appid appkey
-        PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
     }
 
     /**

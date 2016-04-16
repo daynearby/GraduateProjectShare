@@ -74,7 +74,24 @@ public class DataFormateUtils {
         }
         return urlList;
     }
-
+    /**
+     * 批量将网址转化为缩略图地址
+     * bmob中需要使用
+     *
+     * @param context
+     * @param list
+     * @return
+     */
+    public static List<String> bigImagesList(Context context, List<String> list) {
+        List<String> urlList = new ArrayList<>();
+        if (list != null) {
+            for (String thumbnailUrl : list) {
+                urlList.add(NetworkUtils.getRealUrl(context, thumbnailUrl,false));
+//            LogUtils.d(" 真实的url = " + NetworkUtils.getRealUrl(context, thumbnailUrl));
+            }
+        }
+        return urlList;
+    }
 
     /**
      * 将sharemessage格式化成通用格式
