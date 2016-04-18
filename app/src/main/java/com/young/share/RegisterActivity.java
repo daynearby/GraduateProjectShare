@@ -2,6 +2,7 @@ package com.young.share;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Message;
@@ -57,8 +58,8 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
 
     private CountDownTimer timer;
     private boolean phoneNumberVaild;//手机号验证错误
-    private boolean pwdVaild;//密码无效
-    private boolean comfPwdVaild;//确认密码无效
+    private boolean pwdVaild = false;//密码无效
+    private boolean comfPwdVaild = false;//确认密码无效
     private boolean phoneVerific = false;//手机号验证结果
 
     private long allTime = 60;//60秒
@@ -71,6 +72,7 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
     private String streetNumber;
 
     private static final int MESSAGE_LOCATION = 0x01;//定位
+    private static final int MESSAGE_PHONE_VAIL = 0x02;//手机号有效
 
     @Override
     public int getLayoutId() {
@@ -105,9 +107,24 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
 /*设置dialog的dismissListener*/
         dialogSetDismiss();
 /*注册按钮，初始状态，不可点击*/
-        registerBtn.setEnabled(false);
+//        registerBtn.setEnabled(false);
         identifyCodeTx.setOnClickListener(this);
 
+    }
+
+    private void test() {
+
+        LogUtils.e("test");
+        Drawable rightDraw = getResources().getDrawable(R.drawable.icon_checked);
+        registPhone.setCompoundDrawables(null, null, rightDraw, null);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+
+            registPhone.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+        } else {
+
+            registPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+        }
     }
 
     /**
@@ -201,22 +218,33 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
             public void afterTextChanged(Editable editable) {
 
                 phoneNumberVaild = StringUtils.phoneNumberValid(registPhone.getText().toString().trim());
+                LogUtils.e("phoneNumberVaild = " + phoneNumberVaild);
                 if (phoneNumberVaild) {
-
-
+//                    test();
+//                    registPhone= (EditText) findViewById(R.id.et_reg_phone);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+
                         registPhone.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
                     } else {
 
                         registPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
                     }
+//                    mHandler.sendEmptyMessage(MESSAGE_PHONE_VAIL);
+//
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+//
+//                        registPhone.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+//                    } else {
+//
+//                        registPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+//                    }
 //                    registPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
 
                 } else {
                     registPhone.setError(Html.fromHtml("<font color='white'>手机号码格式不对</font>"));
                 }
                 /*更新注册按钮的状态*/
-                registerBtn.setEnabled(phoneVerific && phoneNumberVaild && pwdVaild && comfPwdVaild);
+//                registerBtn.setEnabled(phoneVerific && phoneNumberVaild && pwdVaild && comfPwdVaild);
             }
         });
 /*第一次输入密码*/
@@ -236,6 +264,8 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                 boolean minlangth = pwdVaild = !TextUtils.isEmpty(registPwd.getText().toString().trim())
                         && registPwd.getText().toString().trim().length() >= 6
                         && registPwd.getText().toString().trim().length() <= 16;
+
+                boolean pwdEqual = false;
                 /*密码长度*/
                 if (!pwdVaild) {
                     if (registPwd.getText().toString().trim().length() < 6) {
@@ -243,30 +273,29 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                     } else if (registPwd.getText().toString().trim().length() > 16) {
                         registPwd.setError(Html.fromHtml("<font color='white'>密码长度不大于16位</font>"));
                     }
-                } else {
-
-                    registPwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
-
-                }
-                /*两次密码相同否*/
-                boolean pwdEqual = TextUtils.isEmpty(registConfigPwd.getText().toString().trim());
-
-                if (!pwdEqual) {
+                } else {//当密码长度有效的时候，验证两个密码是否相同
                     pwdEqual = registPwd.getText().toString().trim()
                             .equals(registConfigPwd.getText().toString().trim());
-                    if (!pwdEqual) {
+                    if (comfPwdVaild && !pwdEqual) {//当另外一个密码有效的时候验证该密码
 
                         registPwd.setError(Html.fromHtml(getString(R.string.html_pwd_not_equal)));
                     } else {
-                        registPwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
 
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            registPwd.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+                        } else {
+
+                            registPwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+                        }
+//                    registPwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
                     }
                 }
 
 
+
                 pwdVaild = pwdVaild && pwdEqual;
                 /*更新注册按钮的状态*/
-                registerBtn.setEnabled(phoneVerific && phoneNumberVaild && pwdVaild && comfPwdVaild);
+//                registerBtn.setEnabled(phoneVerific && phoneNumberVaild && pwdVaild && comfPwdVaild);
             }
         });
 /*确认密码*/
@@ -291,6 +320,7 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
 
                 boolean pwdEqual = registPwd.getText().toString().trim()
                         .equals(registConfigPwd.getText().toString().trim());
+
                 if (!comfPwdVaild) {
                     if (registConfigPwd.getText().toString().trim().length() < 6) {
                         registConfigPwd.setError(Html.fromHtml("<font color='white'>密码长度不少于6位</font>"));
@@ -298,20 +328,26 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                         registConfigPwd.setError(Html.fromHtml("<font color='white'>密码长度不大于16位</font>"));
                     }
 
-                    if (!pwdEqual) {
-                        registConfigPwd.setError(Html.fromHtml("<font color='white'>两次输入密码不相符</font>"));
-
-                    }
 
                 } else {
 
+                    if (pwdVaild && !pwdEqual) {//另外一个密码有效才验证该密码是否相同
+                        registConfigPwd.setError(Html.fromHtml("<font color='white'>两次输入密码不相符</font>"));
 
+                    } else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            registConfigPwd.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+                        } else {
 
-                    registConfigPwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+                            registConfigPwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+                        }
+
+//                    registConfigPwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
                     pwdVaild = true;
+                    }
                 }
 
-                registerBtn.setEnabled(phoneVerific && phoneNumberVaild && pwdVaild && comfPwdVaild);
+//                registerBtn.setEnabled(phoneVerific && phoneNumberVaild && pwdVaild && comfPwdVaild);
             }
         });
     }
@@ -341,6 +377,11 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                 // 停止定位服务并且回到登陆界面
                 gotoLoginAndStopLocationServices();
                 break;
+
+            case MESSAGE_PHONE_VAIL:
+                LogUtils.e("handler   ");
+                test();
+                break;
         }
     }
 
@@ -362,10 +403,8 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_register_btn:
+                paramsVerification();
 
-                SVProgressHUD.show(this);
-                /*注册*/
-                regiter();
 
                 break;
 
@@ -379,6 +418,24 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                 getIdentifyCodeEvent();
 
                 break;
+        }
+    }
+
+    /**
+     * 验证参数
+     */
+    private void paramsVerification() {
+        if (phoneVerific) {
+
+            if (pwdVaild && comfPwdVaild) {
+                SVProgressHUD.show(this);
+                /*注册*/
+                regiter();
+            } else {
+                SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.txt_check_pwd_first));
+            }
+        } else {
+            SVProgressHUD.showInfoWithStatus(mActivity, getString(R.string.txt_verifi_phone_first));
         }
     }
 

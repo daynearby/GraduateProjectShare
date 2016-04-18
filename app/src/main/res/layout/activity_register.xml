@@ -35,6 +35,7 @@
                 android:hint="@string/txt_phone_number"
                 android:inputType="phone"
                 android:paddingLeft="@dimen/paddingMediu"
+                android:paddingRight="@dimen/paddingMediu"
                 android:singleLine="true"
                 android:textColorHint="@color/light_gray"
                 android:textColor="@android:color/white">
@@ -73,7 +74,6 @@
                 android:paddingLeft="@dimen/paddingMediu"
                 android:singleLine="true"
                 android:textColorHint="@color/light_gray"
-                android:drawableRight="@drawable/icon_checked"
                 android:textColor="@android:color/white" />
 
 
@@ -96,6 +96,7 @@
                 style="@style/editText_width"
                 android:hint="@string/config_pwd"
                 android:inputType="textPassword"
+
                 android:paddingLeft="@dimen/paddingMediu"
                 android:singleLine="true"
                 android:textColor="@android:color/white"

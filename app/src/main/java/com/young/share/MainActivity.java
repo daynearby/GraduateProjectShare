@@ -41,6 +41,7 @@ import cn.bmob.push.BmobPush;
 import cn.bmob.push.PushConstants;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.update.BmobUpdateAgent;
 
 // TODO: 2016-02-27 百度地图的循环调用，添加一个时间延迟，连续定位没用
 // TODO: 2016-04-09 当消息发送成功的进行刷新界面 ，使用startavtivityForResult
@@ -139,9 +140,10 @@ public class MainActivity extends BaseAppCompatActivity {
         Bmob.initialize(this, Contants.BMOB_APP_KEY);
         // 使用推送服务时的初始化操作
         savaUserWithInsId();
-
+        //自动升级
+        BmobUpdateAgent.update(this);
         // 启动推送服务
-        BmobPush.startWork(this, Contants.BMOB_APP_KEY);
+        BmobPush.startWork(this);
         //注册信息接收者
         registerBoradcastReceiver();
     }

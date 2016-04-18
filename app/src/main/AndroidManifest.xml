@@ -51,6 +51,7 @@
         android:protectionLevel="normal" />
     <uses-permission android:name="cn.bmob.permission.push" />
 
+    <meta-data android:value="c069c0b3c6987f6558c6" android:name="BMOB_CHANNEL"/>
 
     <application
         android:name=".config.ApplicationConfig"
@@ -169,8 +170,11 @@
         <activity
             android:name=".VideoplayerActivity" />
 
-
-
+<!--bmob 自动升级-->
+        <activity
+            android:name="cn.bmob.v3.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
 
         <!-- 百度定位 services -->
         <service

@@ -332,10 +332,21 @@ mActivity.finish();
     private class itemClick implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//            Bundle bundle = new Bundle();
+//            bundle.putSerializable(Contants.BUNDLE_TAG, dataList.get(position));
+//            bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_PERSONAL_ACTIVITY);//shareMessage
+//            mStartActivity(MessageDetailActivity.class, bundle);
+
             Bundle bundle = new Bundle();
-            bundle.putSerializable(Contants.BUNDLE_TAG, dataList.get(position));
+            RemoteModel remoteModel = dataList.get(position);
+            bundle.putSerializable(Contants.CLAZZ_DATA_MODEL, remoteModel);
             bundle.putCharSequence(Contants.CLAZZ_NAME, Contants.CLAZZ_PERSONAL_ACTIVITY);//shareMessage
-            mStartActivity(MessageDetailActivity.class, bundle);
+
+            if (remoteModel.getType() == Contants.DATA_MODEL_SHARE_MESSAGES) {//分享信息
+                mStartActivity(MessageDetailActivity.class, bundle);
+            } else {//折扣信息
+                mStartActivity(DiscoutDetailActivity.class, bundle);
+            }
         }
     }
 

@@ -298,6 +298,9 @@ public class MultiImageView extends LinearLayout {
         @Override
         public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
             ((Activity) context).getMenuInflater().inflate(R.menu.menu_context_image_option, contextMenu);
+            if (imagesList.size()==1){
+                contextMenu.removeItem(2);
+            }
         }
     }
 

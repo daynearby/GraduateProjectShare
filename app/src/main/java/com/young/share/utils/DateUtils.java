@@ -229,6 +229,25 @@ public class DateUtils {
        return convertDate2Str( convertStr2LongDate(date));
 
     }
+    /**
+     * 返回时间字符串的日期
+     * @param dateStr
+     * @return
+     */
+    public static String getDay(String dateStr){
+        return dateStr.substring(8,10);
+
+    }
+
+    /**
+     * 返回时间字符串的月份
+     * @param dateStr
+     * @return
+     */
+    public static String getMonth(String dateStr){
+
+        return String.valueOf(Integer.valueOf(dateStr.substring(5,7)));
+    }
 
 
 
@@ -238,15 +257,25 @@ public class DateUtils {
         return DateUtils.convertDate2Str(date);
     }
 
-    public static void main(String[] args) {
+    /***
+     * 比较两个字符串的时间，是否是同一天
+     * 同一天 return true
+     *
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static boolean isTheSameDay(String date1, String date2) {
+        Date formateDate1 = convertStr2LongDate(date1);
+        Date formateDate2 = convertStr2LongDate(date2);
+//        boolean isTheSameDay =
+        return    formateDate1 != null && formateDate2 != null
+                && formateDate1.getYear() == formateDate2.getYear()
+                && formateDate1.getMonth() == formateDate2.getMonth()
+                && formateDate1.getDay() == formateDate2.getDay();
 
-        Calendar calendar = Calendar.getInstance();
-
-        Long timeStamp = calendar.getTimeInMillis();
-//        System.out.println(convertTimeStamp2Time(timeStamp));
-        timeStamp -= 900000000L;
-        System.out.println(convertTimeStamp2Time(timeStamp));
-
-
+//        LogUtils.E("date1 = " + date1 + " date2 = " + date2 + " is the same day = " + isTheSameDay);
+//        return isTheSameDay;
     }
+
 }
