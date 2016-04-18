@@ -333,17 +333,13 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
         }
     }
 
-    @Override
-    public void mBack() {
-        mActivity.finish();
-    }
 
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
                 && event.getAction() != KeyEvent.ACTION_UP) {
-            mBackStartActivity(LoginActivity.class);
+            mActivity.finish();
             return true;
         }
 

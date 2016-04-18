@@ -10,6 +10,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -300,7 +301,7 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                back2super();
+                mActivity.finish();
             }
         });
 
@@ -418,17 +419,20 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
 
     @Override
     public void handerMessage(Message msg) {
-        back2super();
+        mActivity.finish();
     }
 
     @Override
-    public void mBack() {
-        back2super();
-    }
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
 
-    private void back2super() {
-        mBackStartActivity(PersonalCenterActivity.class);
-        finish();
+            mActivity.finish();
+            return true;
+        }
+
+
+        return super.dispatchKeyEvent(event);
     }
 
 

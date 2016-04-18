@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -82,11 +83,19 @@ public class LoginActivity extends BaseAppCompatActivity implements View.OnClick
         LoginActivity.this.finish();
     }
 
-    @Override
-    public void mBack() {
-        mActivity.finish();
-    }
 
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
+
+            mActivity.finish();
+            return true;
+        }
+
+
+        return super.dispatchKeyEvent(event);
+    }
     /**
      * 初始化toolbar
      */

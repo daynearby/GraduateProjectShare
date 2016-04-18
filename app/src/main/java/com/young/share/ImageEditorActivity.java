@@ -96,8 +96,16 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
     }
 
     @Override
-    public void mBack() {
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
 
+            mActivity.finish();
+            return true;
+        }
+
+
+        return super.dispatchKeyEvent(event);
     }
 
     @Override

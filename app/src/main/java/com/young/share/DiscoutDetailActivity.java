@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -160,7 +161,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                back2superclazz();
+                mActivity.finish();
             }
         });
 
@@ -368,9 +369,16 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
     }
 
     @Override
-    public void mBack() {
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
 
-        back2superclazz();
+            mActivity.finish();
+            return true;
+        }
+
+
+        return super.dispatchKeyEvent(event);
     }
 
     @Override
@@ -537,18 +545,6 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         }
     }
 
-    /**
-     * 返回上一级
-     */
-    private void back2superclazz() {
-
-//        if (isClick) {
-//            CommonFunctionUtils.sendBordCast(mActivity, Contants.REFRESH_TYPE_DISCOUNT);
-//        }
-//
-//        mBackStartActivity(MainActivity.class);
-        this.finish();
-    }
 
     /**
      * pager change listener

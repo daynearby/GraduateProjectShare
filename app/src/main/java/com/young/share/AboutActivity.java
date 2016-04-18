@@ -3,6 +3,7 @@ package com.young.share;
 import android.graphics.Color;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -56,10 +57,16 @@ public class AboutActivity extends BaseAppCompatActivity {
     public void handerMessage(Message msg) {
 
     }
-
     @Override
-    public void mBack() {
-        mActivity.finish();
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
+            mActivity.finish();
+            return  true;
+        }
+
+
+        return super.dispatchKeyEvent(event);
     }
 
 

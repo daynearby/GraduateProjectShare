@@ -182,4 +182,6 @@
     <string name="txt_about_contect">联系作者：daynearby@hotmail.com</string>
     <string name="txt_share_uploading">正在分享信息</string>
     <string name="menu_delete">删除</string>
+    <string name="menu_image_share_all">分享全部图片</string>
+    <string name="menu_image_share_singal">分享该图片</string>
 </resources>

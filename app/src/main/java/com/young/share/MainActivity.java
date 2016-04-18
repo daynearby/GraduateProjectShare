@@ -1,16 +1,14 @@
 package com.young.share;
 
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
-import android.os.Process;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -29,6 +27,7 @@ import com.young.share.fragment.RankFragment;
 import com.young.share.model.MyBmobInstallation;
 import com.young.share.model.MyUser;
 import com.young.share.utils.BDLBSUtils;
+import com.young.share.utils.DialogUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.views.ArcMenu;
 import com.young.share.views.CustomViewPager;
@@ -171,10 +170,6 @@ public class MainActivity extends BaseAppCompatActivity {
         }
     }
 
-    @Override
-    public void mBack() {
-
-    }
 
 
     @Override
@@ -261,30 +256,7 @@ public class MainActivity extends BaseAppCompatActivity {
                 && event.getAction() != KeyEvent.ACTION_UP) {
 
 
-            AlertDialog.Builder alertbBuilder = new AlertDialog.Builder(this);
-
-            alertbBuilder
-                    .setTitle(R.string.txt_exit_title)
-                    .setMessage(R.string.txt_exit_message)
-                    .setPositiveButton(R.string.config,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    int nPid = Process.myPid();
-                                    Process.killProcess(nPid);
-                                    System.exit(0);
-                                }
-                            })
-                    .setNegativeButton(R.string.cancel,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-
-                                    dialog.cancel();
-
-                                }
-                            }).create();
-
+            AlertDialog.Builder alertbBuilder = DialogUtils.exitDialog(mActivity);
             alertbBuilder.show();
 
             return true;

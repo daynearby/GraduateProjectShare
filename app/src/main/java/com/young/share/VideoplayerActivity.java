@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.Environment;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -235,11 +236,18 @@ public class VideoplayerActivity extends BaseAppCompatActivity implements View.O
 
     }
 
-    /**
-     * 返回键监听
-     */
-    protected void mBack() {
-        mActivity.finish();
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
+
+            mActivity.finish();
+            return true;
+        }
+
+
+        return super.dispatchKeyEvent(event);
+
     }
 
 

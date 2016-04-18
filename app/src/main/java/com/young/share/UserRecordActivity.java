@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -130,7 +131,7 @@ public class UserRecordActivity extends BaseAppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                back2superClazz();
+                mActivity.finish();
             }
         });
 
@@ -223,18 +224,16 @@ public class UserRecordActivity extends BaseAppCompatActivity {
         //刷新UI
         recAdapter.setData(dataList.subList(starIndex, endIndex));
     }
-
     @Override
-    public void mBack() {
-        back2superClazz();
-    }
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
+mActivity.finish();
+            return true;
+        }
 
-    /**
-     * 返回上一级
-     */
-    private void back2superClazz() {
-        mBackStartActivity(PersonalCenterActivity.class);
-        this.finish();
+
+        return super.dispatchKeyEvent(event);
     }
 
 

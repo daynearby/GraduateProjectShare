@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -195,12 +196,18 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
         }
 
     }
-
     @Override
-    public void mBack() {
-        back2superclazz();
-    }
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
 
+          back2superclazz();
+            return true;
+        }
+
+
+        return super.dispatchKeyEvent(event);
+    }
     /**
      * setdata &&  notification
      */

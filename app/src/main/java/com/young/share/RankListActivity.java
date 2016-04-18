@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,8 +20,8 @@ import com.young.share.config.Contants;
 import com.young.share.interfaces.AsyncListener;
 import com.young.share.interfaces.ComparatorImpl;
 import com.young.share.interfaces.ListViewRefreshListener;
-import com.young.share.model.RemoteModel;
 import com.young.share.model.DiscountMessage_HZ;
+import com.young.share.model.RemoteModel;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.gson.RankList;
 import com.young.share.network.BmobApi;
@@ -225,11 +226,16 @@ public class RankListActivity extends BaseAppCompatActivity {
         }
 
     }
-
     @Override
-    public void mBack() {
-        mActivity.finish();
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
+            mActivity.finish();
+            return true;
+        }
 
+
+        return super.dispatchKeyEvent(event);
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -20,8 +21,8 @@ import com.young.share.model.Collection_HZ;
 import com.young.share.model.RemoteModel;
 import com.young.share.model.gson.CollectionList;
 import com.young.share.network.BmobApi;
-import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.CommonFunctionUtils;
+import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.LogUtils;
 
 import org.json.JSONException;
@@ -142,18 +143,10 @@ public class WantToGoActivity extends BaseAppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                back2superClazz();
+                mActivity.finish();
             }
         });
 
-    }
-
-    /**
-     * 返回上一级
-     */
-    private void back2superClazz() {
-        mBackStartActivity(PersonalCenterActivity.class);
-        this.finish();
     }
 
     @Override
@@ -182,9 +175,17 @@ public class WantToGoActivity extends BaseAppCompatActivity {
         wantAdapter.setData(dataList.subList(starIndex, endIndex));
     }
 
+
     @Override
-    protected void mBack() {
-        back2superClazz();
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
+            mActivity.finish();
+            return true;
+        }
+
+
+        return super.dispatchKeyEvent(event);
     }
 
     /**

@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.graphics.drawable.Drawable;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,10 +84,17 @@ public class BigPicActivity extends BaseAppCompatActivity implements ViewTreeObs
     }
 
     @Override
-    protected void mBack() {
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
 
+            mActivity.finish();
+            return true;
+        }
+
+
+        return super.dispatchKeyEvent(event);
     }
-
 
     /**
      * 绘制前开始动画

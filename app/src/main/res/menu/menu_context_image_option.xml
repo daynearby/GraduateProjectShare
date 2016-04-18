@@ -6,5 +6,8 @@
         android:title="@string/menu_image_save" />
     <item
         android:id="@+id/menu_iamge_share"
-        android:title="@string/menu_share" />
+        android:title="@string/menu_image_share_singal" />
+    <item
+        android:id="@+id/menu_iamge_share_all"
+        android:title="@string/menu_image_share_all" />
 </menu>

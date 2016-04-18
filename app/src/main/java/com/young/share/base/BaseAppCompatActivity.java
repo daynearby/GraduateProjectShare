@@ -257,7 +257,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
                 && event.getAction() != KeyEvent.ACTION_UP) {
-            mBack();
+
         }
 
 
@@ -281,8 +281,6 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
 //    public abstract void initActionBar();
 
     protected abstract void handerMessage(Message msg);
-
-    protected abstract void mBack();
 
     /**
      * 简化findviewbyid

@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -93,7 +94,7 @@ public class FindPwdActivity extends BaseAppCompatActivity implements View.OnCli
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBack();
+                mActivity.finish();
             }
         });
     }
@@ -172,9 +173,16 @@ public class FindPwdActivity extends BaseAppCompatActivity implements View.OnCli
     }
 
     @Override
-    public void mBack() {
-        mBackStartActivity(LoginActivity.class);
-        this.finish();
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
+
+            mActivity.finish();
+            return true;
+        }
+
+
+        return super.dispatchKeyEvent(event);
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -715,10 +716,16 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
     }
 
-
     @Override
-    public void mBack() {
-        goback();
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && event.getAction() != KeyEvent.ACTION_UP) {
+            goback();
+            return true;
+        }
+
+
+        return super.dispatchKeyEvent(event);
     }
 
     /**
@@ -788,7 +795,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
             dialog.dismiss();
         }
 
-        mBackStartActivity(MainActivity.class);
+//        mBackStartActivity(MainActivity.class);
         //删除搜索的记录 Contants.ACACHE_PLACE_SERVE
         boolean removed = acache.remove(Contants.ACACHE_PLACE_SERVE);
         LogUtils.e("removed = " + removed);

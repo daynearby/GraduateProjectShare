@@ -499,7 +499,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                back2superClazz();
+                mActivity.finish();
             }
         });
 
@@ -658,7 +658,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 bottomOptionBar.setVisibility(View.VISIBLE);
                 return true;
             } else {
-                back2superClazz();
+              mActivity.finish();
             }
         }
 
@@ -666,26 +666,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         return super.dispatchKeyEvent(event);
     }
 
-    @Override
-    public void mBack() {
-        back2superClazz();
-
-    }
-
-    /**
-     * 返回上一级
-     */
-    private void back2superClazz() {
-//        // TODO: 2016-04-03 使用startActivityForResult实现消息更新，也可以使用finish结束当前activity
-//        if (Contants.CLAZZ_PERSONAL_ACTIVITY.equals(superTagClazz)
-//                || Contants.CLAZZ_WANT_TO_GO_ACTIVITY.equals(superTagClazz)
-//                || Contants.CLAZZ_USER_RECORD_ACTIVITY.equals(superTagClazz)) {//结束当前的Activity就好
-//            finish();
-//        } else {//其他需要跳转？好像也不用，先保持吧
-//            backAFinsish();
-//        }
-        finish();
-    }
 
     /**
      * 评论点击事件
