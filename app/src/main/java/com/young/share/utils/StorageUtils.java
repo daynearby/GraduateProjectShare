@@ -48,6 +48,16 @@ public class StorageUtils {
     }
 
     /**
+     * 下载文件夹
+     * @param context
+     * @return
+     */
+    public static File createDownloadFile(Context context) {
+
+        return new File(createdDir(context, Contants.FILE_PAHT_DOWNLOAD));
+    }
+
+    /**
      * 创建或者是获取文件夹
      *
      * @param context

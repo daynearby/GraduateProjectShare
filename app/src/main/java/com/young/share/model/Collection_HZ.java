@@ -13,6 +13,7 @@ public class Collection_HZ extends BmobObject {
     private ShareMessage_HZ shMsgId;
     private DiscountMessage_HZ dtMsgId;
 
+
     public MyUser getShUserId() {
         return shUserId;
     }

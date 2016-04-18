@@ -3,7 +3,6 @@ package com.young.share;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.os.Environment;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -23,7 +22,6 @@ import com.young.share.config.Contants;
 import com.young.share.network.NetworkReuqest;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.LogUtils;
-import com.young.share.utils.StorageUtils;
 import com.young.share.utils.VideoPlayerUtils;
 
 import java.io.File;
@@ -197,9 +195,9 @@ public class VideoplayerActivity extends BaseAppCompatActivity implements View.O
 
         } else {//视频未下载，进行下载
 
-            String filePath = Environment.getExternalStorageDirectory().getPath()
-                    + Contants.FILE_PAHT_DOWNLOAD
-                    + StorageUtils.getFileName(videoPath);
+//            String filePath = Environment.getExternalStorageDirectory().getPath()
+//                    + Contants.FILE_PAHT_DOWNLOAD
+//                    + StorageUtils.getFileName(videoPath);
 
             //下载完成之后进行播放
             NetworkReuqest.call(this, videoPath, new NetworkReuqest.JsonRequstCallback<String>() {

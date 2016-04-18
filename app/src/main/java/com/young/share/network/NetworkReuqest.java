@@ -1,9 +1,9 @@
 package com.young.share.network;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
@@ -13,9 +13,11 @@ import com.young.share.model.gson.Longitude2Location;
 import com.young.share.model.gson.PlaceSearch;
 import com.young.share.model.gson.PlaceSuggestion;
 import com.young.share.utils.LogUtils;
+import com.young.share.utils.StorageUtils;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -50,9 +52,9 @@ public class NetworkReuqest {
      */
     public static void call(Context context, String url, final JsonRequstCallback<String> jsonResponse) {
 
-        SmallFiledownloadRequest smallFiledownloadRequest = new SmallFiledownloadRequest(Request.Method.GET,
+        SmallFiledownloadRequest smallFiledownloadRequest = new SmallFiledownloadRequest(
                 SmallFiledownloadRequest.FILE_TYPE_VIDEO,
-                null, url, new Response.Listener<String>() {
+                url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 LogUtils.d("success = " + response);
@@ -112,35 +114,67 @@ public class NetworkReuqest {
     }
 
     /**
-     * 下载图片
-     *
+     * 保存图片
+     * 已经下载过的图片不会再重新下载
      * @param context
      * @param url     修改过uri的请求，添加了bmob的前面的
      */
     public static void call2(final Context context, String url) {
-        SmallFiledownloadRequest iamgeDownload = new SmallFiledownloadRequest(
-                url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(context, context.getString(R.string.toast_save_iamge_success) + response, Toast.LENGTH_LONG).show();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, R.string.toast_save_iamge_failure, Toast.LENGTH_LONG).show();
-                    }
-                }
-        );
+        String filePath = StorageUtils.createImageFile(context).getAbsoluteFile() + "/" + StorageUtils.getImageName(url);
 
-        iamgeDownload.setTag(url);
+        if ((new File(filePath)).exists()) {
+            Toast.makeText(context,
+                    context.getString(R.string.toast_save_iamge_success) + filePath,
+                    Toast.LENGTH_LONG).show();
+        } else {
+
+            SmallFiledownloadRequest iamgeDownload = new SmallFiledownloadRequest(
+                    url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Toast.makeText(context,
+                                    context.getString(R.string.toast_save_iamge_success) + response,
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(context, R.string.toast_save_iamge_failure,
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+            );
+
+            iamgeDownload.setTag(url);
 
 //启动
-        VolleyApi.getInstence(context).add(iamgeDownload);
+            VolleyApi.getInstence(context).add(iamgeDownload);
 
+        }
     }
 
+
+    /**
+     * 批量下载图片到download文件夹
+     *
+     * @param context
+     * @param url
+     * @param jsR
+     */
+    public static void call(final Context context, String url, final JSONRespond jsR) {
+        if (TextUtils.isEmpty(url)) {
+            throw new IllegalArgumentException("urlList is null...,string must not be null");
+
+        }
+        //复用，创建list
+        List<String> urlList = new ArrayList<>();
+        urlList.add(url);
+
+        call(context, urlList, jsR);
+
+    }
     /**
      * 下载图片,返回图片地址，用作分享
      *
@@ -156,8 +190,21 @@ public class NetworkReuqest {
         final int number = urlList.size();
         final List<String> imagePath = new ArrayList<>();
         for (String url : urlList) {
+
+            String filePath = StorageUtils.createDownloadFile(context).getAbsoluteFile() + "/" + StorageUtils.getImageName(url);
+            File file = new File(filePath);
+            if (file.exists()) {
+                downloadNumber++;
+                imagePath.add(filePath);
+
+                if (jsR != null && number == downloadNumber) {
+                    jsR.onSuccess(imagePath);
+                }
+
+            } else {
+
             SmallFiledownloadRequest iamgeDownload = new SmallFiledownloadRequest(
-                    url,
+                    url, SmallFiledownloadRequest.FILE_TYPE_DOWNLOAD,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -168,8 +215,6 @@ public class NetworkReuqest {
                                 jsR.onSuccess(imagePath);
                             }
 
-
-//                        Toast.makeText(context, context.getString(R.string.toast_save_iamge_success) + response, Toast.LENGTH_LONG).show();
                         }
                     },
                     new Response.ErrorListener() {
@@ -189,6 +234,7 @@ public class NetworkReuqest {
 //启动
             VolleyApi.getInstence(context).add(iamgeDownload);
 
+            }
         }
 
 

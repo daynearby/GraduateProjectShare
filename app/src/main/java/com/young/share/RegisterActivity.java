@@ -2,6 +2,7 @@ package com.young.share;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
@@ -202,7 +203,14 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                 phoneNumberVaild = StringUtils.phoneNumberValid(registPhone.getText().toString().trim());
                 if (phoneNumberVaild) {
 
-                    registPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        registPhone.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+                    } else {
+
+                        registPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
+                    }
+//                    registPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
 
                 } else {
                     registPhone.setError(Html.fromHtml("<font color='white'>手机号码格式不对</font>"));
@@ -296,6 +304,9 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                     }
 
                 } else {
+
+
+
                     registConfigPwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
                     pwdVaild = true;
                 }

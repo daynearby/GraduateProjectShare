@@ -5,9 +5,9 @@
         android:id="@+id/menu_image_save"
         android:title="@string/menu_image_save" />
     <item
-        android:id="@+id/menu_iamge_share"
+        android:id="@+id/menu_image_share_singal"
         android:title="@string/menu_image_share_singal" />
     <item
-        android:id="@+id/menu_iamge_share_all"
+        android:id="@+id/menu_image_share_all"
         android:title="@string/menu_image_share_all" />
 </menu>

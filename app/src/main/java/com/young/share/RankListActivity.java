@@ -26,6 +26,7 @@ import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.gson.RankList;
 import com.young.share.network.BmobApi;
 import com.young.share.network.NetworkReuqest;
+import com.young.share.shareSocial.SocialShareByIntent;
 import com.young.share.shareSocial.SocialShareManager;
 import com.young.share.utils.CommonUtils;
 import com.young.share.utils.DataFormateUtils;
@@ -253,14 +254,21 @@ public class RankListActivity extends BaseAppCompatActivity {
                 NetworkReuqest.call2(this, rankAdapter.getImageUrl());
                 break;
 
-            case R.id.menu_iamge_share://分享图片
-                SocialShareManager.shareImage(this, rankAdapter.getImageUrl());
-                break;
+            case R.id.menu_image_share_all://分享全部图片
+//下载图片
+                SocialShareByIntent.downloadImagesAndShare(mActivity, rankAdapter.getImagesUrl());
+//                SocialShareManager.shareImage(context, discAdapter.getImageUrl());
 
+                break;
+            case R.id.menu_image_share_singal://分享打仗图片
+                SocialShareByIntent.downloadImageAndShare(mActivity, rankAdapter.getImageUrl());
+                break;
         }
 
         return super.onContextItemSelected(item);
     }
+
+
 
     /**
      * 刷新列表，最新数据

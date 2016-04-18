@@ -12,6 +12,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore.MediaColumns;
 
+import com.young.share.config.Contants;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,7 +28,7 @@ import java.io.IOException;
 public final class BitmapCompression {
 
 
-    public static void compressBitmap(String sourcePath, String targetPath, float maxSize) {
+    public static void compressBitmap(String sourcePath, String targetPath) {
 
 
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -41,11 +43,11 @@ public final class BitmapCompression {
         float convertedHeight;
 
         if (originalWidth > originalHeight) {
-            convertedWidth = maxSize;
-            convertedHeight = maxSize / originalWidth * originalHeight;
+            convertedWidth = Contants.IAMGE_MAX_SIZE;
+            convertedHeight =  Contants.IAMGE_MAX_SIZE / originalWidth * originalHeight;
         } else {
-            convertedHeight = maxSize;
-            convertedWidth = maxSize / originalHeight * originalWidth;
+            convertedHeight =  Contants.IAMGE_MAX_SIZE;
+            convertedWidth =  Contants.IAMGE_MAX_SIZE / originalHeight * originalWidth;
         }
 
 

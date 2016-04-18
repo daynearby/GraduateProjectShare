@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,6 +25,7 @@ import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.gson.ShareMessageList;
 import com.young.share.network.BmobApi;
 import com.young.share.network.NetworkReuqest;
+import com.young.share.shareSocial.SocialShareByIntent;
 import com.young.share.shareSocial.SocialShareManager;
 import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.CommonUtils;
@@ -44,7 +46,7 @@ import java.util.List;
 public class DiscoverFragment extends BaseFragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
-    private DiscoverAdapter listviewAdapter;
+    private DiscoverAdapter adapter;
     private List<ShareMessage_HZ> dataList = new ArrayList<>();
     private ImageView tipsIm;
     private ListView listView;
@@ -125,7 +127,7 @@ public class DiscoverFragment extends BaseFragment {
 
     @Override
     public void initView() {
-        listviewAdapter = new DiscoverAdapter(context);
+        adapter = new DiscoverAdapter(context);
         listView = $(R.id.list_discover);
         swipeRefreshLayout = $(R.id.sw_refresh_pager_discover);
         tipsIm = $(R.id.im_discover_tips);
@@ -135,8 +137,8 @@ public class DiscoverFragment extends BaseFragment {
     @Override
     public void bindData() {
 //
-        listView.setAdapter(listviewAdapter);
-        listviewAdapter.bindListView(listView);
+        listView.setAdapter(adapter);
+        adapter.bindListView(listView);
 
         //下拉上拉，点击
         setListPullAndClickListener();
@@ -172,7 +174,7 @@ public class DiscoverFragment extends BaseFragment {
                                     Contants.PAGE_SIZE * PUSH_TIMES ? dataList.size() :
                                     Contants.PAGE_SIZE + Contants.PAGE_SIZE * PUSH_TIMES;
 
-                            listviewAdapter.setData(dataList.subList(startIndex, endIndex));
+                            adapter.setData(dataList.subList(startIndex, endIndex));
 
                             PUSH_TIMES++;
 
@@ -220,19 +222,26 @@ public class DiscoverFragment extends BaseFragment {
 
         switch (item.getItemId()) {
             case R.id.menu_content_copy://复制文本
-                StringUtils.CopyText(context, listviewAdapter.getContentString());
-                break;
+                StringUtils.CopyText(context, adapter.getContentString());
+                return true;
 
             case R.id.menu_content_share://分享文本
-                SocialShareManager.shareText(context, listviewAdapter.getContentString());
-                break;
+                SocialShareManager.shareText(context, adapter.getContentString());
+                return true;
             case R.id.menu_image_save://保存图片
-                NetworkReuqest.call2(context, listviewAdapter.getImageUrl());
-                break;
+                NetworkReuqest.call2(context, adapter.getImageUrl());
+                return true;
 
-            case R.id.menu_iamge_share://分享图片
-                SocialShareManager.shareImage(context, listviewAdapter.getImageUrl());
-                break;
+
+            case R.id.menu_image_share_all://分享全部图片
+//下载图片
+                SocialShareByIntent.downloadImagesAndShare(context, adapter.getImageList());
+//                SocialShareManager.shareImage(context, discAdapter.getImageUrl());
+
+             return true;
+            case R.id.menu_image_share_singal://分享打仗图片
+                SocialShareByIntent.downloadImageAndShare(context, adapter.getImageUrl());
+                return true;
 
         }
 
@@ -293,11 +302,28 @@ public class DiscoverFragment extends BaseFragment {
      */
     private void getDataFromRemote() {
 
-
         JSONObject params = new JSONObject();
+
+        String LONGITUDE = app.getCacheInstance().getAsString(Contants.ACAHE_KEY_LONGITUDE);
+        double longitude;
+        double latitude;
+
+        if (TextUtils.isEmpty(LONGITUDE)) {
+            longitude = 114.424984;
+            latitude = 23.043472;
+
+        } else {
+            String[] strs = LONGITUDE.split(",");
+            longitude = Double.valueOf(strs[0]);
+            latitude = Double.valueOf(strs[1]);
+
+        }
 
         try {
             params.put(Contants.SKIP, String.valueOf(startRow));
+            params.put(Contants.PARAMS_LATITUDE, String.valueOf(latitude));
+            params.put(Contants.PARAMS_LONGITUDE, String.valueOf(longitude));
+
         } catch (JSONException e) {
 
             LogUtils.d("添加 网络参数 失败 = " + e.toString());
@@ -381,13 +407,13 @@ public class DiscoverFragment extends BaseFragment {
             endIndex = dataList.size() < (PUSH_TIMES + 1) * Contants.PAGE_SIZE ?
                     dataList.size() : (PUSH_TIMES + 1) * Contants.PAGE_SIZE;
 
-            listviewAdapter.getData().addAll(dataList.subList(tempEnd, endIndex));
-            listviewAdapter.notifyDataSetChanged();
+            adapter.getData().addAll(dataList.subList(tempEnd, endIndex));
+            adapter.notifyDataSetChanged();
 
         } else {
             endIndex = dataList.size() < Contants.PAGE_SIZE ? dataList.size() : endIndex;
 
-            listviewAdapter.setData(dataList.subList(startIndex, endIndex));
+            adapter.setData(dataList.subList(startIndex, endIndex));
 
         }
 

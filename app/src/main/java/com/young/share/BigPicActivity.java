@@ -20,7 +20,7 @@ import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
 import com.young.share.model.PictureInfo;
 import com.young.share.network.NetworkReuqest;
-import com.young.share.shareSocial.SocialShareManager;
+import com.young.share.shareSocial.SocialShareByIntent;
 import com.young.share.utils.DisplayUtils;
 import com.young.share.utils.EvaluateUtil;
 import com.young.share.views.CustomViewPager;
@@ -150,8 +150,15 @@ public class BigPicActivity extends BaseAppCompatActivity implements ViewTreeObs
                 NetworkReuqest.call2(this, viewpagerAdapter.getImageUrl());
                 break;
 
-            case R.id.menu_iamge_share://分享图片
-                SocialShareManager.shareImage(this, viewpagerAdapter.getImageUrl());
+
+            case R.id.menu_image_share_all://分享全部图片
+//下载图片
+                SocialShareByIntent.downloadImagesAndShare(mActivity, viewpagerAdapter.getImagesUri());
+//                SocialShareManager.shareImage(context, discAdapter.getImageUrl());
+
+                break;
+            case R.id.menu_image_share_singal://分享打仗图片
+                SocialShareByIntent.downloadImageAndShare(mActivity,  viewpagerAdapter.getImageUrl());
                 break;
 
         }

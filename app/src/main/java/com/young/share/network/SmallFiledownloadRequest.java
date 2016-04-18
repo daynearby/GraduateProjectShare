@@ -1,13 +1,13 @@
 package com.young.share.network;
 
 import android.content.Context;
-import android.os.Environment;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.young.share.config.ApplicationConfig;
 import com.young.share.config.Contants;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.NetworkUtils;
@@ -32,6 +32,7 @@ public class SmallFiledownloadRequest extends Request<String> {
 
     public static final int FILE_TYPE_VIDEO = 10;
     public static final int FILE_TYPE_IMAGE = 11;
+    public static final int FILE_TYPE_DOWNLOAD = 12;
 
     /**
      * 下载图片，图片地址直接可以使用，不需要进行编码
@@ -47,6 +48,24 @@ public class SmallFiledownloadRequest extends Request<String> {
         this.params = new HashMap<>();
         this.mListener = mListener;
     }
+
+    /**
+     * 下载图片，图片地址直接可以使用，不需要进行编码
+     *
+     * @param url
+     * @param fileType
+     * @param mListener
+     * @param listener
+     */
+    public SmallFiledownloadRequest(String url, int fileType, Response.Listener<String> mListener, Response.ErrorListener listener) {
+        super(url, listener);
+        this.url = url;
+        this.fileType = fileType;
+        this.params = new HashMap<>();
+        this.mListener = mListener;
+    }
+
+
 
     /**
      * 下载文件
@@ -65,6 +84,15 @@ public class SmallFiledownloadRequest extends Request<String> {
         this.mListener = mListener;
     }
 
+    public SmallFiledownloadRequest(int fileType,
+                                    String url, Response.Listener<String> mListener, Response.ErrorListener listener) {
+        super(Request.Method.GET, url, listener);
+        this.url = url;
+        this.fileType = fileType;
+        this.mListener = mListener;
+
+    }
+
     public SmallFiledownloadRequest(int method, int fileType, Map<String, String> params,
                                     String url, Response.Listener<String> mListener, Response.ErrorListener listener) {
         super(method, url, listener);
@@ -79,12 +107,14 @@ public class SmallFiledownloadRequest extends Request<String> {
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         //            String jsonStr = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
         LogUtils.e("url = " + url);
-        String filePath = Environment.getExternalStorageDirectory().getPath();
-
-        if (fileType == FILE_TYPE_VIDEO) {
-            filePath += Contants.FILE_PAHT_DOWNLOAD + StorageUtils.getFileName(url);
-        } else {
-            filePath += Contants.FILE_PAHT_SAVE + StorageUtils.getImageName(url) ;
+        String filePath;
+//区分文件夹
+        if (fileType == FILE_TYPE_VIDEO) {//下载视频
+            filePath = StorageUtils.createVideoFile(ApplicationConfig.getContext()) + "/" + StorageUtils.getFileName(url);
+        } else if (fileType == FILE_TYPE_DOWNLOAD) {//下载图片文件，分享出去
+            filePath = StorageUtils.createDownloadFile(ApplicationConfig.getContext()) + "/" + StorageUtils.getImageName(url);
+        } else {//保存文件
+            filePath = StorageUtils.createImageFile(ApplicationConfig.getContext()) + "/" + StorageUtils.getImageName(url);
         }
 //        filePath += url.substring(url.lastIndexOf('/') + 1);
 //        filePath += getFileName(url);
@@ -95,8 +125,6 @@ public class SmallFiledownloadRequest extends Request<String> {
         //创建文件夹
         if (!file.exists()) {
             boolean created = file.mkdirs();
-        }else {
-            return Response.success(filePath, HttpHeaderParser.parseCacheHeaders(response));
         }
 
 

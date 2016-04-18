@@ -40,23 +40,24 @@ import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
 import com.young.share.fragment.CommentFragment;
-import com.young.share.fragment.WantToGoFragment;
 import com.young.share.fragment.HadGoFragment;
+import com.young.share.fragment.WantToGoFragment;
 import com.young.share.interfaces.AsyncListener;
 import com.young.share.model.BaseModel;
-import com.young.share.model.RemoteModel;
 import com.young.share.model.Comment_HZ;
 import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
+import com.young.share.model.RemoteModel;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.network.BmobApi;
 import com.young.share.network.NetworkReuqest;
+import com.young.share.shareSocial.SocialShareByIntent;
 import com.young.share.shareSocial.SocialShareManager;
+import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.DataFormateUtils;
 import com.young.share.utils.EmotionUtils;
 import com.young.share.utils.EvaluateUtil;
 import com.young.share.utils.ImageHandlerUtils;
-import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.NetworkUtils;
 import com.young.share.utils.StringUtils;
@@ -160,6 +161,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private int commentClick;//是否是点击评论进去
     private String copyContent;//要复制的文字
     private String imageUrl;//要分享或者保存的图片
+    private List<String> imagesUrl;//图片lsit
 
     private CommentFragment commentFragment;//评论的界面的对象
     private WantToGoFragment wantToGoFragment;//想去或者说是收藏
@@ -393,6 +395,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private void setImage() {
         multiImageView.setRegisterForContextMenu(true);
         multiImageView.setList(DataFormateUtils.thumbnailList(this, shareMessage.getShImgs()));
+        multiImageView.setBigImagesList(DataFormateUtils.bigImagesList(this, shareMessage.getShImgs()));
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -415,6 +418,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
             @Override
             public void onItemLongClick(View view, int position) {
                 imageUrl = multiImageView.getImagesList().get(position);
+                imagesUrl = multiImageView.getBigImagesList();
+
             }
         });
     }
@@ -433,11 +438,15 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
             case R.id.menu_image_save://保存图片
                 NetworkReuqest.call2(this, imageUrl);
                 break;
+            case R.id.menu_image_share_all://分享全部图片
+//下载图片
+                SocialShareByIntent.downloadImagesAndShare(mActivity,imagesUrl);
+//                SocialShareManager.shareImage(context, discAdapter.getImageUrl());
 
-            case R.id.menu_iamge_share://分享图片
-                SocialShareManager.shareImage(this, imageUrl);
                 break;
-
+            case R.id.menu_image_share_singal://分享打仗图片
+                SocialShareByIntent.downloadImageAndShare(mActivity, imageUrl);
+                break;
         }
 
         return super.onContextItemSelected(item);

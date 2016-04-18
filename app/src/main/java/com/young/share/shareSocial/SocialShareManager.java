@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.widget.Toast;
 
+import com.young.share.R;
 import com.young.share.config.ApplicationConfig;
 
 import java.io.File;
@@ -23,31 +24,29 @@ public class SocialShareManager {
      * @param content 文字
      */
     public static void shareText(Context context, String content){
-        shareShow(context,content,null);
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+//      intent.setPackage("com.sina.weibo");
+//        intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
+        intent.putExtra(Intent.EXTRA_TEXT, content);
+        intent.putExtra(Intent.EXTRA_TITLE, context.getString(R.string.app_name));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(Intent.createChooser(intent, "请选择"));
     }
 
     /**
-     * 分享纯图片
+     * 分享纯图片 单张图片
      * @param context
      * @param imageUrl
      */
     public static void shareImage(Context context,  String imageUrl){
-        shareShow(context,null,imageUrl);
-    }
-    /**
-     * 分享 社会化，只能分享一张图片或者是一句话，不能多图
-     */
-    public static void shareShow(Context context, String content, String imageUrl) {
 
 
-        /**
-         * UMImage image = new UMImage(ShareActivity.this,
-         BitmapFactory.decodeFile("/mnt/sdcard/icon.png")));
+        List<String> list = new ArrayList<>();
+        list.add(imageUrl);
 
-         */
-
-
-
+        shareImagesByIntent(context, list);
     }
 
 
@@ -60,7 +59,7 @@ public class SocialShareManager {
      * @param filePathList 文件的地址
      */
     public static void shareImagesByIntent(Context context, List<String> filePathList) {
-        ArrayList<Uri> picturesUriArrayList = new ArrayList<Uri>();
+        ArrayList<Uri> picturesUriArrayList = new ArrayList<>();
 
 //        File pictureFile1=new File
 //                (Environment.getExternalStorageDirectory()+File.separator+"test1.png");

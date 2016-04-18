@@ -73,6 +73,7 @@
                 android:paddingLeft="@dimen/paddingMediu"
                 android:singleLine="true"
                 android:textColorHint="@color/light_gray"
+                android:drawableRight="@drawable/icon_checked"
                 android:textColor="@android:color/white" />
 
 

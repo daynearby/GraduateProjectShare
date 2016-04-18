@@ -150,10 +150,9 @@ public class Contants {
     public static final int IMAGE_TYPE_AVATAR = 0x02;
     public static final int FILE_TYPE_SIGNAL = 0x03;
     public static final int FILE_TYPE_MULTI = 0x04;//多个文件
-    public static final int IAMGE_MAX_WIDTH = 1500;
-    public static final int IAMGE_MAX_HEIGHT = 1500;
     public static final int IMAGE_MIN_SIZE = 200;
     public static final int MODEL_ID = 1;
+    public static final int IAMGE_MAX_SIZE = 1280;
 
     //**************************性别************************************
     public static final String GENDER_MALE = "男";
@@ -162,7 +161,10 @@ public class Contants {
     //**********************网络请求 常量***************************
     public static final int PAGER_NUMBER = 50;//一次请求的数据条数，与云端代码相符
     public static final String SKIP = "skip";//请求参数
-
+    public static final String PARAMS_LONGITUDE = "longitude";//请求参数
+    public static final String PARAMS_LATITUDE = "latitude";//请求参数
+//  double longitude;
+//double latitude;
 
     //************************* 类的跳转 标识***************************************
     public static final String CLAZZ_NAME = "clazz_name";//类名

@@ -33,6 +33,7 @@ import com.young.share.model.gson.AdvertismentList;
 import com.young.share.model.gson.DiscountMessageList;
 import com.young.share.network.BmobApi;
 import com.young.share.network.NetworkReuqest;
+import com.young.share.shareSocial.SocialShareByIntent;
 import com.young.share.shareSocial.SocialShareManager;
 import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.CommonUtils;
@@ -241,18 +242,21 @@ public class DiscountFragment extends BaseFragment {
                 NetworkReuqest.call2(context, discAdapter.getImageUrl());
                 break;
 
-            case R.id.menu_iamge_share://分享图片
+            case R.id.menu_image_share_all://分享全部图片
 //下载图片
-                downloadImages();
-//                SocialShareManager.shareImage(context, discAdapter.getImageUrl());
+                SocialShareByIntent.downloadImagesAndShare(context, discAdapter.getImagesUri());
 
-
+                break;
+            case R.id.menu_image_share_singal://分享打仗图片
+                SocialShareByIntent.downloadImageAndShare(context, discAdapter.getImageUrl());
                 break;
 
         }
 
         return super.onContextItemSelected(item);
     }
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -266,30 +270,6 @@ public class DiscountFragment extends BaseFragment {
             }
 
         }
-
-    }
-
-    /**
-     * 下载图片并且分享
-     */
-    private void downloadImages() {
-
-        SVProgressHUD.showWithStatus(context, "正在下载图片");
-
-        NetworkReuqest.call(context, discAdapter.getImagesUri(), new NetworkReuqest.JSONRespond() {
-            @Override
-            public void onSuccess(List<String> response) {
-                SVProgressHUD.dismiss(context);
-                SocialShareManager.shareImagesByIntent(context, response);
-
-            }
-
-            @Override
-            public void onFailure(String erroMsg) {
-                SVProgressHUD.showErrorWithStatus(context, "下载图片失败，请稍后再试");
-            }
-        });
-
 
     }
 

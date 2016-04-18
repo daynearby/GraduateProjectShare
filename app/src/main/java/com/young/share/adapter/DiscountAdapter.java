@@ -228,7 +228,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         multiImageView.setOnItemLongClickListener(new MultiImageView.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View view, int position) {
-                imageUrl = multiImageView.getImagesList().get(position);
+                imageUrl = multiImageView.getBigImagesList().get(position);
                 imagesUri =multiImageView.getBigImagesList();
             }
         });

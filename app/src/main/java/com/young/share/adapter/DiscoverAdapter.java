@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.MotionEvent;
@@ -64,7 +63,7 @@ import java.util.List;
 public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
     private String contentString = null;
     private String imageUrl = null;//图片签名后的地址
-
+    private List<String> imageList;
 
     /**
      * 实例化对象
@@ -120,6 +119,15 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
     public String getImageUrl() {
         LogUtils.e(" adapter = " + imageUrl);
         return imageUrl;
+    }
+
+    /**
+     * 获取高清大图的list
+     *
+     * @return
+     */
+    public List<String> getImageList() {
+        return imageList;
     }
 
     @Override
@@ -243,6 +251,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
     private void setImages(final MultiImageView multiImageView, final ShareMessage_HZ shareMessage) {
         multiImageView.setRegisterForContextMenu(true);
         multiImageView.setList(DataFormateUtils.thumbnailList(ctx, shareMessage.getShImgs()));
+        multiImageView.setBigImagesList(DataFormateUtils.bigImagesList(ctx, shareMessage.getShImgs()));
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -265,7 +274,8 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         multiImageView.setOnItemLongClickListener(new MultiImageView.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View view, int position) {
-                imageUrl = multiImageView.getImagesList().get(position);
+                imageUrl = multiImageView.getBigImagesList().get(position);
+                imageList = multiImageView.getBigImagesList();
             }
         });
 
@@ -373,10 +383,10 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         pb.setVisibility(View.VISIBLE);
         playvideo.setVisibility(View.GONE);
 
-        String filePath = Environment.getExternalStorageDirectory().getPath()
-                + Contants.FILE_PAHT_DOWNLOAD
-                + StorageUtils.getFileName(url);
-
+//        String filePath = Environment.getExternalStorageDirectory().getPath()
+//                + Contants.FILE_PAHT_DOWNLOAD
+//                + StorageUtils.getFileName(url);
+        String filePath=  StorageUtils.createVideoFile(ctx) + "/" + StorageUtils.getFileName(url);
         File file = new File(filePath);
 //        videoPlayerList.add(view);
         LogUtils.e("down load filePath = " + filePath);

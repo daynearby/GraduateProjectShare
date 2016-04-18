@@ -20,6 +20,9 @@ import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.views.photoview.PhotoView;
 import com.young.share.views.photoview.PhotoViewAttacher;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 大图浏览 适配器
  * <p/>
@@ -27,18 +30,33 @@ import com.young.share.views.photoview.PhotoViewAttacher;
  */
 public class BigpicturePagerAdapter extends BasePagerAdapter<PictureInfo> implements PhotoViewAttacher.OnPhotoTapListener {
 
-    private ImageLoader mImageLoader = ImageLoader.getInstance();
     private View mCurrentView;
     private String imageUrl;
+    private List<String> imagesUri;
 
     public BigpicturePagerAdapter(Context context) {
         super(context);
-
+        imagesUri =new ArrayList<>();
     }
 
     public String getImageUrl() {
         return imageUrl;
     }
+
+
+    /**
+     * 获取全部高清大图的地址
+     * @return
+     */
+    public List<String> getImagesUri() {
+
+        for (PictureInfo  pictureInfo :dataList){
+            imagesUri.add(pictureInfo.getImageUrl());
+        }
+
+        return imagesUri;
+    }
+
 
     @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
@@ -103,11 +121,11 @@ public class BigpicturePagerAdapter extends BasePagerAdapter<PictureInfo> implem
      */
     private void setNetImage(final PhotoView photoView, final ProgressBar progressBar, final PictureInfo pictureInfo) {
 
-        mImageLoader.displayImage(pictureInfo.getImageUrl(), photoView, new ImageLoadingListener() {
+        ImageLoader.getInstance().displayImage(pictureInfo.getImageUrl(), photoView, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String s, View view) {
                 startLoad(progressBar);
-                loadImageFromCache(photoView, pictureInfo.getImageUrl());
+                loadImageFromCache(photoView, pictureInfo.getSmallImageUrl());
             }
 
             @Override
@@ -136,7 +154,7 @@ public class BigpicturePagerAdapter extends BasePagerAdapter<PictureInfo> implem
      * @param imageUrl  图片地址
      */
     private void loadImageFromCache(PhotoView photoView, String imageUrl) {
-        Bitmap bitmap = ImageHandlerUtils.getBitmapFromCache(imageUrl, mImageLoader);
+        Bitmap bitmap = ImageHandlerUtils.getBitmapFromCache(imageUrl, ImageLoader.getInstance());
         if (bitmap != null) {
             photoView.setImageBitmap(bitmap);
         } else {//内存中没有改缩略图

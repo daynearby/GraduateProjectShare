@@ -33,6 +33,7 @@ import com.young.share.model.MyUser;
 import com.young.share.model.PictureInfo;
 import com.young.share.model.RemoteModel;
 import com.young.share.network.NetworkReuqest;
+import com.young.share.shareSocial.SocialShareByIntent;
 import com.young.share.shareSocial.SocialShareManager;
 import com.young.share.utils.CommonFunctionUtils;
 import com.young.share.utils.DataFormateUtils;
@@ -396,14 +397,21 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
                 NetworkReuqest.call2(this, imageUrl);
                 break;
 
-            case R.id.menu_iamge_share://分享图片
-                SocialShareManager.shareImage(this, imageUrl);
+            case R.id.menu_image_share_all://分享全部图片
+//下载图片
+                SocialShareByIntent.downloadImagesAndShare(mActivity, discountMessage.getDtImgs());
+//                SocialShareManager.shareImage(context, discAdapter.getImageUrl());
+
+                break;
+            case R.id.menu_image_share_singal://分享打仗图片
+                SocialShareByIntent.downloadImageAndShare(mActivity, imageUrl);
                 break;
 
         }
 
         return super.onContextItemSelected(item);
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

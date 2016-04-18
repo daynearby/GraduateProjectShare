@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.MotionEvent;
@@ -61,6 +60,7 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
 
     private String contentString = null;
     private String imageUrl = null;//图片签名后的地址
+    private List<String> imagesUrl;//
 
     public RankListAdapter(Context context) {
         super(context);
@@ -80,6 +80,15 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
      */
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    /**
+     * 全部的iamge uri
+     *
+     * @return
+     */
+    public List<String> getImagesUrl() {
+        return imagesUrl;
     }
 
     @Override
@@ -209,6 +218,7 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
 
         multiImageView.setRegisterForContextMenu(true);
         multiImageView.setList(DataFormateUtils.thumbnailList(ctx, remoteModel.getImages()));
+        multiImageView.setBigImagesList(DataFormateUtils.bigImagesList(ctx,remoteModel.getImages()));
         multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -230,7 +240,8 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
         multiImageView.setOnItemLongClickListener(new MultiImageView.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View view, int position) {
-                imageUrl = multiImageView.getImagesList().get(position);
+                imageUrl = multiImageView.getBigImagesList().get(position);
+                imagesUrl = multiImageView.getBigImagesList();
             }
         });
     }
@@ -343,12 +354,10 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
         pb.setVisibility(View.VISIBLE);
         playvideo.setVisibility(View.GONE);
 
+        String filePath = StorageUtils.createVideoFile(ctx) + "/" + StorageUtils.getFileName(url);
 //        String filePath = Environment.getExternalStorageDirectory().getPath()
 //                + Contants.FILE_PAHT_DOWNLOAD
-//                + url.substring(url.lastIndexOf('/') + 1);
-        String filePath = Environment.getExternalStorageDirectory().getPath()
-                + Contants.FILE_PAHT_DOWNLOAD
-                + StorageUtils.getFileName(url);
+//                + StorageUtils.getFileName(url);
 
         File file = new File(filePath);
 //        videoPlayerList.add(view);

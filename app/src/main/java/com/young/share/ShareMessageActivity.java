@@ -831,7 +831,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
                 }
                 url = url.substring(Contants.FILE_HEAD.length(), url.length());
 
-                BitmapCompression.compressBitmap(url, temp, Contants.IMAGE_MAX_SIZE);
+                BitmapCompression.compressBitmap(url, temp);
                 fileList.add(temp);
             }
         }
