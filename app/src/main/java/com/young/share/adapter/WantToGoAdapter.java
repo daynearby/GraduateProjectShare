@@ -86,7 +86,7 @@ public class WantToGoAdapter extends CommAdapter<RemoteModel> {
             contentTxt.setVisibility(View.GONE);
         } else {
             contentTxt.setVisibility(View.VISIBLE);
-            contentTxt.setText(StringUtils.getEmotionContent(ctx, contentTxt, remoteModel.getContent()));
+            contentTxt.setText(StringUtils.getEmotionContent(ctx,  remoteModel.getContent()));
         }
 
 

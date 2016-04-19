@@ -159,7 +159,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         // 特殊文字处理,将表情等转换一下
         if (!TextUtils.isEmpty(shareMessage.getShContent())) {
             content_tv.setText(StringUtils.getEmotionContent(
-                    ctx, content_tv, shareMessage.getShContent()));
+                    ctx,  shareMessage.getShContent()));
             content_tv.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {

@@ -315,7 +315,8 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
         Message_HZ message = new Message_HZ();
         message.setObjectId(dataList.get(position).getObjectId());
         message.setRead(true);
-
+        dataList.get(position).getMessageId().setRead(true);
+        messageAdapter.notifyDataSetChanged();
         message.update(mActivity, new UpdateListener() {
             @Override
             public void onSuccess() {

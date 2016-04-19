@@ -158,7 +158,7 @@ public class CommentAdapter {
 
         //表情
         commentTv.append(":");
-        commentTv.append(StringUtils.getEmotionContent(context, commentTv,
+        commentTv.append(StringUtils.getEmotionContent(context,
                 comment.getMessageId().getCommContent()));
 
         /*item click */

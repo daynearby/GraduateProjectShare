@@ -319,7 +319,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         } else {
             content_tv.setVisibility(View.VISIBLE);
             content_tv.setText(StringUtils.getEmotionContent(
-                    this, content_tv, shareMessage.getShContent()));
+                    this,  shareMessage.getShContent()));
             copyContent = content_tv.getText().toString();
             registerForContextMenu(content_tv);
             content_tv.setOnCreateContextMenuListener(new OnContextMenuCreat());

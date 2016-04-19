@@ -121,7 +121,7 @@ public class EmotionUtils implements Serializable {
 
 						// 特殊文字处理,将表情等转换一下
 						content_et.setText(StringUtils.getEmotionContent(
-								mActivity, content_et, sb.toString()));
+								mActivity,  sb.toString()));
 
 						// 将光标设置到新增完表情的右侧
 						content_et.setSelection(curPosition + emotionName.length());

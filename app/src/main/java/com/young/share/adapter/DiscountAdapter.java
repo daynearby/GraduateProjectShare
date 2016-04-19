@@ -113,7 +113,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
         // 特殊文字处理,将表情等转换一下
         if (!TextUtils.isEmpty(discountMessage_hz.getDtContent())) {
             content_tv.setText(StringUtils.getEmotionContent(
-                    ctx, content_tv, discountMessage_hz.getDtContent()));
+                    ctx,  discountMessage_hz.getDtContent()));
             content_tv.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {

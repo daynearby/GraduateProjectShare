@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.text.SpannableString;
 
 import com.young.share.MessageCenterActivity;
 import com.young.share.R;
@@ -22,7 +23,7 @@ public class MessageNotification {
      * @param context
      * @param content
      */
-    public static void showReceiveComment(Context context,String content){
+    public static void showReceiveComment(Context context,SpannableString content){
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         PendingIntent pendingIntent2 = PendingIntent.getActivity(context, 0,
                 new Intent(context, MessageCenterActivity.class), 0);

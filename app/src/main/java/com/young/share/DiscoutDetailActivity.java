@@ -238,7 +238,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         } else {
             content_tv.setVisibility(View.VISIBLE);
             content_tv.setText(StringUtils.getEmotionContent(
-                    this, content_tv, discountMessage.getDtContent()));
+                    this,  discountMessage.getDtContent()));
             copyContent =content_tv.getText().toString();
             registerForContextMenu(content_tv);
             content_tv.setOnCreateContextMenuListener(new OnContextMenuCreat());

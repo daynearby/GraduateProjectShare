@@ -333,7 +333,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
                     if (!TextUtils.isEmpty(draft_content)) {
                         content_et.setText(StringUtils.getEmotionContent(
-                                mActivity, content_et, draft_content));
+                                mActivity,  draft_content));
                     }
 
                     tag_tv.setText(acache.getAsString(Contants.DRAFT_TAG));
@@ -1028,7 +1028,6 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
      * @param shareMessage_hz
      */
     private void shareMessage(ShareMessage_HZ shareMessage_hz) {
-// TODO: 2015-11-13  分享信息后台一直gcc
         mHandler.sendEmptyMessage(MESSAGE_CLEAR);
 
         shareMessage_hz.save(mActivity, new SaveListener() {

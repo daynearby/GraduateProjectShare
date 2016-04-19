@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.young.share.adapter.MainPagerAdapter;
 import com.young.share.base.BaseAppCompatActivity;
@@ -26,19 +27,22 @@ import com.young.share.fragment.DiscoverFragment;
 import com.young.share.fragment.RankFragment;
 import com.young.share.model.MyUser;
 import com.young.share.utils.BDLBSUtils;
-import com.young.share.utils.BmobUtils;
+import com.young.share.bmobPush.BmobPush;
 import com.young.share.utils.DialogUtils;
 import com.young.share.utils.LogUtils;
+import com.young.share.utils.StringUtils;
 import com.young.share.utils.XmlUtils;
 import com.young.share.views.ArcMenu;
 import com.young.share.views.CustomViewPager;
 import com.young.share.views.Dialog4Tips;
 import com.young.share.views.actionProvider.MainActyProvider;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.push.BmobPush;
 import cn.bmob.push.PushConstants;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
@@ -144,7 +148,7 @@ public class MainActivity extends BaseAppCompatActivity {
         //自动升级
         BmobUpdateAgent.update(this);
         // 启动推送服务
-        BmobPush.startWork(this);
+        cn.bmob.push.BmobPush.startWork(this);
         //注册信息接收者
         registerBoradcastReceiver();
     }
@@ -345,8 +349,20 @@ public class MainActivity extends BaseAppCompatActivity {
 /*更新界面数据*/
                     if (!TextUtils.isEmpty(intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING))) {
 
-                        initMessagesIcon(true);
-                        MessageNotification.showReceiveComment(mActivity, intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
+//                        initMessagesIcon(true);
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        if (jsonObject != null) {
+                            TextView tv = new TextView(mActivity);
+//                             StringUtils.getEmotionContent(mActivity,tv,jsonObject.optString("messageBody"));
+                            MessageNotification.showReceiveComment(mActivity, StringUtils.getEmotionContent(mActivity,jsonObject.optString("messageBody")) );
+                        }
+
                     }
 
                     break;
@@ -356,9 +372,9 @@ public class MainActivity extends BaseAppCompatActivity {
                     startLocation();
                     break;
 
-                case Contants.BORDCAST_CLEAR_MESSAGES://清空消息
-                    initMessagesIcon(false);
-                    break;
+//                case Contants.BORDCAST_CLEAR_MESSAGES://清空消息
+//                    initMessagesIcon(false);
+//                    break;
 
             }
 
@@ -366,29 +382,29 @@ public class MainActivity extends BaseAppCompatActivity {
 
     };
 
-    /**
-     * 有新消息，改变图标
-     *
-     * @param hadNewMessage true -- > 有新消息，出现小红点。反之
-     */
-    private void initMessagesIcon(boolean hadNewMessage) {
-        ImageView imageView;
-
-        if (hadNewMessage) {
-            imageView = (ImageView) mArcMenu.getChildAt(0);
-            imageView.setImageResource(R.drawable.icon_more_light);
-
-            imageView = (ImageView) mArcMenu.getChildAt(2);
-            imageView.setImageResource(R.drawable.icon_comment_light);
-        } else {
-            imageView = (ImageView) mArcMenu.getChildAt(0);
-            imageView.setImageResource(R.drawable.icon_more);
-
-            imageView = (ImageView) mArcMenu.getChildAt(2);
-            imageView.setImageResource(R.drawable.icon_comment);
-        }
-
-    }
+//    /**
+//     * 有新消息，改变图标
+//     *
+//     * @param hadNewMessage true -- > 有新消息，出现小红点。反之
+//     */
+//    private void initMessagesIcon(boolean hadNewMessage) {
+//        ImageView imageView;
+//
+//        if (hadNewMessage) {
+//            imageView = (ImageView) mArcMenu.getChildAt(0);
+//            imageView.setImageResource(R.drawable.icon_more_light);
+//
+//            imageView = (ImageView) mArcMenu.getChildAt(2);
+//            imageView.setImageResource(R.drawable.icon_comment_light);
+//        } else {
+//            imageView = (ImageView) mArcMenu.getChildAt(0);
+//            imageView.setImageResource(R.drawable.icon_more);
+//
+//            imageView = (ImageView) mArcMenu.getChildAt(2);
+//            imageView.setImageResource(R.drawable.icon_comment);
+//        }
+//
+//    }
 
     /**
      * 自定义按钮的点击事件
@@ -478,7 +494,7 @@ public class MainActivity extends BaseAppCompatActivity {
 //            myBmobInstallation.setMyUser(cuser);
 //            myBmobInstallation.save(this);
 
-            BmobUtils.updateinstallationId(this,cuser);
+            BmobPush.updateinstallationId(this,cuser);
 
 
 

@@ -13,11 +13,11 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.young.share.R;
 import com.young.share.config.Contants;
+import com.young.share.views.base.VerticalImageSpan;
 
 import java.util.List;
 import java.util.Random;
@@ -34,11 +34,10 @@ public class StringUtils {
      * 匹配这样的字符串[**]，匹配之后再对比
      *
      * @param context
-     * @param tv
      * @param source
      * @return
      */
-    public static SpannableString getEmotionContent(final Context context, final TextView tv, String source) {
+    public static SpannableString getEmotionContent(final Context context, String source) {
         SpannableString spannableString = new SpannableString(source);
         Resources res = context.getResources();
 
@@ -55,11 +54,12 @@ public class StringUtils {
             Integer imgRes = EmotionUtils.getImgByName(key);
             if (imgRes != 0) {
                 // 压缩表情图片
-                int size = (int) tv.getTextSize();
+//                int size = (int) tv.getTextSize();
+                int size = DisplayUtils.dip2px(context,18);
                 Bitmap bitmap = BitmapFactory.decodeResource(res, imgRes);
                 Bitmap scaleBitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
 
-                ImageSpan span = new ImageSpan(context, scaleBitmap);
+                VerticalImageSpan span = new VerticalImageSpan(context,scaleBitmap);
                 spannableString.setSpan(span, start, start + key.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }

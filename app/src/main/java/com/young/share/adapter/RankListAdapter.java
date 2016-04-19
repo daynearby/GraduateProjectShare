@@ -118,7 +118,7 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
         // 特殊文字处理,将表情等转换一下
         if (!TextUtils.isEmpty(remoteModel.getContent())) {
             content_tv.setText(StringUtils.getEmotionContent(
-                    ctx, content_tv, remoteModel.getContent()));
+                    ctx,  remoteModel.getContent()));
 
             content_tv.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override

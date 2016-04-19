@@ -337,7 +337,7 @@ public class BmobApi {
                     }
 
                 } else {
-                    mToast(ctx, R.string.network_erro);
+                    mToast(ctx, "推送消息失败！消息会送达");
                 }
             }
 
@@ -357,6 +357,15 @@ public class BmobApi {
      */
     private static void mToast(Context context, int strId) {
         Toast.makeText(context, strId, Toast.LENGTH_LONG).show();
+    }
+    /**
+     * toast
+     *
+     * @param context
+     * @param str   提示语
+     */
+    private static void mToast(Context context, String str) {
+        Toast.makeText(context, str, Toast.LENGTH_LONG).show();
     }
 
     /**

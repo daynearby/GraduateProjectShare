@@ -27,7 +27,7 @@ public class MessageCenterAdapter extends CommAdapter<Comment_HZ> {
         int colorId = comment.getMessageId().isRead() ? R.color.black : R.color.theme_puple;
         //未读为紫色
         content.setTextColor(ctx.getResources().getColor(colorId));
-        content.setText(StringUtils.getEmotionContent(ctx, content, comment.getMessageId().getCommContent()));
+        content.setText(StringUtils.getEmotionContent(ctx,  comment.getMessageId().getCommContent()));
 
         ((TextView) holder.getView(R.id.tv_record_comm_created)).setText(comment.getMessageId().getCreatedAt());
 

@@ -12,19 +12,17 @@ import android.widget.TextView;
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
+import com.young.share.bmobPush.BmobPush;
 import com.young.share.config.Contants;
-import com.young.share.model.MyBmobInstallation;
 import com.young.share.model.MyUser;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.SharePreferenceUtils;
 
 import java.util.List;
 
-import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * 登陆
@@ -113,64 +111,6 @@ public class LoginActivity extends BaseAppCompatActivity implements View.OnClick
 
     }
 
-    /**
-     * 保存当前用户在installtion表中
-     *
-     * @param myUser
-     */
-    private void saveCurrentUser2InstalltionTable(MyUser myUser) {
-        MyBmobInstallation installation = new MyBmobInstallation(this);
-        installation.setMyUser(myUser);
-        installation.setInstallationId(BmobInstallation.getInstallationId(this));
-        installation.save();
-    }
-
-    /**
-     * 保存当前用户与installid相关联
-     *
-     * @param myUser
-     */
-    private void savaUserWithInstallId(final MyUser myUser) {
-        BmobQuery<MyBmobInstallation> query = new BmobQuery<>();
-        query.addWhereEqualTo("installationId", BmobInstallation.getInstallationId(this));
-
-        query.findObjects(this, new FindListener<MyBmobInstallation>() {
-
-            @Override
-            public void onSuccess(List<MyBmobInstallation> object) {
-
-                if (object.size() > 0) {//installtionid存在，进行更新
-
-                    MyBmobInstallation mbi = object.get(0);
-                    mbi.setMyUser(myUser);
-                    mbi.update(mActivity, new UpdateListener() {
-
-                        @Override
-                        public void onSuccess() {
-                            LogUtils.d("bmob", "设备信息更新成功");
-                        }
-
-                        @Override
-                        public void onFailure(int code, String msg) {
-                            LogUtils.d("bmob", "设备信息更新失败:" + msg);
-                        }
-                    });
-
-                } else {//installtionid不存在，进行保存
-
-                    saveCurrentUser2InstalltionTable(myUser);
-
-                }
-            }
-
-            @Override
-            public void onError(int code, String msg) {
-                LogUtils.d("bmob", "查找设备信息 code = " + code + " msg = " + msg);
-
-            }
-        });
-    }
-
 
     @Override
     public void onClick(View v) {
@@ -223,7 +163,7 @@ public class LoginActivity extends BaseAppCompatActivity implements View.OnClick
 /*获取当前用户的信息，bmob同步的速度太慢*/
                         getCurrent(userName);
                         /*更新user的installtionId*/
-//                        savaUserWithInstallId(myUserLogin);
+                        BmobPush.updateinstallationId(mActivity,myUserLogin);
 
                         mHandler.sendEmptyMessageDelayed(102, Contants.ONE_SECOND);
 
