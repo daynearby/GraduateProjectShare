@@ -300,7 +300,7 @@ public class DiscoverFragment extends BaseFragment {
     /**
      * 从远程数据库获取数据，可以通过上、下拉刷新实现触发
      */
-    private void getDataFromRemote() {
+    public void getDataFromRemote() {
 
         JSONObject params = new JSONObject();
 

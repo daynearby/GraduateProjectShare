@@ -9,30 +9,5 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     >
 
-    <RelativeLayout
-        android:id="@+id/rtl_include_content_csrcolling"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <ListView
-            android:id="@+id/ls_include_content_scrolling_content_list"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:overScrollMode="never"
-            android:layout_centerHorizontal="true"
-            >
-
-        </ListView>
-
-        <Button
-            android:id="@+id/btn_include_content_scrolling_logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@id/ls_include_content_scrolling_content_list"
-            android:background="@drawable/sele_logout_btn"
-            android:text="@string/user_logout"
-            android:textColor="@color/white"
-            android:textSize="@dimen/textSizeMediu" />
-    </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>

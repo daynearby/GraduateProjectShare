@@ -35,7 +35,6 @@
         android:layout_below="@+id/im_about_head"
         android:background="@android:color/white"
         android:padding="@dimen/paddingMediu"
-        android:gravity="bottom"
         android:orientation="vertical">
 
 
@@ -44,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:overScrollMode="never"
-
+            android:textColor="@android:color/black"
             android:scrollbars="vertical"
             android:singleLine="false"
             android:textSize="@dimen/textSizeMediu" />

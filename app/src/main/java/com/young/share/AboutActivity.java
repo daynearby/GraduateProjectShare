@@ -1,5 +1,7 @@
 package com.young.share;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
@@ -49,8 +51,13 @@ public class AboutActivity extends BaseAppCompatActivity {
 
     @Override
     public void bindData() {
-
+        versionTxt.setText(getVersion());
+        //声明
+        instrunctionTxt.append(getString(R.string.txt_about_content));
+        instrunctionTxt.append("\n");
         instrunctionTxt.append(getString(R.string.txt_about_contect));
+
+
     }
 
     @Override
@@ -90,5 +97,21 @@ public class AboutActivity extends BaseAppCompatActivity {
 
     }
 
+    /**
+     * 2  * 获取版本号
+     * 3  * @return 当前应用的版本号
+     * 4
+     */
+    public String getVersion() {
+        try {
+            PackageManager manager = this.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+            String version = info.versionName;
+            return String.format(getString(R.string.txt_current_version), version);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return String.format(getString(R.string.txt_current_version), "1.0");
+        }
+    }
 
 }

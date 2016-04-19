@@ -41,12 +41,12 @@ public class MainActyProvider extends ActionProvider {
         final PopupMenu citySelectMenu = PopupMenuHub.citySelectMenu(context, cityTxt, new PopupMenuHub.SelectResult() {
 
             @Override
-            public void reslut(String selectResult) {
+            public void reslut(String selectResult,int position) {
                 LogUtils.d(" city = " + selectResult);
                 cityTxt.setText(context.getString(R.string.txt_current_city) + selectResult);
 
                 if (onPopupMenuitemListener != null) {
-                    onPopupMenuitemListener.clickItem(selectResult);
+                    onPopupMenuitemListener.clickItem(position,selectResult);
                 }
             }
         });
@@ -81,7 +81,7 @@ public class MainActyProvider extends ActionProvider {
     }
 
     public interface OnPopupMenuitemListener {
-        void clickItem(String city);
+        void clickItem(int position,String city);
     }
 
 }

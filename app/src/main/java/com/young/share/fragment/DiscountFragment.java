@@ -233,23 +233,23 @@ public class DiscountFragment extends BaseFragment {
         switch (item.getItemId()) {
             case R.id.menu_content_copy://复制文本
                 StringUtils.CopyText(context, discAdapter.getContentString());
-                break;
+                return  true;
 
             case R.id.menu_content_share://分享文本
                 SocialShareManager.shareText(context, discAdapter.getContentString());
-                break;
+                return  true;
             case R.id.menu_image_save://保存图片
                 NetworkReuqest.call2(context, discAdapter.getImageUrl());
-                break;
+                return  true;
 
             case R.id.menu_image_share_all://分享全部图片
 //下载图片
                 SocialShareByIntent.downloadImagesAndShare(context, discAdapter.getImagesUri());
 
-                break;
+                return  true;
             case R.id.menu_image_share_singal://分享打仗图片
                 SocialShareByIntent.downloadImageAndShare(context, discAdapter.getImageUrl());
-                break;
+                return  true;
 
         }
 

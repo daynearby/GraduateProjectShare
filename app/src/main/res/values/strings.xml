@@ -178,8 +178,11 @@
     <string name="toastP_location_info_empty">位置信息不存在!</string>
     <string name="txt_tag_invisible">不显示</string>
     <string name="txt_current_city">所在城市:</string>
-
+    <!--about start-->
+    <string name="txt_current_version">当前版本:%s</string>
+    <string name="txt_about_content">本应用作为作者的毕业设计，不作商业用途,保留所有权利。应用中使用Bmob作为服务后台，以及使用几个开源框架：Universal Image Loader、Volley、Crop、多图选择器，感谢GitHub开源社区的无私贡献者</string>
     <string name="txt_about_contect">联系作者：daynearby@hotmail.com</string>
+    <!--about end-->
     <string name="txt_share_uploading">正在分享信息</string>
     <string name="menu_delete">删除</string>
     <string name="menu_image_share_all">分享全部图片</string>
@@ -219,5 +222,6 @@
     <string name="BMToast_IsUpdating">正在更新中....</string>
     <string name="BMDialog_InstallAPK">最新版本已下载，是否安装？</string>
     <string name="BMUpdateCheck">v3.1.4Beta</string>
+    <string name="txt_video">小视频</string>
     <!--end-->
 </resources>

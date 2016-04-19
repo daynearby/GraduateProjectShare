@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/bg_dialog4upload_linearLayout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="@dimen/paddingMediu"
-    android:paddingBottom="@dimen/paddingMediu"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/paddingMediu"
+        android:paddingTop="@dimen/paddingMediu">
     <TextView
         android:id="@+id/tv_content_dialog4upload_title"
         android:layout_width="match_parent"
@@ -30,10 +34,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:textSize="@dimen/textSizeMediu"
-            android:paddingLeft="@dimen/paddingMediu"
-            android:paddingRight="@dimen/paddingMediu"
+            android:padding="@dimen/paddingMic"
             android:text="选择图库" />
 
         <TextView
@@ -42,11 +45,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="@dimen/textSizeMediu"
-            android:gravity="center_horizontal"
-            android:paddingLeft="@dimen/paddingMediu"
-            android:paddingRight="@dimen/paddingMediu"
+            android:gravity="center"
+            android:padding="@dimen/paddingMic"
             android:text="拍照" />
     </LinearLayout>
 
 
 </LinearLayout>
+</RelativeLayout>

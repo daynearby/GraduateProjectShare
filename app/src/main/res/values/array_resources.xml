@@ -24,6 +24,30 @@
         <item>河源市</item>
     </string-array>
 
+    <string-array name="city_longitude">
+        <item>113.270793,23.135303</item>
+        <item>114.065944,22.548554</item>
+        <item>113.128432,23.027701</item>
+        <item>113.758231,23.026994</item>
+        <item>113.39914,22.524027</item>
+        <item>113.583216,22.276393</item>
+        <item>113.088235,22.584473</item>
+        <item>112.47132,23.05335</item>
+        <item>114.423348,23.116409</item>
+        <item>116.688467,23.36014</item>
+        <item>116.629431,23.662921</item>
+        <item>116.379209,23.555768</item>
+        <item>115.381813,22.791364</item>
+        <item>110.365914,21.276652</item>
+        <item>110.931773,21.669043</item>
+        <item>111.989051,21.864417</item>
+        <item>113.603756,24.816167</item>
+        <item>113.062619,23.688231</item>
+        <item>112.051155,22.920869</item>
+        <item>116.129179,24.294311</item>
+        <item>114.706878,23.74986</item>
+    </string-array>
+
     <string-array name="select_tag_item">
         <item>最多人想去</item>
         <item>我爱拍照</item>
@@ -61,7 +85,7 @@
     </integer-array>
 
     <string-array name="select_option_item">
-        <item>收藏记录</item>
+        <item>我想去</item>
         <item>分享记录</item>
         <item>修改资料</item>
         <item>修改密码</item>

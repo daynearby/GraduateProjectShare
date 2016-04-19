@@ -29,6 +29,7 @@ import com.young.share.model.MyUser;
 import com.young.share.utils.BDLBSUtils;
 import com.young.share.utils.DialogUtils;
 import com.young.share.utils.LogUtils;
+import com.young.share.utils.XmlUtils;
 import com.young.share.views.ArcMenu;
 import com.young.share.views.CustomViewPager;
 import com.young.share.views.Dialog4Tips;
@@ -43,8 +44,6 @@ import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.update.BmobUpdateAgent;
 
-// TODO: 2016-02-27 百度地图的循环调用，添加一个时间延迟，连续定位没用
-// TODO: 2016-04-09 当消息发送成功的进行刷新界面 ，使用startavtivityForResult
 public class MainActivity extends BaseAppCompatActivity {
 
     private ArcMenu mArcMenu;
@@ -125,8 +124,10 @@ public class MainActivity extends BaseAppCompatActivity {
         mainActyProvider = (MainActyProvider) MenuItemCompat.getActionProvider(item);
         mainActyProvider.setOnPopupMenuitemListener(new MainActyProvider.OnPopupMenuitemListener() {
             @Override
-            public void clickItem(String city) {
+            public void clickItem(int position, String city) {
                 currentCity = city;
+                updateCity(position);
+
             }
         });
         return super.onCreateOptionsMenu(menu);
@@ -172,21 +173,23 @@ public class MainActivity extends BaseAppCompatActivity {
         }
     }
 
+    /**
+     * 更改城市，更改经纬度
+     *
+     * @param position
+     */
+    private void updateCity(int position) {
+        List<String> cityList = XmlUtils.getSelectCitiesLongitude(this);
 
+        app.getCacheInstance().put(Contants.ACAHE_KEY_LONGITUDE, cityList.get(position));
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        LogUtils.e(" resultCode = " + resultCode);
-
-        //回调
+        //更新数据
         if (isDiscount) {
 //            discountFragment.getRemoteData();
-            discountFragment.onActivityResult(requestCode, resultCode, data);
+            discountFragment.getRemoteData();
         } else {
-            discoverFragment.onActivityResult(requestCode, resultCode, data);
+            discoverFragment.getDataFromRemote();
         }
-
 
 
     }
@@ -247,7 +250,6 @@ public class MainActivity extends BaseAppCompatActivity {
     private void loginFunction() {
         Dialog4Tips.loginFunction(mActivity);
 
-
     }
 
 
@@ -256,7 +258,6 @@ public class MainActivity extends BaseAppCompatActivity {
 
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
                 && event.getAction() != KeyEvent.ACTION_UP) {
-
 
             AlertDialog.Builder alertbBuilder = DialogUtils.exitDialog(mActivity);
             alertbBuilder.show();

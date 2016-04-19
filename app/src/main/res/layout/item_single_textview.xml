@@ -4,7 +4,10 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:textColor="@android:color/black"
-    android:padding="@dimen/paddingMic"
+    android:paddingLeft="@dimen/paddingMic"
+    android:paddingRight="@dimen/paddingMic"
+    android:paddingTop="@dimen/size_12_dp"
+    android:paddingBottom="@dimen/size_12_dp"
     android:text="item">
 
 </TextView>

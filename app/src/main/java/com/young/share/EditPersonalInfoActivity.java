@@ -231,10 +231,10 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
         switch (contextMenuType) {
             case CONTEXT_MENU_GENDER:
                 gender_tv.setText(item.getTitle());
-                break;
+                return true;
             case CONTEXT_MENU_AGE:
                 age_tv.setText(item.getTitle());
-                break;
+                return true;
 
             case CONTEXT_MENU_HOME_TOWN:
 
@@ -245,7 +245,7 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
                     hometown_tv.append(item.getTitle());
                     homeTownClick = 0;
                 }
-                break;
+                return true;
 
         }
 

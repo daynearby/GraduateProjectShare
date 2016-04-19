@@ -16,6 +16,7 @@
     <dimen name="textSizeLarge">22sp</dimen>
     <dimen name="textSizeXLarge">28sp</dimen>
     <dimen name="textSizeXXLarge">42sp</dimen>
+    <dimen name="size_16_dp">16dp</dimen>
 
     <dimen name="micro">2dp</dimen>
     <dimen name="radius">10dp</dimen>

@@ -3,8 +3,6 @@ package com.young.share;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Message;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -14,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -33,6 +30,7 @@ import com.young.share.utils.ImageHandlerUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.XmlUtils;
 import com.young.share.views.Dialog4UploadAvatar;
+import com.young.share.views.WrapHightListview;
 
 import java.util.List;
 
@@ -56,14 +54,14 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
     @InjectView(R.id.tv_user_signture)
     private TextView signture_tv;
     @InjectView(R.id.ls_include_content_scrolling_content_list)
-    private ListView select_ls;
+    private WrapHightListview select_ls;
     @InjectView(R.id.btn_include_content_scrolling_logout)
     private Button logout_btn;
-    @InjectView(R.id.rtl_include_content_csrcolling)
-    private RelativeLayout relativeLayout;
+    @InjectView(R.id.rl_head_avatar_layout)
+    private RelativeLayout headerLayout;
 
     private List<String> data;
-    private int displayHeightDp = 0;
+    private int displayHeight = 0;
     private Dialog4UploadAvatar dialog4UploadAvater;
 
 
@@ -73,34 +71,31 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
     }
 
     @Override
-    public void findviewbyid() {
+    public void initData() {
         initToolbar();
-        ViewGroup.LayoutParams params = relativeLayout.getLayoutParams();
-        params.height = displayHeightDp / 2;
-        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        relativeLayout.setLayoutParams(params);
-        ViewGroup.LayoutParams layoutParams = select_ls.getLayoutParams();
-        layoutParams.height = displayHeightDp / 2;
-        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        select_ls.setLayoutParams(layoutParams);
+        setTitle(R.string.personal_center);
+        data = XmlUtils.getSelectOption(mActivity);
+        displayHeight = DisplayUtils.getScreenHeightPixels(mActivity);
+    }
+
+    @Override
+    public void findviewbyid() {
 
         avatar_im.setOnClickListener(this);
         logout_btn.setOnClickListener(this);
 
     }
 
-    @Override
-    public void initData() {
-        data = XmlUtils.getSelectOption(mActivity);
-        displayHeightDp = DisplayUtils.getScreenHeightPixels(mActivity);
-    }
+
 
     @Override
     public void bindData() {
+
         initDialog();
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.item_single_textview);
         arrayAdapter.addAll(data);
-
+        ViewGroup.LayoutParams params = headerLayout.getLayoutParams();
+        params.height = displayHeight / 3 + DisplayUtils.dip2px(this, 44);
         select_ls.setAdapter(arrayAdapter);
         select_ls.setOnItemClickListener(new onitemClick());
 
@@ -125,19 +120,12 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
 
         return super.dispatchKeyEvent(event);
     }
-// TODO: 2016-04-16 查看分享记录挂了
     /**
      * toolbar 初始化
      */
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
-        ViewGroup.LayoutParams lp = appBarLayout.getLayoutParams();
-        lp.height = displayHeightDp / 3;
         setSupportActionBar(toolbar);
-        CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        toolBarLayout.setTitle(getString(R.string.personal_center));
-        toolBarLayout.setExpandedTitleColor(Color.argb(0, 0, 0, 0));
         toolbar.setNavigationIcon(R.drawable.icon_menu_back);
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -249,6 +237,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
         SVProgressHUD.showWithStatus(this, getString(R.string.cleaning_cache));
         BmobPro.getInstance(mActivity).clearCache();
         ImageLoader.getInstance().clearDiskCache();
+//        app.getCacheInstance().clear();
         SVProgressHUD.dismiss(this);
     }
 

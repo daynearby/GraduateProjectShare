@@ -87,6 +87,20 @@ public class XmlUtils {
     }
 
     /**
+     * 获取城市信息
+     *
+     * @param ctx
+     * @return String[]
+     */
+    public static List<String> getSelectCitiesLongitude(Context ctx) {
+        List<String> itemsList = new ArrayList<>();
+        String[] items = ctx.getResources().getStringArray(R.array.city_longitude);
+
+        Collections.addAll(itemsList, items);
+        return itemsList;
+    }
+
+    /**
      * 城市对应的地区
      *
      * @param ctx

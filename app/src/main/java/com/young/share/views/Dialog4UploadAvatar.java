@@ -4,14 +4,11 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.soundcloud.android.crop.Crop;
 import com.young.share.R;
-import com.young.share.utils.DisplayUtils;
 
 
 /**
@@ -41,7 +38,6 @@ public class Dialog4UploadAvatar extends Dialog implements View.OnClickListener 
         this.activity = activity;
         this.isBig = isBig;
         findViewById();
-        initDialogSize();
 
         ((TextView) view.findViewById(R.id.tv_content_dialog4upload_title)).setText(StrId);
 
@@ -51,15 +47,7 @@ public class Dialog4UploadAvatar extends Dialog implements View.OnClickListener 
         btnLocalPhoto = (TextView) view.findViewById(R.id.dialog_frag_real_name_btn_local_photo);
         btnCamera = (TextView) view.findViewById(R.id.dialog_frag_real_name_btn_camera);
     }
-    /**
-     * 初始化宽度
-     */
-    private void initDialogSize() {
-        LinearLayout linearLayout= (LinearLayout) view.findViewById(R.id.bg_dialog4upload_linearLayout);
-        ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
-        params.width = DisplayUtils.getScreenWidthPixels(activity);
-        linearLayout.setLayoutParams(params);
-    }
+
 
 
     public void setClickListener(View.OnClickListener listener) {

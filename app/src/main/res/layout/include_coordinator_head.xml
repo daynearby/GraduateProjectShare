@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_head_avatar_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -21,6 +22,7 @@
             android:id="@+id/id_im_personal_avatar"
             android:layout_width="@dimen/avatar_size_mediu"
             android:layout_height="@dimen/avatar_size_mediu"
+            android:layout_marginTop="@dimen/maginMediu"
             android:scaleType="centerInside" />
 
         <TextView

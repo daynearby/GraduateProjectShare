@@ -19,6 +19,7 @@
     <color name="colorAccent">#006682</color>
     <color name="cherry_red">#fd495a</color>
     <color name="cherry_red_light">#befd495a</color>
+    <color name="cherry_red_dark">#f23546</color>
     <color name="black">#000000</color>
     <color name="trans_back">#80000000</color>
     <color name="trans_back_bg">#9c000000</color>

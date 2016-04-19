@@ -443,7 +443,6 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
             if (!TextUtils.isEmpty(content) || lists != null && lists.size() > 0 || !TextUtils.isEmpty(videoPath)) {//信息或者图片不为空
             /*发送*/
                 toast(R.string.txt_share_uploading);
-                // TODO: 2016-03-28 使用线程进行分享
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -468,7 +467,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         tagInfo = !TextUtils.isEmpty(item.getTitle()) && !getString(R.string.txt_tag_invisible).equals(item.getTitle()) ?
                 String.valueOf(item.getTitle()) : "";
 
-        return super.onContextItemSelected(item);
+        return  true;
     }
     // TODO: 2016-04-06 完善修改图片的功能
 

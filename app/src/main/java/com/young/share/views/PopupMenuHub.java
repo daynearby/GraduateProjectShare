@@ -21,6 +21,7 @@ public class PopupMenuHub {
     private static final int cityId = 0x100;
     private static int selectNumber = 0;
     private static StringBuilder cityString = null;
+    private static List<String> cityList;
 
     /**
      * 城市选择的popupmenu
@@ -28,10 +29,10 @@ public class PopupMenuHub {
      * @param context 对象
      * @return
      */
-    public static PopupMenu areaSelectMenu(Context context, View v, final SelectResult selectResult) {
+    public static PopupMenu areaSelectMenu(Context context, View v, final SelectArce selectResult) {
         PopupMenu cityMenu = new PopupMenu(context, v);
         cityMenu.inflate(R.menu.menu_context_empty);
-        List<String> cityList = XmlUtils.getSelectCities(context);
+        cityList = XmlUtils.getSelectCities(context);
 
 
         Menu menu = cityMenu.getMenu();
@@ -85,7 +86,6 @@ public class PopupMenuHub {
     public static PopupMenu citySelectMenu(Context context, View v, final SelectResult selectResult) {
         PopupMenu cityMenu = new PopupMenu(context, v);
         cityMenu.inflate(R.menu.menu_context_empty);
-        List<String> cityList = XmlUtils.getSelectCities(context);
 
 
         Menu menu = cityMenu.getMenu();
@@ -102,9 +102,15 @@ public class PopupMenuHub {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
 
-
+                int position = 0;
                 if (selectResult != null){
-                    selectResult.reslut((String) menuItem.getTitle());
+                    for (int i = 0; i < cityList.size(); i++) {
+                        if (cityList.get(i).equals(menuItem.getTitle())) {
+                            position = i;
+                            break;
+                        }
+                    }
+                    selectResult.reslut((String) menuItem.getTitle(),position);
                 }
                 return false;
             }
@@ -116,6 +122,10 @@ public class PopupMenuHub {
 
 
     public interface SelectResult {
+        void reslut(String selectResult,int position);
+    }
+
+    public interface SelectArce{
         void reslut(String selectResult);
     }
 }
