@@ -187,17 +187,13 @@ public class CommentFragment extends BaseFragment {
             public void onSuccess(Object object) {
                 CommentList commentList = (CommentList) object;
 
-                if (commentList.getCommentList().size() > 0) {
-// TODO: 2016-04-06 需要整理逻辑
-                    if (dataList != null && dataList.size() > 0) {
-                        dataList.clear();
-                    } else {
-                        dataList = new ArrayList<>();
-                    }
-
-                    dataList.addAll(commentList.getCommentList());
-                }else {
+                if (dataList == null) {
                     dataList = new ArrayList<>();
+                }
+
+                if (commentList.getCommentList().size() > 0) {
+
+                    dataList = commentList.getCommentList();
                 }
 
                 if (dataList.size() > 0) {

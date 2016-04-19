@@ -216,15 +216,22 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         nickname_tv.setText(myUser.getNickName() == null ?
                 getString(R.string.user_name_defual) : myUser.getNickName());
 
-        tag_tv.setText(discountMessage.getDtTag());
-
 
         if (TextUtils.isEmpty(discountMessage.getDtTag())) {
             tag_tv.setVisibility(View.GONE);
             tagIconIm.setVisibility(View.GONE);
         } else {
             tag_tv.setText(discountMessage.getDtTag());
+            tag_tv.setOnClickListener(this);
         }
+        if (TextUtils.isEmpty(discountMessage.getDtLocation())) {
+            locationInfo.setVisibility(View.GONE);
+        } else {
+            locationInfo.setVisibility(View.VISIBLE);
+            locationInfo.setText(discountMessage.getDtLocation());
+            locationInfo.setOnClickListener(this);
+        }
+
         //内容
         if (TextUtils.isEmpty(discountMessage.getDtContent())) {
             content_tv.setVisibility(View.GONE);
@@ -442,9 +449,34 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
                 viewPager.setCurrentItem(1, true);
                 hadGo((TextView) v);
 
+                break;
+            case R.id.id_tx_tab://标签
 
+                Bundle bundle = new Bundle();
+                bundle.putCharSequence(Contants.INTENT_RANK_TYPE, discountMessage.getDtTag());
+                mStartActivity(RankListActivity.class, bundle);
+                break;
+            case R.id.tv_item_share_main_location://地址
+                showOnMap();
                 break;
         }
+    }
+
+    /**
+     * 在地图上面显示位置
+     * 或者导航
+     */
+    private void showOnMap() {
+//通过坐标进行显示
+        if (discountMessage.getGeographic() != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(Contants.INTENT_BMOB_GEOPONIT, discountMessage.getGeographic());
+            mStartActivity(BaiduMapActivity.class, bundle);
+
+        } else {
+            toast(R.string.toastP_location_info_empty);
+        }
+
     }
 
     /**

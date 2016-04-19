@@ -24,9 +24,9 @@ import com.young.share.config.Contants;
 import com.young.share.fragment.DiscountFragment;
 import com.young.share.fragment.DiscoverFragment;
 import com.young.share.fragment.RankFragment;
-import com.young.share.model.MyBmobInstallation;
 import com.young.share.model.MyUser;
 import com.young.share.utils.BDLBSUtils;
+import com.young.share.utils.BmobUtils;
 import com.young.share.utils.DialogUtils;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.XmlUtils;
@@ -474,10 +474,16 @@ public class MainActivity extends BaseAppCompatActivity {
      */
     private void savaUserWithInsId() {
         if (cuser != null) {
-            MyBmobInstallation myBmobInstallation = new MyBmobInstallation(this);
-            myBmobInstallation.setMyUser(cuser);
-            myBmobInstallation.setInstallationId(MyBmobInstallation.getInstallationId(this));
-            myBmobInstallation.save(this);
+//            MyBmobInstallation myBmobInstallation = new MyBmobInstallation(this);
+//            myBmobInstallation.setMyUser(cuser);
+//            myBmobInstallation.save(this);
+
+            BmobUtils.updateinstallationId(this,cuser);
+
+
+
+
+
         }
     }
 

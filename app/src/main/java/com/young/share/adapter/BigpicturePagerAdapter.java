@@ -84,6 +84,7 @@ public class BigpicturePagerAdapter extends BasePagerAdapter<PictureInfo> implem
         if (pictureInfo != null && !TextUtils.isEmpty(pictureInfo.getImageUrl())) {
             ((Activity) context).registerForContextMenu(photoView);
             photoView.setOnCreateContextMenuListener(new OnContextMenuCreat());
+            photoView.setImageResource(R.color.black);
             setNetImage(photoView, progressBar, pictureInfo);
 
             photoView.setOnLongClickListener(new View.OnLongClickListener() {

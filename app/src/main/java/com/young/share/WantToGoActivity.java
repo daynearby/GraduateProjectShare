@@ -69,7 +69,7 @@ public class WantToGoActivity extends BaseAppCompatActivity {
     @Override
     protected void initData() {
         initialiToolbar();
-        setTitle(R.string.collection_record);
+        setTitle(R.string.txt_wantto_go);
         dataList = (List<RemoteModel>) app.getCacheInstance().getAsObject(getString(R.string.collection_record) + cuser.getObjectId());
 
         getCollectionRec();

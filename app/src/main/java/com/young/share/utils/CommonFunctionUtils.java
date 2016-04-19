@@ -401,7 +401,6 @@ public class CommonFunctionUtils {
                 R.animator.activity_slid_left_out);
     }
 
-
     /**
      * 发送广播刷新UI
      *

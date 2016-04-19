@@ -148,7 +148,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private ImageView videoPrevideo;
     @InjectView(R.id.im_share_start_btn)
     private ImageView playvideo;
-
     @InjectView(R.id.pb_share_loading)
     private ProgressBar videoDownloadPb;
 
@@ -178,6 +177,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private int totalOffset = 0;//动画总的偏移量
     private int lastIndex = 0;//上一个页面的position
     private boolean initVideo = false;//是否已经初始化videoView
+    private boolean isFirstIn = true;//第一次打开，打开键盘，下次发信息到handler不执行
 
     @Override
     public int getLayoutId() {
@@ -247,7 +247,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                     imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 } else {
                     imm.hideSoftInputFromWindow(sendComment_edt.getWindowToken(), 0);
-
+//                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 }
             }
         });
@@ -430,23 +430,23 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         switch (item.getItemId()) {
             case R.id.menu_content_copy://复制文本
                 StringUtils.CopyText(this, copyContent);
-                break;
+                return true;
 
             case R.id.menu_content_share://分享文本
                 SocialShareManager.shareText(this, copyContent);
-                break;
+                return true;
             case R.id.menu_image_save://保存图片
                 NetworkReuqest.call2(this, imageUrl);
-                break;
+                return true;
             case R.id.menu_image_share_all://分享全部图片
 //下载图片
                 SocialShareByIntent.downloadImagesAndShare(mActivity,imagesUrl);
 //                SocialShareManager.shareImage(context, discAdapter.getImageUrl());
 
-                break;
+                return true;
             case R.id.menu_image_share_singal://分享打仗图片
                 SocialShareByIntent.downloadImageAndShare(mActivity, imageUrl);
-                break;
+                return true;
         }
 
         return super.onContextItemSelected(item);
@@ -456,10 +456,11 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     @Override
     public void handerMessage(Message msg) {
 
-        if (commentClick == Contants.EXPEND_START_INPUT) {
-            viewPager.setCurrentItem(2, true);
+        if (isFirstIn&&commentClick == Contants.EXPEND_START_INPUT) {
+//            viewPager.setCurrentItem(2, true);
             startPrepare();
-
+            receiverId = shareMessage.getMyUserId().getObjectId();
+            isFirstIn = false;
         }
 
         switch (msg.what) {
@@ -662,8 +663,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 && event.getAction() != KeyEvent.ACTION_UP) {
 
             if (layout_comment.getVisibility() == View.VISIBLE) {
-                layout_comment.setVisibility(View.GONE);
                 sendComment_edt.clearFocus();
+                layout_comment.setVisibility(View.GONE);
                 bottomOptionBar.setVisibility(View.VISIBLE);
                 return true;
             } else {
@@ -683,6 +684,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         @Override
         public void onItemClick(Comment_HZ comment, int position) {
             receiverId = comment.getSenderId().getObjectId();
+            LogUtils.e(" receiverId = " + receiverId);
             prepareSend();
         }
     };
@@ -697,14 +699,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
     }
 
-    /**
-     * 结束退出
-     */
-    private void backAFinsish() {
-
-        mBackStartActivity(superTagClazz);
-        this.finish();
-    }
 
     /**
      * 准备发送评论工作
@@ -714,8 +708,8 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         viewPager.setCurrentItem(2, true);
 
         if (SendMessageFinish) {
-            sendComment_edt.requestFocus();
             layout_comment.setVisibility(View.VISIBLE);
+            sendComment_edt.requestFocus();
         }
 
     }
@@ -800,6 +794,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 viewPager.setCurrentItem(2, true);
                 getUser();
                 receiverId = shareMessage.getMyUserId().getObjectId();
+                LogUtils.e(" receiverId = " + receiverId);
                 /*显示评论输入面板*/
                 editComment();
                 break;
@@ -807,6 +802,11 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
             case R.id.id_tx_tab://标签
 
                 LogUtils.ts("标签的点击事件");
+
+                Bundle bundle = new Bundle();
+                bundle.putCharSequence(Contants.INTENT_RANK_TYPE, shareMessage.getShTag());
+                mStartActivity(RankListActivity.class, bundle);
+
                 break;
 
             case R.id.rb_message_detail_want_to://想去，也就是收藏
@@ -1028,7 +1028,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         if (!TextUtils.isEmpty(sendComment_edt.getText().toString())) {
 
             bottomOptionBar.setVisibility(View.VISIBLE);
-            sendComment_edt.clearFocus();
+//            sendComment_edt.clearFocus();
 
             BmobApi.sendMessage(mActivity, cuser.getObjectId(), receiverId, sendComment_edt.getText().toString(),
                     shareMessage.getObjectId(), new BmobApi.SendMessageCallback() {

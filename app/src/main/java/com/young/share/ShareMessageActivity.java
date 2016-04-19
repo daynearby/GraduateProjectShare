@@ -561,12 +561,15 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
             placeResult = (PlaceSearch.ResultsEntity) data.getExtras().getSerializable(Contants.INTENT_PLACE);
             placeSelect = data.getIntExtra(Contants.INTENT_SELECTOR_POSITION, 0);
             if (placeSelect != 0) {
+
                 shareLocation_tv.setText(placeResult.getName());
                 locationInfo = placeResult.getName();
                 // 在现实市级的时候，没有返回经纬度
                 longitude = placeResult.getLocation() != null ? placeResult.getLocation().getLng() : 114.424984;
                 latitude = placeResult.getLocation() != null ? placeResult.getLocation().getLat() : 23.043472;
-
+                LogUtils.d("area" + locationInfo
+                        + " longitude = " + longitude
+                        + " latitude = " + latitude);
 
             }
 

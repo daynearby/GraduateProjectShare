@@ -259,6 +259,10 @@ public class Contants {
     public static final String PARAMS_DT_WANTED_NUMBER = "dtWantedNum";//参数名
     public static final String PARAMS_SH_VISITED_NUMBER = "shVisitedNum";//参数名
     public static final String PARAMS_SH_WANTED_NUMBER = "shWantedNum";//参数名
+    public static final String PARAMS_CONTENT = "content";//参数名
+    public static final String PARAMS_INSTALLATIONID = "installationId";//参数名
+
+
 
 //百度
     public static final String MCODE = "A9:5B:FA:94:1E:DC:5E:FB:22:16:CA:54:FA:C3:F6:2D:99:36:22:6A;com.young.share";

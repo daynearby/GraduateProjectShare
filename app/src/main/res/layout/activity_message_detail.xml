@@ -27,7 +27,6 @@
 
             <TextView
                 android:id="@+id/tx_message_detail_content"
-                style="?android:attr/textAppearanceMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/paddingMic"

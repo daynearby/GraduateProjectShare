@@ -223,5 +223,6 @@
     <string name="BMDialog_InstallAPK">最新版本已下载，是否安装？</string>
     <string name="BMUpdateCheck">v3.1.4Beta</string>
     <string name="txt_video">小视频</string>
+    <string name="txt_wantto_go">我想去</string>
     <!--end-->
 </resources>

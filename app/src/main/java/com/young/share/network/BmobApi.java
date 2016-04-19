@@ -271,26 +271,26 @@ public class BmobApi {
 
         message.setCommContent(content);
         message.setRead(false);
-        LogUtils.d("senderId = " + senderId + " receiverId = " + receiverId);
+        LogUtils.e("senderId = " + senderId + " receiverId = " + receiverId);
 
         message.save(context, new SaveListener() {
-            @Override
-            public void onSuccess() {
-
-                comment.setMessageId(message);
-                comment.save(context, new SaveListener() {
                     @Override
                     public void onSuccess() {
-                        LogUtils.d("save message success");
-                        //保存信息成功。开始发送信息
-                        sendMessage(context, receiverId, content, sendMessageCall);
-                    }
 
-                    @Override
-                    public void onFailure(int i, String s) {
-                        mToast(context, R.string.network_erro);
-                    }
-                });
+                        comment.setMessageId(message);
+                        comment.save(context, new SaveListener() {
+                            @Override
+                            public void onSuccess() {
+                                LogUtils.d("save message success");
+                                //保存信息成功。开始发送信息
+                                sendMessage(context, receiverId, content, sendMessageCall);
+                            }
+
+                            @Override
+                            public void onFailure(int i, String s) {
+                                mToast(context, R.string.network_erro);
+                            }
+                        });
 
             }
 
@@ -317,12 +317,13 @@ public class BmobApi {
                                     String content, final SendMessageCallback sendMessageCall) {
         JSONObject params = new JSONObject();
         try {
-            params.put("uid", receiverId);
-            params.put("content", content);
+            params.put(Contants.PARAM_USERID, receiverId);
+            params.put(Contants.PARAMS_CONTENT, content);
         } catch (JSONException e) {
             LogUtils.i("send messa add params fail " + e.toString());
         }
-
+        LogUtils.e(" PARAM_USERID = " + receiverId
+                + " PARAMS_CONTENT = " + content);
 
         AsyncFunction(ctx, params, PUSH_MESSAGE_BY_UID, new AsyncListener() {
             @Override

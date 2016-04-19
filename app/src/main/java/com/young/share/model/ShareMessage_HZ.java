@@ -100,13 +100,6 @@ public class ShareMessage_HZ extends BmobObject {
         this.shCommNum = shCommNum;
     }
 
-    public MyUser getUserId() {
-        return userId;
-    }
-
-    public void setUserId(MyUser userId) {
-        this.userId = userId;
-    }
 
     public BmobFile getVideo() {
         return video;

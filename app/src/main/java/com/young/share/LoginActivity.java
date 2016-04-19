@@ -223,7 +223,7 @@ public class LoginActivity extends BaseAppCompatActivity implements View.OnClick
 /*获取当前用户的信息，bmob同步的速度太慢*/
                         getCurrent(userName);
                         /*更新user的installtionId*/
-                        savaUserWithInstallId(myUserLogin);
+//                        savaUserWithInstallId(myUserLogin);
 
                         mHandler.sendEmptyMessageDelayed(102, Contants.ONE_SECOND);
 
