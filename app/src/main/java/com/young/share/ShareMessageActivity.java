@@ -559,8 +559,8 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         if (resultCode == Contants.RESULT_CODE_PLACE) {//地点选择了
             //判断是否是第一个，第一个意思是不显示地点
             placeResult = (PlaceSearch.ResultsEntity) data.getExtras().getSerializable(Contants.INTENT_PLACE);
-            placeSelect = data.getIntExtra(Contants.INTENT_SELECTOR_POSITION, 0);
-            if (placeSelect != 0) {
+//            placeSelect = data.getIntExtra(Contants.INTENT_SELECTOR_POSITION, 0);
+            if (placeResult != null) {
 
                 shareLocation_tv.setText(placeResult.getName());
                 locationInfo = placeResult.getName();
@@ -1101,7 +1101,7 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
         intents = new Intent();
         intents.putExtra(Contants.INTENT_KEY_REFRESH, isRefresh);
-        LogUtils.e("share end ");
+        LogUtils.e("share activity end ");
         setResult(currentIsDiscount ? Contants.RESULT_SHARE_DISCOUNT : Contants.RESULT_SHARE_DISCOVER,
                 intents);
     }
