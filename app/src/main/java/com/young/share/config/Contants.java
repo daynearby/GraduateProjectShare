@@ -124,7 +124,6 @@ public class Contants {
     //广播数据的标志
 
     public static final String BORDCAST_IMAGEPATH_LIST = "bordcast_imagrpath_list";
-    public static final String BORDCAST_CLEAR_MESSAGES = "bordcastClearMessages";
 
     public final static String BUNDLE_TAG = "Serializable_Data";
     public final static String BUNDLE_CURRENT_IS_DISCOUNT = "currentIsDiscount";
