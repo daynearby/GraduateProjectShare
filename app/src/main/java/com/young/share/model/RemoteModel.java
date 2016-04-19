@@ -197,4 +197,20 @@ public class RemoteModel implements Serializable {
     public void setVideoPreview(BmobFile videoPreview) {
         this.videoPreview = videoPreview;
     }
+
+    public int getVisitedNumber() {
+        return visitedNumber;
+    }
+
+    public void setVisitedNumber(int visitedNumber) {
+        this.visitedNumber = visitedNumber;
+    }
+
+    public int getWantedNumber() {
+        return wantedNumber;
+    }
+
+    public void setWantedNumber(int wantedNumber) {
+        this.wantedNumber = wantedNumber;
+    }
 }

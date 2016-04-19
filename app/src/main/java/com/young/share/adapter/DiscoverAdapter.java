@@ -189,15 +189,15 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 
 
         String wanto;
-        if (shareMessage.getShWantedNum() != null && shareMessage.getShWantedNum().size() > 0) {
-            wanto = String.valueOf(shareMessage.getShWantedNum().size());
+        if (shareMessage.getShWantedNum()  > 0) {
+            wanto = String.valueOf(shareMessage.getShWantedNum());
         } else {
             wanto = ctx.getString(R.string.tx_wantogo);
         }
 
         String hadgo;
-        if (shareMessage.getShVisitedNum() != null && shareMessage.getShVisitedNum().size() > 0) {
-            hadgo = String.valueOf(shareMessage.getShVisitedNum().size());
+        if (shareMessage.getShVisitedNum()  > 0) {
+            hadgo = String.valueOf(shareMessage.getShVisitedNum());
         } else {
             hadgo = ctx.getString(R.string.hadgo);
         }
@@ -206,8 +206,8 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
         hadgo_tv.setText(hadgo);
 
         if (cuser != null) {
-            CommonFunctionUtils.leftDrawableWantoGO(wanto_tv, shareMessage.getShWantedNum(), cuser.getObjectId());//设置图标
-            CommonFunctionUtils.leftDrawableVisited(hadgo_tv, shareMessage.getShVisitedNum(), cuser.getObjectId());//设置图标
+            CommonFunctionUtils.leftDrawableWantoGO(wanto_tv, shareMessage.getShWanted(), cuser.getObjectId());//设置图标
+            CommonFunctionUtils.leftDrawableVisited(hadgo_tv, shareMessage.getShVisited(), cuser.getObjectId());//设置图标
         }
 
         comment_tv.setText(shareMessage.getShCommNum() > 0 ?
@@ -479,7 +479,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
                     if (cuser != null) {//用户是否登陆
 
                         shareMessage = (ShareMessage_HZ) o;
-                        List<String> shWantedNum = shareMessage.getShWantedNum();
+                        List<String> shWantedNum = shareMessage.getShWanted();
 
                         CommonFunctionUtils.wantToGo(ctx, cuser, UserUtils.isHadCurrentUser(shWantedNum, cuser.getObjectId()),
                                 shareMessage, (TextView) v, new CommonFunctionUtils.Callback() {
@@ -508,7 +508,7 @@ public class DiscoverAdapter extends CommAdapter<ShareMessage_HZ> {
 
                     if (cuser != null) {
                         shareMessage = (ShareMessage_HZ) o;
-                        List<String> shVisitedNum = shareMessage.getShVisitedNum();
+                        List<String> shVisitedNum = shareMessage.getShVisited();
                         CommonFunctionUtils.visit(ctx, cuser, UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()),
                                 shareMessage, v, new CommonFunctionUtils.Callback() {
                                     @Override

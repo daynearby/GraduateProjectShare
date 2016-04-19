@@ -169,8 +169,6 @@ public class HadGoFragment extends BaseFragment {
         }
     }
 
-// TODO: 2016-04-05 头像点击，单个准确，多个不准确，只有最后一个能点击
-
     /**
      * 根据用户信息进行加载头像
      */
@@ -181,8 +179,7 @@ public class HadGoFragment extends BaseFragment {
         for (MyUser u : userList) {
 
             ImageLoader.getInstance().loadImage(TextUtils.isEmpty(u.getAvatar()) ? Contants.DEFAULT_AVATAR :
-                            NetworkUtils.getRealUrl(context,
-                                    u.getAvatar()
+                            NetworkUtils.getRealUrl(context, u.getAvatar()
                             ),
                     mImageSize,
                     new SimpleImageLoadingListener() {

@@ -159,15 +159,15 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
 
         String wanto;
-        if (discountMessage_hz.getDtWantedNum() != null && discountMessage_hz.getDtWantedNum().size() > 0) {
-            wanto = String.valueOf(discountMessage_hz.getDtWantedNum().size());
+        if (discountMessage_hz.getDtWantedNum() > 0) {
+            wanto = String.valueOf(discountMessage_hz.getDtWantedNum());
         } else {
             wanto = ctx.getString(R.string.tx_wantogo);
         }
 
         String hadgo;
-        if (discountMessage_hz.getDtVisitedNum() != null && discountMessage_hz.getDtVisitedNum().size() > 0) {
-            hadgo = String.valueOf(discountMessage_hz.getDtVisitedNum().size());
+        if (discountMessage_hz.getDtVisitedNum()  > 0) {
+            hadgo = String.valueOf(discountMessage_hz.getDtVisitedNum());
         } else {
             hadgo = ctx.getString(R.string.hadgo);
         }
@@ -177,8 +177,8 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
 
         if (cuser != null) {
-            CommonFunctionUtils.leftDrawableWantoGO(wanto_tv, discountMessage_hz.getDtWantedNum(), cuser.getObjectId());//设置图标
-            CommonFunctionUtils.leftDrawableVisited(hadgo_tv, discountMessage_hz.getDtVisitedNum(), cuser.getObjectId());//设置图标
+            CommonFunctionUtils.leftDrawableWantoGO(wanto_tv, discountMessage_hz.getDtWanted(), cuser.getObjectId());//设置图标
+            CommonFunctionUtils.leftDrawableVisited(hadgo_tv, discountMessage_hz.getDtVisited(), cuser.getObjectId());//设置图标
         }
 
 
@@ -294,7 +294,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
                     if (cuser != null) {//用户是否登陆
 
                         discountMessage = (DiscountMessage_HZ) o;
-                        List<String> wantedNum = discountMessage.getDtWantedNum();
+                        List<String> wantedNum = discountMessage.getDtWanted();
 
                         CommonFunctionUtils.discountWanto(ctx, cuser, discountMessage,
                                 UserUtils.isHadCurrentUser(wantedNum, cuser.getObjectId()), (TextView) v, new CommonFunctionUtils.Callback() {
@@ -324,7 +324,7 @@ public class DiscountAdapter extends CommAdapter<DiscountMessage_HZ> {
 
                     if (cuser != null) {
                         discountMessage = (DiscountMessage_HZ) o;
-                        List<String> shVisitedNum = discountMessage.getDtVisitedNum();
+                        List<String> shVisitedNum = discountMessage.getDtVisited();
                         CommonFunctionUtils.discountVisit(ctx, cuser, discountMessage,
                                 UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()), (TextView) v, new CommonFunctionUtils.Callback() {
                                     @Override

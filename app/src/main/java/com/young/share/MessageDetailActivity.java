@@ -277,12 +277,12 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 /*想去*/
         wantToGoFragment = new WantToGoFragment();
 //        wantToGoFragment.initizliza(this);
-        bundle.putStringArrayList(WantToGoFragment.BUNDLE_USERID_LIST, (ArrayList<String>) shareMessage.getShWantedNum());
+        bundle.putStringArrayList(WantToGoFragment.BUNDLE_USERID_LIST, (ArrayList<String>) shareMessage.getShWanted());
         wantToGoFragment.setArguments(bundle);
 /*去过*/
         hadGoFragment = new HadGoFragment();
 //        hadGoFragment.initizliza(this);
-        bundle.putStringArrayList(HadGoFragment.BUNDLE_USER_ID_LIST, (ArrayList<String>) shareMessage.getShVisitedNum());
+        bundle.putStringArrayList(HadGoFragment.BUNDLE_USER_ID_LIST, (ArrayList<String>) shareMessage.getShVisited());
         hadGoFragment.setArguments(bundle);
 
         fragmentList.add(wantToGoFragment);
@@ -342,16 +342,16 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
             tag_tv.setText(shareMessage.getShTag());
         }
 
-        wanto_tv.setText(shareMessage.getShWantedNum() != null && shareMessage.getShWantedNum().size() > 0 ?
-                String.valueOf(shareMessage.getShWantedNum().size()) : getString(R.string.tx_wantogo));
+        wanto_tv.setText(shareMessage.getShWantedNum()  > 0 ?
+                String.valueOf(shareMessage.getShWantedNum()) : getString(R.string.tx_wantogo));
 
 
-        hadgo_tv.setText(shareMessage.getShVisitedNum() != null && shareMessage.getShVisitedNum().size() > 0 ?
-                String.valueOf(shareMessage.getShVisitedNum().size()) : getString(R.string.hadgo));
+        hadgo_tv.setText(shareMessage.getShVisitedNum()  > 0 ?
+                String.valueOf(shareMessage.getShVisitedNum()) : getString(R.string.hadgo));
         //判断当前用户是否点赞
         if (cuser != null) {
-            CommonFunctionUtils.leftDrawableWantoGO(wanto_tv, shareMessage.getShWantedNum(), cuser.getObjectId());//设置图标
-            CommonFunctionUtils.leftDrawableVisited(hadgo_tv, shareMessage.getShVisitedNum(), cuser.getObjectId());
+            CommonFunctionUtils.leftDrawableWantoGO(wanto_tv, shareMessage.getShWanted(), cuser.getObjectId());//设置图标
+            CommonFunctionUtils.leftDrawableVisited(hadgo_tv, shareMessage.getShVisited(), cuser.getObjectId());
         }
 
         ceatedAt_tv.setText(shareMessage.getCreatedAt());
@@ -769,7 +769,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
                 if (cuser != null) {
 
-                    List<String> shWantedNum = shareMessage.getShWantedNum();
+                    List<String> shWantedNum = shareMessage.getShWanted();
 
                     wantToGo(UserUtils.isHadCurrentUser(shWantedNum, cuser.getObjectId()), v);
                 } else {
@@ -786,7 +786,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
                 if (cuser != null) {
 
-                    List<String> shVisitedNum = shareMessage.getShVisitedNum();
+                    List<String> shVisitedNum = shareMessage.getShVisited();
                     visit(UserUtils.isHadCurrentUser(shVisitedNum, cuser.getObjectId()), v);
 
                 } else {
@@ -857,16 +857,19 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 //            strId = R.string.not_visit;
             leftDrawID = R.drawable.icon_bottombar_hadgo;
 
-            shareMessage.getShVisitedNum().remove(cuser.getObjectId());
+            shareMessage.getShVisited().remove(cuser.getObjectId());
         } else {
 //            strId = R.string.cancel_collect_success;
             leftDrawID = R.drawable.icon_hadgo;
-            shareMessage.getShVisitedNum().add(cuser.getObjectId());
+            if (shareMessage.getShVisited() ==null){
+                shareMessage.setShVisited(new ArrayList<String>());
+            }
+            shareMessage.getShVisited().add(cuser.getObjectId());
         }
 
 
-        ((TextView) v).setText(shareMessage.getShVisitedNum() == null ?
-                getString(R.string.hadgo) : String.valueOf(shareMessage.getShVisitedNum().size()));
+        ((TextView) v).setText(shareMessage.getShVisitedNum() ==0 ?
+                getString(R.string.hadgo) : String.valueOf(shareMessage.getShVisitedNum()));
         ((TextView) v).setCompoundDrawablesWithIntrinsicBounds(leftDrawID, 0, 0, 0);
 
 
@@ -896,9 +899,9 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private void updateHadGo() {
 
 
-        hadgo_tv.setText(shareMessage.getShVisitedNum() != null && shareMessage.getShVisitedNum().size() > 0 ?
-                String.valueOf(shareMessage.getShVisitedNum().size()) : getString(R.string.hadgo));
-        hadGoFragment.setWantUserId(shareMessage.getShVisitedNum());
+        hadgo_tv.setText(shareMessage.getShVisitedNum()  > 0 ?
+                String.valueOf(shareMessage.getShVisitedNum()) : getString(R.string.hadgo));
+        hadGoFragment.setWantUserId(shareMessage.getShVisited());
         hadGoFragment.initData();
     }
 
@@ -935,7 +938,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
                     if (baseModel.getCode() == BaseModel.SUCCESS) {
 //                        mToast(R.string.operation_success);
-                        shareMessage.getShWantedNum().remove(cuser.getObjectId());
+                        shareMessage.getShWanted().remove(cuser.getObjectId());
                         updateWantTo();
                         LogUtils.d("删除收藏记录 成功  data = " + baseModel.getData());
                     } else {
@@ -953,15 +956,15 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 //            strId = R.string.collect_success;
             leftDrawID = R.drawable.icon_wantogo_light;
 
-            shareMessage.getShWantedNum().add(cuser.getObjectId());
+            shareMessage.getShWanted().add(cuser.getObjectId());
 
 //MESSAGE_TYPE_SHAREMESSAGE
             BmobApi.saveCollectionShareMessage(this, cuser, shareMessage, Contants.MESSAGE_TYPE_SHAREMESSAGE);
 
         }
 
-        ((TextView) v).setText(shareMessage.getShWantedNum() == null ?
-                getString(R.string.tx_wantogo) : String.valueOf(shareMessage.getShWantedNum().size()));
+        ((TextView) v).setText(shareMessage.getShWantedNum()==0 ?
+                getString(R.string.tx_wantogo) : String.valueOf(shareMessage.getShWantedNum()));
         ((TextView) v).setCompoundDrawablesWithIntrinsicBounds(leftDrawID, 0, 0, 0);
 
         shareMessage.update(this, shareMessage.getObjectId(), new UpdateListener() {
@@ -987,10 +990,10 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
      */
     private void updateWantTo() {
 
-        wanto_tv.setText(shareMessage.getShWantedNum() != null && shareMessage.getShWantedNum().size() > 0 ?
-                String.valueOf(shareMessage.getShWantedNum().size()) : getString(R.string.tx_wantogo));
+        wanto_tv.setText(shareMessage.getShWantedNum()  > 0 ?
+                String.valueOf(shareMessage.getShWantedNum()) : getString(R.string.tx_wantogo));
 
-        wantToGoFragment.setUserIdList(shareMessage.getShWantedNum());
+        wantToGoFragment.setUserIdList(shareMessage.getShWanted());
         wantToGoFragment.initData();
 
     }

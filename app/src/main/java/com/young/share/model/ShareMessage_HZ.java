@@ -20,8 +20,8 @@ public class ShareMessage_HZ extends BmobObject {
     private String shLocation;
     private BmobGeoPoint geographic;
     private String shTag;
-    private List<String> shWantedNum;
-    private List<String> shVisitedNum;
+    private int shWantedNum;
+    private int shVisitedNum;
     private int shCommNum;
     private BmobFile video;
     private BmobFile videoPreview;
@@ -76,19 +76,19 @@ public class ShareMessage_HZ extends BmobObject {
         this.shTag = shTag;
     }
 
-    public List<String> getShWantedNum() {
+    public int getShWantedNum() {
         return shWantedNum;
     }
 
-    public void setShWantedNum(List<String> shWantedNum) {
+    public void setShWantedNum(int shWantedNum) {
         this.shWantedNum = shWantedNum;
     }
 
-    public List<String> getShVisitedNum() {
+    public int getShVisitedNum() {
         return shVisitedNum;
     }
 
-    public void setShVisitedNum(List<String> shVisitedNum) {
+    public void setShVisitedNum(int shVisitedNum) {
         this.shVisitedNum = shVisitedNum;
     }
 

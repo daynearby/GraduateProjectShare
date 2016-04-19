@@ -109,8 +109,10 @@ public class DataFormateUtils {
         commModel.setLocationInfo(shareMessage.getShLocation());
         commModel.setTag(shareMessage.getShTag());
         commModel.setMyUser(shareMessage.getMyUserId());
-        commModel.setVisited(shareMessage.getShVisitedNum());
-        commModel.setWanted(shareMessage.getShWantedNum());
+        commModel.setVisited(shareMessage.getShVisited());
+        commModel.setVisitedNumber(shareMessage.getShVisitedNum());
+        commModel.setWanted(shareMessage.getShWanted());
+        commModel.setWantedNumber(shareMessage.getShWantedNum());
         commModel.setObjectId(shareMessage.getObjectId());
         commModel.setComment(shareMessage.getShCommNum());
         commModel.setCreatedAt(shareMessage.getCreatedAt());
@@ -137,8 +139,10 @@ public class DataFormateUtils {
         shareMessage.setShLocation(remoteModel.getLocationInfo());
         shareMessage.setShTag(remoteModel.getTag());
         shareMessage.setMyUserId(remoteModel.getMyUser());
-        shareMessage.setShVisitedNum(remoteModel.getVisited());
-        shareMessage.setShWantedNum(remoteModel.getWanted());
+        shareMessage.setShVisitedNum(remoteModel.getVisitedNumber());
+        shareMessage.setShVisited(remoteModel.getVisited());
+        shareMessage.setShWantedNum(remoteModel.getWantedNumber());
+        shareMessage.setShWanted(remoteModel.getWanted());
         shareMessage.setObjectId(remoteModel.getObjectId());
         shareMessage.setShCommNum(remoteModel.getComment());
         shareMessage.setCreatedAt(remoteModel.getCreatedAt());
@@ -163,8 +167,10 @@ public class DataFormateUtils {
         commModel.setLocationInfo(discountMessage.getDtLocation());
         commModel.setTag(discountMessage.getDtTag());
         commModel.setMyUser(discountMessage.getMyUserId());
-        commModel.setVisited(discountMessage.getDtVisitedNum());
-        commModel.setWanted(discountMessage.getDtWantedNum());
+        commModel.setVisitedNumber(discountMessage.getDtVisitedNum());
+        commModel.setVisited(discountMessage.getDtVisited());
+        commModel.setWantedNumber(discountMessage.getDtWantedNum());
+        commModel.setWanted(discountMessage.getDtWanted());
         commModel.setObjectId(discountMessage.getObjectId());
         commModel.setCreatedAt(discountMessage.getCreatedAt());
         commModel.setType(Contants.DATA_MODEL_DISCOUNT_MESSAGES);//属于折扣
@@ -187,8 +193,10 @@ public class DataFormateUtils {
         discountMessage.setDtLocation(remoteModel.getLocationInfo());
         discountMessage.setDtTag(remoteModel.getTag());
         discountMessage.setMyUserId(remoteModel.getMyUser());
-        discountMessage.setDtVisitedNum(remoteModel.getVisited());
-        discountMessage.setDtWantedNum(remoteModel.getWanted());
+        discountMessage.setDtVisited(remoteModel.getVisited());
+        discountMessage.setDtVisitedNum(remoteModel.getVisitedNumber());
+        discountMessage.setDtWanted(remoteModel.getWanted());
+        discountMessage.setDtWantedNum(remoteModel.getWantedNumber());
         discountMessage.setObjectId(remoteModel.getObjectId());
         discountMessage.setCreatedAt(remoteModel.getCreatedAt());
 
@@ -209,8 +217,10 @@ public class DataFormateUtils {
         shareMessageHz.setShLocation(commModel.getLocationInfo());
         shareMessageHz.setShTag(commModel.getTag());
         shareMessageHz.setMyUserId(commModel.getMyUser());
-        shareMessageHz.setShVisitedNum(commModel.getVisited());
-        shareMessageHz.setShWantedNum(commModel.getWanted());
+        shareMessageHz.setShVisited(commModel.getVisited());
+        shareMessageHz.setShVisitedNum(commModel.getVisitedNumber());
+        shareMessageHz.setShWanted(commModel.getWanted());
+        shareMessageHz.setShWantedNum(commModel.getWantedNumber());
         shareMessageHz.setObjectId(commModel.getObjectId());
         shareMessageHz.setShCommNum(commModel.getComment());
 

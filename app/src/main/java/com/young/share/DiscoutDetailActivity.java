@@ -316,13 +316,13 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
      * 下方数据
      */
     private void initBottomBar() {
-        wanto_tv.setText(discountMessage.getDtWantedNum() != null && discountMessage.getDtWantedNum().size() > 0 ?
-                String.valueOf(discountMessage.getDtWantedNum().size()) : getString(R.string.tx_wantogo));
-        hadgo_tv.setText(discountMessage.getDtVisitedNum() != null && discountMessage.getDtVisitedNum().size() > 0 ?
-                String.valueOf(discountMessage.getDtVisitedNum().size()) : getString(R.string.hadgo));
+        wanto_tv.setText(discountMessage.getDtWantedNum() > 0 ?
+                String.valueOf(discountMessage.getDtWantedNum()) : getString(R.string.tx_wantogo));
+        hadgo_tv.setText(discountMessage.getDtVisitedNum() > 0 ?
+                String.valueOf(discountMessage.getDtVisitedNum()) : getString(R.string.hadgo));
 
-        CommonFunctionUtils.leftDrawableWantoGO(wanto_tv, discountMessage.getDtWantedNum(), cuser.getObjectId());
-        CommonFunctionUtils.leftDrawableVisited(hadgo_tv, discountMessage.getDtVisitedNum(), cuser.getObjectId());
+        CommonFunctionUtils.leftDrawableWantoGO(wanto_tv, discountMessage.getDtWanted(), cuser.getObjectId());
+        CommonFunctionUtils.leftDrawableVisited(hadgo_tv, discountMessage.getDtVisited(), cuser.getObjectId());
 
 
     }
@@ -340,12 +340,12 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         /*想去*/
         wantToGoFragment = new WantToGoFragment();
 //        wantToGoFragment.initizliza(this);
-        bundle.putStringArrayList(WantToGoFragment.BUNDLE_USERID_LIST, (ArrayList<String>) discountMessage.getDtWantedNum());
+        bundle.putStringArrayList(WantToGoFragment.BUNDLE_USERID_LIST, (ArrayList<String>) discountMessage.getDtWanted());
         wantToGoFragment.setArguments(bundle);
 /*去过*/
         hadGoFragment = new HadGoFragment();
 //        hadGoFragment.initizliza(this);
-        bundle.putStringArrayList(WantToGoFragment.BUNDLE_USERID_LIST, (ArrayList<String>) discountMessage.getDtWantedNum());
+        bundle.putStringArrayList(WantToGoFragment.BUNDLE_USERID_LIST, (ArrayList<String>) discountMessage.getDtWanted());
         hadGoFragment.setArguments(bundle);
 
         fragmentList.add(wantToGoFragment);
@@ -454,7 +454,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         getUser();
         if (cuser != null) {
             CommonFunctionUtils.discountVisit(mActivity, cuser, discountMessage,
-                    UserUtils.isHadCurrentUser(discountMessage.getDtVisitedNum(), cuser.getObjectId()),
+                    UserUtils.isHadCurrentUser(discountMessage.getDtVisited(), cuser.getObjectId()),
                     t, new CommonFunctionUtils.Callback() {
 
                         @Override
@@ -482,9 +482,9 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
     private void updateHadGo() {
 
 
-        hadgo_tv.setText(discountMessage.getDtVisitedNum() != null && discountMessage.getDtVisitedNum().size() > 0 ?
-                String.valueOf(discountMessage.getDtVisitedNum().size()) : getString(R.string.hadgo));
-        hadGoFragment.setWantUserId(discountMessage.getDtVisitedNum());
+        hadgo_tv.setText(discountMessage.getDtVisitedNum() > 0 ?
+                String.valueOf(discountMessage.getDtVisitedNum()) : getString(R.string.hadgo));
+        hadGoFragment.setWantUserId(discountMessage.getDtVisited());
         hadGoFragment.initData();
     }
 
@@ -497,7 +497,7 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
         getUser();
         if (cuser != null) {
             CommonFunctionUtils.discountWanto(mActivity, cuser, discountMessage,
-                    UserUtils.isHadCurrentUser(discountMessage.getDtWantedNum(), cuser.getObjectId()),
+                    UserUtils.isHadCurrentUser(discountMessage.getDtWanted(), cuser.getObjectId()),
                     t, new CommonFunctionUtils.Callback() {
 
                         @Override
@@ -523,10 +523,10 @@ public class DiscoutDetailActivity extends BaseAppCompatActivity implements View
      * 更新喜欢的用户
      */
     private void updateWantTo() {
-        wanto_tv.setText(discountMessage.getDtWantedNum() != null && discountMessage.getDtWantedNum().size() > 0 ?
-                String.valueOf(discountMessage.getDtWantedNum().size()) : getString(R.string.tx_wantogo));
+        wanto_tv.setText(discountMessage.getDtWantedNum()  > 0 ?
+                String.valueOf(discountMessage.getDtWantedNum()) : getString(R.string.tx_wantogo));
 
-        wantToGoFragment.setUserIdList(discountMessage.getDtWantedNum());
+        wantToGoFragment.setUserIdList(discountMessage.getDtWanted());
         wantToGoFragment.initData();
 
     }

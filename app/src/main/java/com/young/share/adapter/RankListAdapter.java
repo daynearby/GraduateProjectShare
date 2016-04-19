@@ -503,7 +503,7 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
 
                 ShareMessage_HZ shareMessage = new ShareMessage_HZ();
                 shareMessage.setObjectId(commModel.getObjectId());
-                shareMessage.setShVisitedNum(commModel.getVisited());
+                shareMessage.setShVisited(commModel.getVisited());
 
 
                 CommonFunctionUtils.visit(ctx, cuser,
@@ -524,7 +524,7 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
 
                 DiscountMessage_HZ discountMessage = new DiscountMessage_HZ();
                 discountMessage.setObjectId(commModel.getObjectId());
-                discountMessage.setDtWantedNum(commModel.getWanted());
+                discountMessage.setDtWanted(commModel.getWanted());
 
                 CommonFunctionUtils.discountVisit(ctx, cuser, discountMessage,
                         UserUtils.isHadCurrentUser(visitedNum, cuser.getObjectId()),
@@ -564,7 +564,7 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
 
                 ShareMessage_HZ shareMessage = new ShareMessage_HZ();
                 shareMessage.setObjectId(commModel.getObjectId());
-                shareMessage.setShWantedNum(commModel.getWanted());
+                shareMessage.setShWanted(commModel.getWanted());
 
                 CommonFunctionUtils.wantToGo(ctx, cuser,
                         UserUtils.isHadCurrentUser(wantedNum, cuser.getObjectId()), shareMessage,
@@ -584,7 +584,7 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
 
                 DiscountMessage_HZ discountMessage = new DiscountMessage_HZ();
                 discountMessage.setObjectId(commModel.getObjectId());
-                discountMessage.setDtWantedNum(commModel.getWanted());
+                discountMessage.setDtWanted(commModel.getWanted());
 
                 CommonFunctionUtils.discountWanto(ctx, cuser, discountMessage,
                         UserUtils.isHadCurrentUser(wantedNum, cuser.getObjectId()),

@@ -855,12 +855,14 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
         shareMessage_hz.setShContent(content);
         shareMessage_hz.setShTag(tagInfo);
-        shareMessage_hz.setShLocation(!TextUtils.isEmpty(locationInfo) ? locationInfo : null);
+        shareMessage_hz.setShLocation(!TextUtils.isEmpty(locationInfo) ? locationInfo : "");
         shareMessage_hz.setGeographic(new BmobGeoPoint(longitude, latitude));
         shareMessage_hz.setMyUserId(cuser);
         shareMessage_hz.setShCommNum(0);
-        shareMessage_hz.setShVisitedNum(new ArrayList<String>());
-        shareMessage_hz.setShWantedNum(new ArrayList<String>());
+        shareMessage_hz.setShWantedNum(0);
+        shareMessage_hz.setShVisitedNum(0);
+        shareMessage_hz.setShVisited(new ArrayList<String>());
+        shareMessage_hz.setShWanted(new ArrayList<String>());
 
         if (lists != null && !lists.isEmpty()) {//有上传图片的
 
@@ -939,7 +941,10 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
 
         disMessages.setDtTag(tagInfo);
         disMessages.setDtContent(content);
-
+        disMessages.setDtVisited(new ArrayList<String>());
+        disMessages.setDtWanted(new ArrayList<String>());
+        disMessages.setDtVisitedNum(0);
+        disMessages.setDtWantedNum(0);
         disMessages.setDtLocation(!TextUtils.isEmpty(locationInfo) ? locationInfo : null);
         disMessages.setMyUserId(cuser);
 

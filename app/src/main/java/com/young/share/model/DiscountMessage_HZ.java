@@ -17,8 +17,8 @@ public class DiscountMessage_HZ extends BmobObject {
     private String dtLocation;
     private BmobGeoPoint geographic;
     private String dtTag;
-    private List<String> dtWantedNum;
-    private List<String> dtVisitedNum;
+    private int dtWantedNum;
+    private int dtVisitedNum;
     private List<String> dtWanted;
     private List<String> dtVisited;
 
@@ -70,19 +70,19 @@ public class DiscountMessage_HZ extends BmobObject {
         this.dtTag = dtTag;
     }
 
-    public List<String> getDtWantedNum() {
+    public int getDtWantedNum() {
         return dtWantedNum;
     }
 
-    public void setDtWantedNum(List<String> dtWantedNum) {
+    public void setDtWantedNum(int dtWantedNum) {
         this.dtWantedNum = dtWantedNum;
     }
 
-    public List<String> getDtVisitedNum() {
+    public int getDtVisitedNum() {
         return dtVisitedNum;
     }
 
-    public void setDtVisitedNum(List<String> dtVisitedNum) {
+    public void setDtVisitedNum(int dtVisitedNum) {
         this.dtVisitedNum = dtVisitedNum;
     }
 

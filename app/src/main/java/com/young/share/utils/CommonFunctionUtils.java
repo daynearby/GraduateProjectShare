@@ -10,11 +10,11 @@ import android.widget.TextView;
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.share.R;
 import com.young.share.config.Contants;
+import com.young.share.interfaces.AsyncListener;
 import com.young.share.model.BaseModel;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.MyUser;
 import com.young.share.model.ShareMessage_HZ;
-import com.young.share.interfaces.AsyncListener;
 import com.young.share.network.BmobApi;
 
 import org.json.JSONException;
@@ -86,16 +86,23 @@ public class CommonFunctionUtils {
     public static void visit(Context ctx, MyUser cuser, boolean hadGo, ShareMessage_HZ shareMessage,
                              final View v,final Callback listener) {
         if (hadGo) {
-            shareMessage.getShVisitedNum().remove(cuser.getObjectId());
+            shareMessage.getShVisited().remove(cuser.getObjectId());
+            shareMessage.increment(Contants.PARAMS_SH_VISITED_NUMBER, -1); // 减1
+            shareMessage.setShVisitedNum(shareMessage.getShVisitedNum() - 1);
         } else {
-            shareMessage.getShVisitedNum().add(cuser.getObjectId());
+            if (shareMessage.getShVisited() == null) {
+                shareMessage.setShVisited(new ArrayList<String>());
+            }
+            shareMessage.getShVisited().add(cuser.getObjectId());
+            shareMessage.increment(Contants.PARAMS_SH_VISITED_NUMBER); // 加1
+            shareMessage.setShVisitedNum(shareMessage.getShVisitedNum() + 1);
         }
+        shareMessage.update(ctx);
 
+        ((TextView) v).setText(String.valueOf(shareMessage.getShVisitedNum() <= 0 ?
+                ctx.getResources().getString(R.string.hadgo) : shareMessage.getShVisitedNum()));
 
-        ((TextView) v).setText(String.valueOf(shareMessage.getShVisitedNum() == null ?
-                0 : shareMessage.getShVisitedNum().size()));
-
-        CommonFunctionUtils.leftDrawableVisited(((TextView) v), shareMessage.getShVisitedNum(), cuser.getObjectId());
+        CommonFunctionUtils.leftDrawableVisited(((TextView) v), shareMessage.getShVisited(), cuser.getObjectId());
 
         shareMessage.update(ctx, shareMessage.getObjectId(), new UpdateListener() {
             @Override
@@ -145,8 +152,9 @@ public class CommonFunctionUtils {
 
         if (hadWant) {
 //            strId = R.string.cancel_collect_success;
-            shareMessage.getShWantedNum().remove(cuser.getObjectId());
-
+            shareMessage.getShWanted().remove(cuser.getObjectId());
+            shareMessage.increment(Contants.PARAMS_SH_WANTED_NUMBER, -1); // 减1
+            shareMessage.setShWantedNum(shareMessage.getShWantedNum()-1);
 //操作收藏表
             BmobApi.AsyncFunction(ctx, jsonObject, BmobApi.REMOVE_COLLECTION, new AsyncListener() {
                 @Override
@@ -176,14 +184,20 @@ public class CommonFunctionUtils {
             });
         } else {
 //            strId = R.string.collect_success;
-            shareMessage.getShWantedNum().add(cuser.getObjectId());
-
+            if (shareMessage.getShWanted() == null) {
+                shareMessage.setShWanted(new ArrayList<String>());
+            }
+            shareMessage.getShWanted().add(cuser.getObjectId());
             BmobApi.saveCollectionShareMessage(ctx, cuser, shareMessage, Contants.MESSAGE_TYPE_SHAREMESSAGE);
-        }
 
-        v.setText(String.valueOf(shareMessage.getShWantedNum() == null ?
-                0 : shareMessage.getShWantedNum().size()));
-        CommonFunctionUtils.leftDrawableWantoGO((v), shareMessage.getShWantedNum(), cuser.getObjectId());
+            shareMessage.increment(Contants.PARAMS_SH_WANTED_NUMBER); // 加1
+            shareMessage.setShWantedNum(shareMessage.getShWantedNum()+1);
+
+        }
+        shareMessage.update(ctx);
+        v.setText(String.valueOf(shareMessage.getShWantedNum() <= 0 ?
+                ctx.getResources().getString(R.string.tx_wantogo) : shareMessage.getShWantedNum()));
+        CommonFunctionUtils.leftDrawableWantoGO((v), shareMessage.getShWanted(), cuser.getObjectId());
 
         shareMessage.update(ctx, shareMessage.getObjectId(), new UpdateListener() {
             @Override
@@ -244,8 +258,9 @@ public class CommonFunctionUtils {
 
         if (hadWant) {
 
-            discountMessage.getDtWantedNum().remove(cuser.getObjectId());
-
+            discountMessage.getDtWanted().remove(cuser.getObjectId());
+            discountMessage.increment(Contants.PARAMS_DT_WANTED_NUMBER, -1); // 减1
+            discountMessage.setDtWantedNum(discountMessage.getDtWantedNum()-1);
 //操作收藏表
             BmobApi.AsyncFunction(ctx, jsonObject, BmobApi.REMOVE_COLLECTION, new AsyncListener() {
                 @Override
@@ -277,18 +292,22 @@ public class CommonFunctionUtils {
 
         } else {
 //            strId = R.string.collect_success;
-            if (discountMessage.getDtWantedNum() == null) {
-                discountMessage.setDtWantedNum(new ArrayList<String>());
+            if (discountMessage.getDtWantedNum() == 0) {
+                discountMessage.setDtWanted(new ArrayList<String>());
             }
-            discountMessage.getDtWantedNum().add(cuser.getObjectId());
+
+            discountMessage.getDtWanted().add(cuser.getObjectId());
 
             BmobApi.saveCollectionShareMessage(ctx, cuser, discountMessage, Contants.MESSAGE_TYPE_DISCOUNT);
+            discountMessage.increment(Contants.PARAMS_DT_WANTED_NUMBER); // 加1
+            discountMessage.setDtWantedNum(discountMessage.getDtWantedNum()+1);
+
         }
+        discountMessage.update(ctx);
+        v.setText(String.valueOf(discountMessage.getDtWantedNum() <= 0 ?
+                ctx.getResources().getString(R.string.tx_wantogo) : discountMessage.getDtWantedNum()));
 
-        v.setText(String.valueOf(discountMessage.getDtWantedNum() == null ?
-                0 : discountMessage.getDtWantedNum().size()));
-
-        CommonFunctionUtils.leftDrawableWantoGO(v, discountMessage.getDtWantedNum(), cuser.getObjectId());
+        CommonFunctionUtils.leftDrawableWantoGO(v, discountMessage.getDtWanted(), cuser.getObjectId());
 
         discountMessage.update(ctx, discountMessage.getObjectId(), new UpdateListener() {
             @Override
@@ -326,19 +345,23 @@ public class CommonFunctionUtils {
                                      boolean hadGo, final TextView v, final Callback listener) {
 
         if (hadGo) {
-            discountMessage.getDtVisitedNum().remove(cuser.getObjectId());
+            discountMessage.getDtVisited().remove(cuser.getObjectId());
+            discountMessage.increment(Contants.PARAMS_DT_VISITED_NUMBER, -1); // 减1
+            discountMessage.setDtVisitedNum(discountMessage.getDtVisitedNum()-1);
         } else {
-            if (discountMessage.getDtVisitedNum() == null) {
-                discountMessage.setDtVisitedNum(new ArrayList<String>());
+            if (discountMessage.getDtVisitedNum() == 0) {
+                discountMessage.setDtVisited(new ArrayList<String>());
             }
-            discountMessage.getDtVisitedNum().add(cuser.getObjectId());
+            discountMessage.getDtVisited().add(cuser.getObjectId());
+            discountMessage.increment(Contants.PARAMS_DT_VISITED_NUMBER); // 加1
+            discountMessage.setDtVisitedNum(discountMessage.getDtVisitedNum()+1);
         }
+        discountMessage.update(ctx);
 
+        v.setText(discountMessage.getDtVisitedNum() <= 0 ?
+                ctx.getString(R.string.hadgo) : String.valueOf(discountMessage.getDtVisitedNum()));
 
-        v.setText(discountMessage.getDtVisitedNum() == null ?
-                ctx.getString(R.string.hadgo) : String.valueOf(discountMessage.getDtVisitedNum().size()));
-
-        CommonFunctionUtils.leftDrawableVisited(v, discountMessage.getDtVisitedNum(), cuser.getObjectId());
+        CommonFunctionUtils.leftDrawableVisited(v, discountMessage.getDtVisited(), cuser.getObjectId());
 
         discountMessage.update(ctx, discountMessage.getObjectId(), new UpdateListener() {
             @Override
