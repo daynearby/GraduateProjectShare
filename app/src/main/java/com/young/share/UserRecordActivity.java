@@ -172,7 +172,7 @@ public class UserRecordActivity extends BaseAppCompatActivity {
             @Override
             public void pullToRefresh() {//下拉
                 Skip = 0;
-                dataList.clear();
+//                dataList.clear();
                 isGetMore = false;
                 //获取分享记录
                 getShareRec();
@@ -189,6 +189,7 @@ public class UserRecordActivity extends BaseAppCompatActivity {
             case MESSAFE_TYPE_SHARE://分享信息记录，获取数据
                 //提示框处理
                 CommonFunctionUtils.processDialog(mActivity);
+                swipeRefresh.setRefreshing(false);
                 if (!isEmpty) {
                     refreshUI();
                 } else {
@@ -198,11 +199,13 @@ public class UserRecordActivity extends BaseAppCompatActivity {
                 break;
 
             case MESSAGE_NO_MORE_DATA://没有更多数据
+                swipeRefresh.setRefreshing(false);
                 toast(R.string.no_more_messages);
                 break;
             case MESSAGE_LOAD_DATA_FAILURE://加载数据失败
                 //提示框处理
                 CommonFunctionUtils.processDialog(mActivity);
+                swipeRefresh.setRefreshing(false);
 
                 toast(R.string.tips_loading_faile);
                 break;

@@ -86,7 +86,7 @@ public class PopupMenuHub {
     public static PopupMenu citySelectMenu(Context context, View v, final SelectResult selectResult) {
         PopupMenu cityMenu = new PopupMenu(context, v);
         cityMenu.inflate(R.menu.menu_context_empty);
-
+        cityList = XmlUtils.getSelectCities(context);
 
         Menu menu = cityMenu.getMenu();
 

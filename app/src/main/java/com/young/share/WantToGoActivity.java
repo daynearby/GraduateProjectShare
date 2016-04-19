@@ -118,7 +118,7 @@ public class WantToGoActivity extends BaseAppCompatActivity {
             @Override
             public void pullToRefresh() {//下拉
                 Skip = 0;
-                dataList.clear();
+//                dataList.clear();
                 isGetMore = false;
                 //获取分享记录
                 getCollectionRec();
@@ -151,6 +151,7 @@ public class WantToGoActivity extends BaseAppCompatActivity {
 
     @Override
     protected void handerMessage(Message msg) {
+        swipeRefresh.setRefreshing(false);
         if (!isEmpty) {
             refreshUI();
         } else {

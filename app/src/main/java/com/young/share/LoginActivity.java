@@ -259,7 +259,7 @@ public class LoginActivity extends BaseAppCompatActivity implements View.OnClick
 
     /**
      * 获取用户信息
-     *
+     * 保存到本地
      * @param userName
      */
     private void getCurrent(final String userName) {

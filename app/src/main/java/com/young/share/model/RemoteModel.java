@@ -28,6 +28,8 @@ public class RemoteModel implements Serializable {
     private String tag;
     private List<String> wanted;
     private List<String> visited;
+    private int wantedNumber;
+    private int visitedNumber;
     private int comment = 0;
     private int type;
     private boolean read;

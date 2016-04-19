@@ -98,10 +98,18 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
         params.height = displayHeight / 3 + DisplayUtils.dip2px(this, 44);
         select_ls.setAdapter(arrayAdapter);
         select_ls.setOnItemClickListener(new onitemClick());
+//显示用户信息
+        initUserInfo();
+        loadingAvatar();
+    }
 
+    /**
+     * 初始化用户资料
+     */
+    private void initUserInfo() {
         nickname_tv.setText(TextUtils.isEmpty(cuser.getNickName()) ? getString(R.string.user_name_defual) : cuser.getNickName());
         signture_tv.setText(TextUtils.isEmpty(cuser.getSignture()) ? getString(R.string.user_info_hint_enjoy_life) : cuser.getSignture());
-        loadingAvatar();
+
     }
 
     @Override
@@ -211,8 +219,10 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
 
                     break;
                 case 2:// <item>修改资料</item>
+                    intents = new Intent(mActivity, EditPersonalInfoActivity.class);
+                    startActivityForResult(intents, Contants.REQUSET_EDIT_PERSONAL_INFO);
+                    overridePendingTransition(R.animator.activity_slid_right_in, R.animator.activity_slid_left_out);
 
-                    mStartActivity(EditPersonalInfoActivity.class);
                     break;
                 case 3:// <item>修改密码</item>
                     mStartActivity(ResetPwdActivity.class);
@@ -244,6 +254,9 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+
         String croppath = "";
         boolean finish = ActivityResult.corpResult(this, requestCode, resultCode, data, avatar_im);
 
@@ -264,20 +277,24 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
                 @Override
                 public void Result( String[] urls,BmobFile[] bmobfiles) {
                     //上传文件成功
-                        cuser = BmobUser.getCurrentUser(mActivity, MyUser.class);
-                        String avatar_url = urls[0];
+                    MyUser newuser = new MyUser();
+                    cuser = app.getCUser();
+                    final String avatar_url = urls[0];
 
                         if (!TextUtils.isEmpty(avatar_url)) {
-                            cuser.setAvatar(avatar_url);
+                            newuser.setAvatar(avatar_url);
 
-                            cuser.update(mActivity, new UpdateListener() {
+                            newuser.update(mActivity, cuser.getObjectId(), new UpdateListener() {
                                 @Override
                                 public void onSuccess() {
+
+                                    cuser.setAvatar(avatar_url);
                                     toast(R.string.reset_avatar_success);
                                 }
 
                                 @Override
                                 public void onFailure(int i, String s) {
+                                    LogUtils.e("更新用户信息失败 code = " + i + " 错误信息 = " + s);
                                     toast(R.string.reset_avatar_failure);
                                 }
                             });
@@ -291,7 +308,14 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
                 }
             });
         }
+        } else if (resultCode == Contants.RESULT_EDIT_PERSONAL_INFO) {
+            if (data.getBooleanExtra(Contants.INTENT_KEY_REFRESH, false)) {
+                //更新当前用户信息，更新用户昵称、签名
+                cuser = app.getCUser();
+                initUserInfo();
+            }
 
+        }
     }
 
 

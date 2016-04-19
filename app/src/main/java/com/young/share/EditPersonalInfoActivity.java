@@ -1,6 +1,7 @@
 package com.young.share;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.os.Message;
@@ -23,6 +24,7 @@ import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.share.annotation.InjectView;
 import com.young.share.base.BaseAppCompatActivity;
 import com.young.share.config.Contants;
+import com.young.share.model.MyUser;
 import com.young.share.utils.LogUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.utils.XmlUtils;
@@ -419,6 +421,10 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
 
     @Override
     public void handerMessage(Message msg) {
+        //只有更新成功才会关闭当前界面
+        intents = new Intent();
+        intents.putExtra(Contants.INTENT_KEY_REFRESH,true);
+        mActivity.setResult(Contants.RESULT_EDIT_PERSONAL_INFO,intents);
         mActivity.finish();
     }
 
@@ -505,18 +511,21 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
     private void updateUserInfo() {
 
         if (!TextUtils.isEmpty(nickname_et.getText().toString())) {
-            cuser.setNickName(nickname_et.getText().toString());
-            cuser.setGender(Contants.GENDER_MALE.equals(gender_tv.getText().toString()));
-            cuser.setAge(Integer.valueOf(age_tv.getText().toString()));
-            cuser.setQq(qq_et.getText().toString());
-            cuser.setEmail(email_et.getText().toString());
-            cuser.setAddress(hometown_tv.getText().toString());
-            cuser.setSignture(signtureEdt.getText().toString().trim());
+            MyUser newUser = new MyUser();
+            newUser.setNickName(nickname_et.getText().toString());
+            newUser.setGender(Contants.GENDER_MALE.equals(gender_tv.getText().toString()));
+            newUser.setAge(Integer.valueOf(age_tv.getText().toString()));
+            newUser.setQq(qq_et.getText().toString());
+            newUser.setEmail(email_et.getText().toString());
+            newUser.setAddress(hometown_tv.getText().toString());
+            newUser.setSignture(signtureEdt.getText().toString().trim());
             SVProgressHUD.showWithStatus(mActivity, getString(R.string.updating));
-            cuser.update(this, new UpdateListener() {
+
+            newUser.update(this, cuser.getObjectId(), new UpdateListener() {
                 @Override
                 public void onSuccess() {
                     LogUtils.d("更新信息成功");
+                    updateLoacaluserInfo();
                     mHandler.sendEmptyMessageDelayed(101, Contants.ONE_SECOND);
 
                     SVProgressHUD.showSuccessWithStatus(mActivity, getString(R.string.update_user_info_success));
@@ -524,7 +533,7 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
 
                 @Override
                 public void onFailure(int i, String s) {
-                    LogUtils.d("更新失败 code = " + i + " message = " + s);
+                    LogUtils.e("更新失败 code = " + i + " message = " + s);
                     SVProgressHUD.showErrorWithStatus(mActivity, getString(R.string.update_user_info_faile));
                 }
             });
@@ -533,6 +542,20 @@ public class EditPersonalInfoActivity extends BaseAppCompatActivity implements V
         }
     }
 
+    /**
+     * 更新本地用户信息
+     */
+    private void updateLoacaluserInfo() {
+        cuser.setNickName(nickname_et.getText().toString());
+        cuser.setGender(Contants.GENDER_MALE.equals(gender_tv.getText().toString()));
+        cuser.setAge(Integer.valueOf(age_tv.getText().toString()));
+        cuser.setQq(qq_et.getText().toString());
+        cuser.setEmail(email_et.getText().toString());
+        cuser.setAddress(hometown_tv.getText().toString());
+        cuser.setSignture(signtureEdt.getText().toString().trim());
+
+        app.getCacheInstance().put(Contants.ACAHE_KEY_USER, cuser);
+    }
 
     /**
      * 短信验证

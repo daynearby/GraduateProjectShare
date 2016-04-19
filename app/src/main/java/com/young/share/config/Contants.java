@@ -204,12 +204,14 @@ public class Contants {
     public static final int REQUSET_SHARE_DISCOVER = 0x102;//分享发现
     public static final int REQUSET_SHARE_DISCOUNT = 0x103;//分享y优惠
     public static final int REQUSET_MESSAGE_CENTER = 0x104;//消息中心
+    public static final int REQUSET_EDIT_PERSONAL_INFO = 0x105;//修改个人信息
 
     public static final int RESULT_CODE_IMAGE_LIST = 0x0001;//图片编辑返回码
     public static final int RESULT_CODE_PLACE = 0x0002;//图片编辑返回码
     public static final int RESULT_SHARE_DISCOVER = 0x0003;//分享发现
     public static final int RESULT_SHARE_DISCOUNT = 0x0004;//分享y优惠
     public static final int RESULT_MESSAGE_CENTER = 0x0005;//消息中心
+    public static final int RESULT_EDIT_PERSONAL_INFO = 0x0006;//修改个人信息
 
     //************************** 数据model 类型******************************
     public static final int DATA_MODEL_SHARE_MESSAGES = 0x1001;//分享信息数据
