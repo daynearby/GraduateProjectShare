@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.widget.Toast;
 
-import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.young.share.R;
 import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
@@ -83,7 +82,7 @@ public class CommentFragment extends BaseFragment {
   /*初始化数据*/
 //        initFragment();
         //提示
-        SVProgressHUD.showWithStatus(context, getString(R.string.tips_loading));
+//        SVProgressHUD.showWithStatus(context, getString(R.string.tips_loading));
         dataList = (List<Comment_HZ>) app.getCacheInstance().getAsObject(CACHE_KEY + shareMessageId);
 
 /*获取评论内容*/
@@ -143,7 +142,7 @@ public class CommentFragment extends BaseFragment {
             case GET_MESSAGE:
                 /*评论数据，显示到linearLayout*/
                 //关闭显示的框
-                processDialogDismisson();
+//                processDialogDismisson();
 
                 commentAdapter.setDatas(dataList);
                 commentAdapter.notifyDataSetChanged();
@@ -151,7 +150,7 @@ public class CommentFragment extends BaseFragment {
                 break;
             case MESSAGE_LOAD_DATA_FAILURE://加载数据失败
 
-                processDialogDismisson();
+//                processDialogDismisson();
                 Toast.makeText(context, R.string.tips_loading_faile, Toast.LENGTH_SHORT).show();
 
                 break;
@@ -214,17 +213,17 @@ public class CommentFragment extends BaseFragment {
         });
     }
 
-    /**
-     * 关闭进度条提示
-     */
-    private void processDialogDismisson() {
-//        LogUtils.d(" isshow" + SVProgressHUD.isShowing(mActivity));
-        if (SVProgressHUD.isShowing(context)) {
-
-            //提示
-            SVProgressHUD.dismiss(context);
-        }
-    }
+//    /**
+//     * 关闭进度条提示
+//     */
+//    private void processDialogDismisson() {
+////        LogUtils.d(" isshow" + SVProgressHUD.isShowing(mActivity));
+//        if (SVProgressHUD.isShowing(context)) {
+//
+//            //提示
+//            SVProgressHUD.dismiss(context);
+//        }
+//    }
 
     /**
      * 发送评论之后进行刷新数据

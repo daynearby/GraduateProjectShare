@@ -80,7 +80,6 @@ public class Contants {
     public final static String IMAGE_EXTENSION_JPG = ".jpg";
     public final static String IMAGE_EXTENSION_JPEG = ".jpeg";
     public final static String IMAGE_EXTENSION_PNG = ".png";
-    public static final String LAST_ADD_IMG = "drawable://" + R.drawable.icon_addimg;
     public static final String DEFAULT_AVATAR = "drawable://" + R.drawable.icon_avatar;
 
     public static final String IMAGE_PATH_AND_NAME = "/image/cropped.jpeg";

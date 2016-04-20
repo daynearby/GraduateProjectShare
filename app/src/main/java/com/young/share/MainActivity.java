@@ -438,7 +438,7 @@ public class MainActivity extends BaseAppCompatActivity {
         @Override
         public void onViewGroundClickListener(View view) {
             itemIm = (ImageView) view;
-            itemIm.setImageResource(R.drawable.icon_more);
+            itemIm.setImageResource(R.drawable.ic_more);
         }
     }
 

@@ -11,26 +11,39 @@
         android:id="@+id/id_button"
         style="@style/arcButton"
         android:layout_centerInParent="true"
-        android:src="@drawable/icon_more"
-        android:layout_marginBottom="@dimen/maginMediu"
-        android:layout_marginRight="@dimen/maginMediu"
+        android:layout_marginBottom="@dimen/dp20"
+        android:background="@drawable/dw_message_center"
+        android:padding="@dimen/size_12_dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_more"
+        android:layout_marginRight="@dimen/size_16_dp"
+
         />
 
 
     <ImageView
         style="@style/arcButtonChild"
-        android:src="@drawable/icon_share_messages"
+        android:background="@drawable/dw_message_center"
+        android:scaleType="centerInside"
+        android:padding="@dimen/size_12_dp"
+        android:src="@drawable/ic_plus"
         android:tag="Place" />
 
 
     <ImageView
         style="@style/arcButtonChild"
         android:src="@drawable/icon_comment"
+        android:background="@drawable/dw_message_center"
+        android:scaleType="centerInside"
+        android:padding="@dimen/size_12_dp"
         android:tag="Sun" />
 
     <ImageView
         style="@style/arcButtonChild"
-        android:src="@drawable/icon_personal_centre"
+        android:background="@drawable/dw_message_center"
+        android:scaleType="centerInside"
+        android:padding="@dimen/size_12_dp"
+        android:src="@drawable/ic_personal_center"
         android:tag="People" />
 
 </com.young.share.views.ArcMenu>

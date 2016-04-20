@@ -8,15 +8,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 
 import com.young.share.R;
+import com.young.share.utils.DisplayUtils;
 
 
 public class ArcMenu extends ViewGroup implements OnClickListener
@@ -26,8 +27,12 @@ public class ArcMenu extends ViewGroup implements OnClickListener
 	private static final int POS_RIGHT_TOP = 2;
 	private static final int POS_RIGHT_BOTTOM = 3;
 
+	private Context context;
 	private Position mPosition = Position.RIGHT_BOTTOM;
 	private int mRadius;
+	private int measeredWidth;
+	private int measeredHeight;
+
 	/**
 	 * 菜单的状态
 	 */
@@ -80,6 +85,7 @@ public class ArcMenu extends ViewGroup implements OnClickListener
 	public ArcMenu(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
+		this.context = context;
 
 		mRadius = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
 				100, getResources().getDisplayMetrics());
@@ -104,6 +110,7 @@ public class ArcMenu extends ViewGroup implements OnClickListener
 			mPosition = Position.RIGHT_BOTTOM;
 			break;
 		}
+
 		mRadius = (int) a.getDimension(R.styleable.ArcMenu_radius, TypedValue
 				.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100,
 						getResources().getDisplayMetrics()));
@@ -111,6 +118,8 @@ public class ArcMenu extends ViewGroup implements OnClickListener
 //		Log.e("TAG", "position = " + mPosition + " , radius =  " + mRadius);
 
 		a.recycle();
+
+		LayoutParams params = getLayoutParams();
 
 	}
 
@@ -120,9 +129,16 @@ public class ArcMenu extends ViewGroup implements OnClickListener
 		int count = getChildCount();
 		for (int i = 0; i < count; i++)
 		{
+
 			// 测量child
 			measureChild(getChildAt(i), widthMeasureSpec, heightMeasureSpec);
 		}
+
+		ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) getChildAt(0).getLayoutParams();
+		int margin = Math.min(params.leftMargin,params.rightMargin);
+
+		measeredWidth = getMeasuredWidth() - DisplayUtils.dip2px(context, margin);
+		measeredHeight = getMeasuredHeight() - DisplayUtils.dip2px(context, margin);
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
 
@@ -153,13 +169,13 @@ public class ArcMenu extends ViewGroup implements OnClickListener
 				if (mPosition == Position.LEFT_BOTTOM
 						|| mPosition == Position.RIGHT_BOTTOM)
 				{
-					ct = getMeasuredHeight() - cHeight - ct;
+					ct = measeredHeight - cHeight - ct;
 				}
 				// 右上，右下
 				if (mPosition == Position.RIGHT_TOP
 						|| mPosition == Position.RIGHT_BOTTOM)
 				{
-					cl = getMeasuredWidth() - cWidth - cl;
+					cl = measeredWidth - cWidth - cl;
 				}
 				child.layout(cl, ct, cl + cWidth, ct + cHeight);
 
@@ -183,6 +199,8 @@ public class ArcMenu extends ViewGroup implements OnClickListener
 		int width = mCButton.getMeasuredWidth();
 		int height = mCButton.getMeasuredHeight();
 
+
+
 		switch (mPosition)
 		{
 		case LEFT_TOP:
@@ -191,15 +209,15 @@ public class ArcMenu extends ViewGroup implements OnClickListener
 			break;
 		case LEFT_BOTTOM:
 			l = 0;
-			t = getMeasuredHeight() - height;
+			t = measeredHeight - height;
 			break;
 		case RIGHT_TOP:
-			l = getMeasuredWidth() - width;
+			l = measeredWidth - width;
 			t = 0;
 			break;
 		case RIGHT_BOTTOM:
-			l = getMeasuredWidth() - width;
-			t = getMeasuredHeight() - height;
+			l =measeredWidth - width;
+			t = measeredHeight - height;
 			break;
 		}
 		mCButton.layout(l, t, l + width, t + width);

@@ -5,6 +5,7 @@
     <dimen name="paddingMic">8dp</dimen>
     <dimen name="paddingHit">4dp</dimen>
     <dimen name="size_12_dp">12dp</dimen>
+    <dimen name="size_16_dp">16dp</dimen>
 
     <dimen name="size40">40dp</dimen>
     <dimen name="dp20">20dp</dimen>

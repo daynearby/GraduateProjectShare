@@ -168,6 +168,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private static final int MESSAGE_SHARE_MESSAGE = 0x01;//显示传过来的sharemessage
     private static final int MESSAGE_BING_MESSAGE = 0x02;//显示传过来的sharemessage
     private static final int MESSAGE_REFRESH_COMMENT = 0x03;//发送评论之后进行刷新评论列表
+    private static final int MESSAGE_BEGIN_COMMENT = 0x04;//进入界面。进行显示输入框
 
     private static final int COMMENT_CLICK = 0;//点击事件，是评论
     private boolean SendMessageFinish = true;//消息是否已经发送
@@ -247,7 +248,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                     imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 } else {
                     imm.hideSoftInputFromWindow(sendComment_edt.getWindowToken(), 0);
-//                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 }
             }
         });
@@ -310,7 +310,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
      * 设置数据
      */
     private void setupData() {
-
 
         MyUser myUser = shareMessage.getMyUserId();
 
@@ -386,6 +385,17 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
         //创建下方的viewpager，显示点赞用户、评论内容
         createdFragments();
+/**
+ *       if (isFirstIn&&commentClick == Contants.EXPEND_START_INPUT) {
+ //            viewPager.setCurrentItem(2, true);
+ startPrepare();
+ receiverId = shareMessage.getMyUserId().getObjectId();
+ isFirstIn = false;
+ }
+ */
+        if (isFirstIn && commentClick == Contants.EXPEND_START_INPUT) {
+            mHandler.sendEmptyMessageDelayed(MESSAGE_BEGIN_COMMENT, 200);
+        }
 
     }
 
@@ -456,26 +466,21 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     @Override
     public void handerMessage(Message msg) {
 
-        if (isFirstIn&&commentClick == Contants.EXPEND_START_INPUT) {
-//            viewPager.setCurrentItem(2, true);
-            startPrepare();
-            receiverId = shareMessage.getMyUserId().getObjectId();
-            isFirstIn = false;
-        }
+//        if (isFirstIn&&commentClick == Contants.EXPEND_START_INPUT) {
+////            viewPager.setCurrentItem(2, true);
+//            startPrepare();
+//            receiverId = shareMessage.getMyUserId().getObjectId();
+//            isFirstIn = false;
+//        }
 
         switch (msg.what) {
 
-//            case GET_MESSAGE:
-/*更新信息*/
-//                commAdapter.setData(dataList);
-//
-//                break;
-//
-//
-//            case MESSAGE_SHARE_MESSAGE:
-//
-//
-//                break;
+            case MESSAGE_BEGIN_COMMENT:
+
+                receiverId = shareMessage.getMyUserId().getObjectId();
+                isFirstIn = false;
+                startPrepare();
+                break;
 
             case MESSAGE_BING_MESSAGE://将数据绑定到控件中
 /*
@@ -509,7 +514,14 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mActivity.finish();
+
+                if (layout_comment.getVisibility() == View.VISIBLE) {
+                    sendComment_edt.clearFocus();
+                    layout_comment.setVisibility(View.GONE);
+                    bottomOptionBar.setVisibility(View.VISIBLE);
+                } else {
+                    mActivity.finish();
+                }
             }
         });
 
@@ -659,6 +671,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
+
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
                 && event.getAction() != KeyEvent.ACTION_UP) {
 
@@ -669,12 +682,14 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 return true;
             } else {
               mActivity.finish();
+                return true;
             }
         }
 
 
         return super.dispatchKeyEvent(event);
     }
+
 
 
     /**
