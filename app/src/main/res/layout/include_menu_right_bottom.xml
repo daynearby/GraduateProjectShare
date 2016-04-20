@@ -12,6 +12,8 @@
         style="@style/arcButton"
         android:layout_centerInParent="true"
         android:src="@drawable/icon_more"
+        android:layout_marginBottom="@dimen/maginMediu"
+        android:layout_marginRight="@dimen/maginMediu"
         />
 
 

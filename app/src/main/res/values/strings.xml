@@ -147,7 +147,7 @@
     <string name="toast_save_iamge_success">保存图片成功</string>
     <string name="toast_save_iamge_failure">保存图片失败，请稍候再试</string>
     <string name="txt_video_review">视频预览</string>
-    <string name="toast_video_can_not_found">找不到视频</string>
+    <string name="toast_video_can_not_found">找不到视频!请重新录制</string>
     <string name="upload_video_fail">上传视频失败</string>
     <string name="txt_pwd_min_length">最少六位字符</string>
     <string name="txt_get_identify_code">获取验证码</string>
@@ -224,5 +224,6 @@
     <string name="BMUpdateCheck">v3.1.4Beta</string>
     <string name="txt_video">小视频</string>
     <string name="txt_wantto_go">我想去</string>
+    <string name="toast_start_download_iamge">开始下载...</string>
     <!--end-->
 </resources>

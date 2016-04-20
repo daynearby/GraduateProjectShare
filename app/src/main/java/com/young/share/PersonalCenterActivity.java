@@ -247,7 +247,8 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
         SVProgressHUD.showWithStatus(this, getString(R.string.cleaning_cache));
         BmobPro.getInstance(mActivity).clearCache();
         ImageLoader.getInstance().clearDiskCache();
-//        app.getCacheInstance().clear();
+        app.getCacheInstance().clear();
+
         SVProgressHUD.dismiss(this);
     }
 

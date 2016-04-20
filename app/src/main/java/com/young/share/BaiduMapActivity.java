@@ -112,7 +112,7 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
             @Override
             public void onClick(View v) {
 //               LogUtils.logE("isShow = " + mapSearch.searchView.isShown());
-                if (mapSearch.isShow) {
+                if (mapSearch!=null && mapSearch.isShow){
                     mapSearch.searchView.setIconified(true);
                 } else {
                     mActivity.finish();

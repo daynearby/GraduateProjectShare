@@ -138,10 +138,10 @@ public class DiscoverFragment extends BaseFragment {
 //
         listView.setAdapter(adapter);
         adapter.bindListView(listView);
-        swipeRefreshLayout.setColorScheme(getResources().getColor(android.R.color.holo_red_light),
-                getResources().getColor(android.R.color.holo_green_light),
-                getResources().getColor(android.R.color.holo_blue_bright),
-                getResources().getColor(android.R.color.holo_orange_light));
+        swipeRefreshLayout.setColorSchemeResources(R.color.red_light,
+                R.color.green_light,
+                R.color.blue_bright,
+                R.color.orange_light);
         //下拉上拉，点击
         setListPullAndClickListener();
 
@@ -231,6 +231,7 @@ public class DiscoverFragment extends BaseFragment {
                 SocialShareManager.shareText(context, adapter.getContentString());
                 return true;
             case R.id.menu_image_save://保存图片
+                toast(context.getString(R.string.toast_start_download_iamge));
                 NetworkReuqest.call2(context, adapter.getImageUrl());
                 return true;
 

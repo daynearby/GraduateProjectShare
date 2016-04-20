@@ -87,6 +87,10 @@ public class WantToGoActivity extends BaseAppCompatActivity {
 
     @Override
     protected void bindData() {
+        swipeRefresh.setColorSchemeResources(R.color.red_light,
+                R.color.green_light,
+                R.color.blue_bright,
+                R.color.orange_light);
 //列表刷新
         new ListViewRefreshListener(listview, swipeRefresh, new ListViewRefreshListener.RefreshListener() {
             @Override

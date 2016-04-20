@@ -112,6 +112,7 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
     private Dialog4Tips dialog;//保存草稿的提示框
     private DarftUtils darftUtils;//草稿
 
+
     private boolean currentIsDiscount;//当前页面是否为商家优惠
     private String draftType;//草稿类型
     private String imageFilePath;//图片的地址
@@ -516,7 +517,7 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
 
             case R.id.im_activity_share_message_add_video:/*录制视频*/
 
-                QupaiServiceImpl qupaiService = new QupaiServiceImpl.Builder()
+                 QupaiServiceImpl  qupaiService = new QupaiServiceImpl.Builder()
                         .setEditorCreateInfo(createInfo).build();
                 qupaiService.showRecordPage(mActivity, REQUEST_CODE_RECORD_VIDEO);
 
@@ -856,6 +857,10 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
 
 
         final ShareMessage_HZ shareMessage_hz = new ShareMessage_HZ();
+        String LONGITUDE = app.getCacheInstance().getAsString(Contants.ACAHE_KEY_LONGITUDE);
+        String[] strs = LONGITUDE.split(",");
+        longitude = Double.valueOf(strs[0]);
+        latitude = Double.valueOf(strs[1]);
 
         shareMessage_hz.setShContent(content);
         shareMessage_hz.setShTag(tagInfo);
@@ -942,6 +947,10 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
 
         final DiscountMessage_HZ disMessages = new DiscountMessage_HZ();
 
+        String LONGITUDE = app.getCacheInstance().getAsString(Contants.ACAHE_KEY_LONGITUDE);
+        String[] strs = LONGITUDE.split(",");
+        longitude = Double.valueOf(strs[0]);
+        latitude = Double.valueOf(strs[1]);
 
         disMessages.setDtTag(tagInfo);
         disMessages.setDtContent(content);
