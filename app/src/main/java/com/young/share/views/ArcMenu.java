@@ -133,10 +133,10 @@ public class ArcMenu extends ViewGroup implements OnClickListener
 			// 测量child
 			measureChild(getChildAt(i), widthMeasureSpec, heightMeasureSpec);
 		}
-
-		ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) getChildAt(0).getLayoutParams();
-		int margin = Math.min(params.leftMargin,params.rightMargin);
-
+// TODO: 2016-04-20 将边距写死了，获取不了，转化不了
+//		ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) getChildAt(0).getLayoutParams();
+//		int margin = Math.min(params.leftMargin,params.rightMargin);
+		int margin = DisplayUtils.dip2px(context,8);
 		measeredWidth = getMeasuredWidth() - DisplayUtils.dip2px(context, margin);
 		measeredHeight = getMeasuredHeight() - DisplayUtils.dip2px(context, margin);
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);

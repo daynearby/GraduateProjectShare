@@ -30,8 +30,8 @@
     <dimen name="btnSizeDefault">60dp</dimen>
 
     <dimen name="stroke_width">1dp</dimen>
-    <dimen name="arcButtonChild">56dp</dimen>
-    <dimen name="arcButton">66dp</dimen>
+    <dimen name="arcButtonChild">54dp</dimen>
+    <dimen name="arcButton">64dp</dimen>
     <dimen name="size_progress_small">32dp</dimen>
     <dimen name="size_video_width">240dp</dimen>
     <dimen name="size_video_height">180dp</dimen>
