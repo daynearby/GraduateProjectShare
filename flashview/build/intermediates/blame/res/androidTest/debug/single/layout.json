@@ -20,12 +20,12 @@
         "source": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\notification_template_part_chronometer.xml"
     },
     {
-        "merged": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_activity_chooser_view.xml",
-        "source": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_activity_chooser_view.xml"
-    },
-    {
         "merged": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_screen_simple.xml",
         "source": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_screen_simple.xml"
+    },
+    {
+        "merged": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_activity_chooser_view.xml",
+        "source": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_activity_chooser_view.xml"
     },
     {
         "merged": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\notification_template_lines.xml",

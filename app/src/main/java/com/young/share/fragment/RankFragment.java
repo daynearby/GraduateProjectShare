@@ -13,7 +13,6 @@ import com.young.share.adapter.RankAdapter;
 import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
 import com.young.share.model.RankBean;
-import com.young.share.utils.LogUtils;
 import com.young.share.utils.XmlUtils;
 import com.young.share.views.SpacesItemDecoration;
 
@@ -68,17 +67,12 @@ public class RankFragment extends BaseFragment {
     @Override
     public void initView() {
 
-         recyclerView = $(R.id.recv_rank);
+        recyclerView = $(R.id.recv_rank);
         rankAdapter = new RankAdapter(context);
 
-        try {
             layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
-        } catch (IllegalArgumentException e) {
-            LogUtils.e("viewpager IllegalArgumentException =" + e);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            LogUtils.e("viewpager ArrayIndexOutOfBoundsException =" + e);
-        }
+
 
     }
 

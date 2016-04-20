@@ -88,8 +88,9 @@ public class RankListActivity extends BaseAppCompatActivity {
         setTitle(tag);
 
         remoteList = (List<RemoteModel>) app.getCacheInstance().getAsObject(tag);
-        if (!(isHadData = remoteList != null && remoteList.size() > 0))
-            remoteList = new ArrayList<>();
+        isHadData = remoteList != null && remoteList.size() > 0;
+//        if (!isHadData)
+//            remoteList = new ArrayList<>();
 
 //获取数据
         getDataFromRemote();
@@ -206,14 +207,17 @@ public class RankListActivity extends BaseAppCompatActivity {
                 }
             }
         });
-
+        swipeRefreshLayout.setRefreshing(true);
+        if (isHadData){
+            mHandler.sendEmptyMessage(HANDLER_GET_DATA);
+        }
     }
 
     @Override
     public void handerMessage(Message msg) {
         switch (msg.what) {
             case HANDLER_GET_DATA:
-
+                swipeRefreshLayout.setRefreshing(false);
                 refreshUI();
                 break;
 
@@ -279,18 +283,19 @@ public class RankListActivity extends BaseAppCompatActivity {
      * 刷新列表，最新数据
      */
     private void refreshUI() {
+        if (remoteList != null && remoteList.size() > 0) {
         if (isGetMore) {
             endIndex = remoteList.size() < (PUSH_TIMES + 1) * Contants.PAGE_SIZE ?
                     remoteList.size() : (PUSH_TIMES + 1) * Contants.PAGE_SIZE;
         } else {
-
             endIndex = remoteList.size() < Contants.PAGE_SIZE ? remoteList.size() : endIndex;
 
         }
-        if (remoteList != null && remoteList.size() > 0) {
+
             rankAdapter.setData(remoteList.subList(startIndex, endIndex));
+
+//        swipeRefreshLayout.setRefreshing(false);
         }
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     /**
@@ -344,9 +349,10 @@ public class RankListActivity extends BaseAppCompatActivity {
 
                         //排序
                         if (remoteList != null && remoteList.size() > 0) {
-                            Collections.sort(remoteList, new ComparatorImpl(key));
-                            app.getCacheInstance().put(tag, (Serializable) remoteList);
-                            mHandler.sendEmptyMessage(HANDLER_GET_DATA);
+//                            Collections.sort(remoteList, new ComparatorImpl(key));
+//                            app.getCacheInstance().put(tag, (Serializable) remoteList);
+//                            mHandler.sendEmptyMessage(HANDLER_GET_DATA);
+                            listSort();
                         }
 
                     } else {
@@ -358,10 +364,8 @@ public class RankListActivity extends BaseAppCompatActivity {
 
 /*分享信息的数据*/
                     if (sharemessagesList.size() > 0 || discountMessagesList.size() > 0) {
-                        //清空原来的数据
-                        if (remoteList != null && remoteList.size() > 0) {
-                            remoteList.clear();
-                        }
+
+                        remoteList = new ArrayList<>();
 
 
                         for (ShareMessage_HZ share : sharemessagesList) {
@@ -376,9 +380,10 @@ public class RankListActivity extends BaseAppCompatActivity {
 
 //进行排序
                         if (remoteList != null && remoteList.size() > 0) {
-                            Collections.sort(remoteList, new ComparatorImpl(key));
-                            app.getCacheInstance().put(tag, (Serializable) remoteList);
-                            mHandler.sendEmptyMessage(HANDLER_GET_DATA);
+//                            Collections.sort(remoteList, new ComparatorImpl(key));
+//                            app.getCacheInstance().put(tag, (Serializable) remoteList);
+//                            mHandler.sendEmptyMessage(HANDLER_GET_DATA);
+                            listSort();
                         }
                     } else {
                         mHandler.sendEmptyMessage(HANDLER_GET_NO_DATA);
@@ -394,6 +399,17 @@ public class RankListActivity extends BaseAppCompatActivity {
                 LogUtils.d("get rank data failure. code = " + code + " message = " + msg);
             }
         });
+    }
 
+
+    private void listSort() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Collections.sort(remoteList, new ComparatorImpl(key));
+                app.getCacheInstance().put(tag, (Serializable) remoteList);
+                mHandler.sendEmptyMessage(HANDLER_GET_DATA);
+            }
+        }).start();
     }
 }

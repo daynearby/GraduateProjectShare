@@ -30,9 +30,10 @@
 #-- start ---添加混淆，app使用到的gson、volley、bmob---
 #如果引用了v4或者v7包
 #-dontwarn android.support.**
+-dontwarn com.young.share.**
 -verbose
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
--dontwarn android.support.v4.**
+#-dontwarn android.support.v4.**
 -keep class android.support.v4.app.** { *; }
 -keep interface android.support.v4.app.** { *; }
 -keep class com.actionbarsherlock.** { *; }
@@ -72,7 +73,7 @@
 -keep class com.young.share.model.Message_HZ{*;}
 -keep class com.young.share.model.MyBmobInstallation{*;}
 
-# 如果你使用了okhttp、okio的包，请添加以下混淆代码
+# 使用了okhttp、okio的包，请添加以下混淆代码
 -dontwarn com.squareup.okhttp.**
 -keep class com.squareup.okhttp.** { *;}
 -keep interface com.squareup.okhttp.** { *; }
@@ -150,7 +151,7 @@
 #-keep public interface com.umeng.socialize.sensor.**
 #-keep public interface com.umeng.scrshot.**
 
--keep public class com.umeng.socialize.* {*;}
+#-keep public class com.umeng.socialize.* {*;}
 -keep public class javax.**
 -keep public class android.webkit.**
 
@@ -171,9 +172,9 @@
 #-keep public class com.umeng.soexample.R$*{
 #    public static final int *;
 #}
--keep public class com.umeng.soexample.R$*{
-    public static final int *;
-}
+#-keep public class com.umeng.soexample.R$*{
+#    public static final int *;
+#}
 #-keep class com.tencent.open.TDialog$*
 #-keep class com.tencent.open.TDialog$* {*;}
 #-keep class com.tencent.open.PKDialog

@@ -138,7 +138,7 @@ public class HadGoFragment extends BaseFragment {
     @Override
     public void initView() {
         avatarTxt = $(R.id.tv_want_to_go_avatar);
-        LogUtils.e("init view ");
+//        LogUtils.e("");
     }
 
     @Override

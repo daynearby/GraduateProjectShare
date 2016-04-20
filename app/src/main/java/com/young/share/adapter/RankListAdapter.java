@@ -134,7 +134,7 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
         }
 
 
-        nickname_tv.setText(TextUtils.isEmpty(myUser.getNickName()) ? "" : myUser.getNickName());
+        nickname_tv.setText(TextUtils.isEmpty(myUser.getNickName()) ? "xx" : myUser.getNickName());
 
         ImageLoader.getInstance().displayImage(
                 TextUtils.isEmpty(myUser.getAvatar()) ?
@@ -150,25 +150,18 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
 
         tag_tv.setText(remoteModel.getTag());
 
-        String wanto;
-        if (remoteModel.getWanted() != null && remoteModel.getWanted().size() > 0) {
-            wanto = String.valueOf(remoteModel.getWanted().size());
-        } else {
-            wanto = ctx.getString(R.string.tx_wantogo);
-        }
 
-        String hadgo;
-        if (remoteModel.getVisited() != null && remoteModel.getVisited().size() > 0) {
-            hadgo = String.valueOf(remoteModel.getVisited().size());
-        } else {
-            hadgo = ctx.getString(R.string.hadgo);
-        }
+        wanto_tv.setText(remoteModel.getWantedNumber() > 0 ?
+                String.valueOf(remoteModel.getWanted().size())
+                : ctx.getString(R.string.tx_wantogo));
 
-        wanto_tv.setText(wanto);
-        hadgo_tv.setText(hadgo);
+        hadgo_tv.setText(remoteModel.getVisitedNumber() > 0 ?
+                String.valueOf(remoteModel.getVisited().size())
+                : ctx.getString(R.string.hadgo));
 
         //地理信息的显示。显示了可以点击查看详细
         if (!TextUtils.isEmpty(remoteModel.getLocationInfo())) {
+
             locationTxt.setVisibility(View.VISIBLE);
             locationTxt.setText(StringUtils.locatiomInfo(ctx, remoteModel.getLocationInfo(), new StringUtils.TextLink() {
                 @Override
@@ -196,7 +189,6 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
         setVideo(holder, remoteModel);
 
         //图片显示
-//        gridViewAdapter.setDatas(DataFormateUtils.formateStringInfoList(ctx, remoteModel.getImages()));
         setupImage(multiImageView, remoteModel);
 
 //添加监听事件
@@ -258,6 +250,7 @@ public class RankListAdapter extends CommAdapter<RemoteModel> {
      * @param remoteModel remoteModel通用数据结构
      */
     private void setVideo(ViewHolder holder, final RemoteModel remoteModel) {
+
         RelativeLayout videoLayout = holder.getView(R.id.rl_share_video_layout);
         final VideoView videoView = holder.getView(R.id.vv_share_preview_video);
         final ImageView videoPrevideo = holder.getView(R.id.im_share_video_priview);
