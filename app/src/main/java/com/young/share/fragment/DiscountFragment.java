@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -168,6 +169,10 @@ public class DiscountFragment extends BaseFragment {
         listview.addHeaderView(headerView);
         listview.setOnItemClickListener(new itemClick());
         listview.setAdapter(discAdapter);
+
+        swipeRefreshLayout.setColorScheme(getResources().getColor(android.R.color.holo_red_light), getResources().getColor(android.R.color.holo_green_light),
+                getResources().getColor(android.R.color.holo_blue_bright), getResources().getColor(android.R.color.holo_orange_light));
+
           /*上拉刷新*/
         pullToRefresh();
 
@@ -325,17 +330,42 @@ public class DiscountFragment extends BaseFragment {
 
     }
 
+    /**
+     * 显示刷新控件
+     */
+    private void showSwipeRefreshLayout(){
+        if (swipeRefreshLayout!=null){
+            swipeRefreshLayout.setRefreshing(true);
+        }
+    }
 
     /**
      * 获取数据
      */
     public void getRemoteData() {
 
+        showSwipeRefreshLayout();
 
         JSONObject params = new JSONObject();
+        String LONGITUDE = app.getCacheInstance().getAsString(Contants.ACAHE_KEY_LONGITUDE);
+        double longitude;
+        double latitude;
+
+        if (TextUtils.isEmpty(LONGITUDE)) {
+            longitude = 114.424984;
+            latitude = 23.043472;
+
+        } else {
+            String[] strs = LONGITUDE.split(",");
+            longitude = Double.valueOf(strs[0]);
+            latitude = Double.valueOf(strs[1]);
+
+        }
 
         try {
             params.put(Contants.SKIP, String.valueOf(skip));
+            params.put(Contants.PARAMS_LATITUDE, String.valueOf(latitude));
+            params.put(Contants.PARAMS_LONGITUDE, String.valueOf(longitude));
 
         } catch (JSONException e) {
 

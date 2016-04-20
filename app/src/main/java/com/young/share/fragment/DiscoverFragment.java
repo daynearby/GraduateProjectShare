@@ -1,7 +1,6 @@
 package com.young.share.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -139,7 +138,10 @@ public class DiscoverFragment extends BaseFragment {
 //
         listView.setAdapter(adapter);
         adapter.bindListView(listView);
-
+        swipeRefreshLayout.setColorScheme(getResources().getColor(android.R.color.holo_red_light),
+                getResources().getColor(android.R.color.holo_green_light),
+                getResources().getColor(android.R.color.holo_blue_bright),
+                getResources().getColor(android.R.color.holo_orange_light));
         //下拉上拉，点击
         setListPullAndClickListener();
 
@@ -248,21 +250,6 @@ public class DiscoverFragment extends BaseFragment {
         return super.onContextItemSelected(item);
     }
 
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        super.onActivityResult(requestCode, resultCode, data);
-        LogUtils.e(" discover " + resultCode);
-        if (resultCode == Contants.RESULT_SHARE_DISCOVER) {
-            //发送成功进行刷新
-            if (data.getBooleanExtra(Contants.INTENT_KEY_REFRESH,false)){
-                getDataFromRemote();
-            }
-
-        }
-
-    }
 
     @Override
     public void handler(Message msg) {

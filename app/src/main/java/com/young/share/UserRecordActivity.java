@@ -284,11 +284,11 @@ mActivity.finish();
                     }
 
                 } else {
-                    if (dataList != null && dataList.size() > 0) {
-                        dataList.clear();
-                    } else {
+//                    if (dataList != null && dataList.size() > 0) {
+//                        dataList.clear();
+//                    } else {
                         dataList = new ArrayList<>();
-                    }
+//                    }
 
                     for (ShareMessage_HZ sha : userRecorderList.getShareMessage()) {
                         dataList.add(DataFormateUtils.formateDataDiscover(sha));

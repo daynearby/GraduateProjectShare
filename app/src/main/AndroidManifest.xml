@@ -99,7 +99,7 @@
 
         <!-- 分享信息 -->
         <activity
-            android:name=".ShareMessageActivity"
+            android:name=".ShareActivity"
             android:windowSoftInputMode="adjustPan" />
 
 

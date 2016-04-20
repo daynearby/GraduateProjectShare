@@ -3,6 +3,7 @@ package com.young.share;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
@@ -157,7 +158,6 @@ public class MainActivity extends BaseAppCompatActivity {
 
         setTitle(R.string.discover);
 
-//        setCity(XmlUtils.getSelectCities(this).get(8));
 
         if (cuser == null) {
             loginFunction();
@@ -187,17 +187,32 @@ public class MainActivity extends BaseAppCompatActivity {
         app.getCacheInstance().put(Contants.ACAHE_KEY_LONGITUDE, cityList.get(position));
 
         //更新数据
-        if (isDiscount) {
+//        if (isDiscount) {
+////            discountFragment.getRemoteData();
 //            discountFragment.getRemoteData();
-            discountFragment.getRemoteData();
-        } else {
-            discoverFragment.getDataFromRemote();
-        }
-
+//        } else {
+//            discoverFragment.getDataFromRemote();
+//        }
+        updateDisFragmentData();
 
     }
 
+    /**
+     * 更新 discountFragmen、discoverFragment的数据
+     */
+    private void updateDisFragmentData(){
+    //更新数据
+    if (isDiscount) {
+//            discountFragment.getRemoteData();
+        discountFragment.getRemoteData();
+    } else {
+        discoverFragment.getDataFromRemote();
+    }
+    }
 
+    /**
+     * 页面监听
+     */
     private class pageChangeListener implements MainPagerAdapter.OnPageSelected {
 
 
@@ -243,6 +258,17 @@ public class MainActivity extends BaseAppCompatActivity {
 
     }
 
+    //注册广播接收者。分享发现、优惠 更新UI
+    public void registerBoradcastReceiverShare() {
+        myIntentFilter= new IntentFilter();
+        myIntentFilter.addAction(Contants.BORDCAST_SHARE);
+        //注册广播
+        registerReceiver(mBroadcastReceiver, myIntentFilter);
+        isRegistBordcast = true;
+
+    }
+
+
 
 
 
@@ -272,14 +298,6 @@ public class MainActivity extends BaseAppCompatActivity {
             return super.dispatchKeyEvent(event);
 
         }
-    }
-
-    /**
-     * 开始定位
-     */
-    public void startLocation() {
-
-        bdlbsUtils.startLocation();
     }
 
     /**
@@ -363,10 +381,16 @@ public class MainActivity extends BaseAppCompatActivity {
                     }
 
                     break;
-                case Contants.BORDCAST_REQUEST_LOCATIONINFO://使用百度定位
-                    //开始 百度定位
-                    times = 0;
-                    startLocation();
+//                case Contants.BORDCAST_REQUEST_LOCATIONINFO://使用百度定位
+//                    //开始 百度定位
+//                    times = 0;
+//                    startLocation();
+//                    break;
+
+                case Contants.BORDCAST_SHARE:
+                    //分享后刷新
+                    updateDisFragmentData();
+
                     break;
 
 
@@ -423,12 +447,13 @@ public class MainActivity extends BaseAppCompatActivity {
      */
     private void shareActivity() {
         if (cuser != null) {
-
+            //注册广播接收者 ，分享后刷新ui
+            registerBoradcastReceiverShare();
             Bundle bundle = new Bundle();
             bundle.putBoolean(Contants.BUNDLE_CURRENT_IS_DISCOUNT, isDiscount);
             //定位信息请求，注册广播接收者
 //            registerBoradcastReceiverRequestLocation();
-            intents = new Intent(this, ShareMessageActivity.class);
+            intents = new Intent(this, ShareActivity.class);
             intents.putExtras(bundle);
             mActivity.startActivityForResult(intents, Contants.REQUSET_SHARE_DISCOVER);
 

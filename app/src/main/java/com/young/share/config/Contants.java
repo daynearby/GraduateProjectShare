@@ -117,6 +117,7 @@ public class Contants {
     public static final String BORDCAST_LOCATIONINFO = "bordcast_location_info";
     public static final String BORDCAST_REQUEST_LOCATIONINFO = "bordcast_request_location_info";
     public static final String BORDCAST_REQUEST_REFRESH = "bordcast_request_refresh";
+    public static final String BORDCAST_SHARE = "bordcast_share";
 
     public static final String REFRESH_TYPE = "refresh_type";
     public static final int REFRESH_TYPE_DISCOUNT = 10;

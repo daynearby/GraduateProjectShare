@@ -73,7 +73,7 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
  * <p/>
  * Created by Nearby Yang on 2015-10-23.
  */
-public class ShareMessageActivity extends BaseAppCompatActivity implements View.OnClickListener {
+public class ShareActivity extends BaseAppCompatActivity implements View.OnClickListener {
 
     @InjectView(R.id.et_contnent_popupwin_content)
     private EditText content_et;
@@ -734,13 +734,14 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
      * 设置结果
      */
     private void setShareResult() {
-//        intents = new Intent();
+        intents = new Intent();
 //        intents.putExtra(Contants.INTENT_KEY_REFRESH, isRefresh);
 //        LogUtils.e("share end ");
 //        setResult(currentIsDiscount ? Contants.RESULT_SHARE_DISCOUNT : Contants.RESULT_SHARE_DISCOVER,
 //                intents);
-
-        finish();
+        intents.setAction(Contants.BORDCAST_SHARE);
+        mActivity.sendBroadcast(intents);
+        mActivity.finish();
     }
 
     /**
@@ -1094,14 +1095,14 @@ public class ShareMessageActivity extends BaseAppCompatActivity implements View.
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        intents = new Intent();
-        intents.putExtra(Contants.INTENT_KEY_REFRESH, isRefresh);
-        LogUtils.e("share activity end ");
-        setResult(currentIsDiscount ? Contants.RESULT_SHARE_DISCOUNT : Contants.RESULT_SHARE_DISCOVER,
-                intents);
-    }
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//
+//        intents = new Intent();
+//        intents.putExtra(Contants.INTENT_KEY_REFRESH, isRefresh);
+//        LogUtils.e("share activity end ");
+//        setResult(currentIsDiscount ? Contants.RESULT_SHARE_DISCOUNT : Contants.RESULT_SHARE_DISCOVER,
+//                intents);
+//    }
 }

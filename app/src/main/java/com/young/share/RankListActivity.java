@@ -181,6 +181,11 @@ public class RankListActivity extends BaseAppCompatActivity {
     @Override
     public void bindData() {
 
+        swipeRefreshLayout.setColorScheme(getResources().getColor(android.R.color.holo_red_light),
+                getResources().getColor(android.R.color.holo_green_light),
+                getResources().getColor(android.R.color.holo_blue_bright),
+                getResources().getColor(android.R.color.holo_orange_light));
+
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
