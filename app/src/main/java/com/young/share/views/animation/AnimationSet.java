@@ -1,5 +1,6 @@
 package com.young.share.views.animation;
 
+import android.content.Context;
 import android.view.animation.TranslateAnimation;
 
 /**
@@ -9,9 +10,10 @@ import android.view.animation.TranslateAnimation;
 public class AnimationSet {
 
 
-    public static TranslateAnimation sildIn(){
-
-
+    public static TranslateAnimation sildIn(Context context){
+AnimationSet animationSet =new  AnimationSet();
+//        TranslateAnimation translateAnimation = new TranslateAnimation()
+//                context.
 return null;
     }
 

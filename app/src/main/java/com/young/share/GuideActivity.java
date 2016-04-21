@@ -71,7 +71,7 @@ public class GuideActivity extends Activity {
                 Intent intents = new Intent(GuideActivity.this, MainActivity.class);
 
                 startActivity(intents);
-                overridePendingTransition(R.animator.activity_slid_right_in, R.animator.activity_slid_left_out);
+                overridePendingTransition(R.anim.activity_slid_right_in, R.anim.activity_slid_left_out);
                 GuideActivity.this.finish();
 
             }

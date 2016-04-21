@@ -212,10 +212,10 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
         startActivity(intent);
         if (type == TYPE_BACK) {
-            overridePendingTransition(R.animator.activity_slid_left_in, R.animator.activity_slid_right_out);
+            overridePendingTransition(R.anim.activity_slid_left_in, R.anim.activity_slid_right_out);
         } else {
 
-            overridePendingTransition(R.animator.activity_slid_right_in, R.animator.activity_slid_left_out);
+            overridePendingTransition(R.anim.activity_slid_right_in, R.anim.activity_slid_left_out);
         }
     }
 

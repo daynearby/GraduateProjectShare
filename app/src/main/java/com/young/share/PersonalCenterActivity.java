@@ -221,7 +221,7 @@ public class PersonalCenterActivity extends BaseAppCompatActivity implements Vie
                 case 2:// <item>修改资料</item>
                     intents = new Intent(mActivity, EditPersonalInfoActivity.class);
                     startActivityForResult(intents, Contants.REQUSET_EDIT_PERSONAL_INFO);
-                    overridePendingTransition(R.animator.activity_slid_right_in, R.animator.activity_slid_left_out);
+                    overridePendingTransition(R.anim.activity_slid_right_in, R.anim.activity_slid_left_out);
 
                     break;
                 case 3:// <item>修改密码</item>

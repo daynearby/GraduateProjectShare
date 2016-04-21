@@ -88,7 +88,7 @@ public class WelcomeActivity extends Activity {
 
         intents.setClass(WelcomeActivity.this, MainActivity.class);
         startActivity(intents);
-        overridePendingTransition(R.animator.activity_slid_bottom_in, R.animator.activity_slid_bottom_out);
+        overridePendingTransition(R.anim.activity_slid_bottom_in, R.anim.activity_slid_bottom_out);
         this.finish();
 
     }
@@ -99,7 +99,7 @@ public class WelcomeActivity extends Activity {
         intents.setClass(WelcomeActivity.this, GuideActivity.class);
 
         startActivity(intents);
-        overridePendingTransition(R.animator.activity_slid_bottom_in, R.animator.activity_slid_bottom_out);
+        overridePendingTransition(R.anim.activity_slid_bottom_in, R.anim.activity_slid_bottom_out);
         this.finish();
 
     }

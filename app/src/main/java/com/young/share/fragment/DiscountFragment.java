@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -28,6 +29,7 @@ import com.young.share.config.ApplicationConfig;
 import com.young.share.config.Contants;
 import com.young.share.interfaces.AsyncListener;
 import com.young.share.interfaces.ListViewRefreshListener;
+import com.young.share.interfaces.MScrollListener;
 import com.young.share.model.Advertisement;
 import com.young.share.model.DiscountMessage_HZ;
 import com.young.share.model.gson.AdvertismentList;
@@ -65,6 +67,7 @@ public class DiscountFragment extends BaseFragment {
     private FlashView flashView;
     private View headerView;
     private ImageView tipsIm;
+    private MScrollListener mScrollListener;
 
     private int startIndex = 0;
     private int endIndex = 20;
@@ -102,6 +105,14 @@ public class DiscountFragment extends BaseFragment {
     @Override
     protected void getDataFromBunlde(Bundle bundle) {
 
+    }
+
+    /**
+     * 按钮状态触发
+     * @param mScrollListener
+     */
+    public void setmScrollListener(MScrollListener mScrollListener) {
+        this.mScrollListener = mScrollListener;
     }
 
     @Override
@@ -176,7 +187,7 @@ public class DiscountFragment extends BaseFragment {
                 R.color.orange_light);
           /*上拉刷新*/
         pullToRefresh();
-
+        mScrollListener();
 //        Log.d(tag, "bindData");
         swipeRefreshLayout.setRefreshing(true);
 
@@ -200,6 +211,35 @@ public class DiscountFragment extends BaseFragment {
             swipeRefreshLayout.setRefreshing(true);
             isFirstIn = false;
         }
+    }
+
+    /**
+     * 滚动监听
+     */
+    private void mScrollListener() {
+
+        listview.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                //状态改变
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {//停止
+                    if (mScrollListener != null) {
+                        mScrollListener.scrollStop();
+                    }
+
+                } else {//开始
+                    if (mScrollListener != null) {
+                        mScrollListener.scrollStart();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+            }
+        });
     }
 
     @Override

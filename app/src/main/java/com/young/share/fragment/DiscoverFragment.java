@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -20,6 +21,7 @@ import com.young.share.base.BaseFragment;
 import com.young.share.config.Contants;
 import com.young.share.interfaces.AsyncListener;
 import com.young.share.interfaces.ListViewRefreshListener;
+import com.young.share.interfaces.MScrollListener;
 import com.young.share.model.ShareMessage_HZ;
 import com.young.share.model.gson.ShareMessageList;
 import com.young.share.network.BmobApi;
@@ -49,6 +51,7 @@ public class DiscoverFragment extends BaseFragment {
     private List<ShareMessage_HZ> dataList = new ArrayList<>();
     private ImageView tipsIm;
     private ListView listView;
+    private MScrollListener mScrollListener;
 
     private int startIndex = 0;
     private int endIndex = 15;
@@ -80,6 +83,14 @@ public class DiscoverFragment extends BaseFragment {
 
     }
 
+    /**
+     * 滑动监听，作为按钮动画触发
+     *
+     * @param mScrollListener
+     */
+    public void setmScrollListener(MScrollListener mScrollListener) {
+        this.mScrollListener = mScrollListener;
+    }
 
     @Override
     public int getLayoutId() {
@@ -145,6 +156,7 @@ public class DiscoverFragment extends BaseFragment {
         //下拉上拉，点击
         setListPullAndClickListener();
 
+        mScrollListener();
         swipeRefreshLayout.setRefreshing(true);
 
         if (isFirstIn) {
@@ -156,6 +168,41 @@ public class DiscoverFragment extends BaseFragment {
             mhandler.sendEmptyMessage(HANDLER_GET_DATA);
         }
 
+    }
+
+    boolean isStop = true;
+
+    /**
+     * 滚动监听
+     */
+    private void mScrollListener() {
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                //状态改变
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {//停止
+                    if (mScrollListener != null) {
+                        isStop = true;
+                        mScrollListener.scrollStop();
+                    }
+
+                } else {//开始
+                    if (mScrollListener != null) {
+
+                        if (isStop)
+                            mScrollListener.scrollStart();
+                        isStop = false;
+                    }
+
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+            }
+        });
     }
 
     /**
@@ -241,7 +288,7 @@ public class DiscoverFragment extends BaseFragment {
                 SocialShareByIntent.downloadImagesAndShare(context, adapter.getImageList());
 //                SocialShareManager.shareImage(context, discAdapter.getImageUrl());
 
-             return true;
+                return true;
             case R.id.menu_image_share_singal://分享打仗图片
                 SocialShareByIntent.downloadImageAndShare(context, adapter.getImageUrl());
                 return true;

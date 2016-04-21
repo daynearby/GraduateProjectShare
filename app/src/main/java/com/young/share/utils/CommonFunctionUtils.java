@@ -397,8 +397,8 @@ public class CommonFunctionUtils {
         intent.putExtras(bundle);
         intent.setClass(ctx, clazz);
         ctx.startActivity(intent);
-        ((Activity) ctx).overridePendingTransition(R.animator.activity_slid_right_in,
-                R.animator.activity_slid_left_out);
+        ((Activity) ctx).overridePendingTransition(R.anim.activity_slid_right_in,
+                R.anim.activity_slid_left_out);
     }
 
     /**

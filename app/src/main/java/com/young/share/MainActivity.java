@@ -16,6 +16,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.young.share.adapter.MainPagerAdapter;
@@ -26,6 +28,7 @@ import com.young.share.config.Contants;
 import com.young.share.fragment.DiscountFragment;
 import com.young.share.fragment.DiscoverFragment;
 import com.young.share.fragment.RankFragment;
+import com.young.share.interfaces.MScrollListener;
 import com.young.share.model.MyUser;
 import com.young.share.utils.BDLBSUtils;
 import com.young.share.utils.DialogUtils;
@@ -48,7 +51,7 @@ import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.update.BmobUpdateAgent;
 
-public class MainActivity extends BaseAppCompatActivity {
+public class MainActivity extends BaseAppCompatActivity implements MScrollListener {
 
     private ArcMenu mArcMenu;
     private BDLBSUtils bdlbsUtils;
@@ -94,6 +97,8 @@ public class MainActivity extends BaseAppCompatActivity {
         discoverFragment = new DiscoverFragment();
         RankFragment rankFragment = new RankFragment();
 
+        discoverFragment.setmScrollListener(this);
+        discountFragment.setmScrollListener(this);
         list.add(discountFragment);
         list.add(discoverFragment);
         list.add(rankFragment);
@@ -200,14 +205,77 @@ public class MainActivity extends BaseAppCompatActivity {
     /**
      * 更新 discountFragmen、discoverFragment的数据
      */
-    private void updateDisFragmentData(){
-    //更新数据
-    if (isDiscount) {
+    private void updateDisFragmentData() {
+        //更新数据
+        if (isDiscount) {
 //            discountFragment.getRemoteData();
-        discountFragment.getRemoteData();
-    } else {
-        discoverFragment.getDataFromRemote();
+            discountFragment.getRemoteData();
+        } else {
+            discoverFragment.getDataFromRemote();
+        }
     }
+
+    @Override
+    public void scrollStop() {
+//        LogUtils.e("停止");
+
+        Animation slidOutAnimation = AnimationUtils.loadAnimation(this, R.anim.button_slid_bottom_in);
+//        slidOutAnimation.setInterpolator(new DecelerateInterpolator());
+        slidOutAnimation.setFillEnabled(true);
+        slidOutAnimation.setFillBefore(true);
+        slidOutAnimation.setFillAfter(true);
+        slidOutAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                mArcMenu.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mArcMenu.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        mArcMenu.startAnimation(slidOutAnimation);
+
+//        translateAnimation.start();
+//        mArcMenu.setVisibility(View.VISIBLE);
+//        LogUtils.e("停止");
+    }
+
+    @Override
+    public void scrollStart() {
+//        LogUtils.e("开始");
+
+        if (mArcMenu.getVisibility() == View.VISIBLE) {
+            Animation slidInAnimation = AnimationUtils.loadAnimation(this, R.anim.button_slid_bottom_out);
+            slidInAnimation.setFillEnabled(true);
+            slidInAnimation.setFillAfter(true);
+            slidInAnimation.setFillBefore(true);
+            slidInAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    mArcMenu.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            mArcMenu.startAnimation(slidInAnimation);
+        }
+//        mArcMenu.setVisibility(View.GONE);
+
     }
 
     /**
@@ -215,6 +283,7 @@ public class MainActivity extends BaseAppCompatActivity {
      */
     private class pageChangeListener implements MainPagerAdapter.OnPageSelected {
 
+        int lastIndex = 1;
 
         @Override
         public void onselected(int position) {
@@ -223,23 +292,29 @@ public class MainActivity extends BaseAppCompatActivity {
 
                 case 0:
                     setTitle(R.string.discount);
-                    mArcMenu.setVisibility(View.VISIBLE);
+//                    mArcMenu.setVisibility(View.VISIBLE);
                     isDiscount = true;
-
+                    lastIndex = 0;
                     break;
 
                 case 1:
 
                     setTitle(R.string.discover);
-                    mArcMenu.setVisibility(View.VISIBLE);
-                    isDiscount = false;
+//                    mArcMenu.setVisibility(View.VISIBLE);
 
+                    isDiscount = false;
+                    if (lastIndex == 2) {
+                        scrollStop();
+                    }
+
+                    lastIndex = 1;
                     break;
 
                 case 2:
                     setTitle(R.string.rank);
-                    mArcMenu.setVisibility(View.GONE);
-
+//                    mArcMenu.setVisibility(View.GONE);
+                    scrollStart();
+                    lastIndex = 2;
                     break;
 
             }
@@ -260,16 +335,13 @@ public class MainActivity extends BaseAppCompatActivity {
 
     //注册广播接收者。分享发现、优惠 更新UI
     public void registerBoradcastReceiverShare() {
-        myIntentFilter= new IntentFilter();
+        myIntentFilter = new IntentFilter();
         myIntentFilter.addAction(Contants.BORDCAST_SHARE);
         //注册广播
         registerReceiver(mBroadcastReceiver, myIntentFilter);
         isRegistBordcast = true;
 
     }
-
-
-
 
 
     /**
@@ -311,7 +383,6 @@ public class MainActivity extends BaseAppCompatActivity {
                                  String Province, String City,
                                  String District, String Street,
                                  String StreetNumber) {
-
 
             times++;
 
@@ -375,7 +446,7 @@ public class MainActivity extends BaseAppCompatActivity {
                         }
 
                         if (jsonObject != null) {
-                            MessageNotification.showReceiveComment(mActivity, StringUtils.getEmotionContent(mActivity,jsonObject.optString("messageBody")) );
+                            MessageNotification.showReceiveComment(mActivity, StringUtils.getEmotionContent(mActivity, jsonObject.optString("messageBody")));
                         }
 
                     }
@@ -490,10 +561,7 @@ public class MainActivity extends BaseAppCompatActivity {
 //            myBmobInstallation.setMyUser(cuser);
 //            myBmobInstallation.save(this);
 
-            BmobPush.updateinstallationId(this,cuser);
-
-
-
+            BmobPush.updateinstallationId(this, cuser);
 
 
         }

@@ -140,8 +140,8 @@ public class Dialog4Tips extends Dialog implements View.OnClickListener {
 
                 dialog4Tips.dismiss();
                 activity.startActivity(new Intent(activity, LoginActivity.class));
-                activity.overridePendingTransition(R.animator.activity_slid_right_in,
-                        R.animator.activity_slid_left_out);
+                activity.overridePendingTransition(R.anim.activity_slid_right_in,
+                        R.anim.activity_slid_left_out);
             }
 
             @Override

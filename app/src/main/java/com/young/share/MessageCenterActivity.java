@@ -28,6 +28,7 @@ import com.young.share.utils.LogUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
         initialiToolbar();
         setTitle(R.string.messages_center);
 
-
+        dataList = (List<Comment_HZ>) app.getCacheInstance().getAsObject(Contants.ACAHE_KEY_MESSAGE_CENTER + cuser.getObjectId());
         SVProgressHUD.showWithStatus(mActivity, getString(R.string.tips_loading));
         //获取数据
         initDataByThread();
@@ -99,6 +100,9 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
     @Override
     public void bindData() {
 
+        if (dataList!=null&&dataList.size()>0){
+            mHandler.sendEmptyMessage(REFRESHUI);
+        }
     }
 
 
@@ -196,18 +200,20 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
         }
 
     }
+
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
                 && event.getAction() != KeyEvent.ACTION_UP) {
 
-          back2superclazz();
+            back2superclazz();
             return true;
         }
 
 
         return super.dispatchKeyEvent(event);
     }
+
     /**
      * setdata &&  notification
      */
@@ -228,7 +234,7 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
      */
     private void back2superclazz() {
 
-       setResult(Contants.RESULT_MESSAGE_CENTER);
+        setResult(Contants.RESULT_MESSAGE_CENTER);
         this.finish();
     }
 
@@ -265,9 +271,12 @@ public class MessageCenterActivity extends BaseAppCompatActivity {
                     dataList = commentList.getCommentList();
 
                 }
+
                 //刷新机制
                 if (dataList != null && dataList.size() > 0) {
                     tipsIm.setVisibility(View.GONE);
+                    //缓存数据
+                    app.getCacheInstance().put(Contants.ACAHE_KEY_MESSAGE_CENTER + cuser.getObjectId(), (Serializable) dataList);
                     mHandler.sendEmptyMessage(REFRESHUI);
                 } else {
                     //提示框处理

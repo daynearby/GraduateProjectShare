@@ -30,7 +30,6 @@ public class Contants {
     public static final int PAGE_SIZE = 20;
 
     //*************************** Bmob key *****************
-
     public static final String BMOB_APP_KEY = "52f47fe363ec6e189700adf5b51e58ed";
     public static final String BMOB_APP_ACCESS_KEY = "cf5d7486b89a2ad072047b2cb8d4396c";
     public static final String BMOB_APP_REST_KEY = "15ef57525ecb26c77323665e3a2ca59f";
@@ -275,6 +274,8 @@ public class Contants {
     public static final String ACAHE_KEY_DISCOUNT = "acahe_key_discount";//商家优惠前面那部分
     public static final String ACAHE_KEY_USER = "acahe_key_user";//用户信息
     public static final String ACAHE_KEY_ADVERTISMENT = "acahe_key_advertisment";//广告信息
+    public static final String ACAHE_KEY_MESSAGE_CENTER = "acahe_key_message_center";//消息中心
+
 
 
 }
