@@ -70,7 +70,7 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * 发送分享信息
- * <p/>
+ * <p>
  * Created by Nearby Yang on 2015-10-23.
  */
 public class ShareActivity extends BaseAppCompatActivity implements View.OnClickListener {
@@ -168,7 +168,6 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
 
     @Override
     public void findviewbyid() {
-
 
         /**
          * 创建文件地址
@@ -301,9 +300,9 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
 
             if (currentIsDiscount && draft_type.equals(Contants.DRAFT_TYPE_DICOUNT)) {//商家优惠
 
-                setDraft();
+                setDiscountDraft();
             } else if (!currentIsDiscount && draft_type.equals(Contants.DRAFT_TYPE_DICOVER)) {//发现
-                setDraft();
+                setDiscoverDraft();
 
             }
         }
@@ -314,7 +313,7 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
     /**
      * 回复草稿
      */
-    private void setDraft() {
+    private void setDiscoverDraft() {
 
         final List<String> list = new ArrayList<>();
         final String draft_content = acache.getAsString(Contants.DRAFT_CONTENT);
@@ -334,7 +333,7 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
 
                     if (!TextUtils.isEmpty(draft_content)) {
                         content_et.setText(StringUtils.getEmotionContent(
-                                mActivity,  draft_content));
+                                mActivity, draft_content));
                     }
 
                     tag_tv.setText(acache.getAsString(Contants.DRAFT_TAG));
@@ -350,7 +349,7 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
                             }
 
                         }
-                        multiImageView.setList(urlAddHead(list));
+                        multiImageView.setList(list);
 //                        gridViewAdapter.setDatas(DataFormateUtils.formateLocalImage(list));
                     }
 
@@ -363,6 +362,68 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
 
                     } else {
                         videoPreview.setVisibility(View.GONE);
+                    }
+
+
+                    //删除草稿
+                    darftUtils.deleteDraft();
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void btnCancelListener() {
+
+                    //删除草稿
+                    darftUtils.deleteDraft();
+
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+            LogUtils.i("有草稿 存在");
+        }
+
+    }
+
+    /*
+    * 回复草稿
+    */
+    private void setDiscountDraft() {
+
+        final List<String> list = new ArrayList<>();
+        final String draft_content = acache.getAsString(Contants.DRAFT_CONTENT_DISCOUNT);
+        final JSONArray imgJsArray = acache.getAsJSONArray(Contants.DRAFT_IMAGES_LIST_DISCOUNT);
+
+        if (draft_content != null || imgJsArray != null) {
+
+            dialog.setContent(getString(R.string.had_draft_would_reset_tips));
+            dialog.setBtnOkText(getString(R.string.reset));
+            dialog.setBtnCancelText(getString(R.string.do_not_reset));
+
+            dialog.setDialogListener(new Dialog4Tips.Listener() {
+                @Override
+                public void btnOkListenter() {
+
+                    if (!TextUtils.isEmpty(draft_content)) {
+                        content_et.setText(StringUtils.getEmotionContent(
+                                mActivity, draft_content));
+                    }
+
+                    tag_tv.setText(acache.getAsString(Contants.DRAFT_TAG_DISCOUNT));
+                    shareLocation_tv.setText(acache.getAsString(Contants.DRAFT_LOCATION_INFO_DISCOUNT));
+
+                    if (imgJsArray != null) {
+                        for (int i = 0; i < imgJsArray.length(); i++) {
+
+                            try {
+                                list.add(imgJsArray.getString(i));
+                            } catch (JSONException e) {
+                                LogUtils.e("读取jsonArray数据出错" + e.toString());
+                            }
+
+                        }
+                        multiImageView.setList(list);
+//                        gridViewAdapter.setDatas(DataFormateUtils.formateLocalImage(list));
                     }
 
 
@@ -468,7 +529,7 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
         tagInfo = !TextUtils.isEmpty(item.getTitle()) && !getString(R.string.txt_tag_invisible).equals(item.getTitle()) ?
                 String.valueOf(item.getTitle()) : "";
 
-        return  true;
+        return true;
     }
     // TODO: 2016-04-06 完善修改图片的功能
 
@@ -517,7 +578,7 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
 
             case R.id.im_activity_share_message_add_video:/*录制视频*/
 
-                 QupaiServiceImpl  qupaiService = new QupaiServiceImpl.Builder()
+                QupaiServiceImpl qupaiService = new QupaiServiceImpl.Builder()
                         .setEditorCreateInfo(createInfo).build();
                 qupaiService.showRecordPage(mActivity, REQUEST_CODE_RECORD_VIDEO);
 
@@ -760,20 +821,7 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
                 @Override
                 public void btnOkListenter() {
 
-                    List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(mActivity, multiImageView.getImagesList());
-
-                    ArrayList<String> l = new ArrayList<>();
-                    for (PictureInfo pictureInfo : pictureInfoList) {
-
-                        l.add(pictureInfo.getImageUrl());
-                    }
-
-                    darftUtils.saveDraft(draftType, content_et.getText().toString(),
-                            videoPath, imageFilePath,
-                            shareLocation_tv.getText().toString(),
-                            tag_tv.getText().toString(),
-                            l
-                    );
+                    saveDarft();
                     back2MainActivity();
 
                 }
@@ -1067,20 +1115,23 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
     private void saveDarft() {
 
 //        List<PictureInfo> pictureInfoList = gridViewAdapter.getData();
-        List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(this, multiImageView.getImagesList());
+        if (!currentIsDiscount) {
+            darftUtils.saveDraft(
+                    content_et.getText().toString(), videoPath, imageFilePath,
+                    shareLocation_tv.getText().toString(),
+                    tag_tv.getText().toString(),
+                    multiImageView.getImagesList()
+            );
+        } else {//优惠
+            darftUtils.saveDraftDiscount(
+                    content_et.getText().toString(),
+                    shareLocation_tv.getText().toString(),
+                    tag_tv.getText().toString(),
+                    multiImageView.getImagesList()
+            );
 
-        ArrayList<String> l = new ArrayList<>();
-        for (PictureInfo pictureInfo : pictureInfoList) {
 
-            l.add(pictureInfo.getImageUrl());
         }
-        darftUtils.saveDraft(draftType,
-                content_et.getText().toString(), videoPath, imageFilePath,
-                shareLocation_tv.getText().toString(),
-                tag_tv.getText().toString(),
-                l
-        );
-
     }
 
     /**

@@ -139,6 +139,11 @@ public class Contants {
     public static final String DRAFT_VIDEO = "draft_video";
     public static final String DRAFT_VIDEO_PREVIEW = "draft_video_preview";
 
+    public static final String DRAFT_CONTENT_DISCOUNT = "draft_content_discount";
+    public static final String DRAFT_TAG_DISCOUNT = "draft_tag_discount";
+    public static final String DRAFT_LOCATION_INFO_DISCOUNT = "draft_location_info_discount";
+    public static final String DRAFT_IMAGES_LIST_DISCOUNT = "draft_images_list_discount";
+
     public static final String ACACHE_PLACE_SERVE = "acache_place_serve";//搜索的地点
 
     public static final int DARFT_LIVE_TIME = 60 * 60;//一个小时
