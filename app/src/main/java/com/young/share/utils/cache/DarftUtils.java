@@ -84,6 +84,7 @@ public class DarftUtils {
     }
 
     /**
+     * 发现
      * 删除草稿
      */
     public void deleteDraft() {
@@ -92,6 +93,19 @@ public class DarftUtils {
         acache.remove(Contants.DRAFT_LOCATION_INFO);
         acache.remove(Contants.DRAFT_TAG);
         acache.remove(Contants.DRAFT_IMAGES_LIST);
+
+    }
+
+    /**
+     * 优惠
+     * 删除草稿
+     */
+    public void deleteDraftDiscount() {
+
+        acache.remove(Contants.DRAFT_CONTENT_DISCOUNT);
+        acache.remove(Contants.DRAFT_LOCATION_INFO_DISCOUNT);
+        acache.remove(Contants.DRAFT_TAG_DISCOUNT);
+        acache.remove(Contants.DRAFT_IMAGES_LIST_DISCOUNT);
 
     }
 }

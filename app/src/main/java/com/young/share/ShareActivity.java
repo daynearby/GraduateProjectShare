@@ -294,17 +294,10 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
      */
     private void resetDraft() {
 
-        String draft_type = acache.getAsString(Contants.DRAFT_TYPE);
-
-        if (!TextUtils.isEmpty(draft_type)) {
-
-            if (currentIsDiscount && draft_type.equals(Contants.DRAFT_TYPE_DICOUNT)) {//商家优惠
-
-                setDiscountDraft();
-            } else if (!currentIsDiscount && draft_type.equals(Contants.DRAFT_TYPE_DICOVER)) {//发现
-                setDiscoverDraft();
-
-            }
+        if (currentIsDiscount) {//商家优惠
+            setDiscountDraft();
+        } else {//发现
+            setDiscoverDraft();
         }
 
 
@@ -427,18 +420,18 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
                     }
 
 
-                    //删除草稿
-                    darftUtils.deleteDraft();
                     dialog.dismiss();
+                    //删除草稿
+                    darftUtils.deleteDraftDiscount();
                 }
 
                 @Override
                 public void btnCancelListener() {
 
-                    //删除草稿
-                    darftUtils.deleteDraft();
-
                     dialog.dismiss();
+                    //删除草稿
+                    darftUtils.deleteDraftDiscount();
+
                 }
             });
             dialog.show();
@@ -467,7 +460,6 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
                     break;
 
             }
-
 
             getMenuInflater().inflate(menuViewId, contextMenu);
         }
@@ -531,7 +523,6 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
 
         return true;
     }
-    // TODO: 2016-04-06 完善修改图片的功能
 
 
     @Override
@@ -812,7 +803,7 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
      */
     private void goback() {
 
-        if (!TextUtils.isEmpty(content_et.getText().toString()) | multiImageView.getImagesList() != null) {
+        if (!TextUtils.isEmpty(content_et.getText().toString()) || multiImageView.getImagesList() != null) {
 
             dialog.setContent(getString(R.string.need_to_save_draft));
             dialog.setBtnOkText(getString(R.string.save));
