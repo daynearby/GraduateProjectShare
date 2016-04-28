@@ -244,11 +244,13 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
             @Override
             public void onFocusChange(View view, boolean focus) {
 
-                if (focus) {
-                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                } else {
+                LogUtils.e("focus - " + focus);
+
+//                if (focus) {
+//                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_NOT_ALWAYS);
+//                } else {
                     imm.hideSoftInputFromWindow(sendComment_edt.getWindowToken(), 0);
-                }
+//                }
             }
         });
 
@@ -318,7 +320,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         } else {
             content_tv.setVisibility(View.VISIBLE);
             content_tv.setText(StringUtils.getEmotionContent(
-                    this,  shareMessage.getShContent()));
+                    this, shareMessage.getShContent()));
             copyContent = content_tv.getText().toString();
             registerForContextMenu(content_tv);
             content_tv.setOnCreateContextMenuListener(new OnContextMenuCreat());
@@ -341,11 +343,11 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
             tag_tv.setText(shareMessage.getShTag());
         }
 
-        wanto_tv.setText(shareMessage.getShWantedNum()  > 0 ?
+        wanto_tv.setText(shareMessage.getShWantedNum() > 0 ?
                 String.valueOf(shareMessage.getShWantedNum()) : getString(R.string.tx_wantogo));
 
 
-        hadgo_tv.setText(shareMessage.getShVisitedNum()  > 0 ?
+        hadgo_tv.setText(shareMessage.getShVisitedNum() > 0 ?
                 String.valueOf(shareMessage.getShVisitedNum()) : getString(R.string.hadgo));
         //判断当前用户是否点赞
         if (cuser != null) {
@@ -450,7 +452,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 return true;
             case R.id.menu_image_share_all://分享全部图片
 //下载图片
-                SocialShareByIntent.downloadImagesAndShare(mActivity,imagesUrl);
+                SocialShareByIntent.downloadImagesAndShare(mActivity, imagesUrl);
 //                SocialShareManager.shareImage(context, discAdapter.getImageUrl());
 
                 return true;
@@ -681,7 +683,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
                 bottomOptionBar.setVisibility(View.VISIBLE);
                 return true;
             } else {
-              mActivity.finish();
+                mActivity.finish();
                 return true;
             }
         }
@@ -689,7 +691,6 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
         return super.dispatchKeyEvent(event);
     }
-
 
 
     /**
@@ -816,7 +817,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
             case R.id.id_tx_tab://标签
 
-                LogUtils.ts("标签的点击事件");
+//                LogUtils.ts("标签的点击事件");
 
                 Bundle bundle = new Bundle();
                 bundle.putCharSequence(Contants.INTENT_RANK_TYPE, shareMessage.getShTag());
@@ -876,14 +877,14 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         } else {
 //            strId = R.string.cancel_collect_success;
             leftDrawID = R.drawable.icon_hadgo;
-            if (shareMessage.getShVisited() ==null){
+            if (shareMessage.getShVisited() == null) {
                 shareMessage.setShVisited(new ArrayList<String>());
             }
             shareMessage.getShVisited().add(cuser.getObjectId());
         }
 
 
-        ((TextView) v).setText(shareMessage.getShVisitedNum() ==0 ?
+        ((TextView) v).setText(shareMessage.getShVisitedNum() == 0 ?
                 getString(R.string.hadgo) : String.valueOf(shareMessage.getShVisitedNum()));
         ((TextView) v).setCompoundDrawablesWithIntrinsicBounds(leftDrawID, 0, 0, 0);
 
@@ -914,7 +915,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
     private void updateHadGo() {
 
 
-        hadgo_tv.setText(shareMessage.getShVisitedNum()  > 0 ?
+        hadgo_tv.setText(shareMessage.getShVisitedNum() > 0 ?
                 String.valueOf(shareMessage.getShVisitedNum()) : getString(R.string.hadgo));
         hadGoFragment.setWantUserId(shareMessage.getShVisited());
         hadGoFragment.initData();
@@ -970,7 +971,9 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
         } else {
 //            strId = R.string.collect_success;
             leftDrawID = R.drawable.icon_wantogo_light;
-
+            if (shareMessage.getShWanted() == null) {
+                shareMessage.setShWanted(new ArrayList<String>());
+            }
             shareMessage.getShWanted().add(cuser.getObjectId());
 
 //MESSAGE_TYPE_SHAREMESSAGE
@@ -978,7 +981,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
 
         }
 
-        ((TextView) v).setText(shareMessage.getShWantedNum()==0 ?
+        ((TextView) v).setText(shareMessage.getShWantedNum() == 0 ?
                 getString(R.string.tx_wantogo) : String.valueOf(shareMessage.getShWantedNum()));
         ((TextView) v).setCompoundDrawablesWithIntrinsicBounds(leftDrawID, 0, 0, 0);
 
@@ -1005,7 +1008,7 @@ public class MessageDetailActivity extends BaseAppCompatActivity implements View
      */
     private void updateWantTo() {
 
-        wanto_tv.setText(shareMessage.getShWantedNum()  > 0 ?
+        wanto_tv.setText(shareMessage.getShWantedNum() > 0 ?
                 String.valueOf(shareMessage.getShWantedNum()) : getString(R.string.tx_wantogo));
 
         wantToGoFragment.setUserIdList(shareMessage.getShWanted());

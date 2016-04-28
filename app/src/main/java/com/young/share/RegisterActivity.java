@@ -28,8 +28,12 @@ import com.young.share.utils.LogUtils;
 import com.young.share.utils.StringUtils;
 import com.young.share.views.IdentifyCodeDialog;
 
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.RequestSMSCodeListener;
 import cn.bmob.v3.listener.SaveListener;
 
@@ -292,7 +296,6 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                 }
 
 
-
                 pwdVaild = pwdVaild && pwdEqual;
                 /*更新注册按钮的状态*/
 //                registerBtn.setEnabled(phoneVerific && phoneNumberVaild && pwdVaild && comfPwdVaild);
@@ -343,7 +346,7 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                         }
 
 //                    registConfigPwd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_checked, 0);
-                    pwdVaild = true;
+                        pwdVaild = true;
                     }
                 }
 
@@ -386,7 +389,6 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
     }
 
 
-
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
@@ -414,8 +416,9 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
                 break;
 
             case R.id.txt_reg_get_identify_code://获取验证码
-//获取验证码
-                getIdentifyCodeEvent();
+//获取验证码,验证手机号是否已经注册
+                getPhoneVail();
+
 
                 break;
         }
@@ -439,6 +442,28 @@ public class RegisterActivity extends BaseAppCompatActivity implements View.OnCl
         }
     }
 
+    /**
+     * 验证手机号是否已经注册
+     */
+    private void getPhoneVail() {
+        BmobQuery<MyUser> query = new BmobQuery<>();
+        query.addWhereEqualTo("username", registPhone.getText().toString().trim());
+        query.findObjects(this, new FindListener<MyUser>() {
+            @Override
+            public void onSuccess(List<MyUser> list) {
+                if (list.size() > 0) {
+                    toast("该帐号已经注册！请换其他吗手机号注册");
+                } else {
+                    getIdentifyCodeEvent();
+                }
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                LogUtils.e(" query err  code = " + i + " message = " + s);
+            }
+        });
+    }
 
     /**
      * 获取验证码的逻辑

@@ -538,14 +538,15 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
 
             case R.id.im_activity_share_message_addimg://添加照片
                 emotionPanel_bg.setVisibility(emotionPanel_bg.getVisibility() == View.VISIBLE ? View.GONE : View.GONE);
-                List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(this, multiImageView.getImagesList());
+              //  List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(this, multiImageView.getImagesList());
 
                 ArrayList<String> l = new ArrayList<>();
-                if (pictureInfoList != null && pictureInfoList.size() > 0) {
-                    for (PictureInfo pictureInfo : pictureInfoList) {
+                if (multiImageView.getImagesList() != null && multiImageView.getImagesList().size() > 0) {
+                 //   for (PictureInfo pictureInfo : pictureInfoList) {
 
-                        l.add(pictureInfo.getImageUrl());
-                    }
+                   //     l.add(pictureInfo.getImageUrl());
+                    //}
+					  l.addAll(multiImageView.getImagesList());
                 }
                 //选择图片
                 ImageHandlerUtils.starSelectImages(mActivity, l);
