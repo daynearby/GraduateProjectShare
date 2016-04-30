@@ -4,12 +4,12 @@
         "source": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_action_bar_up_container.xml"
     },
     {
-        "merged": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\res\\merged\\release\\layout\\abc_expanded_menu_layout.xml",
-        "source": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_expanded_menu_layout.xml"
-    },
-    {
         "merged": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\res\\merged\\release\\layout\\notification_template_part_time.xml",
         "source": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\notification_template_part_time.xml"
+    },
+    {
+        "merged": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\res\\merged\\release\\layout\\abc_expanded_menu_layout.xml",
+        "source": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_expanded_menu_layout.xml"
     },
     {
         "merged": "D:\\AS workSpace\\share\\flashview\\build\\intermediates\\res\\merged\\release\\layout\\select_dialog_singlechoice_material.xml",

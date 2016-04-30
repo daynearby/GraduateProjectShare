@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * 图片查看的activity
  * 在准备发送分享信息的时候，点击照片，可以查看图片
- * <p/>
+ * <p>
  * Created by Administrator on 2016/2/3.
  */
 public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTreeObserver.OnPreDrawListener {
@@ -110,7 +110,7 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_share_iamge_delete,menu);
+        getMenuInflater().inflate(R.menu.menu_share_iamge_delete, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -201,7 +201,7 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                setTitle(String.format("%s/%s", String.valueOf(position), String.valueOf(pictureInfoList.size())));
+                setTitle(String.format("%s/%s", String.valueOf(position + 1), String.valueOf(pictureInfoList.size())));
             }
 
             @Override
@@ -283,7 +283,7 @@ public class ImageEditorActivity extends BaseAppCompatActivity implements ViewTr
 
     /**
      * 退出当前activity
-     * <p/>
+     * <p>
      * 开始activity的动画
      */
     public void startActivityAnim() {

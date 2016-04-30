@@ -10,7 +10,7 @@ import cn.bmob.v3.datatype.BmobGeoPoint;
  * Created by Nearby Yang on 2015-10-16.
  */
 public class DiscountMessage_HZ extends BmobObject {
-
+    private static final long serialVersionUID =-690015927794564554L;
     private MyUser userId;
     private String dtContent;
     private List<String> dtImgs;

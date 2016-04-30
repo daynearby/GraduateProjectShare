@@ -26,5 +26,5 @@
         android:id="@+id/tb_image_editor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/trans_theme_puple"/>
+        android:background="@color/theme_puple"/>
 </RelativeLayout>

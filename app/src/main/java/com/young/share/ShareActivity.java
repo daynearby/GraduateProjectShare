@@ -70,7 +70,7 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * 发送分享信息
- * <p>
+ * <p/>
  * Created by Nearby Yang on 2015-10-23.
  */
 public class ShareActivity extends BaseAppCompatActivity implements View.OnClickListener {
@@ -349,8 +349,8 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
                     /**
                      * 恢复视频播放
                      */
-                    if (!TextUtils.isEmpty(videoPath)) {
-                        LogUtils.d(videoPath);
+                    if (videoPath != null && !TextUtils.isEmpty(videoPath) && !videoPath.equals("null")) {
+                        LogUtils.e("videoPath =--" + videoPath + "--");
                         videoPlayback();
 
                     } else {
@@ -538,15 +538,15 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
 
             case R.id.im_activity_share_message_addimg://添加照片
                 emotionPanel_bg.setVisibility(emotionPanel_bg.getVisibility() == View.VISIBLE ? View.GONE : View.GONE);
-              //  List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(this, multiImageView.getImagesList());
+                //  List<PictureInfo> pictureInfoList = DataFormateUtils.formate2PictureInfo(this, multiImageView.getImagesList());
 
                 ArrayList<String> l = new ArrayList<>();
                 if (multiImageView.getImagesList() != null && multiImageView.getImagesList().size() > 0) {
-                 //   for (PictureInfo pictureInfo : pictureInfoList) {
+                    //   for (PictureInfo pictureInfo : pictureInfoList) {
 
-                   //     l.add(pictureInfo.getImageUrl());
+                    //     l.add(pictureInfo.getImageUrl());
                     //}
-					  l.addAll(multiImageView.getImagesList());
+                    l.addAll(multiImageView.getImagesList());
                 }
                 //选择图片
                 ImageHandlerUtils.starSelectImages(mActivity, l);
@@ -804,7 +804,9 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
      */
     private void goback() {
 
-        if (!TextUtils.isEmpty(content_et.getText().toString()) || multiImageView.getImagesList() != null) {
+        if (!TextUtils.isEmpty(content_et.getText().toString())
+                || multiImageView.getImagesList() != null
+                || !TextUtils.isEmpty(videoPath)) {
 
             dialog.setContent(getString(R.string.need_to_save_draft));
             dialog.setBtnOkText(getString(R.string.save));
