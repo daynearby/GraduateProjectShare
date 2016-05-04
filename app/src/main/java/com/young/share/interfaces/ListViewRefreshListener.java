@@ -16,6 +16,7 @@ public class ListViewRefreshListener implements AbsListView.OnScrollListener,
     private RefreshListener refreshlistener;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listView;
+    private ScrollStateChange stateChangeListener;
 
     public ListViewRefreshListener(ListView listView, SwipeRefreshLayout swipeRefreshLayout,
                                    RefreshListener refreshlistener) {
@@ -27,16 +28,44 @@ public class ListViewRefreshListener implements AbsListView.OnScrollListener,
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 
+    /**
+     * 添加滑动状态改变的回调
+     * @param listView
+     * @param swipeRefreshLayout
+     * @param refreshlistener
+     * @param stateChangeListener 滑动状态改变的回调
+     */
+    public ListViewRefreshListener(ListView listView, SwipeRefreshLayout swipeRefreshLayout,
+                                   RefreshListener refreshlistener, ScrollStateChange stateChangeListener) {
+        this.listView = listView;
+        this.swipeRefreshLayout = swipeRefreshLayout;
+        this.refreshlistener = refreshlistener;
+        this.stateChangeListener = stateChangeListener;
+
+        listView.setOnScrollListener(this);
+        swipeRefreshLayout.setOnRefreshListener(this);
+    }
+
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
 
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+
             if (isLastItem) {
                 swipeRefreshLayout.setRefreshing(true);
                 if (refreshlistener != null) {
                     refreshlistener.pushToRefresh();
                 }
 
+            }
+
+            if (stateChangeListener!=null){
+                stateChangeListener.scrollStop();
+            }
+
+        } else {
+            if (stateChangeListener!=null){
+                stateChangeListener.scrollStar();
             }
         }
 
@@ -68,6 +97,12 @@ public class ListViewRefreshListener implements AbsListView.OnScrollListener,
         //下拉刷新
         void pullToRefresh();
 
+    }
+
+    public interface ScrollStateChange {
+        void scrollStar();
+
+        void scrollStop();
     }
 }
 

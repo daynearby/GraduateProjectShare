@@ -1,13 +1,11 @@
 package com.young.share.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -156,7 +154,7 @@ public class DiscoverFragment extends BaseFragment {
         //下拉上拉，点击
         setListPullAndClickListener();
 
-        mScrollListener();
+//        mScrollListener();
         swipeRefreshLayout.setRefreshing(true);
 
         if (isFirstIn) {
@@ -176,33 +174,24 @@ public class DiscoverFragment extends BaseFragment {
      * 滚动监听
      */
     private void mScrollListener() {
-
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-                //状态改变
-                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {//停止
-                    if (mScrollListener != null) {
-                        isStop = true;
-                        mScrollListener.scrollStop();
-                    }
-
-                } else {//开始
-                    if (mScrollListener != null) {
-
-                        if (isStop)
-                            mScrollListener.scrollStart();
-                        isStop = false;
-                    }
-
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-
-            }
-        });
+//
+//        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+//                //状态改变
+//                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {//停止
+//
+//
+//                } else {//开始
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+//
+//            }
+//        });
     }
 
     /**
@@ -249,7 +238,27 @@ public class DiscoverFragment extends BaseFragment {
 
 
                     }
-                });
+                },new ListViewRefreshListener.ScrollStateChange(){
+
+            @Override
+            public void scrollStar() {
+                if (mScrollListener != null) {
+
+                    if (isStop)
+                        mScrollListener.scrollStart();
+                    isStop = false;
+                }
+
+            }
+
+            @Override
+            public void scrollStop() {
+                if (mScrollListener != null) {
+                    isStop = true;
+                    mScrollListener.scrollStop();
+                }
+            }
+        });
 
         //item点击事件监听
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -469,51 +478,4 @@ public class DiscoverFragment extends BaseFragment {
 //    }
 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        LogUtils.d("onCreate");
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        LogUtils.d("onAttach");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        LogUtils.d("onDetach");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        LogUtils.d("onDestroy");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        LogUtils.d("onDestroyView");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        LogUtils.d("onResume");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        LogUtils.d("onResume");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        LogUtils.d("onStop");
-    }
 }

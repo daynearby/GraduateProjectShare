@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -187,7 +186,7 @@ public class DiscountFragment extends BaseFragment {
                 R.color.orange_light);
           /*上拉刷新*/
         pullToRefresh();
-        mScrollListener();
+//        mScrollListener();
 //        Log.d(tag, "bindData");
         swipeRefreshLayout.setRefreshing(true);
 
@@ -213,34 +212,32 @@ public class DiscountFragment extends BaseFragment {
         }
     }
 
-    /**
-     * 滚动监听
-     */
-    private void mScrollListener() {
-
-        listview.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-                //状态改变
-                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {//停止
-                    if (mScrollListener != null) {
-                        mScrollListener.scrollStop();
-                    }
-
-                } else {//开始
-                    if (mScrollListener != null) {
-                        mScrollListener.scrollStart();
-                    }
-
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-
-            }
-        });
-    }
+//    /**
+//     * 滚动监听
+//     */
+//    private void mScrollListener() {
+//
+//        listview.setOnScrollListener(new AbsListView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+//                //状态改变
+//                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {//停止
+//                    if (mScrollListener != null) {
+//                        mScrollListener.scrollStop();
+//                    }
+//
+//                } else {//开始
+//
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+//
+//            }
+//        });
+//    }
 
     @Override
     public void handler(Message msg) {
@@ -365,6 +362,21 @@ public class DiscountFragment extends BaseFragment {
                 skip = 0;
                 isGetMore = false;
                 getRemoteData();
+            }
+        },new ListViewRefreshListener.ScrollStateChange(){
+
+            @Override
+            public void scrollStar() {
+                if (mScrollListener != null) {
+                    mScrollListener.scrollStart();
+                }
+            }
+
+            @Override
+            public void scrollStop() {
+                if (mScrollListener != null) {
+                    mScrollListener.scrollStop();
+                }
             }
         }
 
