@@ -899,10 +899,10 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
 
 
         final ShareMessage_HZ shareMessage_hz = new ShareMessage_HZ();
-        String LONGITUDE = app.getCacheInstance().getAsString(Contants.ACAHE_KEY_LONGITUDE);
-        String[] strs = LONGITUDE.split(",");
-        longitude = Double.valueOf(strs[0]);
-        latitude = Double.valueOf(strs[1]);
+//        String LONGITUDE = app.getCacheInstance().getAsString(Contants.ACAHE_KEY_LONGITUDE);
+//        String[] strs = LONGITUDE.split(",");
+//        longitude = Double.valueOf(strs[0]);
+//        latitude = Double.valueOf(strs[1]);
 
         shareMessage_hz.setShContent(content);
         shareMessage_hz.setShTag(tagInfo);
@@ -989,10 +989,10 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
 
         final DiscountMessage_HZ disMessages = new DiscountMessage_HZ();
 
-        String LONGITUDE = app.getCacheInstance().getAsString(Contants.ACAHE_KEY_LONGITUDE);
-        String[] strs = LONGITUDE.split(",");
-        longitude = Double.valueOf(strs[0]);
-        latitude = Double.valueOf(strs[1]);
+//        String LONGITUDE = app.getCacheInstance().getAsString(Contants.ACAHE_KEY_LONGITUDE);
+//        String[] strs = LONGITUDE.split(",");
+//        longitude = Double.valueOf(strs[0]);
+//        latitude = Double.valueOf(strs[1]);
 
         disMessages.setDtTag(tagInfo);
         disMessages.setDtContent(content);
@@ -1002,7 +1002,7 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
         disMessages.setDtWantedNum(0);
         disMessages.setDtLocation(!TextUtils.isEmpty(locationInfo) ? locationInfo : null);
         disMessages.setMyUserId(cuser);
-
+        disMessages.setGeographic(new BmobGeoPoint(longitude, latitude));
 
         if (lists != null && !lists.isEmpty()) {//有上传图片的
 

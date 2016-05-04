@@ -298,7 +298,7 @@ public class BaiduMapActivity extends BaseAppCompatActivity {
                         placeList = new ArrayList<>();
                     }
                     placeList.add(0, new PlaceSearch.ResultsEntity("不显示"));
-
+//ACAHE_KEY_LONGITUDE
                     app.getCacheInstance().put(Contants.ACACHE_PLACE_SERVE, (Serializable) placeList);
                     mHandler.sendEmptyMessage(HANDLER_PLACE_SUGGEST);
                 }
