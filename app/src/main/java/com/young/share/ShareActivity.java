@@ -639,6 +639,11 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
                 }
 
                 /*输出的缩略图的地址没有返回，取输出的地址*/
+                String[] thumbnail = result.getThumbnail();
+                if (thumbnail.length > 0) {
+
+                    imageFilePath = !TextUtils.isEmpty(thumbnail[0]) ? thumbnail[0] : thumbnail[1];
+                }
                 videoPlayback();
 //                LogUtils.E("file path  video = " + filePath + " iamge = " + thumbnailPath);
 
@@ -943,7 +948,7 @@ public class ShareActivity extends BaseAppCompatActivity implements View.OnClick
         } else if (!TextUtils.isEmpty(videoPath)) {//视频
 
             String[] file = new String[]{videoPath, imageFilePath};
-            LogUtils.d(" videoPath = " + videoPath + " imageFilePath = " + imageFilePath);
+            LogUtils.e(" videoPath = " + videoPath + " imageFilePath = " + imageFilePath);
 
             BmobApi.UploadFiles(mActivity, file, Contants.FILE_TYPE_MULTI, new GoToUploadImages() {
                 /**
