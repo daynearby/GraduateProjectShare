@@ -15,6 +15,7 @@ out/
 
 # Gradle files
 .gradle/
+.navigation/
 build/
 flashview/build/
 
